@@ -7,7 +7,7 @@ interface MyCoursesCard {
 
 export default function MyCoursesCard(myCoursesCard: MyCoursesCard) {
   return (
-    <div className="card w-[249px] h-[304px] bg-base-200 drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[20px]">
+    <div className="card w-[249px] h-[304px] bg-base-200 drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[20px] hover:shadow-xl cursor-pointer">
       <img
         className="object-cover h-[146px] rounded-t-[20px]"
         src={myCoursesCard.courseThumbnailUrl}
@@ -16,7 +16,7 @@ export default function MyCoursesCard(myCoursesCard: MyCoursesCard) {
       <div className="px-3 pt-2 text-[14px] font-bold">
         {myCoursesCard.courseName}
       </div>
-      <div className="px-3 pt-1 text-[12px] text-gray-400 font-semibold col">
+      <div className="px-3 pt-1 text-[12px] text-gray-500 font-semibold col">
         {myCoursesCard.instructorName}
       </div>
       <div className="px-3 pt-3 text-[12px] font-semibold">{`สำเร็จไปแล้ว ${myCoursesCard.percentCompleted}%`}</div>

@@ -9,7 +9,7 @@ export default function MyCoursesCard(myCoursesCard: MyCoursesCard) {
   return (
     <div className="card w-[249px] h-[304px] bg-base-200 drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[20px] hover:shadow-xl cursor-pointer">
       <img
-        className="object-cover h-[146px] rounded-t-[20px]"
+        className="object-cover h-[146px] rounded-t-[20px] pointer-events-none"
         src={myCoursesCard.courseThumbnailUrl}
         alt="Course Thumbnail Picture"
       />

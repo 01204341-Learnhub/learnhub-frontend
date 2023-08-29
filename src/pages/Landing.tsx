@@ -1,5 +1,4 @@
-import ImageElephant from "../assets/Images/landingpagElephant.png"
-import ImageBackGElephant from "../assets/Images/landingpagBackElephant.png"
+import ImageElephant from "../assets/Images/Elephant.png"
 import ImageLogo from "../assets/Images/Logo_landing.png"
 import ImageLogoText from "../assets/Images/Textlogo_landing.png"
 import CouseIcon from "../assets/Images/landingCouseIcon.png"

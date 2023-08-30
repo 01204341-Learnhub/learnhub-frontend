@@ -1,11 +1,11 @@
-interface MyCoursesCard {
+interface CourseCardProps {
   courseThumbnailUrl: string;
   courseName: string;
   instructorName: string;
   percentCompleted: number;
 }
 
-export default function MyCoursesCard(myCoursesCard: MyCoursesCard) {
+export default function CourseCard(myCoursesCard: CourseCardProps) {
   return (
     <div className="card w-[249px] h-[304px] bg-base-200 drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[20px] hover:shadow-xl cursor-pointer">
       <img

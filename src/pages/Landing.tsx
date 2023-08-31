@@ -73,7 +73,7 @@ function CourseDetailedSummary(){
     return (
         <>
         <div className="bg-red-500">
-            <div className="flex justify-between">
+            <div className="flex justify-between px-[10%]">
                 <div className="text-center">
                     4000
                 </div>
@@ -81,12 +81,37 @@ function CourseDetailedSummary(){
                     เพิ่มในการเรียนรู้ที่อยากได้
                 </div>
             </div>
-            <div className="flex justify-center">
-                <div className="text-center">
+            <div className="flex justify-between px-[10%] ">
+                <div className="bg-green-100 text-center">
                     aswssss
                 </div>
                 <div className="text-center">
                     awdwad
+                </div>
+            </div>
+            <div className="flex justify-between px-[10%] ">
+                <div className="bg-green-100 overflow-hidden">
+                ผู้เรียน 456,899
+                </div>
+            </div>
+            <div className="flex justify-between px-[10%] ">
+                <div className="bg-green-100 overflow-hidden">
+                วิดีโอสอน 22 ชั่วโมง               
+                </div>
+            </div>
+            <div className="flex justify-between px-[10%] ">
+                <div className="bg-green-100 overflow-hidden">
+                แบทฝึกหัด 5 แบบฝึกหัด                 
+                </div>
+            </div>
+            <div className="flex justify-between px-[10%] ">
+                <div className="bg-green-100 overflow-hidden">
+                การเข้าถึง ได้ตลอดชีวิตไม่จำกัดจำนวนครั้ง                
+                </div>
+            </div>
+            <div className="flex justify-between px-[10%] ">
+                <div className="bg-green-100 overflow-hidden">
+                แหล่งข้อมูลที่ดาวโหลดได้ 6            
                 </div>
             </div>
         </div>
@@ -98,7 +123,7 @@ export default function Landing() {
     return (
         <div className="flex-1 bg-[#C4D9EE] h-screen">
             <div className="flex justify-center items-center content-center">
-                <div className="h[20%] w-[20%] ">         
+                <div className="w-[30%] ">         
                     <CourseDetailedSummary/>
                 </div>
             </div>

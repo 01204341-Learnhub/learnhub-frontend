@@ -1,8 +1,8 @@
-import ImageElephant from "../assets/Images/Elephant.png"
-import ImageLogo from "../assets/Images/Logo_landing.png"
-import ImageLogoText from "../assets/Images/Textlogo_landing.png"
-import CouseIcon from "../assets/Images/landingCouseIcon.png"
-import ClassIcon from "../assets/Images/landingClassIcon.png"
+import ImageElephant from "../assets/Images/elephantLogo.png"
+import ImageLogo from "../assets/Images/bookLogo.png"
+import ImageLogoText from "../assets/Images/textNamelogo.png"
+import CouseIcon from "../assets/Images/landingCouseicon.png"
+import ClassIcon from "../assets/Images/landingClassicon.png"
 
 
 function Landingmiddle(){
@@ -65,11 +65,44 @@ function Landingmiddle(){
     )
 }
 
+
+
+
+function CourseDetailedSummary(){
+
+    return (
+        <>
+        <div className="bg-red-500">
+            <div className="flex justify-between">
+                <div className="text-center">
+                    4000
+                </div>
+                <div className="text-center">
+                    เพิ่มในการเรียนรู้ที่อยากได้
+                </div>
+            </div>
+            <div className="flex justify-center">
+                <div className="text-center">
+                    aswssss
+                </div>
+                <div className="text-center">
+                    awdwad
+                </div>
+            </div>
+        </div>
+        </>
+    )
+}
+
 export default function Landing() {
     return (
         <div className="flex-1 bg-[#C4D9EE] h-screen">
-            <Landingmiddle/>
+            <div className="flex justify-center items-center content-center">
+                <div className="h[20%] w-[20%] ">         
+                    <CourseDetailedSummary/>
+                </div>
+            </div>
         </div>
-    )
+    );
 }
 

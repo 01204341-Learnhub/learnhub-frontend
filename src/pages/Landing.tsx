@@ -1,33 +1,34 @@
-import ImageElephant from "../assets/Images/elephantLogo.png"
+import { Link } from "react-router-dom"
 import ImageLogo from "../assets/Images/bookLogo.png"
-import ImageLogoText from "../assets/Images/textNameLogo.png"
-import CouseIcon from "../assets/Images/landingCourseIcon.png"
+import ImageElephant from "../assets/Images/elephantLogo.png"
 import ClassIcon from "../assets/Images/landingClassicIcon.png"
+import CouseIcon from "../assets/Images/landingCourseIcon.png"
+import ImageLogoText from "../assets/Images/textNameLogo.png"
 
 
-function Landingmiddle(){
+function Landingmiddle() {
 
     return (
         <>
             <div className="flex flex-row w-screen px-[10%] pt-[1.5%]">
                 <div className="flex flex-row w-screen">
                     <div className="flex flex-row items-center mx-2">
-                        <img src={ImageLogo}/>
+                        <img src={ImageLogo} />
                     </div>
                     <div className="flex flex-row items-center mx-2 mr-[4%]">
-                        <img src={ImageLogoText}/>
+                        <img src={ImageLogoText} />
                     </div>
-                    <div className="flex items-center font-bold mx-[2%] hover:text-[#007399]">หน้าแรก</div>
+                    <Link to={"/home"} className="flex items-center font-bold mx-[2%] hover:text-[#007399]">หน้าแรก</Link>
                     <div className="flex items-center font-bold mx-[2%] hover:text-[#007399]">คอร์สเรียน</div>
                     <div className="flex items-center font-bold mx-[2%] hover:text-[#007399]">คลาสเรียน</div>
                 </div>
                 <div className="flex flex-row w-full justify-end ">
-                    <div className="flex items-center font-bold mx-[6%]  hover:text-[#007399]">เข้าสู่ระบบ</div>
-                    <div className="flex py-[1.5%]  ">
+                    <Link to={"/login"} className="flex items-center font-bold mx-[6%]  hover:text-[#007399]">เข้าสู่ระบบ</Link>
+                    <Link to={"/register"} className="flex py-[1.5%]  ">
                         <button className="bg-white hover:bg-gray-100
                         text-gray-800 font-semibold  border px-6
                         border-gray-400 rounded-[15%] shadow">สร้างบัญชี</button>
-                    </div>
+                    </Link>
                 </div>
             </div>
             <div>
@@ -49,15 +50,15 @@ function Landingmiddle(){
                         </div>
                         <div className="flex pt-[15%]">
                             <div>
-                                <img src={CouseIcon} width="65%" className=""/>
+                                <img src={CouseIcon} width="65%" className="" />
                             </div>
                             <div>
-                                <img src={ClassIcon} width="60%" className=""/>
+                                <img src={ClassIcon} width="60%" className="" />
                             </div>
                         </div>
                     </div>
                     <div className="flex justify-cente w-[50%]">
-                        <img src={ImageElephant}  />
+                        <img src={ImageElephant} />
                     </div>
                 </div>
             </div>
@@ -72,7 +73,7 @@ function Landingmiddle(){
 export default function Landing() {
     return (
         <div className="flex-1 bg-[#C4D9EE] h-screen">
-                <Landingmiddle/>
+            <Landingmiddle />
         </div>
     );
 }

@@ -1,8 +1,8 @@
 import ImageElephant from "../assets/Images/elephantLogo.png"
 import ImageLogo from "../assets/Images/bookLogo.png"
-import ImageLogoText from "../assets/Images/textNamelogo.png"
-import CouseIcon from "../assets/Images/landingCouseicon.png"
-import ClassIcon from "../assets/Images/landingClassicon.png"
+import ImageLogoText from "../assets/Images/textNameLogo.png"
+import CouseIcon from "../assets/Images/landingCourseIcon.png"
+import ClassIcon from "../assets/Images/landingClassicIcon.png"
 
 
 function Landingmiddle(){

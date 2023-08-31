@@ -31,8 +31,8 @@ function Landingmiddle(){
                 </div>
             </div>
             <div>
-                <div className="flex flex-row  px-[10%] pt-[5%] justify-between">
-                    <div className="w-[50%] justify-center content-center pt-[2%]">
+                <div className="flex flex-row  px-[10%] pt-[5%] justify-center">
+                    <div className="justify-center content-center pt-[2%] w-[50%]">
                         <div className="text-base font-bold text-[#007399]">สำรวจคอร์สเรียนและคลาสออนไลน์</div>
                         <div className="text-4xl font-bold text-[#18334E] pt-4">
                             <p>เรียนรู้และพัฒนาตนเอง</p>
@@ -56,9 +56,9 @@ function Landingmiddle(){
                             </div>
                         </div>
                     </div>
-                        <div className="flex justify-end">
-                            <img src={ImageElephant}  className="h-[80%]"/>
-                        </div>
+                    <div className="flex justify-cente w-[50%]">
+                        <img src={ImageElephant}  />
+                    </div>
                 </div>
             </div>
         </>

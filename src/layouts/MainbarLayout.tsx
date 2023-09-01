@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom"
 import MainBar from "../components/MainBar"
-function NavbarLayout() {
+function MainbarLayout() {
     return (
         <>
             <MainBar />
@@ -10,4 +10,4 @@ function NavbarLayout() {
     )
 }
 
-export default NavbarLayout
+export default MainbarLayout

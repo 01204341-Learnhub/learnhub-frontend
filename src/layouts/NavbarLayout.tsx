@@ -4,6 +4,7 @@ function NavbarLayout() {
     return (
         <>
             <MainBar />
+            <hr style={{ height: 2, color: "gray", backgroundColor: "gray" }} />
             <Outlet />
         </>
     )

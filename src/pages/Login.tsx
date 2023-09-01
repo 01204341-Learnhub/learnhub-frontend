@@ -1,3 +1,5 @@
+import { faEnvelope, faLockOpen, faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
 export default function Login() {
@@ -32,12 +34,16 @@ export default function Login() {
 
                 </div>
                 <div className=" mt-10 ml-48 flex border-[5px] rounded-xl space-x-10 object-contain h-[60px] w-[500px] items-center">
-                    <img src="../../src/assets/images/mail.png" className=" ml-6 object-contain h-[30px] w-[30px]"/>
-                    <p className=" text-[24px] opacity-50">อีเมลล์</p>
+                    <div className=" opacity-50 flex space-x-10 ml-4">
+                        <FontAwesomeIcon icon={faEnvelope} size='2xl'></FontAwesomeIcon>
+                        <p className=" text-[24px]">อีเมลล์</p>
+                    </div>
                 </div>
                 <div className=" mt-10 ml-48 flex border-[5px] rounded-xl space-x-10 object-contain h-[60px] w-[500px] items-center">
-                    <img src="../../src/assets/images/lock.png" className=" ml-6 object-contain h-[30px] w-[30px]"/>
-                    <p className=" text-[24px] opacity-50">รหัสผ่าน</p>
+                    <div className=" opacity-50 flex space-x-10 ml-4">
+                        <FontAwesomeIcon icon={faUnlockKeyhole} size='2xl'></FontAwesomeIcon>
+                        <p className=" text-[24px]">รหัสผ่าน</p>
+                    </div>
                 </div>
                 <div className=" flex justify-center ">
                     <Link to="/Register" className=" mt-10 font-bold text-[24px] flex text-blue-600">ลืมรหัสผ่าน?</Link>

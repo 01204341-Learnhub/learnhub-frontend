@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './index.css'
 import NavbarLayout from './layouts/NavbarLayout'
+import CourseDetail from './pages/CourseDetail'
 import Home from './pages/Home'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
@@ -18,6 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path='/' element={<Landing />} />
           <Route element={<NavbarLayout />}>
             <Route path='/home' element={<Home />} />
+            <Route path='/detail/course/:id' element={<CourseDetail />} />
           </Route>
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />

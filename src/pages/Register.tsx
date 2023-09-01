@@ -1,8 +1,21 @@
+import { Link, useNavigate } from "react-router-dom";
+
+
+
+
 export default function Register() {
+    const navigate = useNavigate()
+
+    function handleBack() {
+        navigate(-1)
+    }
+
+    
+
   return (
     <>
         <div className=" flex-row">
-            <button className=" ml-4 py-3 text-[24px]">ย้อนกลับ</button>
+            <button className=" ml-4 py-3 text-[24px]" onClick={handleBack}>ย้อนกลับ</button>
         </div>
 
         <div className=" flex-row">
@@ -35,7 +48,7 @@ export default function Register() {
 
         <div className=" mt-5 flex flex-row justify-center space-x-2 text-[24px]">
             <h3 className=" font-semibold">มีบัญชีเเล้ว?</h3>
-            <button className=" font-bold text-blue-600">คลิกเพื่อลงชื่อเข้าสู่ระบบ</button>
+            <Link to="/login" className=" font-bold text-blue-600">คลิกเพื่อลงชื่อเข้าสู่ระบบ</Link>
         </div>  
     </>
   );

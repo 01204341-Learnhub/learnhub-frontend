@@ -14,7 +14,7 @@ function CourseDetail() {
             setCourse(course)
         }
         fetchCourseDetail()
-    }, [])
+    }, [id])
     if (course === null) {
         return null;
     }

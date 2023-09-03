@@ -1,4 +1,4 @@
-import { faEnvelope, faLockOpen, faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 

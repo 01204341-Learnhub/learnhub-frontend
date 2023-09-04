@@ -1,8 +1,8 @@
 import { faEnvelope, faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
-import bookLogo from "../../src/assets/images/bookLogo.png";
-import textNameLogo from "../../src/assets/images/textNameLogo.png";
+import bookLogo from "../../src/assets/Images/bookLogo.png";
+import textNameLogo from "../../src/assets/Images/textNameLogo.png";
 
 
 export default function Login() {

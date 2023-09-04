@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
-import studentImage from "../../src/assets/images/regStudent.png"
-import teacherImage from "../../src/assets/images/regTeacher.png"
+import studentImage from "../../src/assets/Images/regStudent.png"
+import teacherImage from "../../src/assets/Images/regTeacher.png"
 
 export default function Register() {
     const navigate = useNavigate()

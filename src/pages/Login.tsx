@@ -1,6 +1,9 @@
 import { faEnvelope, faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import bookLogo from "../../src/assets/Images/bookLogo.png";
+import textNameLogo from "../../src/assets/Images/textNameLogo.png";
+
 
 export default function Login() {
     return (
@@ -12,8 +15,8 @@ export default function Login() {
         <div className="grid grid-cols-2">
             <div className=" mt-36">
                 <div className="flex flex-row justify-center space-x-4 scale-150">
-                    <img src="../../src/assets/images/bookLogo.png"/>
-                    <img src="../../src/assets/images/textNameLogo.png" className=" object-contain h-[45] w-[342]"/>
+                    <img src={bookLogo}/>
+                    <img src={textNameLogo} className=" object-contain h-[45] w-[342]"/>
                 </div>
                 <p className="text-[40px] text-center mt-12 font-bold">เรียนรู้เเละพัฒนาตนเองกับ LearnHub</p>
             </div>

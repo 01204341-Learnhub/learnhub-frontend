@@ -10,7 +10,7 @@ interface ProgramSlotProps {
     lvl: string;
 }
 
-function intToThaiMonth(month) {
+function intToThaiMonth(month:number) {
     const thaiMonth = [
         "ม.ค.", "ก.พ.", "มี.ค.",
         "เม.ย.", "พ.ค.", "มิ.ย.",

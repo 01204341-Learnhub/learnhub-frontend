@@ -13,6 +13,7 @@ function mockPrograms(num: number) {
         programs.push({
             courseName: `คอร์สเรียนที่ ${i + 1}`,
             className: `คลาสเรียนที่ ${i + 1}`,
+            courseId: ` B${i + 1}`,
             instructorName: mockInstructor[i % mockInstructor.length],
             percentCompleted: Math.floor(Math.random() * 100),
             courseThumbnailUrl: `https://picsum.photos/${i}/${300}`,

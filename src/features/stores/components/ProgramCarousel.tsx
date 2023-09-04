@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { faChevronCircleLeft, faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -5,8 +6,10 @@ import ProgramSlot from "./ProgramSlot";
 interface CourseCardProps {
     courseThumbnailUrl: string;
     courseName: string;
+    courseId: string;
     instructorName: string;
     percentCompleted: number;
+
 }
 interface ProgramCarouselProps {
     programs: CourseCardProps[],
@@ -49,14 +52,14 @@ export default function ProgramCarousel({ programs, displayCount, carouselName }
                             return null
                         }
                         return (
-                            <li key={index} className="mx-5">
+                            <Link to={`/detail/course/${program.courseId}`} key={index} className="mx-5" >
                                 <ProgramSlot courseThumbnailUrl={program.courseThumbnailUrl}
                                 courseName={program.courseName}
                                 instructorName={program.instructorName}
                                 percentCompleted={program.percentCompleted} 
                                 regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"} 
                                 lvl={"พื้นฐาน"} />
-                            </li>
+                            </Link>
                         )
                     })}
                 </ul>

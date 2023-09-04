@@ -3,7 +3,7 @@ interface ProgramSlotProps {
     regisDate: string;
     courseName: string;
     instructorName: string;
-    rating: number;
+    percentCompleted: number;
     voter: number;
     price: number;
     tag: string;
@@ -42,11 +42,11 @@ function ProgramSlot(myProgram: ProgramSlotProps) {
             <div className="px-5 py-5">
                 <div className="-mt-3 font-extrabold text-[16px] mb-2">{myProgram.courseName}</div>
                 <p className="-mt-2 font-bold text-gray-500 text-[14px]">{myProgram.instructorName}</p>
-                <div className="py-2 flex items-center space-x-1 text-[14px] font-bold">{myProgram.rating}
+                <div className="py-2 flex items-center space-x-1 text-[14px] font-bold">{myProgram.percentCompleted}
                     {[1, 2, 3, 4, 5].map((index) => (
                         <svg
                         key={index}
-                        className={`w-3 h-3 ${index <= myProgram.rating ? 'text-black' : 'text-gray-300 dark:text-gray-500'}`}
+                        className={`w-3 h-3 ${index <= myProgram.percentCompleted ? 'text-black' : 'text-gray-300 dark:text-gray-500'}`}
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="currentColor"

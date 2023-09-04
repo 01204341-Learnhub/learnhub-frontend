@@ -55,15 +55,15 @@ export default function Login() {
 
                 </div>
                 <div className=" mt-10 ml-48 flex border-[5px] rounded-xl space-x-10 object-contain h-[60px] w-[500px] items-center">
-                    <div className=" opacity-50 flex space-x-10 ml-4">
-                        <FontAwesomeIcon icon={faEnvelope} size='2xl'></FontAwesomeIcon>
-                        <p className=" text-[24px]">อีเมลล์</p>
+                    <div className=" flex space-x-[6%] ml-[4%]">
+                        <FontAwesomeIcon icon={faEnvelope} size='2xl' className=" opacity-50"></FontAwesomeIcon>
+                        <input type="text" className=" text-[24px]" placeholder={click_std ? "อีเมลล์ผู้เรียน": "อีเมลล์ผู้สอน"} required></input>
                     </div>
                 </div>
                 <div className=" mt-10 ml-48 flex border-[5px] rounded-xl space-x-10 object-contain h-[60px] w-[500px] items-center">
-                    <div className=" opacity-50 flex space-x-10 ml-4">
-                        <FontAwesomeIcon icon={faUnlockKeyhole} size='2xl'></FontAwesomeIcon>
-                        <p className=" text-[24px]">รหัสผ่าน</p>
+                    <div className=" flex space-x-[6%] ml-[4%]">
+                        <FontAwesomeIcon icon={faUnlockKeyhole} size='2xl' className=" opacity-50"></FontAwesomeIcon>
+                        <input type="text" className=" text-[24px]" placeholder={click_std ? "รหัสผ่านผู้เรียน": "รหัสผ่านผู้สอน"} required></input>
                     </div>
                 </div>
                 <div className=" flex justify-center ">

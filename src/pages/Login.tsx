@@ -3,9 +3,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import bookLogo from "../../src/assets/Images/bookLogo.png";
 import textNameLogo from "../../src/assets/Images/textNameLogo.png";
+import { useState } from "react";
 
 
 export default function Login() {
+    const [click_std, set_std] = useState(true);
+    const [click_teach, set_teach] = useState(false);
+
+    function handleClick_std () {
+        set_std(true)
+        set_teach(false)
+    }
+
+    function handleClick_teach () {
+        set_teach(true)
+        set_std(false)
+    }
+
     return (
     <>
         <Link to="/Register" className=" text-[24px] ml-5 mt-10">
@@ -23,14 +37,20 @@ export default function Login() {
 
             <div className=" mt-36 mr-14 shadow-xl rounded-3xl">
                 <div className="">
-                    <h1 className=" text-center text-[40px] font-bold">เข้าสู่ระบบ</h1>
+                    <h1 className="text-center text-[40px] font-bold">เข้าสู่ระบบ</h1>
                 </div>
                 <div className=" flex flex-row justify-center space-x-10 mt-4">
-                    <div>
-                        <button className=" text-center text-[24px] font-bold hover:underline underline-offset-[6px] decoration-[#18334E] decoration-8">ผู้เรียน</button>
+                    <div className=" text-center text-[24px] font-bold">
+                        <button className= {click_std ? "underline underline-offset-[6px] decoration-[#18334E] decoration-8": ""}
+                                onClick={handleClick_std}
+                                >ผู้เรียน
+                        </button>
                     </div>
-                    <div>
-                        <button className=" text-center text-[24px] font-bold hover:underline underline-offset-[6px] decoration-[#18334E] decoration-8">ผู้สอน</button>
+                    <div className="text-center text-[24px] font-bold">
+                        <button className={click_teach ? "underline underline-offset-[6px] decoration-[#18334E] decoration-8": ""}
+                                onClick={handleClick_teach}
+                                >ผู้สอน
+                        </button>
                     </div>
 
                 </div>

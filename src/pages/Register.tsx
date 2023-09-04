@@ -1,4 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
+import studentImage from "../../src/assets/images/regStudent.png"
+import teacherImage from "../../src/assets/images/regTeacher.png"
 
 export default function Register() {
     const navigate = useNavigate()
@@ -21,29 +23,29 @@ export default function Register() {
 
         <div className="grid grid-cols-2">
             <div className="text-center">
-                <img src="../../src/assets/images/reg-student.png" className="w-full h-[750px] opacity-20 relative z-0"/>
+                <img src={studentImage} className="w-full h-[80%] opacity-20 relative z-0"/>
                 <div className=" absolute z-50 bottom-64">
-                    <h1 className=" mb-10 text-[32px] text-center font-bold">ผู้เรียน</h1>
-                    <h1 className=" ml-32 text-left text-[20px] font-bold">
+                    <h1 className=" mb-[5%] text-[32px] text-center font-bold">ผู้เรียน</h1>
+                    <h1 className=" ml-[25%] text-left text-[20px] font-bold">
                     สำหรับผู้ใช้ที่เข้าแพลทฟอร์มมาเพื่อหาความรู้ในเรื่องต่างๆ<br></br>
                     บัญชีผู้เรียนจะสามารถเข้าเรียนได้เท่านั้น จะไม่สามารถสร้างสื่อการสอนได้<br></br>
                     ไม่สามารถได้รับรายได้จากแพลทฟอร์มนี้ได้
                     </h1>
-                    <div className=" mt-80">
+                    <div className=" mt-[40%]">
                         <Link to="/Login" className=" text-white bg-[#007399] p-2 rounded-md shadow-md text-[24px]">สร้างบัญชีผู้เรียน</Link>
                     </div>
                 </div>
             </div>
             <div className="text-center">
-                <img src="../../src/assets/images/reg-teacher.png" className="w-full h-[750px] opacity-20 relative z-0"/>
-                <div className=" absolute z-50 bottom-64 ml-16">
-                    <h1 className=" mb-10 text-[32px] text-center font-bold">ผู้สอน</h1>
-                    <p className=" ml-32 text-left text-[20px] font-bold">
+                <img src={teacherImage} className="w-full h-[80%] opacity-20 relative z-0"/>
+                <div className=" absolute z-50 bottom-64 ">
+                    <h1 className=" mb-[5%] text-[32px] text-center font-bold">ผู้สอน</h1>
+                    <p className=" ml-[25%] text-left text-[20px] font-bold">
                     ผู้ใช้ที่เข้าแพลทฟอร์มมาเพื่อเปิดห้องเรียนสร้างและเผยแพร่สื่อการสอน<br></br>
                     บัญชีผู้สอนจะไม่สามารถซื้อและเข้าเรียนคอร์สหรือคลาสได้<br></br>
                     สามารถหารายได้จากแพลทฟอร์มนี้ได้
                     </p>
-                    <div className=" mt-80">
+                    <div className=" mt-[40%]">
                         <Link to="/Login" className=" text-white bg-[#007399] p-2 rounded-md shadow-md text-[24px]">สร้างบัญชีผู้สอน</Link>
                     </div>
                 </div>

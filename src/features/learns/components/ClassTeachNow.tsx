@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 interface ClassTeachNowProp {
     ThumbnailUrl: string;
     ClassName: string;
+    Minute: number; 
 }
 
 export default function ClassTeachNow (props:ClassTeachNowProp) {
@@ -19,7 +20,7 @@ export default function ClassTeachNow (props:ClassTeachNowProp) {
                 <div className=" flex space-x-2 items-center">
                     <div className="text-[20px] font-bold translate-y-[40%] bg-[#ADE792] rounded-xl p-1">กำลังสอน</div>
                     <FontAwesomeIcon icon={faClockRotateLeft} className=" translate-y-[60%]" size="xl"></FontAwesomeIcon>
-                    <div className=" text-[20px] font-bold translate-y-[50%]">เริ่มสอนไปแล้ว</div>
+                    <div className=" text-[20px] font-bold translate-y-[50%]">เริ่มสอนไปแล้ว {props.Minute} นาที</div>
                 </div>
             </div>
             <Link to="/Login" className=" absolute -translate-y-[140%] translate-x-[300%] bg-black text-white p-1 rounded-xl text-[20px] font-bold">ไปยังคลาสเรียนนี้</Link>

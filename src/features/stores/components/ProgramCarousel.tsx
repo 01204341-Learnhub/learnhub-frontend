@@ -1,8 +1,7 @@
 import { faChevronCircleLeft, faChevronCircleRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import CourseCard from "../../learns/components/CourseCard";
-
+import ProgramSlot from "./ProgramSlot";
 interface CourseCardProps {
     courseThumbnailUrl: string;
     courseName: string;
@@ -51,10 +50,12 @@ export default function ProgramCarousel({ programs, displayCount, carouselName }
                         }
                         return (
                             <li key={index} className="mx-5">
-                                <CourseCard courseThumbnailUrl={program.courseThumbnailUrl}
-                                    courseName={program.courseName}
-                                    instructorName={program.instructorName}
-                                    percentCompleted={program.percentCompleted} />
+                                <ProgramSlot courseThumbnailUrl={program.courseThumbnailUrl}
+                                courseName={program.courseName}
+                                instructorName={program.instructorName}
+                                percentCompleted={program.percentCompleted} 
+                                regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"} 
+                                lvl={"พื้นฐาน"} />
                             </li>
                         )
                     })}

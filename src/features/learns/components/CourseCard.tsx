@@ -16,7 +16,7 @@ export default function CourseCard(myCoursesCard: CourseCardProps) {
       <div className="px-3 pt-2 text-[14px] font-bold">
         {myCoursesCard.courseName}
       </div>
-      <div className="px-3 pt-1 text-[12px] text-gray-500 font-semibold col">
+      <div className="px-3 pt-1 text-[12px] text-gray-500 font-semibold">
         {myCoursesCard.instructorName}
       </div>
       <div className="px-3 pt-3 text-[12px] font-semibold">{`สำเร็จไปแล้ว ${myCoursesCard.percentCompleted}%`}</div>

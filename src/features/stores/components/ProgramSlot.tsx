@@ -10,34 +10,34 @@ interface ProgramSlotProps {
     lvl: string;
 }
 
-function intToThaiMonth(month:number) {
-    const thaiMonth = [
-        "ม.ค.", "ก.พ.", "มี.ค.",
-        "เม.ย.", "พ.ค.", "มิ.ย.",
-        "ก.ค.", "ส.ค.", "ก.ย.",
-        "ต.ค.", "พ.ย.", "ธ.ค."
-    ]
+// function intToThaiMonth(month:number) {
+//     const thaiMonth = [
+//         "ม.ค.", "ก.พ.", "มี.ค.",
+//         "เม.ย.", "พ.ค.", "มิ.ย.",
+//         "ก.ค.", "ส.ค.", "ก.ย.",
+//         "ต.ค.", "พ.ย.", "ธ.ค."
+//     ]
 
-    if (month >= 1 && month <= 12) {
-        return thaiMonth[month - 1]
-    } else {
-        return "invalid month";
-    }
-}
+//     if (month >= 1 && month <= 12) {
+//         return thaiMonth[month - 1]
+//     } else {
+//         return "invalid month";
+//     }
+// }
 
 function ProgramSlot(myProgram: ProgramSlotProps) {
 
-    const [dd, mm, yy] = myProgram.regisDate.split('/')
+    // const [dd, mm, yy] = myProgram.regisDate.split('/')
 
     return (
-        <div className="m-2 rounded-[20px] w-[286px] h-[350px] max-w-sm overflow-hidden shadow-lg opacity-80 hover:opacity-100">
-            <div className=" w-[286px] h-[146px] relative">
+        <div className="m-2 rounded-[20px] w-[286px] h-[350px] max-w-sm overflow-hidden shadow-lg ">
+            <div className=" w-[286px] h-[146px]">
                 <img className="w-full h-[146px]" src={myProgram.courseThumbnailUrl} alt="Larm On Chang" />
-                {dd && mm && yy && (
+                {/* {dd && mm && yy && (
                 <p className="absolute font-semibold text-[14px] text-white bottom-3 left-5">
                     ลงทะเบียนได้ถึง {dd} {intToThaiMonth(parseInt(mm))} {yy}
                 </p>
-                )}
+                )} */}
             </div>
             <div className="px-5 py-5">
                 <div className="-mt-3 font-extrabold text-[16px] mb-2">{myProgram.courseName}</div>

@@ -34,7 +34,7 @@ export default function Register() {
                             ไม่สามารถได้รับรายได้จากแพลทฟอร์มนี้ได้
                         </h1>
                         <div className=" mt-[40%]">
-                            <Link to={{ pathname: "/register", search: "?u=student" }} className=" text-white bg-[#007399] p-2 rounded-md shadow-md text-[24px]">สร้างบัญชีผู้เรียน</Link>
+                            <Link to={{ pathname: "/register", search: "?u=student" }} replace={true} className=" text-white bg-[#007399] p-2 rounded-md shadow-md text-[24px]">สร้างบัญชีผู้เรียน</Link>
                         </div>
                     </div>
                 </div>
@@ -48,7 +48,7 @@ export default function Register() {
                             สามารถหารายได้จากแพลทฟอร์มนี้ได้
                         </p>
                         <div className=" mt-[40%]">
-                            <Link to={{ pathname: "/register", search: "?u=teacher" }} className=" text-white bg-[#007399] p-2 rounded-md shadow-md text-[24px]">สร้างบัญชีผู้สอน</Link>
+                            <Link to={{ pathname: "/register", search: "?u=teacher" }} replace={true} className=" text-white bg-[#007399] p-2 rounded-md shadow-md text-[24px]">สร้างบัญชีผู้สอน</Link>
                         </div>
                     </div>
                 </div>
@@ -56,7 +56,7 @@ export default function Register() {
 
             <div className=" mt-5 flex flex-row justify-center space-x-2 text-[24px]">
                 <h3 className=" font-semibold">มีบัญชีเเล้ว?</h3>
-                <Link to="/login" className=" font-bold text-blue-600">คลิกเพื่อลงชื่อเข้าสู่ระบบ</Link>
+                <Link to="/login" replace={true} className=" font-bold text-blue-600">คลิกเพื่อลงชื่อเข้าสู่ระบบ</Link>
             </div>
         </>
     ); else if (searchParams.get("u") === "student") return (

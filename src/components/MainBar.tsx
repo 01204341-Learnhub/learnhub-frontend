@@ -2,6 +2,7 @@ import { faBell, faBook, faCartShopping, faHeart, faMagnifyingGlass } from '@for
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import booklogo from '../assets/Images/bookLogo.png'
 import namelogo from '../assets/Images/textNameLogo.png'
+import mockprofile from '../assets/Images/regStudent.png'
 
 function MainBar() {
     return (
@@ -12,8 +13,12 @@ function MainBar() {
             <div className='flex flex-row items-center w-2/12'>
                 <img className='' src={namelogo} alt="namelogo" />
             </div>
-            <div className='bg-gray-300 rounded-xl w-2/4 py-2 px-2'>
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
+            <div className='bg-gray-300 flex rounded-xl w-2/4 py-2 px-2'>
+                <FontAwesomeIcon icon={faMagnifyingGlass} className='mr-3 ml-2' />
+                <input
+                    type="search"
+                    className=" bg-transparent border-none outline-none w-full text-[16px] font-semibold "
+                />
             </div>
             <div className='w-2/12 flex justify-evenly my-2'>
                 <FontAwesomeIcon icon={faBook} size='xl' />
@@ -21,7 +26,9 @@ function MainBar() {
                 <FontAwesomeIcon icon={faCartShopping} size='xl' />
                 <FontAwesomeIcon icon={faBell} size='xl' />
             </div>
-            <div className='bg-black rounded-full w-1/12 h-10 mr-3' />
+            <div className='  w-[55px] h-[55px] mr-3 justify-self-center' >
+                <img src={mockprofile} alt="profile" className=' h-full rounded-full' />
+            </div>
         </div>
     )
 }

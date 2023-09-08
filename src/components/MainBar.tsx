@@ -13,11 +13,11 @@ function MainBar() {
             <div className='flex flex-row items-center w-2/12'>
                 <img className='' src={namelogo} alt="namelogo" />
             </div>
-            <div className='bg-gray-300 flex rounded-xl w-2/4 py-2 px-2'>
-                <FontAwesomeIcon icon={faMagnifyingGlass} className='mr-3 ml-2' />
+            <div className='bg-gray-300 flex rounded-full w-2/4 py-2 px-2'>
+                <FontAwesomeIcon icon={faMagnifyingGlass} color='black' size='xl' className='mr-4 ml-4' />
                 <input
                     type="search"
-                    className=" bg-transparent border-none outline-none w-full text-[16px] font-semibold "
+                    className=" bg-transparent border-none outline-none w-full text-[18px] font-semibold "
                 />
             </div>
             <div className='w-2/12 flex justify-evenly my-2'>

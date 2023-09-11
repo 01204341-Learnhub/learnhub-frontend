@@ -4,7 +4,7 @@ function MainbarLayout() {
     return (
         <>
             <MainBar />
-            <hr style={{ height: 2, color: "gray", backgroundColor: "gray" }} />
+            <hr style={{ height: '100px', color: "gray", backgroundColor: "gray" }} />
             <Outlet />
         </>
     )

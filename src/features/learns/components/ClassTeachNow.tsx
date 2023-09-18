@@ -13,7 +13,7 @@ interface ClassTeachNowProp {
 export default function ClassTeachNow (props:ClassTeachNowProp) {
 
     return (
-    <div className="relative w-[80%] h-[220px]">
+    <div className="relative w-[100%] h-[220px]">
         <div className="static">
             <img src={props.ThumbnailUrl} alt="Thumbnail Picture" className=" object-cover w-[100%] h-[220px] opacity-70 rounded-xl hover:opacity-50" />
             <div className="absolute top-2 left-4">

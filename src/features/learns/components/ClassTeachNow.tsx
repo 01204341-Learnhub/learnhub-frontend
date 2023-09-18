@@ -17,7 +17,7 @@ export default function ClassTeachNow (props:ClassTeachNowProp) {
         <div className="static">
             <img src={props.ThumbnailUrl} alt="Thumbnail Picture" className=" object-cover w-[100%] h-[220px] opacity-70 rounded-xl hover:opacity-50" />
             <div className="absolute top-2 left-4">
-                <div className="text-5xl font-bold ">{props.TitleName}</div>
+                <div className="text-4xl font-bold ">{props.TitleName}</div>
                 <div className=" flex space-x-2 items-center">
                     <div className="text-[20px] font-bold translate-y-[40%] bg-[#ADE792] rounded-xl p-1">กำลังสอน</div>
                     <FontAwesomeIcon icon={faClockRotateLeft} className=" translate-y-[60%]" size="xl"></FontAwesomeIcon>

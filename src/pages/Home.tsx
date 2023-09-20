@@ -1,4 +1,6 @@
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
+import LearningClasses from "../pages/students/LearningClasses"
+
 
 function mockPrograms(num: number) {
     const programs = []
@@ -25,7 +27,7 @@ function mockPrograms(num: number) {
 export default function Home() {
     return (
         <div>
-            <div className="ml-6">
+            {/* <div className="ml-6">
                 <ProgramCarousel programs={mockPrograms(20)}
                     carouselName="คลาสเรียนยอดนิยม"
                     displayCount={3} />
@@ -46,7 +48,9 @@ export default function Home() {
                     carouselName="คอร์สเรียนใหม่ล่าสุด"
                     displayCount={3}
                 />
-            </div>
+            </div> */}
+
+        <LearningClasses></LearningClasses>
         </div>
     )
 }

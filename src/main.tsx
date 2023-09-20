@@ -11,11 +11,12 @@ import Home from './pages/Home'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import LearnCourse from './pages/students/LearnCourse'
 import LearningClasses from './pages/students/LearningClasses'
-import LearningCourses from './pages/students/LearningCourses'
 import LearningHomeworks from './pages/students/LearningHomeworks'
 import LearningOverview from './pages/students/LearningOverview'
 import LearningSchedule from './pages/students/LearningSchedule'
+import SelectCourse from './pages/students/SelectCourse'
 import TeachingClasses from './pages/teachers/TeachingClasses'
 import TeachingCourses from './pages/teachers/TeachingCourses'
 import TeachingHomeworks from './pages/teachers/TeachingHomeworks'
@@ -32,7 +33,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Route path='/detail/course/:id' element={<CourseDetail />} />
             <Route element={<StudentNavbarLayout />}>
               <Route path='/learn/overview' element={<LearningOverview />} />
-              <Route path='/learn/courses' element={<LearningCourses />} />
+              <Route path='/learn/courses' element={<SelectCourse />} />
+              <Route path='/learn/courses/:courseID' element={<LearnCourse />} />
               <Route path='/learn/classes' element={<LearningClasses />} />
               <Route path='/learn/homework' element={<LearningHomeworks />} />
               <Route path='/learn/schedule' element={<LearningSchedule />} />

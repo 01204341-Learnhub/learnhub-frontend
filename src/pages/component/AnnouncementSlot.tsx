@@ -1,6 +1,6 @@
 
 
-interface AnnulmentSlotProp {
+interface AnnouncementSlotProp {
     title: string;
     tpyeslot:string;
     time:string;
@@ -8,7 +8,7 @@ interface AnnulmentSlotProp {
 
 
 
-export default function AnnulmentSlot(prop:AnnulmentSlotProp) {
+export default function AnnouncementSlot(prop:AnnouncementSlotProp) {
     return (
         <div className='flex justify-between mx-[5%] h-[75px]'>
         <div className="flex justify-center items-center">

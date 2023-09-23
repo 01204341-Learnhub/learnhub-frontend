@@ -52,7 +52,7 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
     }
     if (step == 1) {
         return (
-            <div className="max-w-4xl p-0.5 bg-black">
+            <div className="p-0.5 bg-black">
                 <div className="flex flex-col justify-center items-center bg-gray-300">
                     <h1 className="font-bold">ชื่อ course เรียนของคุณ</h1>
                     <p>ไม่เป็นไรหากไม่สามารถคิดชื่อที่เหมาะสมได้ในตอนนี้ คุณสามารถเปลี่ยนได้ในภายหลัง</p>
@@ -66,7 +66,7 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
     }
     else if (step == 2) {
         return (
-            <div className="max-w-4xl p-0.5 bg-black">
+            <div className="p-0.5 bg-black">
                 <div className="flex flex-col justify-center items-center bg-gray-300">
                     <h1 className="font-bold">หมวดหมู่ course เรียนของคุณ</h1>
                     <p>หากคุณไม่แน่ใจว่าหมวดหมู่ถูกต้องหรือไม่ คุณสามารถเปลี่ยนได้ในภายหลัง</p>
@@ -77,7 +77,7 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
     }
     else if (step == 3) {
         return (
-            <div className="max-w-4xl p-0.5 bg-black">
+            <div className="p-0.5 bg-black">
                 <div className="flex flex-col justify-center items-center bg-gray-300">
                     <h1 className="font-bold">ระดับ course เรียนของคุณ</h1>
                     <p>หากคุณไม่แน่ใจว่าระดับถูกต้องหรือไม่ คุณสามารถเปลี่ยนได้ในภายหลัง</p>

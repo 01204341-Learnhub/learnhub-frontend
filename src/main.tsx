@@ -17,6 +17,7 @@ import LearningHomeworks from './pages/students/LearningHomeworks'
 import LearningOverview from './pages/students/LearningOverview'
 import LearningSchedule from './pages/students/LearningSchedule'
 import SelectCourse from './pages/students/SelectCourse'
+import CreateCourse from './pages/teachers/CreateCourse'
 import TeachingClasses from './pages/teachers/TeachingClasses'
 import TeachingCourses from './pages/teachers/TeachingCourses'
 import TeachingHomeworks from './pages/teachers/TeachingHomeworks'
@@ -43,6 +44,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               <Route path='/teach/courses' element={<TeachingCourses />} />
               <Route path='/teach/classes' element={<TeachingClasses />} />
               <Route path='/teach/homework' element={<TeachingHomeworks />} />
+              <Route path='/teach/create/course' element={<CreateCourse />} />
             </Route>
           </Route>
           <Route path='/login' element={<Login />} />

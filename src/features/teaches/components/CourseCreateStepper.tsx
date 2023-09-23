@@ -89,3 +89,4 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
 }
 
 export default CourseCreateStepper
+export type { BasicCourseInfo }

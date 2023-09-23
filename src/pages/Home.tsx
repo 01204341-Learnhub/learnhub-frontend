@@ -1,4 +1,6 @@
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
+import LearningClasses from "../pages/students/LearningClasses"
+
 
 function mockPrograms(num: number) {
     const programs = []

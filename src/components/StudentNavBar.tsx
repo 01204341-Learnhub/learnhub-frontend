@@ -20,7 +20,7 @@ function StudentNavBar() {
             </NavLink>
             <NavLink to="/learn/homework" replace={true} className={({ isActive }) => `flex my-3 hover:bg-gray-400 ${isActive ? "bg-gray-400" : ""}`}>
                 <FontAwesomeIcon icon={faClipboardList} />
-                <h1 className="ml-2 font-bold text-2xl">การบ้านในคลาส</h1>
+                <h1 className="ml-2 font-bold text-2xl">งานที่ต้องทำ</h1>
             </NavLink>
             <NavLink to="/learn/schedule" replace={true} className={({ isActive }) => `flex my-3 hover:bg-gray-400 ${isActive ? "bg-gray-400" : ""}`}>
                 <FontAwesomeIcon icon={faCalendar} />

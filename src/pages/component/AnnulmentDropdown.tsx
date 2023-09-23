@@ -1,9 +1,11 @@
 import { useState } from 'react';
-
+import AnnulmentSlot from '../component/AnnulmentSlot'
 
 interface AnnulmentDropdownProp {
     title: string;
     works: Array<any>
+    Studied:string
+    TotalTime:string
 }
 
 export default function AnnulmentDropdown(props:AnnulmentDropdownProp) {
@@ -11,15 +13,22 @@ export default function AnnulmentDropdown(props:AnnulmentDropdownProp) {
     return (
         <>
         <div className='mx-[10%]'>
-            <div className="flex bg-red-500 justify-between">
-                <div className='text-xl'>{props.title}</div>
+            <div className="flex bg-[#ECF3F9] justify-between"  onClick={()=>setShow(!show)}>
+                <div className='text-xl m-5'>
+                    <div>{props.title}</div>
+                    <div className='flex mt-2'>
+                        <div className='mx-5 text-sm'>{props.Studied}</div>
+                        <div className='mx-5 text-sm'>{props.TotalTime}</div>
+                    </div>
+                </div>
                 <button onClick={()=>setShow(!show)}>show</button>
             </div>
+            <hr/>
             {show && props.works.map((item)=>(
-            <li key={item.id} className='flex justify-between mx-[5%]'>
-                <h1>{item.name}</h1>
-                <input type="checkbox"></input>
-            </li>    
+                <div key={item.id}>
+                    <AnnulmentSlot title={item.name} tpyeslot={item.tpyeslot} time={item.time}></AnnulmentSlot>
+                    <hr/>
+                </div>
             ))
                 
             }

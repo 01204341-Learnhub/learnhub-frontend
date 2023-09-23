@@ -1,4 +1,4 @@
-export type UserCoursePrgress = {
+export type UserCourseProgress = {
   studentID: string;
   courseID: string;
   finished: boolean;

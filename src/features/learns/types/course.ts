@@ -7,7 +7,7 @@ export type CourseChapter = {
   description: string;
 };
 
-export type Lesson = {
+export type CourseLesson = {
   lessonNum: number;
   name: string;
   courseID: string;

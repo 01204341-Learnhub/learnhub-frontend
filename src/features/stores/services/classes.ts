@@ -17,7 +17,7 @@ async function getClass(id: string): Promise<ClassProgram> {
       id: id,
       name: "Eren Yeager",
       avatarUrl:
-        "https://i0.wp.com/imgs.hipertextual.com/wp-content/uploads/2022/02/Eren-Jaeger-Ataque-a-los-titanes-Critica-Mikasa-Armin-Shingeki.jpg?fit=1918%2C1020&quality=50&strip=all&ssl=1",
+        "https://i.pinimg.com/1200x/99/71/76/997176fee7a0a8f2c3ff56cc211d7190.jpg",
       jobTitle: "The Scout Regiment",
     },
   };

@@ -4,8 +4,8 @@ import LearningClasses from "../pages/students/LearningClasses"
 import { Link } from "react-router-dom"
 
 
-function mockPrograms(num: number) {
-    const programs = []
+function mockClass(num: number) {
+    const classPrograms = []
     const mockInstructor = [
         "อาจารย์ อนันต์ สุขสวัสดิ์",
         "อาจารย์ สมชาย สุขสวัสดิ์",
@@ -14,31 +14,50 @@ function mockPrograms(num: number) {
         "mr. Jirapong",
     ]
     for (let i = 0; i < num; i++) {
-        programs.push({
-            courseName: `คอร์สเรียนที่ ${i + 1}`,
-            className: `คลาสเรียนที่ ${i + 1}`,
-            courseId: ` B${i + 1}`,
-            classId: ` B${i + 1}`,
+        classPrograms.push({
+            programName: `คลาสเรียนที่ ${i + 1}`,
+            programId: ` B${i + 1}`,
             instructorName: mockInstructor[i % mockInstructor.length],
             percentCompleted: Math.floor(Math.random() * 100),
-            courseThumbnailUrl: `https://picsum.photos/${i}/${300}`,
+            programThumbnailUrl: `https://picsum.photos/${i}/${300}`,
         })
     }
-    return programs
+    return classPrograms
 }
 
+function mockCourse(num: number) {
+    const coursePrograms = []
+    const mockInstructor = [
+        "อาจารย์ อนันต์ สุขสวัสดิ์",
+        "อาจารย์ สมชาย สุขสวัสดิ์",
+        "อาจารย์ สมหญิง สุขสวัสดิ์",
+        "mrs Jiraporn",
+        "mr. Jirapong",
+    ]
+    for (let i = 0; i < num; i++) {
+        
+        coursePrograms.push({
+            programName: `คอร์สเรียนที่ ${i + 1}`,
+            programId: ` B${i + 1}`,
+            instructorName: mockInstructor[i % mockInstructor.length],
+            percentCompleted: Math.floor(Math.random() * 100),
+            programThumbnailUrl: `https://picsum.photos/${i}/${300}`,
+        })
+    }
+    return coursePrograms
+}
 
 const renderProgramsCourse = () => {
     return (
         <>
-            {mockPrograms(20).map((program, index) => {
+            {mockCourse(20).map((program, index) => {
                 if (index > 7){
                     return null
                 } else {
                     return (
-                        <Link to={`/detail/course/${program.courseId}`} key={index} className="mx-5 my-2" >
-                            <ProgramSlot key={index} courseThumbnailUrl={program.courseThumbnailUrl}
-                                courseName={program.courseName}
+                        <Link to={`/detail/course/${program.programId}`} key={index} className="mx-5 my-2" >
+                            <ProgramSlot key={index} courseThumbnailUrl={program.programThumbnailUrl}
+                                courseName={program.programName}
                                 instructorName={program.instructorName}
                                 percentCompleted={program.percentCompleted}
                                 regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"}
@@ -55,15 +74,15 @@ const renderProgramsCourse = () => {
 const renderProgramClasses = () => {
     return (
         <>
-            {mockPrograms(20).map((program, index) => {
+            {mockClass(20).map((program, index) => {
                 if (index > 7){
                     return null
                 } else {
 
                     return (
-                        <Link to={`/detail/class/${program.classId}`} key={index} className="mx-5 my-2" >
-                            <ProgramSlot key={index} courseThumbnailUrl={program.courseThumbnailUrl}
-                                courseName={program.className}
+                        <Link to={`/detail/class/${program.programId}`} key={index} className="mx-5 my-2" >
+                            <ProgramSlot key={index} courseThumbnailUrl={program.programThumbnailUrl}
+                                courseName={program.programName}
                                 instructorName={program.instructorName}
                                 percentCompleted={program.percentCompleted}
                                 regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"}
@@ -81,14 +100,18 @@ export default function Home() {
     return (
         <div className="flex flex-col items-center">
             <div className="mt-5">
-                <ProgramCarousel programs={mockPrograms(20)}
-                    carouselName="คลาสเรียนยอดนิยม"
+                <ProgramCarousel 
+                    type="course"
+                    programs={mockCourse(20)}
+                    carouselName="คอร์สเรียนยอดนิยม"
                     displayCount={3} />
             </div>
             <hr className="border-[#d9d9d9] my-8 w-full"/>
 
             <div className="mt-5 mb-4">
-                <ProgramCarousel programs={mockPrograms(20)}
+                <ProgramCarousel
+                    type="class"
+                    programs={mockClass(20)}
                     carouselName="คลาสเรียนใหม่ล่าสุด"
                     displayCount={3} />
             </div>

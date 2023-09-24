@@ -11,7 +11,7 @@ interface ClassTeachNowProp {
 }
 
 
-interface ClassCardProps {
+type ClassCardProps = {
   classThumbnailUrl: string;
   className: string;
   instructorName: string;
@@ -26,50 +26,28 @@ const mockClassTeachNow: ClassTeachNowProp = {
 }
 
 
-// mockdata in progress
-const mockClassCardProgress: ClassCardProps[] = [
-    {
-        classThumbnailUrl: "https://www.mindphp.com/images/knowledge/122560/vue.jpg",
-        className: "คณิตศาสตร์",
-        instructorName: "อาจารย์ สมศรี สมใจ",
-        percentCompleted: 50,
-        completionDate: new Date(2021, 8, 1)
-    },
-    {
-        classThumbnailUrl: "https://www.mindphp.com/images/knowledge/122560/vue.jpg",
-        className: "คณิตศาสตร์",
-        instructorName: "อาจารย์ สมศรี สมใจ",
-        percentCompleted: 50,
-        completionDate: new Date(2021, 8, 1)
-    },
-]
-
-// mockdata completed
-const mockClassCardComplete: ClassCardProps[] = [
-    {
-        classThumbnailUrl: "https://miro.medium.com/v2/resize:fit:1200/1*m0H6-tUbW6grMlezlb52yw.png",
-        className: "คณิตศาสตร์",
-        instructorName: "อาจารย์ สมศรี สมใจ",
-        percentCompleted: 0,
-        completionDate: new Date(2021, 8, 1)
-    },
-    {
-        classThumbnailUrl: "https://miro.medium.com/v2/resize:fit:1200/1*m0H6-tUbW6grMlezlb52yw.png",
-        className: "คณิตศาสตร์",
-        instructorName: "อาจารย์ สมศรี สมใจ",
-        percentCompleted: 0,
-        completionDate: new Date(2021, 8, 1)
-    },
-]
-
 const enrolledClasses = await listEnrolledClass("1")
-
-
-
 const classesProcess = enrolledClasses.filter((enrolledClass: EnrolledClass) => enrolledClass.status === "started")
-console.log(classesProcess)
+const classesProcessCard : ClassCardProps[] = classesProcess.map((enrolledClass: EnrolledClass) => {
+    return {
+        classThumbnailUrl: enrolledClass.imageClassUrl,
+        className: enrolledClass.name,
+        instructorName: enrolledClass.teacher.name,
+        percentCompleted: 40,
+        completionDate: enrolledClass.registrationEndDate
+    }
+})   
+
 const classesCompleted = enrolledClasses.filter((enrolledClass: EnrolledClass) => enrolledClass.status === "finished")
-console.log(classesCompleted)
+const classesCompletedCard : ClassCardProps[] = classesCompleted.map((enrolledClass: EnrolledClass) => {
+    return {
+        classThumbnailUrl: enrolledClass.imageClassUrl,
+        className: enrolledClass.name,
+        instructorName: enrolledClass.teacher.name,
+        percentCompleted: 100,
+        completionDate: enrolledClass.registrationEndDate
+    }
+})
 
 
 function LearningClasses() {
@@ -97,7 +75,7 @@ function LearningClasses() {
     const renderClassInProcess = () => {
         return (
             <>
-                {mockClassCardProgress.map((classCard, index) => {
+                {classesProcessCard.map((classCard, index) => {
                     return (
                         <div key={index} className='px-4 py-3'>
                             <ClassCard {...classCard} />
@@ -111,7 +89,7 @@ function LearningClasses() {
     const renderClassInCompleted = () => {
         return (
             <>
-                {mockClassCardComplete.map((classCard, index) => {
+                {classesCompletedCard.map((classCard, index) => {
                     return (
                         <div key={index} className='px-4 py-3'>
                             <ClassCard {...classCard} />

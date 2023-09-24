@@ -70,8 +70,7 @@ function LessonSlot(prop:LessonSlotProp) {
                 <h1>{prop.name}</h1>
             </div>
         </div>
-        <input type="checkbox" className='mx-5' checked={true}></input>
-        <input type="checkbox" id="vehicle3" name="vehicle3" value="Boat" checked={true}></input>
+        <input type="checkbox" className='mx-5' checked={prop.finished}></input>
     </div>
     )
 }

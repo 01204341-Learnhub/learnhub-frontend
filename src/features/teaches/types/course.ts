@@ -8,4 +8,12 @@ type CourseChapter = {
   }[];
 };
 
-export type { CourseChapter };
+type CourseInfo = {
+  courseID: string;
+  courseThumbnailUrl: string;
+  courseName: string;
+  courseRating: number;
+  studentCount: number;
+};
+
+export type { CourseChapter, CourseInfo };

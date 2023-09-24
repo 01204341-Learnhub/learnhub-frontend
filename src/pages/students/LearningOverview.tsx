@@ -1,5 +1,4 @@
 import ClassTeachNow from "../../features/learns/components/ClassTeachNow"
-import ProgramCarousel from "../../features/stores/components/ProgramCarousel"
 function LearningOverview() {
     return (
         <>

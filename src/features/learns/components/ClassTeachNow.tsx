@@ -24,6 +24,7 @@ export default function ClassTeachNow (props:ClassTeachNowProp) {
                     <div className=" text-[20px] font-bold translate-y-[50%]">เริ่มสอนไปแล้ว {props.Minute} นาที</div>
                 </div>
             </div>
+
         </div>
         <Link to="/Login" className=" absolute bottom-2 right-4 bg-black text-white p-1 rounded-xl text-[20px] font-bold">ไปยังคลาสเรียนนี้</Link>
     </div>

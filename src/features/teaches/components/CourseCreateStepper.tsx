@@ -92,7 +92,7 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
 
   if (step == 1) {
     return (
-      <div className="relative w-[1040px] h-[490px] bg-[#F0F0F0] border-black border-2">
+      <div className="relative w-full h-[500px] bg-[#F0F0F0] border-black border-2">
         <div className="flex flex-col justify-center mt-[120px]">
           <p className="text-black text-center text-[24px] font-bold">
             ชื่อคอร์สเรียนของคุณ
@@ -107,7 +107,7 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
             placeholder="ตัวอย่าง : เรียนรู้วิธีใช้ microsoft word เริ่มจาก 0"
             onChange={(e) => setCourseName(e.target.value)}
             maxLength={60}
-            className="mt-[29px] mx-auto w-[585px] h-[45px] px-4"
+            className="mt-[29px] mx-auto w-2/3 max-w-[585px] h-[45px] px-4"
           />
         </div>
         <div className="absolute bottom-0 w-full">
@@ -121,7 +121,7 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
     );
   } else if (step == 2) {
     return (
-      <div className="relative w-[1040px] h-[490px] bg-[#F0F0F0] border-black border-2">
+      <div className="relative w-full h-[500px] bg-[#F0F0F0] border-black border-2">
         <div className="flex flex-col justify-center mt-[120px]">
           <p className="text-black text-center text-[24px] font-bold">
             หมวดหมู่คอร์สเรียนของคุณ
@@ -130,9 +130,9 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
             หากคุณไม่แน่ใจว่าหมวดหมู่ถูกต้องหรือไม่ คุณสามารถเปลี่ยนได้ในภายหลัง
           </p>
           <select
-            value={""}
+            value={courseCategory}
             onChange={(e) => setCourseCategory(e.target.value)}
-            className="mt-[29px] mx-auto w-[585px] h-[45px] px-4"
+            className="mt-[29px] mx-auto w-2/3 max-w-[585px] h-[45px] px-4"
           >
             <option value="">เลือกหมวดหมู่</option>
             <option value="programming">การเขียนโปรแกรม</option>
@@ -152,7 +152,7 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
     );
   } else if (step == 3) {
     return (
-      <div className="relative w-[1040px] h-[490px] bg-[#F0F0F0] border-black border-2">
+      <div className="relative w-full h-[500px] bg-[#F0F0F0] border-black border-2">
         <div className="flex flex-col justify-center mt-[120px]">
           <p className="text-black text-center text-[24px] font-bold">
             ระดับคอร์สเรียนของคุณ
@@ -161,9 +161,9 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
             หากคุณไม่แน่ใจว่าระดับถูกต้องหรือไม่ คุณสามารถเปลี่ยนได้ในภายหลัง
           </p>
           <select
-            value={""}
+            value={courseLevel}
             onChange={(e) => setCourseLevel(e.target.value)}
-            className="mt-[29px] mx-auto w-[585px] h-[45px] px-4"
+            className="mt-[29px] mx-auto w-2/3 max-w-[585px] h-[45px] px-4"
           >
             <option value="">เลือกระดับ</option>
             <option value="beginner">ระดับต้น</option>

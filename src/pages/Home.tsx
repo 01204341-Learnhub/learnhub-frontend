@@ -1,5 +1,7 @@
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
+import ProgramSlot from "../features/stores/components/ProgramSlot";
 import LearningClasses from "../pages/students/LearningClasses"
+import { Link } from "react-router-dom"
 
 
 function mockPrograms(num: number) {
@@ -24,31 +26,107 @@ function mockPrograms(num: number) {
     return programs
 }
 
+
+const renderProgramsCourse = () => {
+    return (
+        <>
+            {mockPrograms(20).map((program, index) => {
+                if (index > 7){
+                    return null
+                } else {
+                    return (
+                        <Link to={`/detail/course/${program.courseId}`} key={index} className="mx-5 my-2" >
+                            <ProgramSlot key={index} courseThumbnailUrl={program.courseThumbnailUrl}
+                                courseName={program.courseName}
+                                instructorName={program.instructorName}
+                                percentCompleted={program.percentCompleted}
+                                regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"}
+                                lvl={"พื้นฐาน"} />
+                        </Link>
+                    )
+                }
+            })}  
+        </>
+    )
+}
+
+
+const renderProgramClasses = () => {
+    return (
+        <>
+            {mockPrograms(20).map((program, index) => {
+                if (index > 7){
+                    return null
+                } else {
+
+                    return (
+                        <Link to={`/detail/course/${program.courseId}`} key={index} className="mx-5 my-2" >
+                            <ProgramSlot key={index} courseThumbnailUrl={program.courseThumbnailUrl}
+                                courseName={program.className}
+                                instructorName={program.instructorName}
+                                percentCompleted={program.percentCompleted}
+                                regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"}
+                                lvl={"พื้นฐาน"} />
+                        </Link>
+                    )
+                }
+            })}
+        </>
+    )
+}
+
+
 export default function Home() {
     return (
         <div className="flex flex-col items-center">
-            <div className="ml-6">
+            <div className="mt-5">
                 <ProgramCarousel programs={mockPrograms(20)}
                     carouselName="คลาสเรียนยอดนิยม"
                     displayCount={3} />
             </div>
-            <div className="ml-6 mt-5">
+            <hr className="border-[#d9d9d9] my-8 w-full"/>
+
+            <div className="mt-5 mb-4">
                 <ProgramCarousel programs={mockPrograms(20)}
                     carouselName="คลาสเรียนใหม่ล่าสุด"
-                    displayCount={3}
-                />
-            </div>
-            <div className="ml-6">
-                <ProgramCarousel programs={mockPrograms(20)}
-                    carouselName="คอร์สเรียนยอดนิยม"
                     displayCount={3} />
             </div>
-            <div className="ml-6 mt-5">
-                <ProgramCarousel programs={mockPrograms(20)}
-                    carouselName="คอร์สเรียนใหม่ล่าสุด"
-                    displayCount={3}
-                />
-            </div>
+            <hr className="border-[#d9d9d9] my-8 w-full"/>
+
+            <section className="relative flex flex-col items-center">
+                <h1 className="absolute left-[16%] pb-12 text-2xl font-bold self-start">คลาสเรียน</h1>
+                <div className="pl-6 mt-5 w-[74%] pt-8 flex flex-wrap">
+                    {renderProgramClasses()} 
+                </div>
+                <Link to={`/home/classes`}>
+                    <div className="flex pb-4 pt-2">
+                        <button
+                            type="button"
+                            className="text-lg font-bold">
+                            ดูทั้งหมด
+                        </button>
+                    </div>
+                </Link>
+            </section>
+            <hr className="border-[#d9d9d9] my-8 w-full"/>
+
+            <section className="relative flex flex-col items-center">
+                <h1 className="absolute left-[16%] pb-12 text-2xl font-bold self-start">คอร์สเรียน</h1>
+                <div className="pl-6 mt-5 w-[74%] pt-8 flex flex-wrap">
+                    {renderProgramsCourse()} 
+                </div>
+                <Link to={`/home/courses`}>
+                    <div className="flex pb-4 pt-2">
+                        <button
+                            type="button"
+                            className="text-lg font-bold">
+                            ดูทั้งหมด
+                        </button>
+                    </div>
+                </Link>
+            </section>
+
+            
         </div>
     )
 }

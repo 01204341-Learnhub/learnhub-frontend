@@ -33,6 +33,20 @@ function LessonEntry(props: LessonEntryProps) {
       <div className="text-[#808080] font-normal text-[13px]">
         {props.lesson.name}
       </div>
+      <div className="flex-1"></div>
+      <div className="text-[#808080] font-normal text-[13px]">
+        {(function () {
+          if (props.lesson.lessonLength < 3600) {
+            return `${Math.floor(props.lesson.lessonLength / 60)} นาที`;
+          } else {
+            return `${Math.floor(
+              props.lesson.lessonLength / 3600
+            )} ชั่วโมง ${Math.floor(
+              (props.lesson.lessonLength % 3600) / 60
+            )} นาที`;
+          }
+        })()}
+      </div>
     </div>
   );
 }
@@ -59,7 +73,7 @@ function ChapterEntry(props: ChapterEntryProps) {
       description: `This is lesson ${i}`,
       lessonNum: i,
       lessonType: lessonTypes[i % 4],
-      lessonLength: 2500,
+      lessonLength: 1500 * (i + 1),
     };
     lessons.push(lesson);
   }
@@ -67,7 +81,7 @@ function ChapterEntry(props: ChapterEntryProps) {
   return (
     <>
       <button className={"bg-[#D9D9D9] p-3 w-full"} onClick={handleExpand}>
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-between">
           <div className="text-left text-black text-[16px] font-semibold">
             {props.chapter.name}
           </div>
@@ -108,3 +122,30 @@ function CourseChaptersOutline(props: CourseChaptersOutlineProps) {
 }
 
 export default CourseChaptersOutline;
+
+function CourseChaptersOutlineTest() {
+  // TODO: In real caller, get chapters from backend.
+  const chapters: Chapter[] = [];
+  for (let i = 0; i < 10; i++) {
+    const chapter: Chapter = {
+      id: `${i}`,
+      courseId: "0",
+      name: `Chapter ${i}`,
+      description: `This is chapter ${i}`,
+      chapterNum: i,
+      lessonCount: 4,
+      chapterLength: 10000,
+    };
+    chapters.push(chapter);
+  }
+
+  return (
+    <div className="bg-white min-h-screen min-w-screen">
+      <div className="flex flex-row justify-center">
+        <CourseChaptersOutline chapters={chapters} />
+      </div>
+    </div>
+  );
+}
+
+export { CourseChaptersOutlineTest };

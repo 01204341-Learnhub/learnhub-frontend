@@ -91,6 +91,7 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
   };
 
   if (step == 1) {
+    const maxLength = 60;
     return (
       <div className="relative w-full h-[500px] bg-[#F0F0F0] border-black border-2">
         <div className="flex flex-col justify-center mt-[120px]">
@@ -106,10 +107,11 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
             value={courseName}
             placeholder="ตัวอย่าง : เรียนรู้วิธีใช้ microsoft word เริ่มจาก 0"
             onChange={(e) => setCourseName(e.target.value)}
-            maxLength={60}
-            className="mt-[29px] mx-auto w-2/3 max-w-[585px] h-[45px] px-4"
+            maxLength={maxLength}
+            className="mt-[29px] mx-auto w-2/3 max-w-[585px] h-[45px] px-5"
           />
         </div>
+        <p className="text-gray-400 text-[16px] text-center mt-2">{`${courseName.length} / ${maxLength}`}</p>
         <div className="absolute bottom-0 w-full">
           <_StepperNav
             onPrev={onPrev}

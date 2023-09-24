@@ -26,7 +26,7 @@ function mockPrograms(num: number) {
 
 export default function Home() {
     return (
-        <div>
+        <div className="flex flex-col items-center">
             <div className="ml-6">
                 <ProgramCarousel programs={mockPrograms(20)}
                     carouselName="คลาสเรียนยอดนิยม"

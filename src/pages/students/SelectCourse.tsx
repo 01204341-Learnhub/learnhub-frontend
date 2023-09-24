@@ -1,11 +1,12 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useEffect, useState } from "react"
+import { Link } from "react-router-dom"
 import CourseCard from "../../features/learns/components/CourseCard"
 import { listEnrolledCourses } from "../../features/learns/services/programs"
 import { EnrolledCourse } from "../../features/learns/types/programs"
 
-export default function LearningCourses() {
+export default function SelectCourse() {
     const [enrolledCourses, setEnrolledCourses] = useState<EnrolledCourse[]>([])
     const [loading, setLoading] = useState(false)
     const [query, setQuery] = useState("IN-PROGRESS")
@@ -45,10 +46,12 @@ export default function LearningCourses() {
             <ul className="grid grid-cols-5 mx-5">
                 {enrolledCourses.map((course) => (
                     <li key={course.id} className={`flex justify-center mt-5`}>
-                        <CourseCard courseName={course.name}
-                            courseThumbnailUrl={course.thumbnailUrl}
-                            instructorName={course.instructor[0]}
-                            percentCompleted={course.progress} />
+                        <Link to={`/learn/courses/${course.id}`}>
+                            <CourseCard courseName={course.name}
+                                courseThumbnailUrl={course.thumbnailUrl}
+                                instructorName={course.instructor[0]}
+                                percentCompleted={course.progress} />
+                        </Link>
                     </li>
                 ))}
             </ul>

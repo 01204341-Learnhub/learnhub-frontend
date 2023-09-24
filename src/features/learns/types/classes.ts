@@ -16,6 +16,6 @@ export type EnrolledClass = {
     teacher: Teacher
     status: string
     tags: Tag[]
-    registrationEndDate: number
+    registrationEndDate: Date
     price: number 
 }

@@ -4,7 +4,7 @@ async function listEnrolledClass(
     studentID: string
 ): Promise<EnrolledClass[]> {
     studentID;
-    const mock = (i : string) => {
+    const mock = (i : string, status: string) => {
         const m = {
             id: i,
             name: "Mahasachan",
@@ -13,19 +13,21 @@ async function listEnrolledClass(
                 id: i,
                 name: "Baramee putty"
             },
-            status: "started",
+            status: status,
             tags: [
                 {
                     id: i,
                     name: "Deep Learning"
                 }
             ],
-            registrationEndDate: 123412,
+            registrationEndDate: new Date(2022, 12, 8),
             price: 1990
         };
         return m;
     };
-    return [mock("1"), mock("2")];
+    return [mock("1", "finished"), mock("2", "started")];
 }
+
+
 
 export { listEnrolledClass }

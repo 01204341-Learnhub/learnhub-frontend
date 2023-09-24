@@ -6,6 +6,10 @@ function TeacherNavBar() {
     return (
         <div className="">
             <h1 className="px-2 ml-2 mt-3 bg-pink-400 rounded-xl inline-block">ผู้สอน</h1>
+            <NavLink to="/teach/overview" replace={true} className={({ isActive }) => `flex my-3 hover:bg-gray-400 ${isActive ? "bg-gray-400" : ""}`}>
+                <FontAwesomeIcon icon={faBookOpen} />
+                <h1 className="ml-2 font-bold text-2xl">หน้าภาพรวม</h1>
+            </NavLink>
             <NavLink to="/teach/courses" replace={true} className={({ isActive }) => `flex my-3 hover:bg-gray-400 ${isActive ? "bg-gray-400" : ""}`}>
                 <FontAwesomeIcon icon={faBookOpen} />
                 <h1 className="ml-2 font-bold text-2xl">คอร์สเรียนของฉัน</h1>

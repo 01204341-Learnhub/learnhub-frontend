@@ -27,7 +27,7 @@ const renderClasses = () => {
         <>
             {mockClasses(20).map((program, index) => {
                     return (
-                        <Link to={`/detail/course/${program.classId}`} key={index} className="mx-5 my-2" >
+                        <Link to={`/detail/class/${program.classId}`} key={index} className="mx-5 my-2" >
                             <ProgramSlot key={index} courseThumbnailUrl={program.courseThumbnailUrl}
                                 courseName={program.className}
                                 instructorName={program.instructorName}

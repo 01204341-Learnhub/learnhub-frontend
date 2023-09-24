@@ -18,6 +18,7 @@ function mockPrograms(num: number) {
             courseName: `คอร์สเรียนที่ ${i + 1}`,
             className: `คลาสเรียนที่ ${i + 1}`,
             courseId: ` B${i + 1}`,
+            classId: ` B${i + 1}`,
             instructorName: mockInstructor[i % mockInstructor.length],
             percentCompleted: Math.floor(Math.random() * 100),
             courseThumbnailUrl: `https://picsum.photos/${i}/${300}`,
@@ -60,7 +61,7 @@ const renderProgramClasses = () => {
                 } else {
 
                     return (
-                        <Link to={`/detail/course/${program.courseId}`} key={index} className="mx-5 my-2" >
+                        <Link to={`/detail/class/${program.classId}`} key={index} className="mx-5 my-2" >
                             <ProgramSlot key={index} courseThumbnailUrl={program.courseThumbnailUrl}
                                 courseName={program.className}
                                 instructorName={program.instructorName}

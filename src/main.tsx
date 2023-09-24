@@ -20,6 +20,8 @@ import SelectCourse from './pages/students/SelectCourse'
 import TeachingClasses from './pages/teachers/TeachingClasses'
 import TeachingCourses from './pages/teachers/TeachingCourses'
 import TeachingHomeworks from './pages/teachers/TeachingHomeworks'
+import AllClasses from './pages/AllClasses'
+import AllCourses from './pages/AllCourses'
 import store from './store'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -30,6 +32,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path='/' element={<Landing />} />
           <Route element={<MainbarLayout />}>
             <Route path='/home' element={<Home />} />
+            <Route path='/home/courses' element={<AllCourses/>}></Route>
+            <Route path='/home/classes' element={<AllClasses/>}></Route>
             <Route path='/detail/course/:id' element={<CourseDetail />} />
             <Route element={<StudentNavbarLayout />}>
               <Route path='/learn/overview' element={<LearningOverview />} />

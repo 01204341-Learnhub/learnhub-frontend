@@ -182,7 +182,7 @@ function CreateCourse() {
     )
     else if (currentView == "add-chapter") return (
         <>
-            <CourseChapterCreate courseNumber={1} onSubmit={onCreateChapter} onCancel={() => { setCurrentView("main") }} />
+            <CourseChapterCreate chapterNumber={chapters.length + 1} onSubmit={onCreateChapter} onCancel={() => { setCurrentView("main") }} />
         </>
     )
 }

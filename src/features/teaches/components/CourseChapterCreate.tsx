@@ -4,31 +4,38 @@ import { useState } from "react"
 import { CourseChapter } from "../types/course"
 
 interface CourseChapterCreateProps {
-    courseNumber: number,
+    chapterNumber: number,
     onSubmit: (chapter: CourseChapter) => void
     onCancel: () => void
 }
 
-function CourseChapterCreate({ courseNumber, onSubmit, onCancel }: CourseChapterCreateProps) {
-    const chapterName = useState<string>("")
-    const chapterDescription = useState<string>("")
+function CourseChapterCreate({ chapterNumber: courseNumber, onSubmit, onCancel }: CourseChapterCreateProps) {
+    const [chapterName, setChapterName] = useState<string>("")
+    const [chapterDescription, setChapterDescription] = useState<string>("")
     const handleSubmit = () => {
         const chapter: CourseChapter = {
-            chapterName: "33",
-            chapterDescription: "33333333333333331111111111111111",
+            chapterName: chapterName,
+            chapterDescription: chapterDescription,
             lessons: [{ lessonName: "Y", lessonNumber: 1, lessonType: "video" },
             { lessonName: "X", lessonNumber: 2, lessonType: "doc" }]
         }
         onSubmit(chapter)
+    }
+    const onChapterNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setChapterName(e.target.value)
+    }
+    const onChapterDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setChapterDescription(e.target.value)
     }
     return (
         <div>
             <h1 className="font-bold m-5">บทที่ {courseNumber}</h1>
             <div className="bg-white py-2 px-4 drop-shadow-lg">
                 <h1 className="font-bold">ชื่อบทเรียน</h1>
-                <input type="text" placeholder="  ชื่อบทเรียน" className="input input-bordered w-full my-4" />
+                <input type="text" placeholder="ชื่อบทเรียน" className="input input-bordered w-full my-4" value={chapterName} onChange={onChapterNameChange} />
                 <h1 className="font-bold">คำอธิบาย</h1>
-                <input type="text" placeholder="  ผู้เรียนสามารถทำอะไรได้บ้างหลังจากจบส่วนนี้" className="input input-bordered w-full my-4" />
+                <input type="text" placeholder="  ผู้เรียนสามารถทำอะไรได้บ้างหลังจากจบส่วนนี้" className="input input-bordered w-full my-4" value={chapterDescription}
+                    onChange={onChapterDescriptionChange} />
             </div>
             <div className="w-full flex justify-end mt-5">
                 <div className="mr-4">

@@ -93,7 +93,7 @@ function _LevelDropDown({ targetLevel, onChangeLevel }: { targetLevel: string, o
 }
 
 function CreateClass() {
-    const fakeUrl = "https://pic-bstarstatic.akamaized.net/ugc/44e7ab09469c5f088a2c7aae748a3113.jpeg"
+    const fakeUrl = "https://miro.medium.com/v2/resize:fit:691/1*VSQ0XEywxSgZBwW05GsZtw.png"
     const [mode, setMode] = useState<string>("purpose")
     const [className, setClassName] = useState<string>("")
     const [classLevel, setClassLevel] = useState<string>("BEGINNER")

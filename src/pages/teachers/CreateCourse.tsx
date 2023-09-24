@@ -68,7 +68,7 @@ function CreateCourse() {
         setChapters(prev => [...prev, chapter])
         setCurrentView("main")
     }
-    const fakeThumbnail = "https://thicc.mywaifulist.moe/waifus/650/21296f5d4968c9f8ff4a18a123535c0b52d9d14ea5e7a9899362ce940f41eeba_thumb.jpg"
+    const fakeThumbnail = "https://miro.medium.com/v2/resize:fit:691/1*VSQ0XEywxSgZBwW05GsZtw.png"
     if (basicCouseInfo === undefined) return (
         <div className="mx-5">
             <h1 className="font-bold text-2xl">สร้างคอร์สเรียน</h1>

@@ -19,20 +19,20 @@ function SingleTopicSelector(props: SingleTopicSelectorProps) {
 
   return (
     <button
-      className={
+      className={`rounded-full px-5 h-[40px] hover:shadow-lg ${
         isSelected
-          ? "group rounded-full bg-white border-black border-[2px] px-6 h-[40px] hover:shadow-lg"
-          : "group rounded-full bg-[#EAEAEA] px-6 h-[40px] hover:shadow-lg"
-      }
+          ? "bg-white border-black border-[2px]"
+          : "bg-[#EAEAEA] border-transparent border-[2px]"
+      }`}
       onClick={handleTopicClick}
     >
       <div className="flex flex-row items-center">
         <div
-          className={
+          className={`text-center text-[20px] ${
             isSelected
-              ? "text-black text-center text-[20px] font-semibold"
-              : "text-gray-600 text-center text-[20px] font-normal"
-          }
+              ? "text-black font-semibold"
+              : "text-gray-600 font-normal"
+          }`}
         >
           {props.topicName}
         </div>
@@ -51,10 +51,10 @@ function SingleTopicSelector(props: SingleTopicSelectorProps) {
 function InterestedTopics() {
   // TODO: Fetch all topics from backend.
   const allTopics: Topic[] = [];
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 40; i++) {
     allTopics.push({
       id: `${i}`,
-      name: `Topic ${i}`,
+      name: `Topic ${"a".repeat(i % 10)} `,
     });
   }
 
@@ -67,32 +67,31 @@ function InterestedTopics() {
     }
   }
 
-  const [isExpanded, setIsExpanded] = useState(false);
-  function handleExpandClick() {
-    setIsExpanded(!isExpanded);
-  }
-
   const navigate = useNavigate();
   function handleNextClick() {
+    if (interestedTopicIds.length < 3) {
+      alert("กรุณาเลือก 3 หัวข้อหรือมากกว่า");
+      return;
+    }
     // TODO: Send interestedTopicIds to backend.
     console.log(interestedTopicIds);
     navigate("/home");
   }
 
   return (
-    <>
-      <div className=" mt-10 text-[36px] font-semibold text-center">
+    <div className="bg-white absolute top-0 bottom-0">
+      <div className="mt-8 text-[36px] text-black font-semibold text-center">
         คุณสนใจด้านใดบ้าง
       </div>
 
-      <div className="mt-4 mb-12 text-[20px] text-center">
+      <div className="mt-4 text-[20px] text-black text-center">
         เลือก 3 หัวข้อหรือมากกว่า
       </div>
 
-      <div className="flex flex-row justify-center">
-        <div className="flex flex-row flex-wrap">
+      <div className="mx-60 mt-14 max-h-[400px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none] [scrollbar-width:'none']">
+        <div className="flex flex-row flex-wrap justify-center">
           {allTopics.map((topic) => (
-            <div className="m-2" key={topic.id}>
+            <div className="m-3" key={topic.id}>
               <SingleTopicSelector
                 topicId={topic.id}
                 topicName={topic.name}
@@ -104,19 +103,10 @@ function InterestedTopics() {
       </div>
 
       <div className="flex flex-row justify-center">
-        <button>
-          <div
-            className="text-black text-center text-[20px] font-semibold"
-            onClick={handleExpandClick}
-          >
-            เพิ่มเติม
-          </div>
-        </button>
-      </div>
-
-      <div className="flex flex-row justify-center">
         <button
-          className="rounded-full bg-[#D9D9D9] px-6 h-[40px] hover:shadow-lg"
+          className={`${
+            interestedTopicIds.length < 3 ? "hidden" : "block"
+          } rounded-full bg-[#D9D9D9] px-6 h-[40px] absolute bottom-10 hover:shadow-lg`}
           onClick={handleNextClick}
         >
           <div className="text-black text-center text-[24px] font-semibold">
@@ -124,7 +114,7 @@ function InterestedTopics() {
           </div>
         </button>
       </div>
-    </>
+    </div>
   );
 }
 

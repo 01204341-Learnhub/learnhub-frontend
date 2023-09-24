@@ -1,7 +1,8 @@
 import React from 'react'
 import ClassCard from '../../features/learns/components/ClassCard'
 import ClassTeachNow from '../../features/learns/components/ClassTeachNow'
-
+import { listEnrolledClass } from '../../features/learns/services/classes'
+import { EnrolledClass } from '../../features/learns/types/classes'
 
 interface ClassTeachNowProp {
     ThumbnailUrl: string;
@@ -61,6 +62,15 @@ const mockClassCardComplete: ClassCardProps[] = [
     },
 ]
 
+const enrolledClasses = await listEnrolledClass("1")
+
+
+
+const classesProcess = enrolledClasses.filter((enrolledClass: EnrolledClass) => enrolledClass.status === "started")
+console.log(classesProcess)
+const classesCompleted = enrolledClasses.filter((enrolledClass: EnrolledClass) => enrolledClass.status === "finished")
+console.log(classesCompleted)
+
 
 function LearningClasses() {
 
@@ -77,17 +87,19 @@ function LearningClasses() {
         setIsSelectProgcess(false)
     }
 
-   const selectedProcess = isSelectProgcess ? 'text-lg font-medium border-b-8 border-black mx-4 pb-2 px-2' : 'text-lg font-medium border-b-8 border-transparent mx-4 px-2 pb-2'
-   const selectedCompleted = isSelectCompleted ? 'text-lg font-medium border-b-8 border-black mx-4 pb-2 px-2' : 'text-lg font-medium border-b-8 border-transparent mx-4 px-2 pb-2'
+    const selected = 'text-lg font-semibold border-b-8 border-black mx-4 pb-2 px-2'
+    const notSelected = 'text-lg text-[#808080] font-medium border-b-8 border-transparent mx-4 px-2 pb-2'
+    const selectedProcess = isSelectProgcess ? selected : notSelected
+    const selectedCompleted = isSelectCompleted ? selected : notSelected
 
 
 
     const renderClassInProcess = () => {
         return (
             <>
-                {mockClassCardProgress.map((classCard) => {
+                {mockClassCardProgress.map((classCard, index) => {
                     return (
-                        <div className='px-4 py-3'>
+                        <div key={index} className='px-4 py-3'>
                             <ClassCard {...classCard} />
                         </div>
                     )
@@ -99,9 +111,9 @@ function LearningClasses() {
     const renderClassInCompleted = () => {
         return (
             <>
-                {mockClassCardComplete.map((classCard) => {
+                {mockClassCardComplete.map((classCard, index) => {
                     return (
-                        <div className='px-4 py-3'>
+                        <div key={index} className='px-4 py-3'>
                             <ClassCard {...classCard} />
                         </div>
                     )
@@ -139,7 +151,8 @@ function LearningClasses() {
                         className={selectedCompleted}>เสร็จสิ้นแล้ว</button>
                 </nav>
                 <hr className='border-2'/>
-                <section className='flex flex-wrap px-4 pt-8'>
+                <h1 className='px-12 pt-12 text-xl font-semibold'>คลาสเรียนที่กำลังดำเนิน</h1>
+                <section className='flex flex-wrap px-4 pt-8 pb-12'>
                     { isSelectProgcess && renderClassInProcess()}
                     { isSelectCompleted && renderClassInCompleted()}
                 </section>

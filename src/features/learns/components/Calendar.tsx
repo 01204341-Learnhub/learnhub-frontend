@@ -49,13 +49,13 @@ import {
     };
   
     return (
-      <div className="p-8 w-[100%] h-[100%] flex items-center justify-center">
-        <div className="">
+      <div className="p-6 w-full h-full flex items-center justify-center shadow-xl">
+        <div className="w-[400px] h-[280px]">
           <div className="flex items-center justify-between">
             <p className="font-semibold text-xl">
               {format(firstDayOfMonth, "MMMM yyyy")}
             </p>
-            <div className="flex items-center justify-evenly gap-6 sm:gap-12">
+            <div className="flex items-center justify-evenly gap-6 sm:gap-4">
               <ChevronLeftIcon
                 className="w-6 h-6 cursor-pointer"
                 onClick={getPrevMonth}
@@ -66,8 +66,8 @@ import {
               />
             </div>
           </div>
-          <hr className="my-6" />
-          <div className="grid grid-cols-7 gap-6 sm:gap-12 place-items-center">
+          <hr className="my-4" />
+          <div className="grid grid-cols-7 gap-6 sm:gap-1 place-items-center">
             {days.map((day, idx) => {
               return (
                 <div key={idx} className="font-semibold">
@@ -76,7 +76,7 @@ import {
               );
             })}
           </div>
-          <div className="grid grid-cols-7 gap-6 sm:gap-12 mt-8 place-items-center">
+          <div className="grid grid-cols-7 gap-6 sm:gap-1 mt-4 place-items-center">
             {daysInMonth.map((day, idx) => {
               return (
                 <div key={idx} className={colStartClasses[getDay(day)]}>

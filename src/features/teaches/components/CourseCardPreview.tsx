@@ -9,7 +9,7 @@ interface ProgramSlotProps {
 
 function CourseCardPreview({ courseThumbnailUrl, courseName, instructorName, price, tag, lvl }: ProgramSlotProps) {
     return (
-        <div className="m-2 rounded-[20px] w-[286px] h-[350px] max-w-sm overflow-hidden shadow-lg ">
+        <div className="m-2 rounded-[20px] w-[286px] h-[350px] max-w-sm overflow-hidden shadow-lg bg-white">
             <div className=" w-[286px] h-[146px]">
                 <img className="w-full h-[146px]" src={courseThumbnailUrl} alt="Larm On Chang" />
             </div>

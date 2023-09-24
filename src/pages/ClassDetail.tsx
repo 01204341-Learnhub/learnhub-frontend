@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
-import CourseDetailedSummary from "../features/stores/components/CourseDetailedSummary"
+import ClassDetailedSummary from "../features/stores/components/ClassDetailedSummary"
 import ProgramCoverWithInstructorProfile from "../features/stores/components/ProgramCoverWithInstructorProfile"
 import { getClass } from "../features/stores/services/classes"
 import { ClassProgram } from "../features/stores/types/class"
@@ -33,13 +33,12 @@ function ClassDetail() {
                 <p className="mt-3">{classProgram.description}</p>
             </div>
             <div className="flex justify-center mt-10">
-                <CourseDetailedSummary costs={4000}
+                <ClassDetailedSummary costs={4000}
                     quantity={10}
                     level="Beginner"
                     students={100}
                     availablesource={10000}
-                    hours={10}
-                    examples={200}
+                    timeTeaching={10}
                     status="Available"
                 />
             </div>

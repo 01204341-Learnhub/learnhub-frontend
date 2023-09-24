@@ -8,7 +8,7 @@ async function listEnrolledClass(
         const m = {
             id: i,
             name: "Mahasachan",
-            imageClassUrl: "",
+            imageClassUrl: "https://www.mindphp.com/images/knowledge/122560/vue.jpg",
             teacher: {
                 id: i,
                 name: "Baramee putty"

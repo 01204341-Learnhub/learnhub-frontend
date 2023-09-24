@@ -107,6 +107,9 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
             value={courseName}
             placeholder="ตัวอย่าง : เรียนรู้วิธีใช้ microsoft word เริ่มจาก 0"
             onChange={(e) => setCourseName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") onNext();
+            }}
             maxLength={maxLength}
             className="mt-[29px] mx-auto w-2/3 max-w-[585px] h-[45px] px-5"
           />

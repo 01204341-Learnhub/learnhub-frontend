@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import Calendar from "../../features/learns/components/Calendar"
 import ClassCard from "../../features/teaches/components/ClassCard"
 import CourseCard from "../../features/teaches/components/CourseCard"
 import NewProgramClass from "../../features/teaches/components/NewProgramCard"
@@ -32,18 +33,21 @@ function TeacherOverview() {
 
     return (
         <div className="flex flex-col">
-            <div className="w-3/5 mx-5 bg-[#d9d9d9]">
-                <h1 className="my-5 mx-5 text-2xl font-bold">สร้างคอร์สเรียน/คลาสเรียน</h1>
-                <div className="flex">
-                    <div className="mx-5 my-5">
-                        <NewProgramClass type="คอร์ส" onClick={() => { handleNavigate("course") }} />
-                    </div>
-                    <div className="mx-5 my-5">
-                        <NewProgramClass type="คลาส" onClick={() => { handleNavigate("class") }} />
+            <div className="flex">
+                <div className="w-3/5 mx-5 bg-[#d9d9d9]">
+                    <h1 className="my-5 mx-5 text-2xl font-bold">สร้างคอร์สเรียน/คลาสเรียน</h1>
+                    <div className="flex">
+                        <div className="mx-5 my-5">
+                            <NewProgramClass type="คอร์ส" onClick={() => { handleNavigate("course") }} />
+                        </div>
+                        <div className="mx-5 my-5">
+                            <NewProgramClass type="คลาส" onClick={() => { handleNavigate("class") }} />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="w-2/5">
+                <div className="w-2/5 bg-white">
+                    <Calendar />
+                </div>
             </div>
             <div className="flex m-6">
                 <h1 className="font-bold text-2xl">คอร์สเรียนของฉัน</h1>

@@ -1,8 +1,23 @@
 import Calendar from "../../features/learns/components/Calendar"
 import ClassHomeworkIncoming from "../../features/learns/components/ClassHomeworkIncoming"
-import ClassHomeworks from "../../features/learns/components/ClassHomeworks"
 import ClassIncoming from "../../features/learns/components/ClassIncoming"
 import ClassTeachNow from "../../features/learns/components/ClassTeachNow"
+
+
+const DataHomework =[{
+    titleName:"What is Redstone1" ,homeworkName:"Principal Redstone Designs" ,deadlineDayOfWeek:"" ,deadlineTime:"พรุ่งนี้ 9.00 น" ,status:"ยังไม่ได้ส่ง" ,color:"red"
+},{
+    titleName:"What is Redstone2" ,homeworkName:"Principal Redstone Designs" ,deadlineDayOfWeek:"" ,deadlineTime:"พรุ่งนี้ 12.00 น" ,status:"ยังไม่ได้ส่ง" ,color:"red"
+},{
+    titleName:"What is Redstone3" ,homeworkName:"Principal Redstone Designs" ,deadlineDayOfWeek:"" ,deadlineTime:"พรุ่งนี้ 15.00 น" ,status:"ยังไม่ได้ส่ง" ,color:"red"
+},{
+    titleName:"What is Redstone4" ,homeworkName:"Principal Redstone Designs" ,deadlineDayOfWeek:"" ,deadlineTime:"พรุ่งนี้ 20.00 น" ,status:"ยังไม่ได้ส่ง" ,color:"red"
+},{
+    titleName:"What is Redstone5" ,homeworkName:"Principal Redstone Designs" ,deadlineDayOfWeek:"" ,deadlineTime:"พรุ่งนี้ 23.59 น" ,status:"ยังไม่ได้ส่ง" ,color:"red"
+}]
+
+
+
 function LearningOverview() {
     return (
         <>
@@ -33,7 +48,9 @@ function LearningOverview() {
                     การบ้านในคลาสที่ต้องส่งเร็วๆนี้
                 </div>
                 <div className="m-5">
-                    <ClassHomeworkIncoming titleName={""} homeworkName={""} deadlineDayOfWeek={""} deadlineTime={""} status={""} color={"red"}></ClassHomeworkIncoming>
+                {DataHomework.map((item) => (
+                    <ClassHomeworkIncoming  titleName={item.titleName} homeworkName={item.homeworkName} deadlineDayOfWeek={item.deadlineDayOfWeek} deadlineTime={item.deadlineTime} status={item.status} color={item.color}></ClassHomeworkIncoming>
+                ))}
                 </div>
             </div>
         </div>

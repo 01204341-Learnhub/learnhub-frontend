@@ -1,5 +1,6 @@
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import LearningClasses from "../pages/students/LearningClasses"
+import LearningOverview from "./students/LearningOverview";
 
 
 function mockPrograms(num: number) {
@@ -27,7 +28,7 @@ function mockPrograms(num: number) {
 export default function Home() {
     return (
         <div>
-            <div className="ml-6">
+            {/* <div className="ml-6">
                 <ProgramCarousel programs={mockPrograms(20)}
                     carouselName="คลาสเรียนยอดนิยม"
                     displayCount={3} />
@@ -48,7 +49,8 @@ export default function Home() {
                     carouselName="คอร์สเรียนใหม่ล่าสุด"
                     displayCount={3}
                 />
-            </div>
+            </div> */}
+            <LearningOverview></LearningOverview>
         </div>
     )
 }

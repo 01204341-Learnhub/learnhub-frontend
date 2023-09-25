@@ -83,7 +83,7 @@ function CreateCourse() {
             <div className="flex bg-white">
                 <div className="w-3/12">
                     <_ModeIndicator mode="main" onChangeMode={setCurrentView} />
-                    <button className="bg-[#d9d9d9]">
+                    <button className="bg-[#d9d9d9] mt-5 ml-3 p-2">
                         <h1 className="font-bold text-black">
                             เผยแผร่ course
                         </h1>
@@ -113,7 +113,7 @@ function CreateCourse() {
             <div className="flex">
                 <div className="w-3/12">
                     <_ModeIndicator mode="purpose" onChangeMode={setCurrentView} />
-                    <button className="bg-[#d9d9d9]">
+                    <button className="bg-[#d9d9d9] mt-5 ml-3 p-2">
                         <h1 className="font-bold text-black">
                             เผยแผร่ course
                         </h1>
@@ -146,7 +146,7 @@ function CreateCourse() {
             <div className="flex">
                 <div className="w-3/12">
                     <_ModeIndicator mode="publish" onChangeMode={setCurrentView} />
-                    <button className="bg-[#d9d9d9]">
+                    <button className="bg-[#d9d9d9] mt-5 ml-3 p-2">
                         <h1 className="font-bold text-black">
                             เผยแผร่ course
                         </h1>

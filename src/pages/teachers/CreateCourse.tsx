@@ -40,8 +40,8 @@ function _TopPanel({ basicCouseInfo, courseThumbnailUrl }: _TopPanelProps) {
             <div className="flex-2 bg-[#d9d9d9] p-4">
                 <CourseCardPreview courseThumbnailUrl={courseThumbnailUrl}
                     courseName={basicCouseInfo.courseName}
-                    lvl="BEGINNER" price={3500}
-                    tag="YAY"
+                    lvl={basicCouseInfo.courseLevel} price={3500}
+                    tag={basicCouseInfo.courseCategory}
                     instructorName="Baramee No PDPA" />
             </div>
             <div className="flex-1 bg-white drop-shadow-md ml-5">

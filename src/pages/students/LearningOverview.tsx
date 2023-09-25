@@ -10,7 +10,7 @@ function LearningOverview() {
                 <div className="text-3xl font-bold m-9 mx-[10%] overflow-hidden">การเรียนรู้ของฉัน</div>
                 <div className="text-xl font-bold m-7 mx-[10%] overflow-hidden">คลาสเรียนที่กำลังสอนแล้ว</div>
                 <div className="mx-[10%] bg-gray-200 rounded-xl overflow-hidden">
-                    <ClassTeachNow ThumbnailUrl={"https://miro.medium.com/v2/resize:fit:1400/0*mMBXJ9daWzStSCt5.jpg"} TitleName={"Principal Redstone Designs"} Minute={49.00} ></ClassTeachNow>
+                    <ClassTeachNow ThumbnailUrl={""} TitleName={"Principal Redstone Designs"} Minute={49.00} ></ClassTeachNow>
                 </div>
             </div>
             <div className="basis-1/4 bg-white m-10">

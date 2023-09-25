@@ -17,7 +17,7 @@ interface ClassIncomingProps {
 export default function ClassIncoming (props: ClassIncomingProps) { 
     return (
         <div className=" flex flex-cols-2 w-[460px] h-[150px] shadow-xl">
-            <div className={` bg-[${props.color}] w-[10px]`}>
+            <div className={`bg-${props.color}-500 w-[10px]`}>
             </div>
 
             <div className=" flex flex-rows-3 relative bg-white">

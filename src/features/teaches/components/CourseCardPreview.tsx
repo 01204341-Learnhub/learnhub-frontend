@@ -18,7 +18,7 @@ function CourseCardPreview({ courseThumbnailUrl, courseName, instructorName, pri
                 <p className="-mt-2 font-bold text-gray-500 text-[14px]">{instructorName}</p>
                 <p className="mb-5 text-[18px] font-bold">{price} บาท</p>
                 <div className="my-1 flex justify-between items-center">
-                    <div className="bg-[#FF8989] h-[34px] w-[68px] font-semibold text-black text-[13px] flex items-center justify-center">{tag}</div>
+                    <h1 className="bg-[#FF8989] h-[34px] font-semibold text-black text-[13px] flex items-center justify-center">{tag}</h1>
                     <div className="flex items-center ">
                         <img className="w-[30px] h-[25px]" src="https://gcdnb.pbrd.co/images/G0C0jeTiZxkL.png?o=1" alt="lvl" ></img>
                         <div className="  p-2 font-semibold text-[14px] text-gray-500 text-center " >{lvl}</div>

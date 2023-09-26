@@ -79,35 +79,35 @@ function ClassHomeworks(props: ClassHomeworksProps) {
 
   return (
     <>
-      <div className="collapse collapse-arrow bg-base-300 rounded-none w-[830px] my-4">
+      <div className="collapse collapse-arrow bg-base-300 rounded-none  my-4">
         <input type="checkbox" />
         <div className="collapse-title text-xl font-semibold">
           ทำเสร็จแล้ว ({doneHomeworks.length})
         </div>
         <div className="collapse-content">{doneHomeworks}</div>
       </div>
-      <div className="collapse collapse-arrow bg-base-300 rounded-none w-[830px] my-4">
+      <div className="collapse collapse-arrow bg-base-300 rounded-none my-4">
         <input type="checkbox" />
         <div className="collapse-title text-xl font-semibold">
           เกินกำหนดส่ง ({pastDueHomeworks.length})
         </div>
         <div className="collapse-content">{pastDueHomeworks}</div>
       </div>
-      <div className="collapse collapse-arrow bg-base-300 rounded-none w-[830px] my-4">
+      <div className="collapse collapse-arrow bg-base-300 rounded-none my-4">
         <input type="checkbox" />
         <div className="collapse-title text-xl font-semibold">
           ไม่มีกำหนดส่ง ({noDueDateHomeworks.length})
         </div>
         <div className="collapse-content">{noDueDateHomeworks}</div>
       </div>
-      <div className="collapse collapse-arrow bg-base-300 rounded-none w-[830px] my-4">
+      <div className="collapse collapse-arrow bg-base-300 rounded-none   my-4">
         <input type="checkbox" />
         <div className="collapse-title text-xl font-semibold">
           กำหนดส่งภายในสัปดาห์นี้ ({dueThisWeekHomeworks.length})
         </div>
         <div className="collapse-content">{dueThisWeekHomeworks}</div>
       </div>
-      <div className="collapse collapse-arrow bg-base-300 rounded-none w-[830px] my-4">
+      <div className="collapse collapse-arrow bg-base-300 rounded-none   my-4">
         <input type="checkbox" />
         <div className="collapse-title text-xl font-semibold">
           กำหนดส่งภายในสัปดาห์หน้า ({dueNextWeekHomeworks.length})

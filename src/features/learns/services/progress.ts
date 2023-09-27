@@ -1,17 +1,20 @@
-async function fetchUserCourseProgress(course_id: string) {
-  const mockData = {
-    student_id: "1",
-    course_id: course_id,
+import { UserCourseProgress } from "../types/progress";
+
+async function fetchUserCourseProgress(
+  course_id: string
+): Promise<UserCourseProgress> {
+  const mockData: UserCourseProgress = {
+    studentID: "1",
+    courseID: course_id,
     finished: false,
     lessons: [
       {
-        lesson_id: "1",
-        chapter_id: "1",
+        lessonID: "1",
+        chapterID: "1",
         finished: false,
-        lesson_completed: 0,
+        lessonCompleted: 0,
       },
     ],
-    fisnished_count: 0,
   };
   return mockData;
 }

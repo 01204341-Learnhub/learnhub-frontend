@@ -1,4 +1,4 @@
-export type UserCourseProgress = {
+type UserCourseProgress = {
   studentID: string;
   courseID: string;
   finished: boolean;
@@ -9,3 +9,14 @@ export type UserCourseProgress = {
     lessonCompleted: number;
   }[];
 };
+
+type UserCourseChapterProgress = {
+  finished: boolean;
+  lessonsCompleted: number;
+  lessons: {
+    lessonID: string;
+    finished: boolean;
+  }[];
+};
+
+export type { UserCourseChapterProgress, UserCourseProgress };

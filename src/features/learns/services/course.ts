@@ -1,8 +1,9 @@
-import { CourseChapter, Lesson } from "../types/course";
+import { CourseChapter, CourseLesson } from "../types/course";
 
 async function fetchChapters(courseID: string): Promise<CourseChapter[]> {
   const mockChapters: CourseChapter[] = [
     {
+      chapterID: "1",
       courseID: courseID,
       chapterNum: 1,
       name: "Chapter 1",
@@ -12,6 +13,7 @@ async function fetchChapters(courseID: string): Promise<CourseChapter[]> {
         "This is a chapter 2 lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
     },
     {
+      chapterID: "2",
       courseID: courseID,
       chapterNum: 2,
       name: "Chapter 2",
@@ -24,8 +26,9 @@ async function fetchChapters(courseID: string): Promise<CourseChapter[]> {
 }
 
 async function fetchLessons(courseID: string, chapterID: string) {
-  const mockLessons: Lesson[] = [
+  const mockLessons: CourseLesson[] = [
     {
+      lessonID: "1",
       chapterID: chapterID,
       courseID: courseID,
       lessonNum: 1,

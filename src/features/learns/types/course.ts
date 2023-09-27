@@ -1,4 +1,5 @@
 export type CourseChapter = {
+  chapterID: string;
   chapterNum: number;
   name: string;
   courseID: string;
@@ -8,6 +9,7 @@ export type CourseChapter = {
 };
 
 export type CourseLesson = {
+  lessonID: string;
   lessonNum: number;
   name: string;
   courseID: string;

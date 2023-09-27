@@ -55,6 +55,12 @@ function LearnCourse() {
         fetchChaptersAndProgress(courseID).then(() => { setFetching(false) })
     }, [courseID])
 
+    const getChapter = (chapterID: string) => {
+        const idx = chapters.findIndex((chapter) => chapter.chapterID == chapterID)
+        if (idx == -1) throw new Error("Chapter not found")
+        return chapters[idx]
+    }
+
     if (fetching) return (<div>Fetching...</div>)
     if (!progress || !chapters) return (<div>Not found</div>)
     return (
@@ -66,20 +72,33 @@ function LearnCourse() {
             <div>
                 <_LessonDisplay lesson={currentLesson} />
             </div>
-            <div className="flex">
-                <button onClick={() => { setOutlineViewMode("contents") }}>
-                    <h1>เนื้อหาคอร์สเรียน</h1>
-                    <div className={`bg-slate-700 ${outlineViewMode == "contents" ? "h-3" : ""}`}></div>
-                </button>
-                <button className="ml-10" onClick={() => { setOutlineViewMode("announcements") }}>
-                    <h1>ประกาศจากคอร์สเรียน</h1>
-                    <div className={`bg-slate-700 ${outlineViewMode == "announcements" ? "h-3" : ""}`}></div>
-                </button>
-            </div>
-            <div className="bg-white px-10 py-12">
-                {outlineViewMode == 'contents' ?
-                    <_CourseContent chapters={chapters} chapterProgress={progress} onSelectLesson={(l) => { setCurrentLesson(l) }} /> :
-                    <div>Announcements</div>}
+            <div className="mx-12 mt-10">
+
+                {(() => {
+                    if (currentLesson == undefined) return (<></>)
+                    const currentChapter = getChapter(currentLesson.chapterID)
+                    return (
+                        <div>
+                            <h1 className="text-black font-bold">คำอธิบาย (ของ ch) บทที่ {currentChapter.chapterNum}: {currentChapter.name}</h1>
+                            <p>{currentChapter.description}</p>
+                        </div>
+                    )
+                })()}
+                <div className="flex mt-20">
+                    <button onClick={() => { setOutlineViewMode("contents") }}>
+                        <h1>เนื้อหาคอร์สเรียน</h1>
+                        <div className={`bg-slate-700 ${outlineViewMode == "contents" ? "h-3" : ""}`}></div>
+                    </button>
+                    <button className="ml-10" onClick={() => { setOutlineViewMode("announcements") }}>
+                        <h1>ประกาศจากคอร์สเรียน</h1>
+                        <div className={`bg-slate-700 ${outlineViewMode == "announcements" ? "h-3" : ""}`}></div>
+                    </button>
+                </div>
+                <div className="bg-white px-10 py-12">
+                    {outlineViewMode == 'contents' ?
+                        <_CourseContent chapters={chapters} chapterProgress={progress} onSelectLesson={(l) => { setCurrentLesson(l) }} /> :
+                        <div>Announcements</div>}
+                </div>
             </div>
         </div>
     )

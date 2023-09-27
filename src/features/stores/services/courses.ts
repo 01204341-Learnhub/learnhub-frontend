@@ -25,4 +25,26 @@ async function getCourse(id: string): Promise<Course> {
   };
 }
 
-export { getCourse, listCourse };
+async function getAllCourses(num: number): Promise<Course[]> {
+  const programCourse = [];
+  for (let i = 0; i < num; i++) {
+    programCourse.push({
+      id: `C${i+1}`,
+      name: "How to train to Busan",
+      description: "what is zombies in Busan doing",
+      price: 2099,
+      cover: `https://picsum.photos/${i}/${300}`,
+      intructor: {
+        id: "1",
+        name: "Baramika laokrub",
+        avatarUrl: "",
+        jobTitle: "Scotte lungnuk",
+      },
+      reviewerCount: 10000,
+      rating: 4.4,
+    });
+  }
+  return programCourse
+}
+
+export { getCourse, getAllCourses, listCourse };

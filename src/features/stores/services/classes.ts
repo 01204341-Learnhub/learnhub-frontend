@@ -19,8 +19,45 @@ async function getClass(id: string): Promise<ClassProgram> {
       avatarUrl:
         "https://i.pinimg.com/1200x/99/71/76/997176fee7a0a8f2c3ff56cc211d7190.jpg",
       jobTitle: "The Scout Regiment",
+      
     },
+    tags: [
+      {
+        tagId: id,
+        tagName: "ML"
+      }
+    ],
+    registerEndedDate: "120945"
   };
 }
 
-export { getClass, listClass };
+async function getAllClasses(num: number) : Promise<ClassProgram[]> {
+  const programClasses : ClassProgram[] = []
+  for (let i = 0; i < num; i++ ) {
+    programClasses.push(
+      {
+        id: `${i+1}`,
+        description: "",
+        name: "How to be a Good boy like Boom",
+        price: 999,
+        cover: `https://picsum.photos/${i}/${300}`,
+        intructor: {
+          id: "1",
+          name: "Barammey Kung",
+          avatarUrl: "",
+          jobTitle: "Good Guy",
+        },
+        tags: [
+          {
+            tagId: `${i+1}`,
+            tagName: "Life"
+          },
+        ],
+        registerEndedDate:"120945"
+      }
+    )
+  }
+  return programClasses
+}
+
+export { getClass, listClass, getAllClasses };

@@ -1,5 +1,9 @@
 import { Instructor } from "./instructor";
 
+type Tag = {
+    tagId: string
+    tagName: string
+}
 
 export type ClassProgram = {
     id: string;
@@ -8,4 +12,7 @@ export type ClassProgram = {
     price: number;
     cover: string;
     intructor: Instructor;
+    registerEndedDate: string;
+    tags: Tag[];
+    
 }

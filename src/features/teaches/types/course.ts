@@ -8,6 +8,14 @@ type CourseChapter = {
   }[];
 };
 
+type CourseLesson = {
+  lessonID: string;
+  lessonNumber: number;
+  lessonName: string;
+  lessonType: string;
+  src: string;
+};
+
 type CourseInfo = {
   courseID: string;
   courseThumbnailUrl: string;
@@ -16,4 +24,4 @@ type CourseInfo = {
   studentCount: number;
 };
 
-export type { CourseChapter, CourseInfo };
+export type { CourseChapter, CourseInfo, CourseLesson };

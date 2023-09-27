@@ -1,7 +1,9 @@
+// use effect fetch data from services
+
 import ProgramSlot from "../features/stores/components/ProgramSlot"
 import { Link } from "react-router-dom"
 
-function mockClourses(num: number) {
+function mockCourses(num: number) {
     const programs = []
     const mockInstructor = [
         "อาจารย์ อนันต์ สุขสวัสดิ์",
@@ -25,7 +27,7 @@ function mockClourses(num: number) {
 const renderClasses = () => {
     return (
         <>
-            {mockClourses(20).map((course, index) => {
+            {mockCourses(20).map((course, index) => {
                     return (
                         <Link to={`/detail/course/${course.courseId}`} key={index} className="mx-5 my-2" >
                             <ProgramSlot key={index} courseThumbnailUrl={course.courseThumbnailUrl}
@@ -42,6 +44,8 @@ const renderClasses = () => {
 }
 
 export default function AllCloures() {
+    
+
     return (
         <>
             <header className="flex px-4 py-8">

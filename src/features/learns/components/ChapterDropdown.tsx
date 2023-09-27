@@ -15,7 +15,6 @@ interface ChapterDropdownProp {
 
 export default function ChapterDropdown(props:ChapterDropdownProp) {
     const [show,setShow] = useState(false)
-    
     return (
         <>
         <div className='mx-[10%]'>

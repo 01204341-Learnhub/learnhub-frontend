@@ -1,51 +1,45 @@
 // use effect fetch data from services
-
+import { useEffect, useState } from "react"
 import ProgramSlot from "../features/stores/components/ProgramSlot"
 import { Link } from "react-router-dom"
+import { Course } from "../features/stores/types/course"
+import { getAllCourses } from "../features/stores/services/courses"
 
-function mockCourses(num: number) {
-    const programs = []
-    const mockInstructor = [
-        "อาจารย์ อนันต์ สุขสวัสดิ์",
-        "อาจารย์ สมชาย สุขสวัสดิ์",
-        "อาจารย์ สมหญิง สุขสวัสดิ์",
-        "mrs Jiraporn",
-        "mr. Jirapong",
-    ]
-    for (let i = 0; i < num; i++) {
-        programs.push({
-            courseName: `คอร์สเรียนที่ ${i + 1}`,
-            courseId: ` B${i + 1}`,
-            instructorName: mockInstructor[i % mockInstructor.length],
-            percentCompleted: Math.floor(Math.random() * 100),
-            courseThumbnailUrl: `https://picsum.photos/${i}/${300}`,
-        })
-    }
-    return programs
-}
 
-const renderClasses = () => {
-    return (
-        <>
-            {mockCourses(20).map((course, index) => {
-                    return (
-                        <Link to={`/detail/course/${course.courseId}`} key={index} className="mx-5 my-2" >
-                            <ProgramSlot key={index} courseThumbnailUrl={course.courseThumbnailUrl}
-                                courseName={course.courseName}
-                                instructorName={course.instructorName}
-                                percentCompleted={course.percentCompleted}
-                                regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"}
-                                lvl={"พื้นฐาน"} />
-                        </Link>
-                    )
-            })}  
-        </>
-    )
-}
+
+
 
 export default function AllCloures() {
-    
-
+    const [courses, setCourses] = useState<Course[] | null>(null)
+    useEffect(() => {
+        async function fetchProgramCourses() {
+            const courses = await getAllCourses(20!)
+            setCourses(courses)
+        }
+        fetchProgramCourses()
+    }, [])
+    console.log(courses)
+    if (courses === null) {
+        return null;
+    }
+    const renderCourse = () => {
+        return (
+            <>
+                {courses.map((course, index) => {
+                        return (
+                            <Link to={`/detail/course/${course.id}`} key={index} className="mx-5 my-2" >
+                                <ProgramSlot key={index} courseThumbnailUrl={course.cover}
+                                    courseName={course.name}
+                                    instructorName={course.intructor.name}
+                                    percentCompleted={100}
+                                    regisDate={""} voter={1000} price={course.price} tag={"ยอดนิยม"}
+                                    lvl={"พื้นฐาน"} />
+                            </Link>
+                        )
+                })}  
+            </>
+        )
+    }
     return (
         <>
             <header className="flex px-4 py-8">
@@ -61,7 +55,7 @@ export default function AllCloures() {
                     </div>
                 </section>
                 <section className="flex-[3] flex flex-wrap">
-                    {renderClasses()}
+                    {renderCourse()}
                 </section>
             </main>
         </>

@@ -55,7 +55,7 @@ const renderProgramsCourse = () => {
                     return null
                 } else {
                     return (
-                        <Link to={`/detail/course/${program.programId}`} key={index} className="mx-5 my-2" >
+                        <Link to={`/detail/course/${program.programId}`} key={index} className="my-4 px-6" >
                             <ProgramSlot key={index} courseThumbnailUrl={program.programThumbnailUrl}
                                 courseName={program.programName}
                                 instructorName={program.instructorName}
@@ -80,7 +80,7 @@ const renderProgramClasses = () => {
                 } else {
 
                     return (
-                        <Link to={`/detail/class/${program.programId}`} key={index} className="mx-5 my-2" >
+                        <Link to={`/detail/class/${program.programId}`} key={index} className="my-4 px-6" >
                             <ProgramSlot key={index} courseThumbnailUrl={program.programThumbnailUrl}
                                 courseName={program.programName}
                                 instructorName={program.instructorName}
@@ -98,7 +98,7 @@ const renderProgramClasses = () => {
 
 export default function Home() {
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center w-full">
             <div className="mt-5">
                 <ProgramCarousel 
                     type="course"
@@ -117,9 +117,9 @@ export default function Home() {
             </div>
             <hr className="border-[#d9d9d9] my-8 w-full"/>
 
-            <section className="relative flex flex-col items-center">
+            <section className="relative flex flex-col items-center w-full overflow-hidden">
                 <h1 className="absolute left-[16%] pb-12 text-2xl font-bold self-start">คลาสเรียน</h1>
-                <div className="pl-6 mt-5 w-[74%] pt-8 flex flex-wrap">
+                <div className="pl-6 mt-5 pt-8 grid overflow-hidden grid-cols-4">
                     {renderProgramClasses()} 
                 </div>
                 <Link to={`/home/classes`}>
@@ -134,9 +134,9 @@ export default function Home() {
             </section>
             <hr className="border-[#d9d9d9] my-8 w-full"/>
 
-            <section className="relative flex flex-col items-center">
+            <section className="relative flex flex-col items-center w-full overflow-hidden">
                 <h1 className="absolute left-[16%] pb-12 text-2xl font-bold self-start">คอร์สเรียน</h1>
-                <div className="pl-6 mt-5 w-[74%] pt-8 flex flex-wrap">
+                <div className="pl-6 mt-5 pt-8 grid grid-cols-4">
                     {renderProgramsCourse()} 
                 </div>
                 <Link to={`/home/courses`}>

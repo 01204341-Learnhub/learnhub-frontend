@@ -1,6 +1,6 @@
 import { Instructor } from "./instructor";
 
-type Tag = {
+export type Tag = {
   tagId: string
   tagName: string
 }

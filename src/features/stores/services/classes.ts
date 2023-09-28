@@ -60,10 +60,10 @@ async function getAllClasses(num: number) : Promise<ClassProgram[]> {
   return programClasses
 }
 
-async function getPopularClasses(num: number) {
-  const popularClasses = []
+async function getNewClasses(num: number) {
+  const newClasses = []
   for (let i = 0; i < num; i++) {
-    popularClasses.push(
+    newClasses.push(
       {
         id: `${i+1}`,
         description: "",
@@ -86,7 +86,7 @@ async function getPopularClasses(num: number) {
       }
     )
   }
-  return popularClasses
+  return newClasses
 }
 
-export { getClass, listClass, getAllClasses, getPopularClasses };
+export { getClass, listClass, getAllClasses, getNewClasses };

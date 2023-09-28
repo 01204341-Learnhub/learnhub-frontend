@@ -123,17 +123,17 @@ function CreateCourse() {
             </button>
           </div>
           <div className="bg-white font-bold w-full">
-            <ol>
+            <div className="flex flex-col space-y-5 p-[40px]">
               {chapters.map((chapter, idx) => (
-                <li key={idx}>
-                  <CourseChapterInfo
-                    chapterName={chapter.chapterName}
-                    chapterDescription={chapter.chapterDescription}
-                    lessons={chapter.lessons}
-                  />
-                </li>
+                <CourseChapterInfo
+                  key={idx}
+                  chapterName={chapter.chapterName}
+                  chapterDescription={chapter.chapterDescription}
+                  chapterNumber={idx + 1}
+                  lessons={chapter.lessons}
+                />
               ))}
-            </ol>
+            </div>
             <button
               className="bg-[#d9d9d9] p-x2 py-1"
               onClick={() => {
@@ -304,4 +304,4 @@ function CreateCourse() {
     );
 }
 
-export default CreateCourse
+export default CreateCourse;

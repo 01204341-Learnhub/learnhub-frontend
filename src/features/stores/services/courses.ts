@@ -1,4 +1,5 @@
 import { Course } from "../types/course";
+import { Tag } from "../types/course";
 
 async function listCourse() {
   return [];
@@ -22,11 +23,17 @@ async function getCourse(id: string): Promise<Course> {
         "https://images-na.ssl-images-amazon.com/images/S/pv-target-images/ae4816cade1a5b7f29787d0b89610132c72c7747041481c6619b9cc3302c0101._RI_TTW_.jpg",
       jobTitle: "Software Engineer",
     },
+    tag: [
+      {
+        tagId: id,
+        tagName: "Anime"
+      }
+    ]
   };
 }
 
 async function getAllCourses(num: number): Promise<Course[]> {
-  const programCourse = [];
+  const programCourse: Course[] = [];
   for (let i = 0; i < num; i++) {
     programCourse.push({
       id: `C${i+1}`,
@@ -42,9 +49,51 @@ async function getAllCourses(num: number): Promise<Course[]> {
       },
       reviewerCount: 10000,
       rating: 4.4,
+      tag: [
+        {
+          tagId: `T${i+1}`,
+          tagName: "ยอดนิยม"
+        }
+      ]
+      
     });
   }
+
   return programCourse
 }
 
-export { getCourse, getAllCourses, listCourse };
+
+async function getPopularCourse(num: number, tags : Tag[]) : Promise<Course[]> {
+  const popularCourses = [];
+
+  for (let i = 0; i < num; i++) {
+    popularCourses.push({
+      id: `C${i+1}`,
+      name: "How to train to Busan",
+      description: "what is zombies in Busan doing",
+      price: 2099,
+      cover: `https://picsum.photos/${i}/${300}`,
+      intructor: {
+        id: "1",
+        name: "Baramika laokrub",
+        avatarUrl: "",
+        jobTitle: "Scotte lungnuk",
+      },
+      reviewerCount: 10000,
+      rating: 4.4,
+      tag: [
+        {
+          tagId: `T${i+1}`,
+          tagName: "ยอดนิยม"
+        }
+      ]
+      
+    });
+  }
+  
+
+
+  return popularCourses
+}
+
+export { getCourse, getAllCourses, listCourse, getPopularCourse };

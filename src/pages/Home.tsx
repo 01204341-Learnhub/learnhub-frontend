@@ -1,7 +1,12 @@
+import { useEffect, useState } from "react";
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
 import LearningClasses from "../pages/students/LearningClasses"
 import { Link } from "react-router-dom"
+import { getAllCourses } from "../features/stores/services/courses";
+import { getAllClasses } from "../features/stores/services/classes";
+import { Course } from "../features/stores/types/course";
+import { ClassProgram } from "../features/stores/types/class";
 
 
 function mockClass(num: number) {
@@ -47,56 +52,80 @@ function mockCourse(num: number) {
     return coursePrograms
 }
 
-const renderProgramsCourse = () => {
-    return (
-        <>
-            {mockCourse(20).map((program, index) => {
-                if (index > 7){
-                    return null
-                } else {
-                    return (
-                        <Link to={`/detail/course/${program.programId}`} key={index} className="my-4 px-6" >
-                            <ProgramSlot key={index} courseThumbnailUrl={program.programThumbnailUrl}
-                                courseName={program.programName}
-                                instructorName={program.instructorName}
-                                percentCompleted={program.percentCompleted}
-                                regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"}
-                                lvl={"พื้นฐาน"} />
-                        </Link>
-                    )
-                }
-            })}  
-        </>
-    )
-}
 
-
-const renderProgramClasses = () => {
-    return (
-        <>
-            {mockClass(20).map((program, index) => {
-                if (index > 7){
-                    return null
-                } else {
-
-                    return (
-                        <Link to={`/detail/class/${program.programId}`} key={index} className="my-4 px-6" >
-                            <ProgramSlot key={index} courseThumbnailUrl={program.programThumbnailUrl}
-                                courseName={program.programName}
-                                instructorName={program.instructorName}
-                                percentCompleted={program.percentCompleted}
-                                regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"}
-                                lvl={"พื้นฐาน"} />
-                        </Link>
-                    )
-                }
-            })}
-        </>
-    )
-}
 
 
 export default function Home() {
+
+    const [courses, setCouses] = useState<Course[] | null>(null)
+    const [classes, setClasses] = useState<ClassProgram[] | null>(null)
+
+    useEffect(() => {
+        async function fetchCourse() {
+            const coursePrograms = await getAllCourses(8)
+            setCouses(coursePrograms)
+        }
+
+        async function fetchClass() {
+            const classProgram = await getAllClasses(8)
+            setClasses(classProgram)
+        }
+
+        fetchCourse()
+        fetchClass()
+    }, [])
+    if (courses === null || classes === null) {
+        return null;
+    }
+
+    const renderProgramsCourse = () => {
+        return (
+            <>
+                {courses.map((program, index) => {
+                    if (index > 7){
+                        return null
+                    } else {
+                        return (
+                            <Link to={`/detail/course/${program.id}`} key={index} className="my-4 px-6" >
+                                <ProgramSlot key={index} courseThumbnailUrl={program.cover}
+                                    courseName={program.name}
+                                    instructorName={program.intructor.name}
+                                    percentCompleted={100}
+                                    regisDate={""} voter={program.rating} price={program.price} tag={"ยอดนิยม"}
+                                    lvl={"พื้นฐาน"} />
+                            </Link>
+                        )
+                    }
+                })}  
+            </>
+        )
+    }
+
+
+    const renderProgramClasses = () => {
+        return (
+            <>
+                {classes.map((program, index) => {
+                    if (index > 7){
+                        return null
+                    } else {
+
+                        return (
+                            <Link to={`/detail/class/${program.id}`} key={index} className="my-4 px-6" >
+                                <ProgramSlot key={index} courseThumbnailUrl={program.cover}
+                                    courseName={program.name}
+                                    instructorName={program.intructor.name}
+                                    percentCompleted={100}
+                                    regisDate={program.registerEndedDate} voter={0} price={3000} tag={program.tags[0].tagName}
+                                    lvl={"พื้นฐาน"} />
+                            </Link>
+                        )
+                    }
+                })}
+            </>
+        )
+    }
+
     return (
         <div className="flex flex-col items-center w-full">
             <div className="mt-5">

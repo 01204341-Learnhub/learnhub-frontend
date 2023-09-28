@@ -60,4 +60,33 @@ async function getAllClasses(num: number) : Promise<ClassProgram[]> {
   return programClasses
 }
 
-export { getClass, listClass, getAllClasses };
+async function getPopularClasses(num: number) {
+  const popularClasses = []
+  for (let i = 0; i < num; i++) {
+    popularClasses.push(
+      {
+        id: `${i+1}`,
+        description: "",
+        name: "How to be a Good boy like Boom",
+        price: 999,
+        cover: `https://picsum.photos/${i}/${300}`,
+        intructor: {
+          id: "1",
+          name: "Barammey Kung",
+          avatarUrl: "",
+          jobTitle: "Good Guy",
+        },
+        tags: [
+          {
+            tagId: `${i+1}`,
+            tagName: "Hot"
+          },
+        ],
+        registerEndedDate:"120945"
+      }
+    )
+  }
+  return popularClasses
+}
+
+export { getClass, listClass, getAllClasses, getPopularClasses };

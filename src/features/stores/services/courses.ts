@@ -63,7 +63,7 @@ async function getAllCourses(num: number): Promise<Course[]> {
 }
 
 
-async function getPopularCourse(num: number, tags : Tag[]) : Promise<Course[]> {
+async function getPopularCourse(num: number) : Promise<Course[]> {
   const popularCourses = [];
 
   for (let i = 0; i < num; i++) {

@@ -2,6 +2,7 @@ import { faClipboardList, faFile, faFileLines, faFolderBlank, faPlayCircle } fro
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import { CourseChapter, CourseLesson } from "../types/course"
+import FileLessonCreate from "./FileLessonCreate"
 import VideoLessonCreate from "./VideoLessonCreate"
 
 interface CourseChapterCreateProps {
@@ -35,7 +36,8 @@ function _LessonTypeSelector({ onSelect }: { onSelect: (lessonType: string) => v
                             <FontAwesomeIcon icon={faClipboardList} color="black" size="xl" />
                             <h1 className="ml-5">แบบฝึกหัด</h1>
                         </button>
-                        <button className="flex my-2 hover:bg-gray-200 w-full">
+                        <button className="flex my-2 hover:bg-gray-200 w-full"
+                            onClick={() => { onSelect("files") }}>
                             <FontAwesomeIcon icon={faFile} color="black" size="xl" />
                             <h1 className="ml-5">ไฟล์ (ผู้เรียนสามารถดาวโหลดได้)</h1>
                         </button>
@@ -99,6 +101,13 @@ function CourseChapterCreate({ chapterNumber: courseNumber, onSubmit, onCancel }
     if (mode == "add-video") {
         return (
             <VideoLessonCreate chapterNumber={courseNumber} chapterName={chapterName}
+                lessonNumber={lessons.length + 1} onSubmit={handleAddLesson}
+                onCancel={() => { setMode("main") }} />
+        )
+    }
+    if (mode == "add-files") {
+        return (
+            <FileLessonCreate chapterNumber={courseNumber} chapterName={chapterName}
                 lessonNumber={lessons.length + 1} onSubmit={handleAddLesson}
                 onCancel={() => { setMode("main") }} />
         )

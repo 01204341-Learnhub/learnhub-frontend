@@ -134,39 +134,32 @@ function _TopPanel({ courseBasicInfo, courseThumbnailUrl }: _TopPanelProps) {
           instructorName="Baramee No PDPA"
         />
       </div>
-      <div className="flex flex-col justify-start items-start space-y-3 px-10 py-6 bg-white w-full">
+      <div className="flex flex-col justify-start items-start space-y-3 px-10 py-6 bg-white w-full min-w-fit">
         <h1 className="text-black text-[20px] font-semibold mb-4">ภาพรวม</h1>
-        <div className="flex justify-start w-full relative">
+        <div className="flex justify-between w-1/2 min-w-fit">
           <h2 className="text-[#808080] text-[20px] font-semibold">
             จำนวนบทเรียน
           </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold absolute left-[300px]">
-            9
-          </h2>
+          <div className="flex-grow"></div>
+          <h2 className="text-[#808080] text-[20px] font-semibold">9</h2>
         </div>
-        <div className="flex justify-start min-w-fit relative">
+        <div className="flex justify-between w-1/2 min-w-fit">
           <h2 className="text-[#808080] text-[20px] font-semibold">
             จำนวนคลิปวิดีโอ
           </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold absolute left-[300px]">
-            9
-          </h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold">9</h2>
         </div>
-        <div className="flex justify-start  relative">
+        <div className="flex justify-between w-1/2 min-w-fit">
           <h2 className="text-[#808080] text-[20px] font-semibold">
             จำนวนแบบฝึก
           </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold absolute left-[300px]">
-            9
-          </h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold">9</h2>
         </div>
-        <div className="flex justify-start min-w-fit relative">
+        <div className="flex justify-between w-1/2 min-w-fit">
           <h2 className="text-[#808080] text-[20px] font-semibold">
             จำนวนไฟล์ที่ดาวน์โหลดได้
           </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold absolute left-[300px]">
-            9
-          </h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold">9</h2>
         </div>
       </div>
     </div>

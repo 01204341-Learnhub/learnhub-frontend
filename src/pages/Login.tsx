@@ -1,14 +1,24 @@
 import { faEnvelope, faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import bookLogo from "../../src/assets/Images/bookLogo.png";
 import textNameLogo from "../../src/assets/Images/textNameLogo.png";
+import { signIn } from "../services/auth/signIn";
+import { setUser } from "../slices/userSlice";
 
 
 export default function Login() {
     const [mode, setMode] = useState("student") // student or teacher
-
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const handleSignIn = () => {
+        signIn().then((u) => {
+            dispatch(setUser(u))
+            navigate("/home")
+        })
+    }
     return (
         <>
             <Link to="/Register" className=" text-[24px] ml-5 mt-10">
@@ -59,7 +69,8 @@ export default function Login() {
                         <Link to="/Register" className=" mt-10 font-bold text-[24px] flex text-blue-600">ลืมรหัสผ่าน?</Link>
                     </div>
                     <div className=" flex justify-center">
-                        <Link to="/Register" className=" mt-12 text-white bg-[#18334E] py-2 px-10 rounded-md shadow-md text-[24px] flex justify-center">เข้าสู่ระบบ</Link>
+                        <button className=" mt-12 text-white bg-[#18334E] py-2 px-10 rounded-md shadow-md text-[24px] flex justify-center"
+                            onClick={handleSignIn}>เข้าสู่ระบบ</button>
                     </div>
                     <div className=" mt-16 flex space-x-4 justify-center">
                         <p className=" font-bold text-[24px]">ยังไม่มีบัญชี ?</p>

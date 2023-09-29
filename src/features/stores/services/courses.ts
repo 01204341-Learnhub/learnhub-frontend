@@ -52,7 +52,7 @@ async function getAllCourses(num: number): Promise<Course[]> {
       tags: [
         {
           tagId: `T${i+1}`,
-          tagName: "ยอดนิยม"
+          tagName: "ML"
         }
       ]
       

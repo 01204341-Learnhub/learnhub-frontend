@@ -2,305 +2,368 @@ import { useState } from "react";
 import CourseCardPreview from "../../features/teaches/components/CourseCardPreview";
 import CourseChapterCreate from "../../features/teaches/components/CourseChapterCreate";
 import CourseChapterInfo from "../../features/teaches/components/CourseChapterInfo";
-import CourseCreateStepper, {
-  BasicCourseInfo,
-} from "../../features/teaches/components/CourseCreateStepper";
-import { CourseChapter } from "../../features/teaches/types/course";
+import CourseCreateStepper from "../../features/teaches/components/CourseCreateStepper";
+import CourseGoalsInfoForm from "../../features/teaches/components/CourseGoalsInfoForm.tsx";
+import {
+  CourseBasicInfo,
+  CourseChapter,
+  CourseGoalsInfo,
+  CoursePublishingInfo,
+} from "../../features/teaches/types/course";
+import CoursePublishingInfoForm from "../../features/teaches/components/CoursePublishingInfoForm.tsx";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle as faCircleRegular } from "@fortawesome/free-regular-svg-icons";
+import {
+  faArrowRight,
+  faCircle as faCircleSolid,
+} from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
 
-function _ModeIndicator({
-  mode,
-  onChangeMode,
-}: {
-  mode: string;
-  onChangeMode: (m: string) => void;
-}) {
+interface _SideNavProps {
+  currentTab: string;
+  onChangeTab: (tab: string) => void;
+  onPublish?: () => void;
+  readyToPublish?: boolean;
+}
+
+function _SideNav({
+  currentTab,
+  onChangeTab,
+  onPublish,
+  readyToPublish,
+}: _SideNavProps) {
   return (
-    <div className="bg-white flex flex-col">
-      <div className="flex items-center">
-        {mode == "purpose" && <div className="w-3 h-6 bg-slate-600"></div>}
+    <div className="flex flex-col justify-start items-start space-y-5 min-w-fit">
+      <div className="bg-white flex flex-col justify-start items-start p-5 space-y-3 w-fit h-fit">
         <button
+          className="flex justify-start items-center space-x-4"
           onClick={() => {
-            onChangeMode("purpose");
+            onChangeTab("content");
           }}
-          className="mx-auto"
         >
-          <h1 className="font-bold my-3">เป้าหมายของ course</h1>
+          <FontAwesomeIcon
+            icon={currentTab === "content" ? faCircleSolid : faCircleRegular}
+            color="black"
+          />
+          <h1 className="font-semibold text-black text-[18px]">
+            เพิ่มเนื้อหาของคอร์ส
+          </h1>
+        </button>
+        <button
+          className="flex justify-start items-center space-x-4"
+          onClick={() => {
+            onChangeTab("goals");
+          }}
+        >
+          <FontAwesomeIcon
+            icon={currentTab === "goals" ? faCircleSolid : faCircleRegular}
+            color="black"
+          />
+          <h1 className="font-semibold text-black text-[18px]">
+            เพิ่มเป้าหมายของคอร์ส
+          </h1>
+        </button>
+        <button
+          className="flex justify-start items-center space-x-4"
+          onClick={() => {
+            onChangeTab("publishing");
+          }}
+        >
+          <FontAwesomeIcon
+            icon={currentTab === "publishing" ? faCircleSolid : faCircleRegular}
+            color="black"
+          />
+          <h1 className="font-semibold text-black text-[18px]">
+            การเผยแพร่คอร์ส
+          </h1>
         </button>
       </div>
-      <div className="flex items-center">
-        {mode == "main" && <div className="w-3 h-6 bg-slate-600"></div>}
-        <button
-          onClick={() => {
-            onChangeMode("main");
-          }}
-          className="mx-auto"
+      <button
+        className={`w-fit h-fit p-3 hover:drop-shadow-md ${
+          onPublish === undefined || !readyToPublish
+            ? "bg-gray-200"
+            : "bg-[#D9D9D9]"
+        }`}
+        onClick={onPublish}
+      >
+        <h1
+          className={`font-semibold text-[20px] ${
+            onPublish === undefined || !readyToPublish
+              ? "text-gray-400"
+              : "text-black"
+          }`}
         >
-          <h1 className="font-bold my-3">สร้างเนื้อหาของ course</h1>
-        </button>
-      </div>
-      <div className="flex items-center">
-        {mode == "publish" && <div className="w-3 h-6 bg-slate-600"></div>}
-        <button
-          onClick={() => {
-            onChangeMode("publish");
-          }}
-          className="mx-auto"
-        >
-          <h1 className="font-bold my-3">เผยแผร่ course</h1>
-        </button>
-      </div>
+          เผยแพร่คอร์ส
+        </h1>
+      </button>
+    </div>
+  );
+}
+
+interface _TopNavProps {
+  onQuit: () => void;
+}
+
+function _TopNav({ onQuit }: _TopNavProps) {
+  return (
+    <div className="flex justify-between items-center w-full">
+      <h1 className="text-black font-semibold text-[32px]">สร้างคอร์ส</h1>
+      <button className="flex items-center space-x-4 w-fit" onClick={onQuit}>
+        <h1 className="text-black font-semibold text-[29px]">ออก</h1>
+        <FontAwesomeIcon icon={faArrowRight} color="black" size="lg" />
+      </button>
     </div>
   );
 }
 
 interface _TopPanelProps {
-  basicCouseInfo: BasicCourseInfo;
+  courseBasicInfo: CourseBasicInfo;
   courseThumbnailUrl: string;
 }
 
-function _TopPanel({ basicCouseInfo, courseThumbnailUrl }: _TopPanelProps) {
+function _TopPanel({ courseBasicInfo, courseThumbnailUrl }: _TopPanelProps) {
   return (
-    <div className="flex mb-5">
-      <div className="flex-2 bg-[#d9d9d9] p-4">
+    <div className="flex justify-start items-stretch space-x-10 w-full">
+      <div className="bg-[#D9D9D9] p-6 w-fit h-fit">
         <CourseCardPreview
           courseThumbnailUrl={courseThumbnailUrl}
-          courseName={basicCouseInfo.courseName}
-          lvl={basicCouseInfo.courseLevel}
+          courseName={courseBasicInfo.courseName}
+          lvl={courseBasicInfo.courseLevel}
           price={3500}
-          tag={basicCouseInfo.courseCategory}
+          tag={courseBasicInfo.courseCategory}
           instructorName="Baramee No PDPA"
         />
       </div>
-      <div className="flex-1 bg-white drop-shadow-md ml-5">
-        <div className="ml-5">
-          <h1 className="font-bold mb-5">ภาพรวม</h1>
-          <h2>จำนวนบทเรียน 9</h2>
-          <h2>จำนวนคลิปวิดีโอ 9</h2>
-          <h2>จำนวนแบบฝึก 9</h2>
-          <h2>จำนวนไฟล์ที่ดาวโหลดได้ 9</h2>
+      <div className="flex flex-col justify-start items-start space-y-3 px-10 py-6 bg-white w-full">
+        <h1 className="text-black text-[20px] font-semibold mb-4">ภาพรวม</h1>
+        <div className="flex justify-start w-full relative">
+          <h2 className="text-[#808080] text-[20px] font-semibold">
+            จำนวนบทเรียน
+          </h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold absolute left-[300px]">
+            9
+          </h2>
+        </div>
+        <div className="flex justify-start min-w-fit relative">
+          <h2 className="text-[#808080] text-[20px] font-semibold">
+            จำนวนคลิปวิดีโอ
+          </h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold absolute left-[300px]">
+            9
+          </h2>
+        </div>
+        <div className="flex justify-start  relative">
+          <h2 className="text-[#808080] text-[20px] font-semibold">
+            จำนวนแบบฝึก
+          </h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold absolute left-[300px]">
+            9
+          </h2>
+        </div>
+        <div className="flex justify-start min-w-fit relative">
+          <h2 className="text-[#808080] text-[20px] font-semibold">
+            จำนวนไฟล์ที่ดาวน์โหลดได้
+          </h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold absolute left-[300px]">
+            9
+          </h2>
         </div>
       </div>
     </div>
   );
 }
 
+function checkReadyToPublish(
+  courseBasicInfo: CourseBasicInfo,
+  courseChapters: CourseChapter[],
+  courseGoalsInfo: CourseGoalsInfo,
+  coursePublishingInfo: CoursePublishingInfo,
+) {
+  return (
+    courseBasicInfo !== undefined &&
+    courseChapters.length > 0 &&
+    courseGoalsInfo !== undefined &&
+    coursePublishingInfo !== undefined
+  );
+}
+
 function CreateCourse() {
-  const [basicCouseInfo, setBasicCourseInfo] = useState<
-    BasicCourseInfo | undefined
+  const navigate = useNavigate();
+
+  const [currentTab, setCurrentTab] = useState<string>("content");
+  const [courseBasicInfo, setCourseBasicInfo] = useState<
+    CourseBasicInfo | undefined
   >(undefined);
-  const [currentView, setCurrentView] = useState<string>("main");
   const [chapters, setChapters] = useState<CourseChapter[]>([]);
-  const onCreateBasicCourseInfo = (courseInfo: BasicCourseInfo) => {
-    setBasicCourseInfo(courseInfo);
+  const [courseGoalsInfo, setCourseGoalsInfo] = useState<
+    CourseGoalsInfo | undefined
+  >(undefined);
+  const [coursePublishingInfo, setCoursePublishingInfo] = useState<
+    CoursePublishingInfo | undefined
+  >(undefined);
+
+  const onCreateCourseBasicInfo = (basicInfo: CourseBasicInfo) => {
+    setCourseBasicInfo(basicInfo);
+    setCurrentTab("content");
   };
   const onCreateChapter = (chapter: CourseChapter) => {
     setChapters((prev) => [...prev, chapter]);
-    setCurrentView("main");
+    setCurrentTab("content");
   };
+  const onUpdateGoalsInfo = (goalsInfo: CourseGoalsInfo) => {
+    setCourseGoalsInfo(goalsInfo);
+  };
+  const onUpdatePublishingInfo = (publishingInfo: CoursePublishingInfo) => {
+    setCoursePublishingInfo(publishingInfo);
+  };
+  const onPublishCourse = () => {
+    // TODO: Send the course to the server.
+  };
+
   const fakeThumbnail =
     "https://miro.medium.com/v2/resize:fit:691/1*VSQ0XEywxSgZBwW05GsZtw.png";
-  if (basicCouseInfo === undefined)
+
+  if (courseBasicInfo === undefined) {
     return (
-      <div className="mx-5">
-        <h1 className="font-bold text-2xl">สร้างคอร์สเรียน</h1>
-        <div className="w-11/12 h-1/3  justify-center">
-          <CourseCreateStepper onSubmit={onCreateBasicCourseInfo} />
-        </div>
-      </div>
-    );
-  if (currentView === "main")
-    return (
-      <div className="bg-[#f5f5f5]">
-        <_TopPanel
-          basicCouseInfo={basicCouseInfo}
-          courseThumbnailUrl={fakeThumbnail}
-        />
-        <div className="flex bg-white">
-          <div className="w-3/12">
-            <_ModeIndicator mode="main" onChangeMode={setCurrentView} />
-            <button className="bg-[#d9d9d9] mt-5 ml-3 p-2">
-              <h1 className="font-bold text-black">เผยแผร่ course</h1>
-            </button>
-          </div>
-          <div className="bg-white font-bold w-full">
-            <div className="flex flex-col space-y-5 p-[40px]">
-              {chapters.map((chapter, idx) => (
-                <CourseChapterInfo
-                  key={idx}
-                  chapterName={chapter.chapterName}
-                  chapterDescription={chapter.chapterDescription}
-                  chapterNumber={idx + 1}
-                  lessons={chapter.lessons}
-                />
-              ))}
-            </div>
-            <button
-              className="bg-[#d9d9d9] p-x2 py-1"
-              onClick={() => {
-                setCurrentView("add-chapter");
-              }}
-            >
-              <h1>+ เพิ่มบทเรียน</h1>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  else if (currentView == "purpose")
-    return (
-      <div className="bg-[#f5f5f5]">
-        <_TopPanel
-          basicCouseInfo={basicCouseInfo}
-          courseThumbnailUrl={fakeThumbnail}
-        />
-        <div className="flex">
-          <div className="w-3/12">
-            <_ModeIndicator mode="purpose" onChangeMode={setCurrentView} />
-            <button className="bg-[#d9d9d9] mt-5 ml-3 p-2">
-              <h1 className="font-bold text-black">เผยแผร่ course</h1>
-            </button>
-          </div>
-          <div className="bg-white font-bold w-full">
-            <h1 className="bg-white text-2xl ml-4 my-4">เป้าหมายของ course</h1>
-            <hr />
-            <p>
-              คำอธิบายต่อไปนี้จะปรากฏต่อสาธารณะในหน้าเริ่มต้นของหลักสูตร
-              และจะมีผลโดยตรงต่อประสิทธิภาพหลักสูตรของคุณ
-              คำอธิบายเหล่านี้จะช่วยให้ผู้เรียนตัดสินใจว่าหลักสูตรของคุณเหมาะกับพวกเขาหรือไม่
-            </p>
-            <h2>ผู้เรียนจะได้เรียนสิ่งใดในหลักสูตรของคุณ</h2>
-            <p>
-              คุณต้องกรอกจุดประสงค์การเรียนรู้หรือผลลัพธ์ที่ผู้เรียนคาดหวังหลังจากเรียนจบหลักสูตรอย่างน้อย
-              4 รายการ
-            </p>
-            <input
-              type="text"
-              className="input input-bordered w-full rounded-none m-2"
-              placeholder="ตัวอย่าง: มีความชำนาญในการเขียนภาษา HTML"
-            />
-            <input
-              type="text"
-              className="input input-bordered w-full rounded-none m-2"
-              placeholder="ตัวอย่าง: มีความชำนาญในการเขียนภาษา CSS"
-            />
-            <input
-              type="text"
-              className="input input-bordered w-full rounded-none m-2"
-              placeholder="ตัวอย่าง: มีความชำนาญในการสร้างอุปกรณ์จาก Redstone"
-            />
-            <input
-              type="text"
-              className="input input-bordered w-full rounded-none m-2"
-              placeholder="ตัวอย่าง: มีความชำนาญในการเล่น Minecraft"
-            />
-            <h2>
-              ความต้องการหรือข้อกำหนดเบื้องต้นสำหรับการเรียนหลักสูตรของคุณมีอะไรบ้าง
-            </h2>
-            <p>
-              ระบุทักษะที่จำเป็น ประสบการณ์
-              เครื่องมือหรืออุปกรณ์ที่ผู้เรียนควรมีก่อนเรียนหลักสูตรหากไม่มีความต้องการ
-              ให้ใช้พื้นที่นี้เป็นโอกาสในการลดอุปสรรคสำหรับผู้เริ่มต้น
-            </p>
-            <input
-              type="text"
-              className="input input-bordered w-full rounded-none m-2"
-              placeholder="ตัวอย่าง: ไม่จำเป็นต้องมีพื้นฐานในการเขียนภาษา HTML, CSS หรือ redstone design     มาก่อน"
-            />
-            <div className="flex">
-              <h2>ระดับของ course นี้</h2>
-              <input
-                type="text"
-                className="input input-bordered rounded-none m-2"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  else if (currentView == "publish")
-    return (
-      <div className="bg-[#f5f5f5]">
-        <_TopPanel
-          basicCouseInfo={basicCouseInfo}
-          courseThumbnailUrl={fakeThumbnail}
-        />
-        <div className="flex">
-          <div className="w-3/12">
-            <_ModeIndicator mode="publish" onChangeMode={setCurrentView} />
-            <button className="bg-[#d9d9d9] mt-5 ml-3 p-2">
-              <h1 className="font-bold text-black">เผยแผร่ course</h1>
-            </button>
-          </div>
-          <div className="bg-white font-bold w-full">
-            <h1 className="bg-white text-2xl ml-4 my-4">เผยแผร่ course</h1>
-            <hr />
-            <h2 className="text-xl my-4">หน้าเริ่มต้นของหลักสูตร</h2>
-            <p>
-              หน้าเริ่มต้นของหลักสูตรมีความสำคัญ หากทำออกมาได้ดี
-              ยังช่วยให้คุณปรากฏในเครื่องมือค้นหาเช่น Google ได้อีกด้วย
-              เมื่อคุณทำส่วนนี้เสร็จแล้ว
-              ให้นึกถึงการสร้างหน้าเริ่มต้นของหลักสูตรที่น่าสนใจเพื่อแสดงให้เห็นว่าทำไมผู้คนถึงอยาก
-              ลงทะเบียนในหลักสูตรของคุณ
-            </p>
-            <h2>ชื่อ course เรียนของคุณ</h2>
-            <input
-              type="text"
-              className="input input-bordered w-full rounded-none m-2"
-              value={basicCouseInfo.courseName}
-            />
-            <p>
-              ชื่อหลักสูตรของคุณควรเป็นการผสมผสานระหว่างการดึงดูดความสนใจ
-              มีข้อมูล และเหมาะสำหรับการค้นหา
-            </p>
-            <h2 className="text-xl my-4">คำอธิบายคอร์สเรียนของคุณ</h2>
-            <input
-              type="text"
-              className="input input-bordered w-full rounded-none m-2"
-              placeholder="เพิ่มคำอธิบาย course เรียน"
-            />
-            <p>คำอธิบายควรยาวอย่างน้อย 200 คำ</p>
-            <div className="flex my-5">
-              <div className="w-2/12">
-                <img
-                  src="https://images7.alphacoders.com/130/1304859.jpg"
-                  alt=""
-                />
-              </div>
-            </div>
-            <h2 className="text-xl my-4">กำหนดราคา</h2>
-            <p>
-              โปรดกรอกราคา (บาท) สำหรับหลักสูตรของคุณด้านล่าง และคลิก 'บันทึก'
-            </p>
-            <input
-              type="text"
-              className="input input-bordered w-2/12 rounded-none m-2"
-              placeholder="ตัวอย่าง: 2000"
-            />
-            <h2 className="text-xl my-4">กำหนดหมวดหมู่</h2>
-            <p>
-              โปรดเลือกหมวดหมู่สำหรับคลาสเรียนของคุณ
-              ถ้าไม่ระบุหลักสูตรของคุณจะอยู่ในหมวดหมู่ ทั้่วไป
-            </p>
-            <input
-              type="text"
-              className="input input-bordered w-2/12 rounded-none m-2"
-              value={basicCouseInfo.courseCategory}
-            />
-          </div>
-        </div>
-      </div>
-    );
-  else if (currentView == "add-chapter")
-    return (
-      <>
-        <CourseChapterCreate
-          chapterNumber={chapters.length + 1}
-          onSubmit={onCreateChapter}
-          onCancel={() => {
-            setCurrentView("main");
+      <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
+        <_TopNav
+          onQuit={() => {
+            navigate("/teach/overview");
           }}
         />
-      </>
+        <CourseCreateStepper onSubmit={onCreateCourseBasicInfo} />
+      </div>
+    );
+  }
+
+  if (currentTab === "content")
+    return (
+      <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
+        <_TopNav
+          onQuit={() => {
+            navigate("/teach/overview");
+          }}
+        />
+        <_TopPanel
+          courseBasicInfo={courseBasicInfo}
+          courseThumbnailUrl={fakeThumbnail}
+        />
+        <div className="flex justify-start items-start space-x-10 w-full h-fit">
+          <_SideNav
+            currentTab="content"
+            onChangeTab={setCurrentTab}
+            onPublish={onPublishCourse}
+            readyToPublish={checkReadyToPublish(
+              courseBasicInfo,
+              chapters,
+              courseGoalsInfo,
+              coursePublishingInfo,
+            )}
+          />
+          <div className="flex flex-col justify-start w-full space-y-5">
+            {chapters.map((chapter, idx) => (
+              <CourseChapterInfo
+                key={idx}
+                chapterName={chapter.chapterName}
+                chapterDescription={chapter.chapterDescription}
+                chapterNumber={idx + 1}
+                lessons={chapter.lessons}
+              />
+            ))}
+            <button
+              className="bg-[#D9D9D9] p-3 w-fit h-fit hover:drop-shadow-md"
+              onClick={() => {
+                setCurrentTab("add-chapter");
+              }}
+            >
+              <h1 className="text-black font-semibold text-[20px]">
+                เพิ่มบทเรียน
+              </h1>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  else if (currentTab == "goals")
+    return (
+      <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
+        <_TopNav
+          onQuit={() => {
+            navigate("/teach/overview");
+          }}
+        />
+        <_TopPanel
+          courseBasicInfo={courseBasicInfo}
+          courseThumbnailUrl={fakeThumbnail}
+        />
+        <div className="flex justify-start items-start space-x-10 w-full h-fit">
+          <_SideNav
+            currentTab="goals"
+            onChangeTab={setCurrentTab}
+            onPublish={onPublishCourse}
+            readyToPublish={checkReadyToPublish(
+              courseBasicInfo,
+              chapters,
+              courseGoalsInfo,
+              coursePublishingInfo,
+            )}
+          />
+          <CourseGoalsInfoForm
+            onUpdate={onUpdateGoalsInfo}
+            courseBasicInfo={courseBasicInfo}
+          />
+        </div>
+      </div>
+    );
+  else if (currentTab == "publishing")
+    return (
+      <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
+        <_TopNav
+          onQuit={() => {
+            navigate("/teach/overview");
+          }}
+        />
+        <_TopPanel
+          courseBasicInfo={courseBasicInfo}
+          courseThumbnailUrl={fakeThumbnail}
+        />
+        <div className="flex justify-start items-start space-x-10 w-full h-fit">
+          <_SideNav
+            currentTab="publishing"
+            onChangeTab={setCurrentTab}
+            onPublish={onPublishCourse}
+            readyToPublish={checkReadyToPublish(
+              courseBasicInfo,
+              chapters,
+              courseGoalsInfo,
+              coursePublishingInfo,
+            )}
+          />
+          <CoursePublishingInfoForm
+            onUpdate={onUpdatePublishingInfo}
+            courseBasicInfo={courseBasicInfo}
+          />
+        </div>
+      </div>
+    );
+  else if (currentTab == "add-chapter")
+    return (
+      <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
+        <_TopNav
+          onQuit={() => {
+            navigate("/teach/overview");
+          }}
+        />
+        <div className="w-full">
+          <CourseChapterCreate
+            chapterNumber={chapters.length + 1}
+            onSubmit={onCreateChapter}
+            onCancel={() => {
+              setCurrentTab("content");
+            }}
+          />
+        </div>
+      </div>
     );
 }
 

@@ -2,15 +2,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-type BasicCourseInfo = {
-  courseName: string;
-  courseCategory: string;
-  courseLevel: string;
-};
+import { CourseBasicInfo } from "../types/course";
 
 interface CourseCreateStepperProps {
-  onSubmit: (info: BasicCourseInfo) => void;
+  onSubmit: (info: CourseBasicInfo) => void;
 }
 
 function _StepperNav({
@@ -190,4 +185,3 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
 }
 
 export default CourseCreateStepper;
-export type { BasicCourseInfo };

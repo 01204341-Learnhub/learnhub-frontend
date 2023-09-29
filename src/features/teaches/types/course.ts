@@ -24,4 +24,28 @@ type CourseInfo = {
   studentCount: number;
 };
 
-export type { CourseChapter, CourseInfo, CourseLesson };
+type CourseBasicInfo = {
+  courseName: string;
+  courseCategory: string;
+  courseLevel: string;
+};
+
+type CourseGoalsInfo = {
+  objectives: string[];
+  requirement: string;
+};
+
+type CoursePublishingInfo = {
+  courseDescription: string;
+  courseThumbnailUrl: string;
+  coursePrice: number;
+};
+
+export type {
+  CourseChapter,
+  CourseLesson,
+  CourseInfo,
+  CourseBasicInfo,
+  CourseGoalsInfo,
+  CoursePublishingInfo,
+};

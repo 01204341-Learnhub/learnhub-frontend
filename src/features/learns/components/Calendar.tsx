@@ -17,9 +17,10 @@ import { capitalizeFirstLetter } from "../../../utils/functions";
 
 interface CalendarProps {
   onDateSelect?: (date: Date) => void;
+  targetDate?: Date;
 }
 
-function Calendar({ onDateSelect }: CalendarProps) {
+function Calendar({ onDateSelect, targetDate }: CalendarProps) {
   const today = startOfToday();
   const days = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
   const colStartClasses = [
@@ -40,6 +41,13 @@ function Calendar({ onDateSelect }: CalendarProps) {
     end: endOfWeek(endOfMonth(firstDayOfMonth)),
   });
 
+  const isSameDayAsTarget = (currentDate: Date, targetDate: Date) => {
+    return (
+      currentDate.getDate() === targetDate.getDate() &&
+      currentDate.getMonth() === targetDate.getMonth() &&
+      currentDate.getFullYear() === targetDate.getFullYear()
+    );
+  }
   const getPrevMonth = (event: React.MouseEvent<SVGSVGElement>) => {
     event.preventDefault();
     const firstDayOfPrevMonth = add(firstDayOfMonth, { months: -1 });
@@ -82,18 +90,19 @@ function Calendar({ onDateSelect }: CalendarProps) {
         </div>
         <div className="grid grid-cols-7 gap-6 sm:gap-1 mt-4 place-items-center">
           {daysInMonth.map((day, idx) => {
+            const date = parse(
+              `${format(day, "dd-MM-yyyy")} 00:00:00`,
+              "dd-MM-yyyy HH:mm:ss",
+              new Date()
+            );
+            const isSameDayAsTargetDate = targetDate ? isSameDayAsTarget(date, targetDate) : false;
             return (
               <div key={idx} className={colStartClasses[getDay(day)]}>
                 <p
                   className={`cursor-pointer flex items-center justify-center font-semibold h-8 w-8 rounded-full  hover:text-white ${isSameMonth(day, today) ? "text-gray-900" : "text-gray-400"
                     } ${!isToday(day) && "hover:bg-blue-500"} ${isToday(day) && "bg-red-500 text-white"
-                    }`}
+                    } ${isSameDayAsTargetDate && "bg-blue-500 text-white"}`}
                   onClick={() => {
-                    const date = parse(
-                      `${format(day, "dd-MM-yyyy")} 00:00:00`,
-                      "dd-MM-yyyy HH:mm:ss",
-                      new Date()
-                    );
                     onDateSelect?.(date)
                   }}>
                   {format(day, "d")}

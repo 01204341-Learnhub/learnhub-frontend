@@ -2,15 +2,19 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import ProtectedRoute from './components/ProtectedRoute'
 import './index.css'
 import MainbarLayout from './layouts/MainbarLayout'
 import StudentNavbarLayout from './layouts/StudentNavbarLayout'
 import TeacherNavbarLayout from './layouts/TeacherNavbarLayout'
-import CourseDetail from './pages/CourseDetail'
+import AllClasses from './pages/AllClasses'
+import AllCourses from './pages/AllCourses'
 import ClassDetail from './pages/ClassDetail'
+import CourseDetail from './pages/CourseDetail'
 import Home from './pages/Home'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
+import Profile from './pages/Profile'
 import Register from './pages/Register'
 import LearnCourse from './pages/students/LearnCourse'
 import LearningClasses from './pages/students/LearningClasses'
@@ -21,8 +25,6 @@ import SelectCourse from './pages/students/SelectCourse'
 import TeachingClasses from './pages/teachers/TeachingClasses'
 import TeachingCourses from './pages/teachers/TeachingCourses'
 import TeachingHomeworks from './pages/teachers/TeachingHomeworks'
-import AllClasses from './pages/AllClasses'
-import AllCourses from './pages/AllCourses'
 import store from './store'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -32,9 +34,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Routes >
           <Route path='/' element={<Landing />} />
           <Route element={<MainbarLayout />}>
+            <Route element={<ProtectedRoute />} >
+              <Route path='/profile' element={<Profile />} />
+            </Route>
             <Route path='/home' element={<Home />} />
-            <Route path='/home/courses' element={<AllCourses/>}></Route>
-            <Route path='/home/classes' element={<AllClasses/>}></Route>
+            <Route path='/home/courses' element={<AllCourses />}></Route>
+            <Route path='/home/classes' element={<AllClasses />}></Route>
             <Route path='/detail/course/:id' element={<CourseDetail />} />
             <Route path='/detail/class/:id' element={<ClassDetail />} />
             <Route element={<StudentNavbarLayout />}>

@@ -16,10 +16,11 @@ type Work = {
 
 interface WorkCreateProps {
     availableTopics: string[]
-    onSubmit: (work: Work) => void
+    onSubmit: (work: Work) => void,
+    onCancel: () => void
 }
 
-function WorkCreate({ availableTopics }: WorkCreateProps) {
+function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
     const [work, setWork] = useState<Work>({ workName: '', workDescription: '', workAttachments: [], workScore: 0, workTopic: '' })
 
     const onWorkNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,8 +56,8 @@ function WorkCreate({ availableTopics }: WorkCreateProps) {
         <div className="w-full h-full">
             <div className="flex justify-between">
                 <div className="flex">
-                    <FontAwesomeIcon icon={faX} size="lg" className="mx-3" />
-                    <FontAwesomeIcon icon={faClipboardList} size="lg" className="mx-3" />
+                    <FontAwesomeIcon icon={faX} size="lg" className="mx-3" onClick={onCancel} />
+                    <FontAwesomeIcon icon={faClipboardList} size="lg" className="mx-3" onClick={() => { onSubmit(work) }} />
                     <h1 className="text-black font-bold ml-5">สร้างงานในชั้นเรียน</h1>
                 </div>
                 <button className="btn bg-black mr-10">

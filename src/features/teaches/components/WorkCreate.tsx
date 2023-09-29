@@ -2,17 +2,7 @@ import { faClipboardList, faFile, faUpload, faX } from "@fortawesome/free-solid-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import Calendar from "../../learns/components/Calendar"
-
-
-
-type Work = {
-    workName: string
-    workDescription: string
-    workAttachments: { src: string, name: string }[]
-    workDueDate?: Date
-    workScore: number,
-    workTopic: string
-}
+import { Work } from "../types/classWork"
 
 interface WorkCreateProps {
     availableTopics: string[]

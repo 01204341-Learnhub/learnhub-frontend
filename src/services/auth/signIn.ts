@@ -12,6 +12,10 @@ async function signIn() {
     const learnhubUser: LearnhubUser = {
       userType: "student",
       userID: user.uid,
+      username: "Anonymous",
+      email: "anonymous@anym.ano",
+      profilePicture:
+        "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
     };
     return learnhubUser;
   } catch (error) {

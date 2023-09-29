@@ -14,7 +14,10 @@ export const userSlice = createSlice({
       state.user = learnhubUser;
       console.log(`set user to ${JSON.stringify(state)}`);
     },
+    removeUser: (state) => {
+      state.user = undefined;
+    },
   },
 });
 export default userSlice.reducer;
-export const { setUser } = userSlice.actions;
+export const { setUser, removeUser } = userSlice.actions;

@@ -1,10 +1,10 @@
 type Work = {
-  workName: string;
-  workDescription: string;
-  workAttachments: { src: string; name: string }[];
-  workDueDate?: Date;
-  workScore: number;
-  workTopic: string;
+  name: string;
+  description: string;
+  attachments: { src: string; name: string }[];
+  dueDate?: Date;
+  score: number;
+  topic: string;
 };
 
 export type { Work };

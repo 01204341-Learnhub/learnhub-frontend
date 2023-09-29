@@ -11,22 +11,22 @@ interface WorkCreateProps {
 }
 
 function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
-    const [work, setWork] = useState<Work>({ workName: '', workDescription: '', workAttachments: [], workScore: 0, workTopic: '' })
+    const [work, setWork] = useState<Work>({ name: '', description: '', attachments: [], score: 0, topic: '' })
 
     const onWorkNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setWork((p) => ({ ...p, workName: e.target.value }))
+        setWork((p) => ({ ...p, name: e.target.value }))
     }
     const onWorkDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setWork((p) => ({ ...p, workDescription: e.target.value }))
+        setWork((p) => ({ ...p, description: e.target.value }))
     }
     const onWorkScoreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setWork((p) => ({ ...p, workScore: Number(e.target.value) }))
+        setWork((p) => ({ ...p, score: Number(e.target.value) }))
     }
     const onWorkDateChange = (date: Date) => {
-        setWork((p) => ({ ...p, workDueDate: date }))
+        setWork((p) => ({ ...p, dueDate: date }))
     }
     const setWorkTopic = (topic: string) => {
-        setWork((p) => ({ ...p, workTopic: topic }))
+        setWork((p) => ({ ...p, topic: topic }))
     }
     const [newTopic, setNewTopic] = useState<string>("")
     const onNewTopicChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,10 +47,11 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
             <div className="flex justify-between">
                 <div className="flex">
                     <FontAwesomeIcon icon={faX} size="lg" className="mx-3" onClick={onCancel} />
-                    <FontAwesomeIcon icon={faClipboardList} size="lg" className="mx-3" onClick={() => { onSubmit(work) }} />
+                    <FontAwesomeIcon icon={faClipboardList} size="lg" className="mx-3" />
                     <h1 className="text-black font-bold ml-5">สร้างงานในชั้นเรียน</h1>
                 </div>
-                <button className="btn bg-black mr-10">
+                <button className="btn bg-black mr-10"
+                    onClick={() => { onSubmit(work) }}>
                     <h1 className="text-white">มอบหมายงาน</h1>
                 </button>
             </div>
@@ -59,11 +60,11 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                 <div className="w-3/4 m-10">
                     <div className="flex flex-col bg-white rounded-lg border-gray-500 border-2">
                         <h1>ชื่อของงาน</h1>
-                        <input type="text" value={work.workName}
+                        <input type="text" value={work.name}
                             onChange={onWorkNameChange}
                             className="input input-bordered m-5" />
                         <h1>คำอธิบายของงาน</h1>
-                        <input type="text" multiple value={work.workDescription}
+                        <input type="text" multiple value={work.description}
                             onChange={onWorkDescriptionChange}
                             className="input input-bordered m-5" />
                     </div>
@@ -88,16 +89,16 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                 <div className="w-1/4 bg-white">
                     <div>
                         <h1>คะแนน</h1>
-                        <input type="text" value={work.workScore} onChange={onWorkScoreChange} className="input input-bordered bg-gray-400" />
+                        <input type="text" value={work.score} onChange={onWorkScoreChange} className="input input-bordered bg-gray-400" />
                     </div>
                     <div>
                         <h1>กำหนดส่ง</h1>
                         <div className="dropdown">
                             <label tabIndex={0} className="btn m-1">
-                                <h1>{work.workDueDate ? work.workDueDate.toString() : "ไม่มีกำหนดส่ง"}</h1>
+                                <h1>{work.dueDate ? work.dueDate.toString() : "ไม่มีกำหนดส่ง"}</h1>
                             </label>
                             <div tabIndex={0} className="dropdown-content z-[1] p-2 bg-white">
-                                <Calendar targetDate={work.workDueDate} onDateSelect={onWorkDateChange} />
+                                <Calendar targetDate={work.dueDate} onDateSelect={onWorkDateChange} />
                                 <h1 className="btn">เลือกเวลาแต่ยังไม่ได้ทำ</h1>
                             </div>
                         </div>
@@ -122,7 +123,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                         </dialog>
                         <div className="dropdown">
                             <label tabIndex={0} className="btn m-1">
-                                {work.workTopic == "" ? "ไม่มีหัวข้อ" : work.workTopic}
+                                {work.topic == "" ? "ไม่มีหัวข้อ" : work.topic}
                             </label>
                             <div tabIndex={0} className="dropdown-content z-[1] p-2 bg-white">
                                 <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 w-52">

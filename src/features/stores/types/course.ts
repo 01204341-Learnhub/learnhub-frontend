@@ -14,5 +14,5 @@ export type Course = {
   intructor: Instructor;
   reviewerCount: number;
   rating: number;
-  tag: Tag[]
+  tags: Tag[]
 };

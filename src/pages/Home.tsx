@@ -3,62 +3,28 @@ import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
 import LearningClasses from "../pages/students/LearningClasses"
 import { Link } from "react-router-dom"
-import { getAllCourses } from "../features/stores/services/courses";
-import { getAllClasses } from "../features/stores/services/classes";
+import { getAllCourses, getPopularCourse } from "../features/stores/services/courses";
+import { getAllClasses, getNewClasses } from "../features/stores/services/classes";
 import { Course } from "../features/stores/types/course";
 import { ClassProgram } from "../features/stores/types/class";
 
 
-function mockClass(num: number) {
-    const classPrograms = []
-    const mockInstructor = [
-        "อาจารย์ อนันต์ สุขสวัสดิ์",
-        "อาจารย์ สมชาย สุขสวัสดิ์",
-        "อาจารย์ สมหญิง สุขสวัสดิ์",
-        "mrs Jiraporn",
-        "mr. Jirapong",
-    ]
-    for (let i = 0; i < num; i++) {
-        classPrograms.push({
-            programName: `คลาสเรียนที่ ${i + 1}`,
-            programId: ` B${i + 1}`,
-            instructorName: mockInstructor[i % mockInstructor.length],
-            percentCompleted: Math.floor(Math.random() * 100),
-            programThumbnailUrl: `https://picsum.photos/${i}/${300}`,
-        })
-    }
-    return classPrograms
+type ProgramCardProps =  {
+    programThumbnailUrl: string;
+    programName: string;
+    programId: string;
+    instructorName: string;
+    percentCompleted: number;
 }
-
-function mockCourse(num: number) {
-    const coursePrograms = []
-    const mockInstructor = [
-        "อาจารย์ อนันต์ สุขสวัสดิ์",
-        "อาจารย์ สมชาย สุขสวัสดิ์",
-        "อาจารย์ สมหญิง สุขสวัสดิ์",
-        "mrs Jiraporn",
-        "mr. Jirapong",
-    ]
-    for (let i = 0; i < num; i++) {
-        
-        coursePrograms.push({
-            programName: `คอร์สเรียนที่ ${i + 1}`,
-            programId: ` B${i + 1}`,
-            instructorName: mockInstructor[i % mockInstructor.length],
-            percentCompleted: Math.floor(Math.random() * 100),
-            programThumbnailUrl: `https://picsum.photos/${i}/${300}`,
-        })
-    }
-    return coursePrograms
-}
-
 
 
 
 export default function Home() {
 
     const [courses, setCouses] = useState<Course[] | null>(null)
+    const [popCourses, setPopCouses] = useState<Course[] | null>(null)
     const [classes, setClasses] = useState<ClassProgram[] | null>(null)
+    const [newClasses, setNewClasses] = useState<ClassProgram[] | null>(null)
 
     useEffect(() => {
         async function fetchCourse() {
@@ -71,11 +37,53 @@ export default function Home() {
             setClasses(classProgram)
         }
 
+        async function fetchPopularCourse() {
+            const popularCourse = await getPopularCourse(8)
+            setPopCouses(popularCourse)
+        }
+
+        async function fetchNewClass() {
+            const newClass = await getNewClasses(8)
+            setNewClasses(newClass)
+        }
+
         fetchCourse()
         fetchClass()
+        fetchPopularCourse()
+        fetchNewClass()
+
     }, [])
-    if (courses === null || classes === null) {
+    if (courses === null || classes === null || newClasses === null || popCourses === null) {
         return null;
+    }
+
+    function poppularCourseSlotProp() {
+        const coursePopularSlot = []
+        popCourses?.forEach((program) => {
+            coursePopularSlot.push({
+                programName: program.name,
+                programId: program.id,
+                instructorName: program.intructor.name,
+                percentCompleted: 100,
+                programThumbnailUrl: program.cover,
+            })
+        })
+        return coursePopularSlot
+    }
+
+
+    function classNewSlotProp() {
+        const classNewSlot  = []
+        newClasses?.forEach((program) => {
+            classNewSlot.push({
+                programName: program.name,
+                programId: program.id,
+                instructorName: program.intructor.name,
+                percentCompleted: 100,
+                programThumbnailUrl: program.cover,
+            })
+        })
+        return classNewSlot
     }
 
     const renderProgramsCourse = () => {
@@ -91,7 +99,7 @@ export default function Home() {
                                     courseName={program.name}
                                     instructorName={program.intructor.name}
                                     percentCompleted={100}
-                                    regisDate={""} voter={program.rating} price={program.price} tag={"ยอดนิยม"}
+                                    regisDate={""} voter={program.rating} price={program.price} tag={program.tags[0].tagName}
                                     lvl={"พื้นฐาน"} />
                             </Link>
                         )
@@ -131,7 +139,7 @@ export default function Home() {
             <div className="mt-5">
                 <ProgramCarousel 
                     type="course"
-                    programs={mockCourse(20)}
+                    programs={poppularCourseSlotProp()}
                     carouselName="คอร์สเรียนยอดนิยม"
                     displayCount={3} />
             </div>
@@ -140,7 +148,7 @@ export default function Home() {
             <div className="mt-5 mb-4">
                 <ProgramCarousel
                     type="class"
-                    programs={mockClass(20)}
+                    programs={classNewSlotProp()}
                     carouselName="คลาสเรียนใหม่ล่าสุด"
                     displayCount={3} />
             </div>

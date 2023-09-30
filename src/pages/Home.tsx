@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
-import LearningClasses from "../pages/students/LearningClasses"
 import { Link } from "react-router-dom"
 import { getAllCourses, getPopularCourse } from "../features/stores/services/courses";
 import { getAllClasses, getNewClasses } from "../features/stores/services/classes";
 import { Course } from "../features/stores/types/course";
 import { ClassProgram } from "../features/stores/types/class";
+
 
 
 type ProgramCardProps =  {
@@ -186,8 +186,6 @@ export default function Home() {
                     </div>
                 </Link>
             </section>
-
-            
         </div>
     )
 }

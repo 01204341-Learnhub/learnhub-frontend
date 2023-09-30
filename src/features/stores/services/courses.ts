@@ -1,4 +1,4 @@
-import { Course } from "../types/course";
+import { Course, CourseAnnouncement } from "../types/course";
 
 async function listCourse() {
   return [];
@@ -25,4 +25,40 @@ async function getCourse(id: string): Promise<Course> {
   };
 }
 
-export { getCourse, listCourse };
+async function listCourseAnnouncements(courseID: string) {
+  const mockAnnouncements: CourseAnnouncement[] = [
+    {
+      announcementID: "1",
+      name: "Welcome to the course!",
+      lastEdit: 1600000000,
+      text: "Welcome to the course!, WOw oWo",
+      attachments: [],
+    },
+    {
+      announcementID: "2",
+      name: "How to approve",
+      lastEdit: 1600000234,
+      text: "How to approve, WOw oWo",
+      attachments: [],
+    },
+  ];
+  return mockAnnouncements;
+}
+
+async function getCourseAnnouncement(courseID: string, announcementID: string) {
+  const mockAnnouncements: CourseAnnouncement = {
+    announcementID: announcementID,
+    name: "Welcome to the course!",
+    lastEdit: 1600000000,
+    text: "Welcome to the course!, WOw oWo",
+    attachments: [],
+  };
+  return mockAnnouncements;
+}
+
+export {
+  getCourse,
+  getCourseAnnouncement,
+  listCourse,
+  listCourseAnnouncements,
+};

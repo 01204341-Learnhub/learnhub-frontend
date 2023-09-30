@@ -10,3 +10,14 @@ export type Course = {
   reviewerCount: number;
   rating: number;
 };
+
+export type CourseAnnouncement = {
+  announcementID: string;
+  name: string;
+  lastEdit: number;
+  text: string;
+  attachments: {
+    attachmentType: string;
+    src: string;
+  }[];
+};

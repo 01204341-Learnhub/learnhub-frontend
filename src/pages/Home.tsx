@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react";
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
-<<<<<<< HEAD
-=======
-import LearningClasses from "../pages/students/LearningClasses"
-import LearningOverview from "./students/LearningOverview";
->>>>>>> d0c8feed13cfc556c6b7262af4a0eda76b4dd76d
 import { Link } from "react-router-dom"
 import { getAllCourses, getPopularCourse } from "../features/stores/services/courses";
 import { getAllClasses, getNewClasses } from "../features/stores/services/classes";

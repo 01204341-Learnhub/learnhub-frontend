@@ -31,7 +31,15 @@ export type PostDataCourse = {
     course_requirement: string
     difficulty_level: string
     price: number
-} 
+}
+
+export type ResponseChapterDetail = {
+    chapter_id: string
+    course_id: string
+    chapter_num: string
+    name: string
+    description: string
+}
 
 export type ResponseGetCourseId = {
     course_id : string
@@ -58,6 +66,21 @@ export type ResponseGetCourseId = {
     quiz_count : number
     file_count : number
     video_count : number
+}
+
+
+type ResponseChapter = {
+    chapter_id: string
+    chapter_num: number
+    name: string
+    lesson_count: number
+    chapter_length: number
+}
+
+
+
+export type ResponseChapters = {
+    chapters : ResponseChapter[]
 }
 
 export type ResponseGetCourses = {

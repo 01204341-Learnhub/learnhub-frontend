@@ -6,18 +6,6 @@ interface BasketItemSlotProps {
 
 function BasketItemSlot({ item }: BasketItemSlotProps) {
     return (
-        // <div>
-        //     <div className=" bg-white">
-        //         <div className="w-20 h-20">
-        //             <img src={item.thumbnailURL} />
-        //             <div>
-        //                 <p>{item.name}</p>
-        //                 <p>{item.price}</p>
-        //             </div>
-        //         </div>
-        //     </div>
-        //     <hr />
-        // </div>
         <div className="flex flex-row border-1 h-[145px] items-center shadow-sm " key={item.itemID}>
             <img className="object-cover w-[144px] h-[90px] " src={item.thumbnailURL} />
             <div className="ml-[10px] flex flex-col text-left">

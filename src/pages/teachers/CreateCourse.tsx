@@ -60,7 +60,7 @@ function _SideNav({
             color="black"
           />
           <h1 className="font-semibold text-black text-[18px]">
-            เพิ่มเป้าหมายของคอร์ส
+            เป้าหมายของคอร์ส
           </h1>
         </button>
         <button
@@ -253,7 +253,7 @@ function CreateCourse() {
               coursePublishingInfo,
             )}
           />
-          <div className="flex flex-col justify-start w-full space-y-5">
+          <div className="flex flex-col justify-start space-y-5 w-full h-fit p-8 bg-white">
             {chapters.map((chapter, idx) => (
               <CourseChapterInfo
                 key={idx}

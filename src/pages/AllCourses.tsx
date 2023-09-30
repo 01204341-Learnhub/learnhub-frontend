@@ -13,7 +13,7 @@ export default function AllCloures() {
     const [courses, setCourses] = useState<Course[] | null>(null)
     useEffect(() => {
         async function fetchProgramCourses() {
-            const courses = await getAllCourses(20!)
+            const courses = await getAllCourses()
             setCourses(courses)
         }
         fetchProgramCourses()
@@ -27,7 +27,7 @@ export default function AllCloures() {
             <>
                 {courses.map((course, index) => {
                         return (
-                            <Link to={`/detail/course/${course.id}`} key={index} className="mx-5 my-2" >
+                            <Link to={`/detail/course/${course.courseId}`} key={index} className="mx-5 my-2" >
                                 <ProgramSlot key={index} courseThumbnailUrl={course.cover}
                                     courseName={course.name}
                                     instructorName={course.intructor.name}

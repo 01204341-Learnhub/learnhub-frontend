@@ -111,7 +111,7 @@ interface CourseChaptersOutlineProps {
 
 function CourseChaptersOutline(props: CourseChaptersOutlineProps) {
   return (
-    <div className="w-[600px] bg-[#eaeaea66]">
+    <div className="w-[600px] bg-[#eaeaea66] py-0.5">
       <div className="m-5 flex flex-col justify-start space-y-4">
         {props.chapters.map((chapter) => (
           <ChapterEntry key={chapter.id} chapter={chapter} />

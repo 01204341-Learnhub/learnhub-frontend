@@ -25,14 +25,14 @@ function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryPro
 
     return (
         <>
-        <div className="card w-[508px] h-[514px] bg-base-200 drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[5px] cursor-pointer">        
+        <div className="card flex w-[518px] h-[544px] bg-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[5px] cursor-pointer">        
             <div className="flex justify-between content-center items-center mx-[10%] pt-[2%]">
                 <p className="font-bold	text-[32px]">
                     {myCourseDetailedSummary.costs} บาท
                 </p>
-                <button className="flex justify-between items-center content-center  text-sm w-[240px] h-[52px] bg-[#D9D9D9] rounded-xl px-[5%]">
-                    <FontAwesomeIcon icon={faHeart} color="#FF2171" size="xl"/>
-                    <p className="font-bold	">
+                <button className="flex justify-between items-center content-center  text-base h-[52px] bg-[#D9D9D9] rounded-2xl px-[5%] my-4">
+                    <FontAwesomeIcon icon={faHeart} color="#FF2171" size="2xl"/>
+                    <p className="font-bold	pl-2">
                         เพิ่มในนการเรียนรู้ที่อยากได้
                     </p>
                 </button>

@@ -140,12 +140,12 @@ function CourseChaptersOutlineTest() {
   }
 
   return (
-    <div className="bg-white min-h-screen min-w-screen">
-      <div className="flex flex-row justify-center">
+    <div className="bg-white">
+      <div className="">
         <CourseChaptersOutline chapters={chapters} />
       </div>
     </div>
   );
 }
 
-export { CourseChaptersOutlineTest };
+export { CourseChaptersOutline };

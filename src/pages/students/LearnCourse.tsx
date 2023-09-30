@@ -2,12 +2,15 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import VideoPlayer from "../../components/VideoPlayer"
 import ChapterOutline from "../../features/learns/components/ChapterOutline"
+import CourseAnnouncementDropdown from "../../features/learns/components/CourseAnnouncementDropdown"
 import CourseMultipleChoiceQuiz from "../../features/learns/components/CourseMultipleChoiceQuiz"
 import { fetchChapters } from "../../features/learns/services/course"
 import { fetchUserCourseProgress } from "../../features/learns/services/progress"
 import { CourseChapter, CourseLesson } from "../../features/learns/types/course"
 import { UserCourseProgress } from "../../features/learns/types/progress"
 import { CourseQuiz } from "../../features/learns/types/quiz"
+import { listCourseAnnouncements } from "../../features/stores/services/courses"
+import { CourseAnnouncement } from "../../features/stores/types/course"
 
 interface _CourseContentProp {
     chapters: CourseChapter[]
@@ -82,19 +85,32 @@ function LearnCourse() {
     const [chapters, setChapters] = useState<CourseChapter[]>([])
     const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>('contents')
     const [currentLesson, setCurrentLesson] = useState<CourseLesson | undefined>(undefined)
+    const [announcements, setAnnouncements] = useState<CourseAnnouncement[]>([])
 
     useEffect(() => {
         if (!courseID) return
-        async function fetchChaptersAndProgress(courseID: string) {
+        async function fetchData(courseID: string) {
             const fetchedChapters = await fetchChapters(courseID)
             const progress = await fetchUserCourseProgress(courseID)
+            const fetchedAnnouncements = await listCourseAnnouncements(courseID)
             setChapters(fetchedChapters)
             setProgress(progress)
+            setAnnouncements(fetchedAnnouncements)
         }
 
         setFetching(true)
-        fetchChaptersAndProgress(courseID).then(() => { setFetching(false) })
+        fetchData(courseID).then(() => { setFetching(false) })
     }, [courseID])
+
+    const announcementAdapter = (announcement: CourseAnnouncement) => {
+        return {
+            topic: announcement.name,
+            postDate: "091223",
+            content: announcement.text,
+            teacherName: "Mister Hardcode",
+            teacherProfile: "https://www.w3schools.com/howto/img_avatar.png"
+        }
+    }
 
     const getChapter = (chapterID: string) => {
         const idx = chapters.findIndex((chapter) => chapter.chapterID == chapterID)
@@ -136,9 +152,27 @@ function LearnCourse() {
                     </button>
                 </div>
                 <div className="bg-white px-10 py-12">
-                    {outlineViewMode == 'contents' ?
-                        <_CourseContent chapters={chapters} chapterProgress={progress} onSelectLesson={(l) => { setCurrentLesson(l) }} /> :
-                        <div>Announcements</div>}
+                    {(() => {
+                        if (outlineViewMode == 'contents') {
+                            return (
+                                <_CourseContent chapters={chapters} chapterProgress={progress} onSelectLesson={(l) => { setCurrentLesson(l) }} />
+
+                            )
+                        }
+                        else {
+                            return (
+                                <div>
+
+                                    {announcements.map((announcement) => (
+                                        <div key={announcement.announcementID}>
+                                            <CourseAnnouncementDropdown {...announcementAdapter(announcement)} />
+                                        </div>
+                                    ))}
+                                </div>
+                            )
+
+                        }
+                    })()}
                 </div>
             </div>
         </div>

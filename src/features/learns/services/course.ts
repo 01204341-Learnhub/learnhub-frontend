@@ -37,6 +37,16 @@ async function fetchLessons(courseID: string, chapterID: string) {
       src: "https://www.youtube.com/embed/3qHkcs3kG44",
       description: "This is a lesson 1",
     },
+    {
+      lessonID: "2",
+      chapterID: chapterID,
+      courseID: courseID,
+      lessonNum: 2,
+      lessonType: "quiz",
+      name: "Lesson 2",
+      src: "https://www.youtube.com/embed/3qHkcs3kG44",
+      description: "This is a lesson 1",
+    },
   ];
   return mockLessons;
 }

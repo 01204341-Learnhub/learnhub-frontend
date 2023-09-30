@@ -41,7 +41,7 @@ async function getCourse(id: string): Promise<CourseDetailData> {
       instructor : {
         id: courseIdData.teacher.teacher_id,
         name: courseIdData.teacher.teacher_name,
-        avatarUrl: "https://thethaiger.com/th/wp-content/uploads/2023/07/F0LUzN6aQAEFxD8-1480x833.jpg",
+        avatarUrl: courseIdData.teacher.profile_pic,
         jobTitle: "Scotte Langnuk"
       },
       price: courseIdData.price,
@@ -102,7 +102,7 @@ async function getAllCourses(): Promise<Course[]> {
         intructor: {
           id : program.teacher.teacher_id,
           name: program.teacher.teacher_name,
-          avatarUrl: "",
+          avatarUrl: program.teacher.profile_pic,
           jobTitle: "Scotte lungnuk",
         },
         reviewerCount: program.review_count,

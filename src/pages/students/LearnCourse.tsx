@@ -121,37 +121,37 @@ function LearnCourse() {
     if (fetching) return (<div>Fetching...</div>)
     if (!progress || !chapters) return (<div>Not found</div>)
     return (
-        <div className="bg-[#e0e0e0] h-full">
-            <div className="flex">
+        <div className="bg-[#eeeeee80] h-full pb-20">
+            <div className="flex pt-8 pl-14 pb-14">
                 <h1 className="text-black font-bold text-4xl">คอร์สเรียน</h1>
                 <h1 className="text-gray-600 font-semibold text-3xl my-auto ml-4">No name course</h1>
             </div>
-            <div>
+            <div className="flex items-center justify-center">
                 <_LessonDisplay lesson={currentLesson} />
             </div>
-            <div className="mx-12 mt-10">
+            <div className="flex flex-col items-center mx-20 mt-20">
 
                 {(() => {
                     if (currentLesson == undefined) return (<></>)
                     const currentChapter = getChapter(currentLesson.chapterID)
                     return (
-                        <div>
-                            <h1 className="text-black font-bold">คำอธิบาย (ของ ch) บทที่ {currentChapter.chapterNum}: {currentChapter.name}</h1>
-                            <p>{currentChapter.description}</p>
+                        <div className="self-start">
+                            <h1 className="text-black font-bold text-2xl pb-4">คำอธิบาย (ของ ch) บทที่ {currentChapter.chapterNum}: {currentChapter.name}</h1>
+                            <p className="font-medium text-lg" >{currentChapter.description}</p>
                         </div>
                     )
                 })()}
-                <div className="flex mt-20">
+                <div className="flex mt-20 mb-10 self-start">
                     <button onClick={() => { setOutlineViewMode("contents") }}>
-                        <h1>เนื้อหาคอร์สเรียน</h1>
-                        <div className={`bg-slate-700 ${outlineViewMode == "contents" ? "h-3" : ""}`}></div>
+                        <h1 className="text-2xl font-bold">เนื้อหาคอร์สเรียน</h1>
+                        <div className={`bg-black ${outlineViewMode == "contents" ? "h-3" : "h-3 bg-transparent"}`}></div>
                     </button>
                     <button className="ml-10" onClick={() => { setOutlineViewMode("announcements") }}>
-                        <h1>ประกาศจากคอร์สเรียน</h1>
-                        <div className={`bg-slate-700 ${outlineViewMode == "announcements" ? "h-3" : ""}`}></div>
+                        <h1 className="text-2xl font-bold">ประกาศจากคอร์สเรียน</h1>
+                        <div className={`bg-black ${outlineViewMode == "announcements" ? "h-3" : "h-3 bg-transparent"}`}></div>
                     </button>
                 </div>
-                <div className="bg-white px-10 py-12">
+                <div className="bg-white w-full px-10 py-12 ">
                     {(() => {
                         if (outlineViewMode == 'contents') {
                             return (
@@ -161,8 +161,7 @@ function LearnCourse() {
                         }
                         else {
                             return (
-                                <div>
-
+                                <div className="">
                                     {announcements.map((announcement) => (
                                         <div key={announcement.announcementID}>
                                             <CourseAnnouncementDropdown {...announcementAdapter(announcement)} />

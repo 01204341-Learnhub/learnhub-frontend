@@ -34,10 +34,10 @@ export default function ChapterOutline({ chapter, chapterProgress, onSelectLesso
             <div className=''>
                 <div className="flex bg-[#ECF3F9] justify-between" onClick={() => setShow(!show)}>
                     <div className='text-xl m-5'>
-                        <div>{chapter.name}</div>
+                        <h1 className="text-xl font-semibold pl-2">{chapter.name}</h1>
                         <div className='flex mt-2'>
-                            <div className='mx-5 text-sm'>{99999999999999}/{chapter.lessonCount}</div>
-                            <div className='mx-5 text-sm'>{chapter.chapterLength / 3600 >= 1 ? chapter.chapterLength / 3600 + "ชั่วโมง" + ((chapter.chapterLength % 3600 > 0) ? chapter.chapterLength % 3600 + "นาที" : "") : chapter.chapterLength / 60 + "นาที"}</div>
+                            <div className='mx-5 text-sm text-[#606060]'>{99999999999999}/{chapter.lessonCount}</div>
+                            <div className='mx-5 text-sm text-[#606060]'>{chapter.chapterLength / 3600 >= 1 ? chapter.chapterLength / 3600 + "ชั่วโมง" + ((chapter.chapterLength % 3600 > 0) ? chapter.chapterLength % 3600 + "นาที" : "") : chapter.chapterLength / 60 + "นาที"}</div>
                         </div>
                     </div>
                     <button onClick={handleShow} className='mx-5'>
@@ -74,14 +74,15 @@ function LessonSlot({ lesson, finished, onSelectLesson }: LessonSlotProp) {
         if (onSelectLesson) onSelectLesson(lesson)
     }
     return (
-        <div className='flex justify-between  h-[75px]' onClick={handleClick}>
-            <div className="flex justify-center items-center">
-                <div className="flex h-[75px] w-[75px] bg-[#D9D9D9] justify-center items-center">{lesson.lessonType == "video" ? <FontAwesomeIcon icon={faCirclePlay} size='2xl' className=" opacity-50"></FontAwesomeIcon>
-                    : lesson.lessonType == "pdf" ? <FontAwesomeIcon icon={faFileLines} size='2xl' className=" opacity-50"></FontAwesomeIcon>
+        <div className='flex justify-between' onClick={handleClick}>
+            <div className="flex justify-center items-center pb-1.5">
+                <div className="flex h-24 w-24 bg-[#D9D9D9] justify-center items-center">
+                    {lesson.lessonType == "video" ? <FontAwesomeIcon icon={faCirclePlay} size='2xl' color="black" className="drop-shadow-lg"></FontAwesomeIcon>
+                    : lesson.lessonType == "pdf" ? <FontAwesomeIcon icon={faFileLines} color="#000" size='2xl' className=" opacity-50"></FontAwesomeIcon>
                         : <></>}
                 </div>
                 <div className='mx-5'>
-                    <h1>{lesson.name}</h1>
+                    <h1 className="font-semibold">{lesson.name}</h1>
                 </div>
             </div>
             <input type="checkbox" className='mx-5' checked={finished}></input>

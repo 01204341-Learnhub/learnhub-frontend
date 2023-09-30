@@ -5,17 +5,28 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import bookLogo from "../../src/assets/Images/bookLogo.png";
 import textNameLogo from "../../src/assets/Images/textNameLogo.png";
-import { signIn } from "../services/auth/signIn";
+import { signInWithEmail } from "../services/auth/signIn";
 import { setUser } from "../slices/userSlice";
 
 
 export default function Login() {
-    const [mode, setMode] = useState("student") // student or teacher
+    const [mode, setMode] = useState<"student" | "teacher">("student") // student or teacher
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(event.target.value)
+    }
+
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value)
+    }
+
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const handleSignIn = () => {
-        signIn().then((u) => {
-            dispatch(setUser(u))
+        signInWithEmail(email, password, mode).then((user) => {
+            dispatch(setUser(user))
             navigate("/home")
         })
     }
@@ -56,13 +67,16 @@ export default function Login() {
                     <div className=" mt-10 ml-48 flex border-[5px] rounded-xl space-x-10 object-contain h-[60px] w-[500px] items-center">
                         <div className=" flex space-x-[6%] ml-[4%]">
                             <FontAwesomeIcon icon={faEnvelope} size='2xl' className=" opacity-50"></FontAwesomeIcon>
-                            <input type="text" className=" text-[24px]" placeholder={mode == "student" ? "อีเมลล์ผู้เรียน" : "อีเมลล์ผู้สอน"} required></input>
+                            <input type="text" className=" text-[24px]" placeholder={mode == "student" ? "อีเมลล์ผู้เรียน" : "อีเมลล์ผู้สอน"} required
+                                value={email} onChange={handleEmailChange}></input>
                         </div>
                     </div>
                     <div className=" mt-10 ml-48 flex border-[5px] rounded-xl space-x-10 object-contain h-[60px] w-[500px] items-center">
                         <div className=" flex space-x-[6%] ml-[4%]">
                             <FontAwesomeIcon icon={faUnlockKeyhole} size='2xl' className=" opacity-50"></FontAwesomeIcon>
-                            <input type="text" className=" text-[24px]" placeholder={mode == "student" ? "รหัสผ่านผู้เรียน" : "รหัสผ่านผู้สอน"} required></input>
+                            <input type="text" className=" text-[24px]" placeholder={mode == "student" ? "รหัสผ่านผู้เรียน" : "รหัสผ่านผู้สอน"} required
+                                value={password}
+                                onChange={handlePasswordChange}></input>
                         </div>
                     </div>
                     <div className=" flex justify-center ">

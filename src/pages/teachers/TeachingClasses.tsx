@@ -1,4 +1,4 @@
-import { faHandMiddleFinger, faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faClipboardList, faPlus,} from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import WorkCreate from "../../features/teaches/components/WorkCreate"
@@ -38,9 +38,11 @@ function _ViewSlector({ currentView, setView }: ViewSlectorProps) {
 
 function _WorkSlot({ work }: { work: Work }) {
     return (
-        <div className="bg-white flex m-3">
-            <FontAwesomeIcon icon={faHandMiddleFinger} size="lg" />
-            <h1>{work.name}</h1>
+        <div className="bg-white flex m-3 items-center">
+            <div className="flex justify-center items-center bg-[#D9D9D9] w-16 h-16 m-2 rounded-full">
+                <FontAwesomeIcon icon={faClipboardList} size="2xl" />
+            </div>
+            <h1 className="text-xl text-gray-600 font-bold ml-5">{work.name}</h1>
         </div>
     )
 }
@@ -63,24 +65,28 @@ function _ClassWorks({ onCreateClassWork, works }: _ClassWorksProps) {
     if (works.length == 0) {
         <div className="h-full w-full">
             <button className="btn m-7" onClick={onCreateClassWork}>
-                <FontAwesomeIcon icon={faPlus} size="lg" />
-                <h1>สร้าง</h1>
+                <FontAwesomeIcon icon={faPlus} size="xl" />
+                <h1 className="text-xl">สร้าง</h1>
             </button>
         </div>
     }
     return (
         <div className="h-full w-full">
             <button className="btn m-7" onClick={onCreateClassWork}>
-                <FontAwesomeIcon icon={faPlus} size="lg" />
-                <h1>สร้าง</h1>
+                <FontAwesomeIcon icon={faPlus} size="xl" />
+                <h1 className="text-xl">สร้าง</h1>
             </button>
             {getAllTopics().map((topic, index) => (
                 <div key={index}>
-                    {index != 0 ? <hr /> : <></>}
-                    <h1 className="text-black font-bold text-3xl">{topic}</h1>
-                    {works.filter(w => w.topic == topic).map((w) => (
-                        <_WorkSlot key={w.name} work={w} />
-                    ))}
+                    <h1 className="mx-10 text-black font-bold text-3xl my-2">{topic}</h1>
+                    <hr className="mx-10 h-1.5 bg-gray-300"/>
+                    <div className="my-16">
+                        {works.filter(w => w.topic == topic).map((w) => (
+                            <div className="mx-10">
+                                <_WorkSlot key={w.name} work={w} />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             ))}
         </div>
@@ -91,35 +97,35 @@ const mockWorks: Work[] = [
     {
         name: "Mock",
         description: "Mockckdkkfdksfk",
-        topic: "ฟัสสี่",
+        topic: "ไม่ได้กำหนดหัวข้อ",
         attachments: [],
         score: 0
     },
     {
         name: "Mock 3",
         description: "Mockckdkkfdksfk",
-        topic: "ฟัสสี่",
+        topic: "ไม่ได้กำหนดหัวข้อ",
         attachments: [],
         score: 0
     },
     {
         name: "Mock 2",
         description: "Mockckdkkfdksfk",
-        topic: "ฟัสสี่",
+        topic: "ไม่ได้กำหนดหัวข้อ",
         attachments: [],
         score: 0
     },
     {
         name: "Mock 2",
         description: "Mockckdkkfdksfk",
-        topic: "WOW",
+        topic: "หัวข้อที่ 1",
         attachments: [],
         score: 0
     },
     {
         name: "Mock 2",
         description: "Mockckdkkfdksfk",
-        topic: "YAYYAYA",
+        topic: "หัวข้อที่ 2",
         attachments: [],
         score: 0
     },
@@ -133,7 +139,7 @@ function TeachingClasses() {
         return (
             <div className="h-full">
                 <_ViewSlector currentView={view} setView={setView} />
-                <hr />
+                <hr/>
                 <div className="mx-7 mt-8">
                     <div className="flex">
                         <h1 className="text-2xl font-bold text-black">{classInfo.className}</h1>

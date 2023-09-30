@@ -43,25 +43,31 @@ function _Question({ question, onNext, onPrev, isLast }: _QuestionProps) {
     }
     return (
         <div className="bg-white">
-            <h1>คำถามที่ {question.questionNumber}: </h1>
-            <p>{question.question}</p>
+            <h1 className="text-2xl font-bold mx-[3%] my-5">คำถามที่ {question.questionNumber}: </h1>
+            <p className="text-xl  mx-[5%] my-5">{question.question}</p>
             {question.options.map((option, index) => (
-                <div key={index} className="flex">
-                    <button className={`round-full w-10 h-10 ${selected.includes(index) ? 'bg-black' : 'bg-white'} border-2 border-black}`}
-                        onClick={() => { handleSelect(index) }}></button>
-                    <p>{option}</p>
+            
+                <div key={index} className="flex items-center text-lg font-bold mx-[5%] my-10">
+                    <div className="flex rounded-full justify-center items-center w-5 h-5 bg-gray-400">
+                        <div className="flex rounded-full justify-center items-center w-5 h-5">
+                            <button className={`rounded-full w-4 h-4 ${selected.includes(index) ? 'bg-black' : 'bg-white'} border-2 border-black}`}
+                                onClick={() => { handleSelect(index) }}></button>
+                        </div>
+                    </div>
+                    <p className="mx-2">{option}</p>
                 </div>
+                
             ))}
-            <div>
-                <button className={`${onPrev ? "btn-info" : "btn"}`
+            <div className="flex justify-end mx-[3%]">
+                <button className={`flex justify-center items-center px-4 h-11 m-2 rounded-md ${onPrev ? "bg-black" : "bg-gray-300"} text-white`
                 } onClick={handlePrev}>
                     <FontAwesomeIcon icon={faChevronLeft} />
                     <p>ข้อก่อนหน้า</p>
                 </button>
-                <button className={`${onNext ? "btn-info" : "btn"}`}
+                <button className={`flex justify-center items-center px-4 h-11 m-2 rounded-md  ${onNext ? "bg-black" : "bg-gray-300"} text-white`}
                     onClick={handleNext}>
-                    <FontAwesomeIcon icon={faChevronRight} />
                     <p>{isLast ? "ส่งคำตอบ" : "ข้อถัดไป"}</p>
+                    <FontAwesomeIcon icon={faChevronRight} />
                 </button>
             </div>
         </div>
@@ -101,11 +107,11 @@ function CourseMultipleChoiceQuiz({ quiz }: MultipleChoiceQuizProps) {
     if (!started) {
         return (
             <div className="bg-white border-2 border-black">
-                <h1>{quiz.name}</h1>
-                <p>{quiz.description}</p>
-                <div className="flex">
-                    <button className="btn bg-black" onClick={handleStart}>เริ่มต้นทำแบบฝึกหัด</button>
-                    <button className="btn">ข้ามแบบทดสอบ</button>
+                <h1 className="text-3xl font-bold mx-[5%] my-10 ">{quiz.name}</h1>
+                <p className="text-xl mx-[5%] my-10">{quiz.description}</p>
+                <div className="flex mx-[5%] my-10">
+                    <button className="mr-5 my-10 bg-black text-white text-xl py-4 px-5 rounded-xl font-bold" onClick={handleStart}>เริ่มต้นทำแบบฝึกหัด</button>
+                    <button className="mx-5 my-10 text-xl py-4 px-5 rounded-xl font-bold">ข้ามแบบทดสอบ</button>
                 </div>
             </div>
         )

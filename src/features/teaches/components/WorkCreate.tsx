@@ -59,29 +59,34 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
             <div className="bg-[#e0e0e0] flex h-full w-full">
                 <div className="w-3/4 m-10">
                     <div className="flex flex-col bg-white rounded-lg border-gray-500 border-2">
-                        <h1>ชื่อของงาน</h1>
                         <input type="text" value={work.name}
                             onChange={onWorkNameChange}
-                            className="input input-bordered m-5" />
-                        <h1>คำอธิบายของงาน</h1>
-                        <input type="text" multiple value={work.description}
-                            onChange={onWorkDescriptionChange}
-                            className="input input-bordered m-5" />
+                            className="input input-bordered mb-2 mx-10 mt-10" 
+                            placeholder="หัวข้อ"/>
+                        <textarea   
+                            // onChange={onWorkDescriptionChange}
+                            // value={work.description}
+                            className="input input-bordered mt-2 mx-10 mb-10  " 
+                            placeholder="อธิบายงานในส่วนนี้ (ไม่จำเป็นต้องกรอกก็ได้)"/>
                     </div>
-                    <div className="bg-white mt-5 border-gray-500 border-2 rounded-lg pt-4">
-                        <h1 className="text-gray-500 font-bold">แนบ</h1>
-                        <div className="flex justify-center">
-                            <div>
-                                <button>
-                                    <FontAwesomeIcon icon={faFile} size="lg" className="mx-3" />
-                                </button>
-                                <h1>ลิ้งค์</h1>
+                    <div className="bg-white mt-5 border-gray-400 border-2 rounded-xl pt-4">
+                        <h1 className="text-gray-500 font-bold mx-8 ">แนบ</h1>
+                        <div className="flex justify-center m-5">
+                            <div className="ml-8">
+                                <div className="flex justify-center items-center border-2 w-12 h-12 rounded-full">
+                                    <button>
+                                        <FontAwesomeIcon icon={faFile} size="lg" className="mx-3" />
+                                    </button>
+                                </div>
+                                <h1 className="m-2">ลิ้งก์</h1>
                             </div>
-                            <div>
-                                <button>
-                                    <FontAwesomeIcon icon={faUpload} size="lg" className="mx-3" />
-                                </button>
-                                <h1>อัพโหลด</h1>
+                            <div className="ml-8">
+                                <div className="flex justify-center items-center border-2 w-12 h-12 rounded-full">
+                                    <button>
+                                        <FontAwesomeIcon icon={faUpload} size="lg" className="mx-3" />
+                                    </button>
+                                </div>
+                                <h1 className="m-2">อัพโหลด</h1>
                             </div>
                         </div>
                     </div>
@@ -89,7 +94,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                 <div className="w-1/4 bg-white">
                     <div>
                         <h1>คะแนน</h1>
-                        <input type="text" value={work.score} onChange={onWorkScoreChange} className="input input-bordered bg-gray-400" />
+                        <input type="number" value={work.score} onChange={onWorkScoreChange} className="input input-bordered bg-gray-400" />
                     </div>
                     <div>
                         <h1>กำหนดส่ง</h1>

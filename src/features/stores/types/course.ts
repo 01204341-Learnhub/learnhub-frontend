@@ -6,7 +6,7 @@ export type Tag = {
 }
 
 export type Course = {
-  id: string;
+  courseId: string;
   name: string;
   description: string;
   price: number;
@@ -16,3 +16,24 @@ export type Course = {
   rating: number;
   tags: Tag[]
 };
+
+export type CourseDetailData = {
+  courseId : string
+    name : string
+    coursePic : string
+    tags : Tag[]
+    description : string
+    objective : string
+    requirement : string
+    level : string
+    rating : number
+    reviewCount : number
+    studentCount : number
+    instructor: Instructor
+    price: number
+    videoLength : number
+    chapterCount : number
+    quizCount : number
+    fileCount : number
+    videoCount : number
+}

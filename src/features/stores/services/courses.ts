@@ -1,7 +1,14 @@
 import axios from "axios";
 import { CourseDetailData, Course } from "../types/course";
 import { Tag } from "../types/course";
-import { ResponseGetCourses, ResponseGetCourseId, PostDataCourse } from "../types/response";
+import { Chapter } from "../types/chapter";
+import {  ResponseGetCourses, 
+          ResponseGetCourseId, 
+          PostDataCourse,
+          ResponseChapters,
+          ResponseChapterDetail
+        } from "../types/response";
+
 
 
 async function listCourse() {
@@ -85,7 +92,7 @@ async function getAllCourses(): Promise<Course[]> {
       
     
       courseData.map(async (program) => {
-      console.log(program.course_id)
+
       programCourse.push({
         courseId: program.course_id,
         name: program.name,
@@ -113,6 +120,34 @@ async function getAllCourses(): Promise<Course[]> {
   return programCourse
 }
 
+type ChapterPreview = Omit<Chapter, "description">
+
+async function getChapterInCourse(id:string) {
+  const chapterCourse : Chapter[] = []
+  try {
+    const response = await axios.get<ResponseChapters>(`http://localhost:8000/programs/courses/${id}/chapters`)
+    const chapterData = response.data.chapters
+
+    chapterData.map( chapter => {
+      chapterCourse.push({
+        id : chapter.chapter_id,
+        courseId : id,
+        name: chapter.name,
+        chapterNum: chapter.chapter_num,
+        chapterLength: chapter.chapter_length,
+        lessonCount: chapter.lesson_count,
+        description: ""
+      })
+    })
+
+    console.log(chapterCourse)
+
+  } catch (err) {
+    console.log(err)
+  } finally {
+    return chapterCourse
+  }
+}
 
 async function getPopularCourse(num: number) : Promise<Course[]> {
   const popularCourses = [];
@@ -141,10 +176,13 @@ async function getPopularCourse(num: number) : Promise<Course[]> {
       
     });
   }
-  
-
-
   return popularCourses
 }
 
-export { getCourse, getAllCourses, listCourse, getPopularCourse, postCourse };
+
+export {  getCourse, 
+          getAllCourses, 
+          listCourse, 
+          getPopularCourse, 
+          postCourse, 
+          getChapterInCourse };

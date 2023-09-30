@@ -2,10 +2,12 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import VideoPlayer from "../../components/VideoPlayer"
 import ChapterOutline from "../../features/learns/components/ChapterOutline"
+import CourseMultipleChoiceQuiz from "../../features/learns/components/CourseMultipleChoiceQuiz"
 import { fetchChapters } from "../../features/learns/services/course"
 import { fetchUserCourseProgress } from "../../features/learns/services/progress"
 import { CourseChapter, CourseLesson } from "../../features/learns/types/course"
 import { UserCourseProgress } from "../../features/learns/types/progress"
+import { CourseQuiz } from "../../features/learns/types/quiz"
 
 interface _CourseContentProp {
     chapters: CourseChapter[]
@@ -16,8 +18,8 @@ interface _CourseContentProp {
 function _CourseContent({ chapters, chapterProgress, onSelectLesson }: _CourseContentProp) {
     return (
         <div>
-            {chapters.map((chapter) => (
-                <ChapterOutline chapter={chapter} chapterProgress={chapterProgress} onSelectLesson={onSelectLesson} />
+            {chapters.map((chapter, index) => (
+                <ChapterOutline chapter={chapter} chapterProgress={chapterProgress} onSelectLesson={onSelectLesson} key={index} />
             ))}
         </div>
     )
@@ -30,6 +32,45 @@ function _LessonDisplay({ lesson }: { lesson: CourseLesson | undefined }) {
             <div>
                 <VideoPlayer url={lesson.src} />
             </div>
+        )
+    } else {
+        const quiz: CourseQuiz = {
+            quizID: "1",
+            name: "Quiz 1",
+            description: "Quiz 1 description",
+            questions: [
+                {
+                    questionNumber: 1,
+                    question: "Question 1",
+                    options: [
+                        "Option 1",
+                        "Option 2",
+                        "Option 3",
+                    ]
+                },
+                {
+                    questionNumber: 2,
+                    question: "Question 2",
+                    options: [
+                        "Option 1",
+                        "Option 2",
+                        "Option 3",
+                        "Option 4",
+                    ]
+                },
+                {
+                    questionNumber: 3,
+                    question: "Question 3",
+                    options: [
+                        "Option 1",
+                        "Option 3",
+                        "Option 4",
+                    ]
+                },
+            ]
+        }
+        return (
+            <CourseMultipleChoiceQuiz quiz={quiz} />
         )
     }
 }

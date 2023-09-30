@@ -113,7 +113,7 @@ function CourseChapterCreate({ chapterNumber: courseNumber, onSubmit, onCancel }
         )
     }
     return (
-        <div className="bg-[#eeeeee] h-screen">
+        <div className=" h-screen">
             <h1 className="ml-[70px] mt-[20px] flex items-center text-black text-[24px] font-bold">บทที่ {courseNumber}</h1>
             <div className="ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
                 <div className=" flex grow items-center pt-2 pb-4">

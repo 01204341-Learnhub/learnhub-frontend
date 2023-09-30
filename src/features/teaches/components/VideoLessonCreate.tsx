@@ -54,7 +54,7 @@ function VideoLessonCreate({ chapterName, chapterNumber, lessonNumber, onSubmit,
         onSubmit(lesson)
     }
     return (
-        <div className="bg-[#eeeeee] h-screen">
+        <div className=" h-screen">
             
             <div className="ml-[70px] mt-[20px] flex items-center">
                 <h1 className="text-black text-[24px] font-bold">บทที่ {chapterNumber} : </h1>

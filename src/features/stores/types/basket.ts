@@ -9,6 +9,11 @@ type BasketItem = {
   name: string;
   description: string;
   thumbnailURL: string;
+  teacherName: string;
+  rating: number;
+  voter: number;
+  totalTime: number;
+  tag: string;
 };
 
 export type { Basket, BasketItem };

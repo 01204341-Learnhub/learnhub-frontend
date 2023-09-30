@@ -7,19 +7,29 @@ const mockBasket: Basket = {
       thumbnailURL:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbx7eE-vThApajEf_UUzk6v18mYG3BxAvEvw&usqp=CAU",
       programID: "1",
-      name: "Item 1",
+      name: "Item 1 bra bra bra bra bra",
       price: 100,
       description: "This is item 1",
       itemID: "1",
+      teacherName: "Bara MEEHUMYAI",
+      rating: 4.5,
+      voter: 32465,
+      totalTime: 159,
+      tag: "พื้นฐาน"
     },
     {
       thumbnailURL:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbx7eE-vThApajEf_UUzk6v18mYG3BxAvEvw&usqp=CAU",
-      programID: "1",
-      name: "Item 1",
-      price: 100,
-      description: "This is item 1",
+      programID: "2",
+      name: "Item 2",
+      price: 150,
+      description: "This is item 2",
       itemID: "2",
+      teacherName: "Bara MEEHUMYAI",
+      rating: 4.5,
+      voter: 32465,
+      totalTime: 159,
+      tag: "พื้นฐาน"
     },
   ],
 };

@@ -76,7 +76,7 @@ function MainBar() {
                     {/* Mycart dropdown menu */}
                     <div
                         style={{ display: openDropdown === 'mycartdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
-                        className=" absolute w-[320px] h-[550px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
+                        className=" absolute w-[320px]  bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
                     >
                         <div className="px-8 py-3">
                             {basketItems.map((item) => (
@@ -84,9 +84,11 @@ function MainBar() {
                                     <BasketItemSlot item={item} />
                                 </div>
                             ))}
-                            <h1>{basketItems.reduce((acc, item) => acc + item.price, 0)}</h1>
+                            <h1 className=' font-bold text-[20px]'>{basketItems.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
                         </div>
-                        <Link to={{ pathname: "/baskets" }} className='btn'>ไปยังรถเข็น</Link>
+                        <div className='bg-[#d9d9d9] px-[40px] py-[15px] m-2'>
+                            <Link to={{ pathname: "/baskets" }} className=' font-semibold text-[20px]'>ไปยังรถเข็น</Link>
+                        </div>
                     </div>
                     {/* Mycart dropdown menu */}
 

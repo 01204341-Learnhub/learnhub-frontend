@@ -25,7 +25,7 @@ export default function ChapterOutline({ chapter, chapterProgress, onSelectLesso
     }
     const checkIfFinished = (lessonID: string) => {
         const idx = chapterProgress.lessons.findIndex((lesson) => lesson.lessonID == lessonID)
-        if (idx == -1) throw new Error("Lesson not found")
+        if (idx == -1) return false
         return chapterProgress.lessons[idx].finished
     }
 

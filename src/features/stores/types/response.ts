@@ -11,6 +11,7 @@ type ResponseDataCourse = {
     teacher: {
         teacher_id: string
         teacher_name: string
+        profile_pic: string
     }
     tags: {
         tag_id: string
@@ -59,6 +60,7 @@ export type ResponseGetCourseId = {
     teacher : {
         teacher_id : string
         teacher_name : string
+        profile_pic : string
     },
     price: number
     total_video_length : number

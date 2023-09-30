@@ -4,7 +4,7 @@ type Tag = {
     tagName: string
 }
 
-type ResponseData = {
+type ResponseDataCourse = {
     course_id: string
     name: string
     course_pic: string
@@ -21,6 +21,21 @@ type ResponseData = {
     price: number
 }
 
+export type PostDataCourse = {
+    name : string
+    teacher_id: string
+    course_pic : string
+    description: string
+    course_objective: string[]
+    tag_ids: string[]
+    course_requirement: string
+    difficulty_level: string
+    price: number
+} 
+
+type objective = {
+    detail: string
+}
 
 export type ResponseGetCourseId = {
     course_id : string
@@ -31,7 +46,7 @@ export type ResponseGetCourseId = {
         tag_name : string
     }[]
     description : string
-    course_objective : string
+    course_objective : objective[]
     course_requirement : string
     difficulty_level : string
     rating : number
@@ -50,5 +65,6 @@ export type ResponseGetCourseId = {
 }
 
 export type ResponseGetCourses = {
-    courses : ResponseData[]
+    courses : ResponseDataCourse[]
 }
+

@@ -33,10 +33,6 @@ export type PostDataCourse = {
     price: number
 } 
 
-type objective = {
-    detail: string
-}
-
 export type ResponseGetCourseId = {
     course_id : string
     name : string
@@ -46,7 +42,7 @@ export type ResponseGetCourseId = {
         tag_name : string
     }[]
     description : string
-    course_objective : objective[]
+    course_objective : string[]
     course_requirement : string
     difficulty_level : string
     rating : number

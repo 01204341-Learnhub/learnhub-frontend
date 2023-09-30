@@ -23,7 +23,7 @@ export type CourseDetailData = {
     coursePic : string
     tags : Tag[]
     description : string
-    objective : string
+    objective : string[]
     requirement : string
     level : string
     rating : number

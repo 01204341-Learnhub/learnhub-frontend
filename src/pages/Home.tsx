@@ -3,7 +3,7 @@ import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
 import LearningClasses from "../pages/students/LearningClasses"
 import { Link } from "react-router-dom"
-import { getAllCourses, getPopularCourse } from "../features/stores/services/courses";
+import { getAllCourses, getPopularCourse, postCourse,  } from "../features/stores/services/courses";
 import { getAllClasses, getNewClasses } from "../features/stores/services/classes";
 import { Course } from "../features/stores/types/course";
 import { ClassProgram } from "../features/stores/types/class";
@@ -28,7 +28,7 @@ export default function Home() {
 
     useEffect(() => {
         async function fetchCourse() {
-            const coursePrograms = await getAllCourses(8)
+            const coursePrograms = await getAllCourses()
             setCouses(coursePrograms)
         }
 
@@ -62,7 +62,7 @@ export default function Home() {
         popCourses?.forEach((program) => {
             coursePopularSlot.push({
                 programName: program.name,
-                programId: program.id,
+                programId: program.courseId,
                 instructorName: program.intructor.name,
                 percentCompleted: 100,
                 programThumbnailUrl: program.cover,
@@ -94,7 +94,7 @@ export default function Home() {
                         return null
                     } else {
                         return (
-                            <Link to={`/detail/course/${program.id}`} key={index} className="my-4 px-6" >
+                            <Link to={`/detail/course/${program.courseId}`} key={index} className="my-4 px-6" >
                                 <ProgramSlot key={index} courseThumbnailUrl={program.cover}
                                     courseName={program.name}
                                     instructorName={program.intructor.name}

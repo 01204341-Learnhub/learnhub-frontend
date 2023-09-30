@@ -61,6 +61,11 @@ function _Requirement() {
           onUpdateRequirement(e.target.value);
         }}
       />
+      <div className="flex flex-row justify-end items-center w-[90%]">
+        <p className="text-[#606060] text-[16px] font-semibold">
+          {courseContext.course.requirement.length}
+        </p>
+      </div>
     </div>
   );
 }

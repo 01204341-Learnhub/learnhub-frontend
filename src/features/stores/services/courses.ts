@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CourseDetailData, Course } from "../types/course";
 import { Tag } from "../types/course";
-import { ResponseGetCourses, ResponseGetCourseId } from "../types/response";
+import { ResponseGetCourses, ResponseGetCourseId, PostDataCourse } from "../types/response";
 
 
 async function listCourse() {
@@ -49,9 +49,30 @@ async function getCourse(id: string): Promise<CourseDetailData> {
   } catch (err) {
 
   }
+}
 
-  
+async function postCourse(num: number) {
+  for (let i = 0; i < num ; i++) {
+    const courseGenarate : PostDataCourse  = {
+      name: `How to train the busan ${i+1}`,
+      teacher_id : `${i+1}`,
+      course_pic: 'https://www.simplilearn.com/ice9/free_resources_article_thumb/React_Native_Tutorial.jpg',
+      description: 'ปูซาน หรือ พูซัน (เกาหลี: 부산시) หรือทางการเรียกว่า มหานครปูซาน (เกาหลี: 부산광역시) เป็นเมืองท่าที่ใหญ่ที่สุดในประเทศเกาหลีใต้ มีประชากรประมาณ 3.65 ล้านคน และปูซานยังคงเป็นเมืองที่ใหญ่อันดับ 2 ของประเทศรองจาก โซล บริเวณที่แออัดของปูซานตั้งอยู่บริเวณหุบเขาแคบระหว่างแม่น้ำ นักดง และ แม่น้ำซูย็อง ',
+      course_objective: [`busan ${i+1}`, `busan ${i+2}`, `busan ${i+3}`, `busan ${i+4}`],
+      tag_ids: [`${i+1}`, `${i+2}`, `${i+3}`, `${i+4}`],
+      course_requirement: "require pencil",
+      difficulty_level: "ิbasic",
+      price: 2000 + i,
+    }
 
+    console.log(courseGenarate.course_objective);
+    try {
+      const response = await axios.post("http://localhost:8000/programs/courses/", courseGenarate);
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
 
 async function getAllCourses(): Promise<Course[]> {
@@ -126,4 +147,4 @@ async function getPopularCourse(num: number) : Promise<Course[]> {
   return popularCourses
 }
 
-export { getCourse, getAllCourses, listCourse, getPopularCourse };
+export { getCourse, getAllCourses, listCourse, getPopularCourse, postCourse };

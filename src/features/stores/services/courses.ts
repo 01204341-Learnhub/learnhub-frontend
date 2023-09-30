@@ -1,7 +1,8 @@
 import axios from "axios";
-import { Course } from "../types/course";
+import { CourseDetailData, Course } from "../types/course";
 import { Tag } from "../types/course";
-import { ResponseGetCourse } from "../types/response";
+import { ResponseGetCourses, ResponseGetCourseId } from "../types/response";
+
 
 async function listCourse() {
   return [];
@@ -9,68 +10,78 @@ async function listCourse() {
 
 
 
-async function getCourse(id: string): Promise<Course> {
+async function getCourse(id: string): Promise<CourseDetailData> {
 
-  const response = await axios.get(`http://localhost:8000/programs/courses/${id}`)
-  const courseIdData = response.data
+  try {
+    const response = await axios.get<ResponseGetCourseId>(`http://localhost:8000/programs/courses/${id}`)
+    const courseIdData = response.data
+    
+    return {
+      courseId : courseIdData.course_id,
+      name: courseIdData.name,
+      coursePic: courseIdData.course_pic,
+      tags : courseIdData.tags.map(tag => ({
+        tagId: tag.tag_id,
+        tagName: tag.tag_name
+  
+      })),
+      description: courseIdData.description,
+      objective: courseIdData.course_objective,
+      level: courseIdData.difficulty_level,
+      rating: courseIdData.rating,
+      reviewCount: courseIdData.review_count,
+      studentCount : courseIdData.chapter_count,
+      instructor : {
+        id: courseIdData.teacher.teacher_id,
+        name: courseIdData.teacher.teacher_name,
+        avatarUrl: "https://thethaiger.com/th/wp-content/uploads/2023/07/F0LUzN6aQAEFxD8-1480x833.jpg",
+        jobTitle: "Scotte Langnuk"
+      },
+      price: courseIdData.price,
+      videoLength: courseIdData.total_video_length,
+      videoCount : courseIdData.video_count,
+      chapterCount : courseIdData.chapter_count,
+      quizCount: courseIdData.quiz_count,
+      fileCount : courseIdData.file_count,
+      requirement: courseIdData.course_requirement
+    
+    }
+  } catch (err) {
 
- 
+  }
 
+  
 
-
-
-  return {
-    courseId: id,
-    name: "What is Sakuya doing?",
-    description:
-      "Sakuya Izayoi (十六夜 咲夜, Izayoi Sakuya) is the Chief Maid who serves Remilia Scarlet, the head of the Scarlet Devil Mansion. She is also apparently the only human living within the mansion grounds. She is implied to be a vampire hunter like her mistress, but it is unknown if she is a human or a vampire. She is known for her ability to manipulate time.",
-    price: 100,
-    cover:
-      "https://rare-gallery.com/livewalls/imgpreview/96504-Sakuya-Izayoi.jpg",
-    rating: 4.5,
-    reviewerCount: 1222,
-    intructor: {
-      id: id,
-      name: "Supaporn Panyayai",
-      avatarUrl:
-        "https://images-na.ssl-images-amazon.com/images/S/pv-target-images/ae4816cade1a5b7f29787d0b89610132c72c7747041481c6619b9cc3302c0101._RI_TTW_.jpg",
-      jobTitle: "Software Engineer",
-    },
-    tags: [
-      {
-        tagId: id,
-        tagName: "Anime"
-      }
-    ]
-  };
 }
 
-async function getAllCourses(num: number): Promise<Course[]> {
+async function getAllCourses(): Promise<Course[]> {
   const programCourse: Course[] = [];
   
 
   try {
-      const response = await axios.get<ResponseGetCourse>(`http://localhost:8000/programs/courses/`);
+      const response = await axios.get<ResponseGetCourses>(`http://localhost:8000/programs/courses/`);
       const courseData = response.data.courses
+      
     
-      courseData.map(async (program, index) => {
+      courseData.map(async (program) => {
+      console.log(program.course_id)
       programCourse.push({
-        courseId: program.courseID,
+        courseId: program.course_id,
         name: program.name,
         description: "hello",
         price: program.price,
-        cover: program.coursePic,
+        cover: program.course_pic,
         intructor: {
-          id : program.teacher.teacherID,
-          name: program.teacher.teacherName,
+          id : program.teacher.teacher_id,
+          name: program.teacher.teacher_name,
           avatarUrl: "",
           jobTitle: "Scotte lungnuk",
         },
-        reviewerCount: program.reviewCount,
+        reviewerCount: program.review_count,
         rating: program.rating,
         tags: program.tags.map(tag => ({
-          tagId: tag.tagID,
-          tagName: tag.tagName
+          tagId: tag.tag_id,
+          tagName: tag.tag_name
         }))
       });
     })

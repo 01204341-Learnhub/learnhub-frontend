@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import ClassCard from '../../features/learns/components/ClassCard'
 import ClassTeachNow from '../../features/learns/components/ClassTeachNow'
 import { listEnrolledClass } from '../../features/learns/services/classes'
@@ -26,34 +26,46 @@ const mockClassTeachNow: ClassTeachNowProp = {
 }
 
 
-const enrolledClasses = await listEnrolledClass("1")
-const classesProcess = enrolledClasses.filter((enrolledClass: EnrolledClass) => enrolledClass.status === "started")
-const classesProcessCard : ClassCardProps[] = classesProcess.map((enrolledClass: EnrolledClass) => {
-    return {
-        classThumbnailUrl: enrolledClass.imageClassUrl,
-        className: enrolledClass.name,
-        instructorName: enrolledClass.teacher.name,
-        percentCompleted: 40,
-        completionDate: enrolledClass.registrationEndDate
-    }
-})   
-
-const classesCompleted = enrolledClasses.filter((enrolledClass: EnrolledClass) => enrolledClass.status === "finished")
-const classesCompletedCard : ClassCardProps[] = classesCompleted.map((enrolledClass: EnrolledClass) => {
-    return {
-        classThumbnailUrl: enrolledClass.imageClassUrl,
-        className: enrolledClass.name,
-        instructorName: enrolledClass.teacher.name,
-        percentCompleted: 100,
-        completionDate: enrolledClass.registrationEndDate
-    }
-})
-
-
 function LearningClasses() {
 
     const [isSelectProgcess, setIsSelectProgcess] = React.useState(true)
     const [isSelectCompleted, setIsSelectCompleted] = React.useState(false)
+    const [classesProcessCard, setClassesProcessCard] = React.useState<ClassCardProps[]>([])
+    const [classesCompletedCard, setClassesCompletedCard] = React.useState<ClassCardProps[]>([])
+
+    useEffect(() => {
+        async function fetchListEnrolledClasses() {
+            const enrolledClasses : EnrolledClass[] = await listEnrolledClass("1")
+
+
+            const classesProcess = enrolledClasses.filter((enrolledClass: EnrolledClass) => enrolledClass.status === "started")
+            const classesProcessCard : ClassCardProps[] = classesProcess.map((enrolledClass: EnrolledClass) => {
+                return {
+                    classThumbnailUrl: enrolledClass.imageClassUrl,
+                    className: enrolledClass.name,
+                    instructorName: enrolledClass.teacher.name,
+                    percentCompleted: 40,
+                    completionDate: enrolledClass.registrationEndDate
+                }
+            })
+            setClassesProcessCard(classesProcessCard)   
+
+            const classesCompleted = enrolledClasses.filter((enrolledClass: EnrolledClass) => enrolledClass.status === "finished")
+            const classesCompletedCard : ClassCardProps[] = classesCompleted.map((enrolledClass: EnrolledClass) => {
+                return {
+                    classThumbnailUrl: enrolledClass.imageClassUrl,
+                    className: enrolledClass.name,
+                    instructorName: enrolledClass.teacher.name,
+                    percentCompleted: 100,
+                    completionDate: enrolledClass.registrationEndDate
+                }
+            })
+            setClassesCompletedCard(classesCompletedCard)
+            
+        }
+        fetchListEnrolledClasses()
+    }, [])
+
 
     const onChangeSelectProcess = () => {
         setIsSelectProgcess(true)

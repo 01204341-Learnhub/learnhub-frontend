@@ -6,4 +6,13 @@ type LearnhubUser = {
   profilePicture: string;
 };
 
-export type { LearnhubUser };
+type LearnhubUserResponse = {
+  uid: string;
+  student_id: string;
+  username: string;
+  fullname: string;
+  email: string;
+  profile_pic: string;
+};
+
+export type { LearnhubUser, LearnhubUserResponse };

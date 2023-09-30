@@ -1,3 +1,4 @@
 import { listCourse } from "./courses";
+import { listClass } from "./classes";
 
-export { listCourse };
+export { listCourse, listClass };

@@ -3,22 +3,27 @@ import { faChevronCircleLeft, faChevronCircleRight } from "@fortawesome/free-sol
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import ProgramSlot from "./ProgramSlot";
-interface CourseCardProps {
-    courseThumbnailUrl: string;
-    courseName: string;
-    courseId: string;
+
+
+interface ProgramCardProps {
+    programThumbnailUrl: string;
+    programName: string;
+    programId: string;
     instructorName: string;
     percentCompleted: number;
 
 }
+
+
 interface ProgramCarouselProps {
-    programs: CourseCardProps[],
+    type: "course" | "class",
+    programs: ProgramCardProps[],
     displayCount?: number,
     carouselName: string
 }
 
 
-export default function ProgramCarousel({ programs, displayCount, carouselName }: ProgramCarouselProps) {
+export default function ProgramCarousel({ type, programs, displayCount, carouselName }: ProgramCarouselProps) {
     const [offset, setOffset] = useState(0)
     const handleLeft = () => {
         setOffset(prev => {
@@ -51,16 +56,17 @@ export default function ProgramCarousel({ programs, displayCount, carouselName }
                         if (index > offset + (displayCount ?? 3)) {
                             return null
                         }
+                        
                         return (
-                            <Link to={`/detail/course/${program.courseId}`} key={index} className="mx-5" >
-                                <ProgramSlot courseThumbnailUrl={program.courseThumbnailUrl}
-                                courseName={program.courseName}
-                                instructorName={program.instructorName}
-                                percentCompleted={program.percentCompleted} 
-                                regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"} 
-                                lvl={"พื้นฐาน"} />
+                            <Link to={`/detail/${type}/${program.programId}`} key={index} className="mx-5" >
+                                <ProgramSlot courseThumbnailUrl={program.programThumbnailUrl}
+                                    courseName={program.programName}
+                                    instructorName={program.instructorName}
+                                    percentCompleted={program.percentCompleted} 
+                                    regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"} 
+                                    lvl={"พื้นฐาน"} />
                             </Link>
-                        )
+                            )
                     })}
                 </ul>
                 <button onClick={handleRight}>

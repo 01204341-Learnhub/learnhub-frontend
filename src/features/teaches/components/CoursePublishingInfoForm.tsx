@@ -1,36 +1,195 @@
 import { CourseContext } from "../../../pages/teachers/CreateCourse.tsx";
-import { useContext } from "react";
+import React, { useContext, useRef } from "react";
+import { availableCategories, availableLevels } from "../types/course.ts";
 
 function _Name() {
   const courseContext = useContext(CourseContext);
-  return <></>;
+  const onUpdateName = (name: string) => {
+    const updatedCourse = { ...courseContext.course };
+    updatedCourse.name = name;
+    courseContext.setCourse(updatedCourse);
+  };
+  return (
+    <div className="flex flex-col justify-start items-start space-y-3 w-full">
+      <h2 className="text-black text-[18px] font-semibold">
+        ชื่อคอร์สเรียนของคุณ
+      </h2>
+      <input
+        className="border-2 border-[#C0C0C0] py-2 px-3 w-[90%]"
+        type="text"
+        placeholder="ชื่อคอร์สเรียน"
+        value={courseContext.course.name}
+        onChange={(e) => {
+          onUpdateName(e.target.value);
+        }}
+      />
+      <p className="text-[#606060] text-[14px] font-semibold w-[90%]">
+        ชื่อหลักสูตรของคุณควรเป็นการผสมผสานระหว่างการดึงดูดความสนใจ มีข้อมูล
+        และเหมาะสำหรับการค้นหา
+      </p>
+    </div>
+  );
 }
 
 function _Description() {
   const courseContext = useContext(CourseContext);
-  return <></>;
+  const onUpdateDescription = (description: string) => {
+    const updatedCourse = { ...courseContext.course };
+    updatedCourse.description = description;
+    courseContext.setCourse(updatedCourse);
+  };
+  return (
+    <div className="flex flex-col justify-start items-start space-y-3 w-full">
+      <h2 className="text-black text-[18px] font-semibold">
+        คำอธิบายคอร์สเรียนของคุณ
+      </h2>
+      <textarea
+        className="border-2 border-[#C0C0C0] py-2 px-3 w-[90%]"
+        placeholder="คำอธิบายคอร์สเรียน"
+        value={courseContext.course.description}
+        rows={8}
+        onChange={(e) => {
+          onUpdateDescription(e.target.value);
+        }}
+      />
+      <div className="flex flex-row justify-between items-center w-[90%]">
+        <p className="text-[#606060] text-[14px] font-semibold w-full">
+          คำอธิบายควรยาวอย่างน้อย 200 คำ
+        </p>
+        <p className="text-[#606060] text-[16px] font-semibold">
+          {courseContext.course.description.length}
+        </p>
+      </div>
+    </div>
+  );
 }
 
 function _Thumbnail() {
   const courseContext = useContext(CourseContext);
-  return <></>;
+  const fileRef = useRef<HTMLInputElement>(null);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // TODO: Upload to online storage and get url back
+        onUpdateThumbnailUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  const onUpdateThumbnailUrl = (thumbnailUrl: string) => {
+    const updatedCourse = { ...courseContext.course };
+    updatedCourse.thumbnailUrl = thumbnailUrl;
+    courseContext.setCourse(updatedCourse);
+  };
+  return (
+    <div className="flex flex-col justify-start items-start space-y-3 w-full">
+      <h2 className="text-black text-[18px] font-semibold">
+        ภาพคอร์สเรียนของคุณ
+      </h2>
+      <div className="flex justify-start items-stretch space-x-10 w-full">
+        <div className="flex-shrink-0 bg-gray-200 w-[300px] h-[169px]">
+          <img
+            className="w-[300px] h-[169px] object-cover"
+            src={courseContext.course.thumbnailUrl}
+            alt="thumbnail"
+          />
+        </div>
+        <div className="flex flex-col justify-start items-start space-y-3 w-full">
+          <div className="flex justify-start w-full">
+            <input
+              className="border-2 border-[#C0C0C0] py-2 px-3 w-3/5"
+              type="text"
+              placeholder="ใส่ URL ของภาพ หรืออัพโหลด"
+              value={courseContext.course.thumbnailUrl}
+              onChange={(e) => {
+                onUpdateThumbnailUrl(e.target.value);
+              }}
+            />
+            <input
+              type="file"
+              ref={fileRef}
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            <button
+              className="bg-black text-white py-2 px-3"
+              onClick={() => {
+                fileRef.current?.click();
+              }}
+            >
+              {courseContext.course.thumbnailUrl === "" ? "อัพโหลด" : "เปลี่ยน"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function _Price() {
   const courseContext = useContext(CourseContext);
-  return <></>;
+  const onUpdatePrice = (price: number) => {
+    const updatedCourse = { ...courseContext.course };
+    updatedCourse.price = price;
+    courseContext.setCourse(updatedCourse);
+  };
+  return (
+    <div className="flex flex-col justify-start items-start space-y-3 w-full">
+      <h2 className="text-black text-[18px] font-semibold">กำหนดราคา</h2>
+      <p className="text-[16px] text-black">
+        โปรดกรอกราคา (บาท) สำหรับหลักสูตรของคุณด้านล่าง
+      </p>
+
+      <input
+        className="border-2 border-[#C0C0C0] py-2 px-3 w-1/10"
+        type="number"
+        placeholder="ราคา"
+        value={courseContext.course.price}
+        onChange={(e) => {
+          onUpdatePrice(parseInt(e.target.value));
+        }}
+      />
+    </div>
+  );
 }
 
 function _Category() {
   const courseContext = useContext(CourseContext);
-  return <></>;
+  const onUpdateCategoryId = (categoryId: string) => {
+    const updatedCourse = { ...courseContext.course };
+    updatedCourse.categoryId = categoryId;
+    courseContext.setCourse(updatedCourse);
+  };
+  return (
+    <div className="flex flex-col justify-start items-start space-y-3 w-full">
+      <h2 className="text-black text-[18px] font-semibold">กำหนดหมวดหมู่</h2>
+      <p className="text-[16px] text-black">
+        โปรดเลือกหมวดหมู่สำหรับคลาสเรียนของคุณ
+      </p>
+      <select
+        value={courseContext.course.categoryId}
+        onChange={(e) => {
+          onUpdateCategoryId(e.target.value);
+        }}
+        className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
+      >
+        <option value="" disabled selected>
+          เลือกหมวดหมู่
+        </option>
+        {availableCategories.map((category) => {
+          return <option value={category.categoryId}>{category.name}</option>;
+        })}
+      </select>
+    </div>
+  );
 }
 
 function CoursePublishingInfoForm() {
-  const courseContext = useContext(CourseContext);
   return (
     <div className="flex flex-col justify-start items-start space-y-10 bg-white p-8 w-full">
-      <h1 className="text-[32px] font-semibold text-black w-full py-4 border-b-2">
+      <h1 className="text-[32px] font-semibold text-black w-full pb-4 border-b-2">
         เผยแพร่คอร์ส
       </h1>
       <div className="flex flex-col justify-start items-start space-y-3 w-full">

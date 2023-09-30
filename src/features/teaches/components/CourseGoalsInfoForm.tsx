@@ -103,7 +103,7 @@ function _Level() {
 function CourseGoalsInfoForm() {
   return (
     <div className="flex flex-col justify-start items-start space-y-10 bg-white p-8 w-full">
-      <h1 className="text-[32px] font-semibold text-black w-full py-4 border-b-2">
+      <h1 className="text-[32px] font-semibold text-black w-full pb-4 border-b-2">
         เป้าหมายของคอร์ส
       </h1>
       <p className="text-[16px] w-full">

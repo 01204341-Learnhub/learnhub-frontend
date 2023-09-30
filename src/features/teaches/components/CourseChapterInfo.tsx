@@ -10,22 +10,21 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import { Chapter, Lesson } from "../types/course.ts";
 
-function _LessonEntry({
-  lessonName,
-  lessonType,
-}: {
-  lessonName: string;
-  lessonType: string;
-}) {
+interface _LessonEntryProps {
+  lesson: Lesson;
+}
+
+function _LessonEntry({ lesson }: _LessonEntryProps) {
   let icon: IconDefinition;
-  if (lessonType === "video") {
+  if (lesson.type === "video") {
     icon = faCirclePlay;
-  } else if (lessonType === "doc") {
+  } else if (lesson.type === "doc") {
     icon = faFileLines;
-  } else if (lessonType === "quiz") {
+  } else if (lesson.type === "quiz") {
     icon = faClipboardList;
-  } else if (lessonType === "file") {
+  } else if (lesson.type === "file") {
     icon = faDownload;
   } else {
     icon = faCircleQuestion;
@@ -33,28 +32,16 @@ function _LessonEntry({
   return (
     <div className="flex flex-row justify-start space-x-5 py-2">
       <FontAwesomeIcon icon={icon} size="xl" color="#808080" />
-      <p className="text-[13px] text-[#808080] font-normal">{lessonName}</p>
+      <p className="text-[13px] text-[#808080] font-normal">{lesson.name}</p>
     </div>
   );
 }
 
 interface CourseChapterInfoProps {
-  chapterName: string;
-  chapterDescription: string;
-  chapterNumber: number;
-  lessons: {
-    lessonNumber: number;
-    lessonName: string;
-    lessonType: string;
-  }[];
+  chapter: Chapter;
 }
 
-function CourseChapterInfo({
-  chapterName,
-  chapterDescription,
-  chapterNumber,
-  lessons,
-}: CourseChapterInfoProps) {
+function CourseChapterInfo({ chapter }: CourseChapterInfoProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const handleExpandClick = () => {
     setIsExpanded(!isExpanded);
@@ -66,11 +53,11 @@ function CourseChapterInfo({
           <div className="flex justify-start items-start space-x-6">
             <div className="flex flex-col min-w-fit">
               <p className="text-[18px] font-semibold text-black">
-                บทที่ {chapterNumber}:
+                บทที่ {chapter.number}:
               </p>
             </div>
             <p className="text-[18px] font-semibold text-[#808080]">
-              {chapterName}
+              {chapter.name}
             </p>
           </div>
           <div className="flex justify-start items-start space-x-6">
@@ -78,7 +65,7 @@ function CourseChapterInfo({
               <p className="text-[18px] font-semibold text-black">คำอธิบาย:</p>
             </div>
             <p className="text-[18px] font-semibold text-[#808080]">
-              {chapterDescription}
+              {chapter.description}
             </p>
           </div>
         </div>
@@ -100,11 +87,8 @@ function CourseChapterInfo({
       </button>
       {isExpanded && (
         <div className="bg-[#F1F1F1] w-full min-h-fit p-5">
-          {lessons.map((lesson) => (
-            <_LessonEntry
-              lessonName={lesson.lessonName}
-              lessonType={lesson.lessonType}
-            />
+          {chapter.lessons.map((lesson) => (
+            <_LessonEntry lesson={lesson} />
           ))}
         </div>
       )}

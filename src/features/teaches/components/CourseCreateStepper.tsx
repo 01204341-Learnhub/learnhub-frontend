@@ -1,12 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CourseBasicInfo } from "../types/course";
-
-interface CourseCreateStepperProps {
-  onSubmit: (info: CourseBasicInfo) => void;
-}
+import { availableCategories, availableLevels, Course } from "../types/course";
+import { CourseContext } from "../../../pages/teachers/CreateCourse.tsx";
 
 function _StepperNav({
   onPrev,
@@ -46,18 +43,23 @@ function _StepperNav({
   );
 }
 
-function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
-  const [step, setStep] = useState(1);
-  const [courseName, setCourseName] = useState("");
-  const [courseCategory, setCourseCategory] = useState("");
-  const [courseLevel, setCourseLevel] = useState("");
-  const navigate = useNavigate();
+interface CourseCreateStepperProps {
+  onSubmit: () => void;
+}
 
-  const onNext = () => {
+function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
+  const courseContext = useContext(CourseContext);
+  const navigate = useNavigate();
+  const [step, setStep] = useState<number>(1);
+  const [courseName, setCourseName] = useState<string>("");
+  const [courseCategoryId, setCourseCategoryId] = useState<string>("");
+  const [courseLevel, setCourseLevel] = useState<string>("");
+
+  const handleNext = () => {
     setStep(step + 1);
   };
 
-  const onPrev = () => {
+  const handlePrev = () => {
     if (step === 1) {
       navigate(-1);
     } else {
@@ -65,24 +67,25 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
     }
   };
 
+  const handleSubmit = () => {
+    const newCourse: Course = { ...courseContext.course };
+    newCourse.name = courseName;
+    newCourse.categoryId = courseCategoryId;
+    newCourse.level = courseLevel;
+    courseContext.setCourse(newCourse);
+    onSubmit();
+  };
+
   const checkInputOk = () => {
     if (step === 1) {
       return courseName.length > 0 && courseName.length <= 60;
     } else if (step === 2) {
-      return courseCategory !== "";
+      return courseCategoryId !== "";
     } else if (step === 3) {
       return courseLevel !== "";
     } else {
       return false;
     }
-  };
-
-  const onSubmitCourse = () => {
-    onSubmit({
-      courseName,
-      courseCategory,
-      courseLevel,
-    });
   };
 
   if (step == 1) {
@@ -103,7 +106,7 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
             placeholder="ตัวอย่าง : เรียนรู้วิธีใช้ microsoft word เริ่มจาก 0"
             onChange={(e) => setCourseName(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter") onNext();
+              if (e.key === "Enter") handleNext();
             }}
             maxLength={maxLength}
             className="mt-[29px] mx-auto w-2/3 max-w-[585px] h-[45px] px-5"
@@ -112,8 +115,8 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
         <p className="text-gray-400 text-[16px] text-center mt-2">{`${courseName.length} / ${maxLength}`}</p>
         <div className="absolute bottom-0 w-full">
           <_StepperNav
-            onPrev={onPrev}
-            onNext={onNext}
+            onPrev={handlePrev}
+            onNext={handleNext}
             readyToNext={checkInputOk()}
           />
         </div>
@@ -130,21 +133,24 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
             หากคุณไม่แน่ใจว่าหมวดหมู่ถูกต้องหรือไม่ คุณสามารถเปลี่ยนได้ในภายหลัง
           </p>
           <select
-            value={courseCategory}
-            onChange={(e) => setCourseCategory(e.target.value)}
+            value={courseCategoryId}
+            onChange={(e) => setCourseCategoryId(e.target.value)}
             className="mt-[29px] mx-auto w-2/3 max-w-[585px] h-[45px] px-4"
           >
-            <option value="">เลือกหมวดหมู่</option>
-            <option value="programming">การเขียนโปรแกรม</option>
-            <option value="graphic design">การออกแบบกราฟิก</option>
-            <option value="marketing">การตลาด</option>
-            <option value="learning">การเรียนรู้</option>
+            <option value="" disabled selected>
+              เลือกประเภท
+            </option>
+            {availableCategories.map((category) => {
+              return (
+                <option value={category.categoryId}>{category.name}</option>
+              );
+            })}
           </select>
         </div>
         <div className="absolute bottom-0 w-full">
           <_StepperNav
-            onPrev={onPrev}
-            onNext={onNext}
+            onPrev={handlePrev}
+            onNext={handleNext}
             readyToNext={checkInputOk()}
           />
         </div>
@@ -165,16 +171,18 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
             onChange={(e) => setCourseLevel(e.target.value)}
             className="mt-[29px] mx-auto w-2/3 max-w-[585px] h-[45px] px-4"
           >
-            <option value="">เลือกระดับ</option>
-            <option value="beginner">ระดับต้น</option>
-            <option value="intermediate">ระดับกลาง</option>
-            <option value="advanced">ระดับสูง</option>
+            <option value="" disabled selected>
+              เลือกระดับ
+            </option>
+            {availableLevels.map((level) => {
+              return <option value={level}>{level}</option>;
+            })}
           </select>
         </div>
         <div className="absolute bottom-0 w-full">
           <_StepperNav
-            onPrev={onPrev}
-            onNext={onSubmitCourse}
+            onPrev={handlePrev}
+            onNext={handleSubmit}
             nextWord="สร้าง"
             readyToNext={checkInputOk()}
           />

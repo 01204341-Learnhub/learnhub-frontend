@@ -1,29 +1,27 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CourseCardPreview from "../../features/teaches/components/CourseCardPreview";
 import CourseChapterCreate from "../../features/teaches/components/CourseChapterCreate";
 import CourseChapterInfo from "../../features/teaches/components/CourseChapterInfo";
 import CourseCreateStepper from "../../features/teaches/components/CourseCreateStepper";
-import CourseGoalsInfoForm from "../../features/teaches/components/CourseGoalsInfoForm.tsx";
 import {
-  CourseBasicInfo,
-  CourseChapter,
-  CourseGoalsInfo,
-  CoursePublishingInfo,
+  availableCategories,
+  Course,
 } from "../../features/teaches/types/course";
+import CourseGoalsInfoForm from "../../features/teaches/components/CourseGoalsInfoForm.tsx";
 import CoursePublishingInfoForm from "../../features/teaches/components/CoursePublishingInfoForm.tsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircle as faCircleRegular } from "@fortawesome/free-regular-svg-icons";
 import {
-  faArrowRight,
   faCircle as faCircleSolid,
+  faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
 
 interface _SideNavProps {
   currentTab: string;
   onChangeTab: (tab: string) => void;
   onPublish?: () => void;
-  readyToPublish?: boolean;
+  readyToPublish: boolean;
 }
 
 function _SideNav({
@@ -80,7 +78,7 @@ function _SideNav({
       </div>
       <button
         className={`w-fit h-fit p-3 hover:drop-shadow-md ${
-          onPublish === undefined || !readyToPublish
+          !readyToPublish || onPublish === undefined
             ? "bg-gray-200"
             : "bg-[#D9D9D9]"
         }`}
@@ -88,7 +86,7 @@ function _SideNav({
       >
         <h1
           className={`font-semibold text-[20px] ${
-            onPublish === undefined || !readyToPublish
+            !readyToPublish || onPublish === undefined
               ? "text-gray-400"
               : "text-black"
           }`}
@@ -117,21 +115,24 @@ function _TopNav({ onQuit }: _TopNavProps) {
 }
 
 interface _TopPanelProps {
-  courseBasicInfo: CourseBasicInfo;
-  courseThumbnailUrl: string;
+  course: Course;
 }
 
-function _TopPanel({ courseBasicInfo, courseThumbnailUrl }: _TopPanelProps) {
+function _TopPanel({ course }: _TopPanelProps) {
   return (
     <div className="flex justify-start items-stretch space-x-10 w-full">
       <div className="bg-[#D9D9D9] p-6 w-fit h-fit">
         <CourseCardPreview
-          courseThumbnailUrl={courseThumbnailUrl}
-          courseName={courseBasicInfo.courseName}
-          lvl={courseBasicInfo.courseLevel}
-          price={3500}
-          tag={courseBasicInfo.courseCategory}
-          instructorName="Baramee No PDPA"
+          courseThumbnailUrl={course.thumbnailUrl}
+          courseName={course.name}
+          lvl={course.level}
+          price={course.price}
+          tag={
+            availableCategories.find(
+              (category) => category.categoryId === course.categoryId,
+            )?.name
+          }
+          instructorName={course.instructorName}
         />
       </div>
       <div className="flex flex-col justify-start items-start space-y-3 px-10 py-6 bg-white w-full min-w-fit">
@@ -141,82 +142,158 @@ function _TopPanel({ courseBasicInfo, courseThumbnailUrl }: _TopPanelProps) {
             จำนวนบทเรียน
           </h2>
           <div className="flex-grow"></div>
-          <h2 className="text-[#808080] text-[20px] font-semibold">9</h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold">
+            {course.chapters.length}
+          </h2>
         </div>
         <div className="flex justify-between w-1/2 min-w-fit">
           <h2 className="text-[#808080] text-[20px] font-semibold">
             จำนวนคลิปวิดีโอ
           </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold">9</h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold">
+            {
+              // the number of lessons of type "video" in all chapters
+              course.chapters.reduce(
+                (prev, curr) =>
+                  prev +
+                  curr.lessons.reduce(
+                    (prev, curr) => (curr.type === "video" ? prev + 1 : prev),
+                    0,
+                  ),
+                0,
+              )
+            }
+          </h2>
         </div>
         <div className="flex justify-between w-1/2 min-w-fit">
           <h2 className="text-[#808080] text-[20px] font-semibold">
-            จำนวนแบบฝึก
+            จำนวนเอกสาร
           </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold">9</h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold">
+            {
+              // the number of lessons of type "doc" in all chapters
+              course.chapters.reduce(
+                (prev, curr) =>
+                  prev +
+                  curr.lessons.reduce(
+                    (prev, curr) => (curr.type === "doc" ? prev + 1 : prev),
+                    0,
+                  ),
+                0,
+              )
+            }
+          </h2>
+        </div>
+        <div className="flex justify-between w-1/2 min-w-fit">
+          <h2 className="text-[#808080] text-[20px] font-semibold">
+            จำนวนแบบทดสอบ
+          </h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold">
+            {
+              // the number of lessons of type "quiz" in all chapters
+              course.chapters.reduce(
+                (prev, curr) =>
+                  prev +
+                  curr.lessons.reduce(
+                    (prev, curr) => (curr.type === "quiz" ? prev + 1 : prev),
+                    0,
+                  ),
+                0,
+              )
+            }
+          </h2>
         </div>
         <div className="flex justify-between w-1/2 min-w-fit">
           <h2 className="text-[#808080] text-[20px] font-semibold">
             จำนวนไฟล์ที่ดาวน์โหลดได้
           </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold">9</h2>
+          <h2 className="text-[#808080] text-[20px] font-semibold">
+            {
+              // the number of lessons of type "file" in all chapters
+              course.chapters.reduce(
+                (prev, curr) =>
+                  prev +
+                  curr.lessons.reduce(
+                    (prev, curr) => (curr.type === "file" ? prev + 1 : prev),
+                    0,
+                  ),
+                0,
+              )
+            }
+          </h2>
         </div>
       </div>
     </div>
   );
 }
 
-function checkReadyToPublish(
-  courseBasicInfo: CourseBasicInfo,
-  courseChapters: CourseChapter[],
-  courseGoalsInfo: CourseGoalsInfo,
-  coursePublishingInfo: CoursePublishingInfo,
-) {
+function checkReadyToPublish(course: Course) {
   return (
-    courseBasicInfo !== undefined &&
-    courseChapters.length > 0 &&
-    courseGoalsInfo !== undefined &&
-    coursePublishingInfo !== undefined
+    course.name !== "" &&
+    course.categoryId !== "" &&
+    course.level !== "" &&
+    course.instructorName !== "" &&
+    course.description !== "" &&
+    course.chapters.length !== 0 &&
+    course.chapters.every((chapter) => chapter.lessons.length !== 0) &&
+    course.chapters.every((chapter) =>
+      chapter.lessons.every((lesson) => {
+        if (lesson.type === "video") {
+          return lesson.videoUrl !== null && lesson.videoUrl !== "";
+        } else if (lesson.type === "doc") {
+          return lesson.doc !== null;
+        } else if (lesson.type === "quiz") {
+          return lesson.quiz !== null;
+        } else if (lesson.type === "file") {
+          return lesson.fileUrl !== null && lesson.fileUrl !== "";
+        } else {
+          return false;
+        }
+      }),
+    )
   );
 }
 
+interface CourseContextType {
+  course: Course;
+  setCourse: (course: Course) => void;
+}
+
+const CourseContext = React.createContext<CourseContextType | undefined>(
+  undefined,
+);
+
 function CreateCourse() {
   const navigate = useNavigate();
-
+  const [course, setCourse] = useState<Course>({
+    courseId: "1234567890", // TODO: Get an ID, possibly uuid.
+    name: "",
+    thumbnailUrl: "https://picsum.photos/seed/picsum/200/300",
+    categoryId: "",
+    level: "",
+    instructorName: "John Doe",
+    description: "",
+    objectives: ["", "", "", ""],
+    requirement: "",
+    price: 0,
+    rating: 0,
+    studentCount: 0,
+    chapters: [],
+  });
   const [currentTab, setCurrentTab] = useState<string>("content");
-  const [courseBasicInfo, setCourseBasicInfo] = useState<
-    CourseBasicInfo | undefined
-  >(undefined);
-  const [chapters, setChapters] = useState<CourseChapter[]>([]);
-  const [courseGoalsInfo, setCourseGoalsInfo] = useState<
-    CourseGoalsInfo | undefined
-  >(undefined);
-  const [coursePublishingInfo, setCoursePublishingInfo] = useState<
-    CoursePublishingInfo | undefined
-  >(undefined);
+  const [initializedCourse, setInitializedCourse] = useState<boolean>(false);
 
-  const onCreateCourseBasicInfo = (basicInfo: CourseBasicInfo) => {
-    setCourseBasicInfo(basicInfo);
+  const handleInitializeCourse = () => {
+    setInitializedCourse(true);
     setCurrentTab("content");
   };
-  const onCreateChapter = (chapter: CourseChapter) => {
-    setChapters((prev) => [...prev, chapter]);
-    setCurrentTab("content");
-  };
-  const onUpdateGoalsInfo = (goalsInfo: CourseGoalsInfo) => {
-    setCourseGoalsInfo(goalsInfo);
-  };
-  const onUpdatePublishingInfo = (publishingInfo: CoursePublishingInfo) => {
-    setCoursePublishingInfo(publishingInfo);
-  };
-  const onPublishCourse = () => {
+
+  const handlePublishCourse = () => {
     // TODO: Send the course to the server.
+    console.log(course);
   };
 
-  const fakeThumbnail =
-    "https://miro.medium.com/v2/resize:fit:691/1*VSQ0XEywxSgZBwW05GsZtw.png";
-
-  if (courseBasicInfo === undefined) {
+  if (initializedCourse === false) {
     return (
       <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
         <_TopNav
@@ -224,12 +301,19 @@ function CreateCourse() {
             navigate("/teach/overview");
           }}
         />
-        <CourseCreateStepper onSubmit={onCreateCourseBasicInfo} />
+        <CourseContext.Provider
+          value={{
+            course,
+            setCourse,
+          }}
+        >
+          <CourseCreateStepper onSubmit={handleInitializeCourse} />
+        </CourseContext.Provider>
       </div>
     );
   }
 
-  if (currentTab === "content")
+  if (currentTab === "content") {
     return (
       <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
         <_TopNav
@@ -237,31 +321,17 @@ function CreateCourse() {
             navigate("/teach/overview");
           }}
         />
-        <_TopPanel
-          courseBasicInfo={courseBasicInfo}
-          courseThumbnailUrl={fakeThumbnail}
-        />
+        <_TopPanel course={course} />
         <div className="flex justify-start items-start space-x-10 w-full h-fit">
           <_SideNav
             currentTab="content"
             onChangeTab={setCurrentTab}
-            onPublish={onPublishCourse}
-            readyToPublish={checkReadyToPublish(
-              courseBasicInfo,
-              chapters,
-              courseGoalsInfo,
-              coursePublishingInfo,
-            )}
+            onPublish={handlePublishCourse}
+            readyToPublish={checkReadyToPublish(course)}
           />
           <div className="flex flex-col justify-start space-y-5 w-full h-fit p-8 bg-white">
-            {chapters.map((chapter, idx) => (
-              <CourseChapterInfo
-                key={idx}
-                chapterName={chapter.chapterName}
-                chapterDescription={chapter.chapterDescription}
-                chapterNumber={idx + 1}
-                lessons={chapter.lessons}
-              />
+            {course.chapters.map((chapter) => (
+              <CourseChapterInfo chapter={chapter} />
             ))}
             <button
               className="bg-[#D9D9D9] p-3 w-fit h-fit hover:drop-shadow-md"
@@ -277,7 +347,7 @@ function CreateCourse() {
         </div>
       </div>
     );
-  else if (currentTab == "goals")
+  } else if (currentTab == "goals") {
     return (
       <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
         <_TopNav
@@ -285,30 +355,21 @@ function CreateCourse() {
             navigate("/teach/overview");
           }}
         />
-        <_TopPanel
-          courseBasicInfo={courseBasicInfo}
-          courseThumbnailUrl={fakeThumbnail}
-        />
+        <_TopPanel course={course} />
         <div className="flex justify-start items-start space-x-10 w-full h-fit">
           <_SideNav
             currentTab="goals"
             onChangeTab={setCurrentTab}
-            onPublish={onPublishCourse}
-            readyToPublish={checkReadyToPublish(
-              courseBasicInfo,
-              chapters,
-              courseGoalsInfo,
-              coursePublishingInfo,
-            )}
+            onPublish={handlePublishCourse}
+            readyToPublish={checkReadyToPublish(course)}
           />
-          <CourseGoalsInfoForm
-            onUpdate={onUpdateGoalsInfo}
-            courseBasicInfo={courseBasicInfo}
-          />
+          <CourseContext.Provider value={{ course, setCourse }}>
+            <CourseGoalsInfoForm />
+          </CourseContext.Provider>
         </div>
       </div>
     );
-  else if (currentTab == "publishing")
+  } else if (currentTab == "publishing") {
     return (
       <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
         <_TopNav
@@ -316,30 +377,21 @@ function CreateCourse() {
             navigate("/teach/overview");
           }}
         />
-        <_TopPanel
-          courseBasicInfo={courseBasicInfo}
-          courseThumbnailUrl={fakeThumbnail}
-        />
+        <_TopPanel course={course} />
         <div className="flex justify-start items-start space-x-10 w-full h-fit">
           <_SideNav
             currentTab="publishing"
             onChangeTab={setCurrentTab}
-            onPublish={onPublishCourse}
-            readyToPublish={checkReadyToPublish(
-              courseBasicInfo,
-              chapters,
-              courseGoalsInfo,
-              coursePublishingInfo,
-            )}
+            onPublish={handlePublishCourse}
+            readyToPublish={checkReadyToPublish(course)}
           />
-          <CoursePublishingInfoForm
-            onUpdate={onUpdatePublishingInfo}
-            courseBasicInfo={courseBasicInfo}
-          />
+          <CourseContext.Provider value={{ course, setCourse }}>
+            <CoursePublishingInfoForm />
+          </CourseContext.Provider>
         </div>
       </div>
     );
-  else if (currentTab == "add-chapter")
+  } else if (currentTab == "add-chapter") {
     return (
       <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
         <_TopNav
@@ -347,17 +399,20 @@ function CreateCourse() {
             navigate("/teach/overview");
           }}
         />
-        <div className="w-full">
+        <CourseContext.Provider value={{ course, setCourse }}>
           <CourseChapterCreate
-            chapterNumber={chapters.length + 1}
-            onSubmit={onCreateChapter}
+            onSubmit={() => {
+              setCurrentTab("content");
+            }}
             onCancel={() => {
               setCurrentTab("content");
             }}
           />
-        </div>
+        </CourseContext.Provider>
       </div>
     );
+  }
 }
 
 export default CreateCourse;
+export { CourseContext };

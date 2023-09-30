@@ -1,15 +1,19 @@
 import { faBell, faBook, faBookmark, faCartShopping, faHeart, faMagnifyingGlass, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import booklogo from '../assets/Images/bookLogo.png'
 import mockprofile from '../assets/Images/regStudent.png'
 import namelogo from '../assets/Images/textNameLogo.png'
+import BasketItemSlot from '../features/stores/components/BasketItemSlot'
 import { signOut } from '../services/auth/signOut'
+import { RootState } from '../store'
 
 function MainBar() {
 
     const [openDropdown, setOpenDropdown] = useState(null)
+    const basketItems = useSelector((state: RootState) => state.basket.basket.items)
     const toggleDropdown = (dropdownName) => {
         if (openDropdown === dropdownName) {
             // If the clicked dropdown is already open, close it
@@ -75,8 +79,14 @@ function MainBar() {
                         className=" absolute w-[320px] h-[550px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
                     >
                         <div className="px-8 py-3">
-
+                            {basketItems.map((item) => (
+                                <div key={item.itemID}>
+                                    <BasketItemSlot item={item} />
+                                </div>
+                            ))}
+                            <h1>{basketItems.reduce((acc, item) => acc + item.price, 0)}</h1>
                         </div>
+                        <Link to={{ pathname: "/baskets" }} className='btn'>ไปยังรถเข็น</Link>
                     </div>
                     {/* Mycart dropdown menu */}
 

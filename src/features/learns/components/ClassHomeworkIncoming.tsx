@@ -10,7 +10,7 @@ interface ClassHomeworkIncomingProps {
 
 export default function ClassHomeworkIncoming (props: ClassHomeworkIncomingProps) { 
     return (
-        <div className=" flex flex-row w-[550px] h-[100px] shadow-xl relative">
+        <div className=" flex flex-row w-full h-full shadow-xl relative">
             <div className={` bg-[${props.color}] w-[10px] static`}>
             </div>
 

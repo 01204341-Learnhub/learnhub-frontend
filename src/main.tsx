@@ -27,7 +27,6 @@ import TeachingHomeworks from "./pages/teachers/TeachingHomeworks";
 import AllClasses from "./pages/AllClasses";
 import AllCourses from "./pages/AllCourses";
 import store from "./store";
-import Test from "./pages/Test.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

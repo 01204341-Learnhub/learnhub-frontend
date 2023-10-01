@@ -8,9 +8,15 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { app } from "../../firebase/firebase";
-import { LearnhubUser, LearnhubUserResponse } from "../../types/user";
+import {
+  LearnhubStudentResponse,
+  LearnhubTeacherResponse,
+  LearnhubUser,
+} from "../../types/user";
 
 const auth = getAuth(app);
+const noImagePlaceholder =
+  "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip";
 
 type LearnhubUserCredential = {
   studentID?: string;
@@ -27,8 +33,7 @@ async function signIn() {
       userID: user.uid,
       username: "Anonymous",
       email: "anonymous@anym.ano",
-      profilePicture:
-        "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+      profilePicture: noImagePlaceholder,
     };
     return learnhubUser;
   } catch (error) {
@@ -48,6 +53,7 @@ async function createLearnhubStudent(
     username: username,
     fullname: fullname,
     email: email,
+    profile_pic: noImagePlaceholder,
   };
   const res = await axios.post<{ student_id: string }>(url, body);
   const studentID = res.data.student_id;
@@ -66,6 +72,7 @@ async function createLearnhubTeacher(
     username: username,
     fullname: fullname,
     email: email,
+    profile_pic: noImagePlaceholder,
   };
   const res = await axios.post<{ teacher_id: string }>(url, body);
   const teacherID = res.data.teacher_id;
@@ -109,8 +116,7 @@ async function createStudentWithEmail(
         userID: studentID,
         username: username,
         email: email,
-        profilePicture:
-          "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+        profilePicture: noImagePlaceholder,
       };
       return learnhubUser;
     } else {
@@ -136,8 +142,7 @@ async function createStudentWithEmail(
         userID: studentID,
         username: username,
         email: email,
-        profilePicture:
-          "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+        profilePicture: noImagePlaceholder,
       };
       return learnhubUser;
     }
@@ -183,8 +188,7 @@ async function createTeacherWithEmail(
         userID: teacherID,
         username: username,
         email: email,
-        profilePicture:
-          "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+        profilePicture: noImagePlaceholder,
       };
       return learnhubUser;
     } else {
@@ -210,8 +214,7 @@ async function createTeacherWithEmail(
         userID: teacherID,
         username: username,
         email: email,
-        profilePicture:
-          "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+        profilePicture: noImagePlaceholder,
       };
       return learnhubUser;
     }
@@ -259,14 +262,28 @@ async function signInWithEmail(
       learnhubUID = learnhubUserCredential.teacherID!;
     }
     const url: string = `http://localhost:8000/users/${userType}s/${learnhubUID}`;
-    const data = (await axios.get<LearnhubUserResponse>(url)).data;
-    const learnhubUser: LearnhubUser = {
-      userType: userType,
-      userID: learnhubUID,
-      username: data.username,
-      email: data.email,
-      profilePicture: data.profile_pic,
-    };
+    const data = (
+      await axios.get<LearnhubStudentResponse | LearnhubTeacherResponse>(url)
+    ).data;
+    console.log(JSON.stringify(data));
+    let learnhubUser: LearnhubUser;
+    if (userType === "student") {
+      learnhubUser = {
+        userType: "student",
+        userID: (data as LearnhubStudentResponse).student_id,
+        username: data.username,
+        email: data.email,
+        profilePicture: data.profile_pic,
+      };
+    } else {
+      learnhubUser = {
+        userType: "teacher",
+        userID: (data as LearnhubTeacherResponse).teacher_id,
+        username: data.username,
+        email: data.email,
+        profilePicture: data.profile_pic,
+      };
+    }
     return learnhubUser;
   } catch (error) {
     console.log(`error when sign in with email`, error);

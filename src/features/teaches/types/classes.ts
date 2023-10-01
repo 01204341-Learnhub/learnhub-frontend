@@ -41,8 +41,8 @@ type ClassInfo = {
   classThumbnailUrl: string;
   className: string;
   percentCompleted: number;
-  participantCount: number;
-  participantLimit: number;
+  studentCount: number;
+  studentLimit: number;
 };
 
 const availableCategories: Category[] = [

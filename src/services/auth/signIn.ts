@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  UserCredential,
   createUserWithEmailAndPassword,
   getAuth,
   signInAnonymously,
@@ -10,6 +11,11 @@ import { app } from "../../firebase/firebase";
 import { LearnhubUser, LearnhubUserResponse } from "../../types/user";
 
 const auth = getAuth(app);
+
+type LearnhubUserCredential = {
+  studentID?: string;
+  teacherID?: string;
+};
 
 async function signIn() {
   try {
@@ -30,6 +36,42 @@ async function signIn() {
   }
 }
 
+async function createLearnhubStudent(
+  uid: string,
+  username: string,
+  fullname: string,
+  email: string
+) {
+  const url: string = "http://localhost:8000/users/students";
+  const body = {
+    uid: uid,
+    username: username,
+    fullname: fullname,
+    email: email,
+  };
+  const res = await axios.post<{ student_id: string }>(url, body);
+  const studentID = res.data.student_id;
+  return studentID;
+}
+
+async function createLearnhubTeacher(
+  uid: string,
+  username: string,
+  fullname: string,
+  email: string
+) {
+  const url: string = "http://localhost:8000/users/teachers";
+  const body = {
+    uid: uid,
+    username: username,
+    fullname: fullname,
+    email: email,
+  };
+  const res = await axios.post<{ teacher_id: string }>(url, body);
+  const teacherID = res.data.teacher_id;
+  return teacherID;
+}
+
 async function createStudentWithEmail(
   email: string,
   password: string,
@@ -37,36 +79,160 @@ async function createStudentWithEmail(
   fullName: string
 ) {
   try {
-    const userCredentail = await createUserWithEmailAndPassword(
+    let userCredential: UserCredential;
+    const isAlreadyRegisterOnce = await checkIfAlreadyRegisterOnce(
+      email,
+      password
+    );
+    if (isAlreadyRegisterOnce) {
+      userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const learnhubUserCredential: LearnhubUserCredential = JSON.parse(
+        userCredential.user.displayName
+      );
+      if (learnhubUserCredential.studentID) {
+        throw new Error(
+          `this email is aleady register with studentID: ${learnhubUserCredential.studentID}`
+        );
+      }
+      const studentID = await createLearnhubStudent(
+        userCredential.user.uid,
+        username,
+        fullName,
+        email
+      );
+      learnhubUserCredential.studentID = studentID;
+      await updateProfile(userCredential.user, {
+        displayName: JSON.stringify(learnhubUserCredential),
+      });
+      const learnhubUser: LearnhubUser = {
+        userType: "student",
+        userID: studentID,
+        username: username,
+        email: email,
+        profilePicture:
+          "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+      };
+      return learnhubUser;
+    } else {
+      userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const studentID = await createLearnhubStudent(
+        userCredential.user.uid,
+        username,
+        fullName,
+        email
+      );
+      const learnhubUserCredential: LearnhubUserCredential = {
+        studentID: studentID,
+      };
+      await updateProfile(userCredential.user, {
+        displayName: JSON.stringify(learnhubUserCredential),
+      });
+      const learnhubUser: LearnhubUser = {
+        userType: "student",
+        userID: studentID,
+        username: username,
+        email: email,
+        profilePicture:
+          "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+      };
+      return learnhubUser;
+    }
+  } catch (error) {
+    console.log(`error when create student with email`, error);
+  }
+}
+
+async function createTeacherWithEmail(
+  email: string,
+  password: string,
+  username: string,
+  fullName: string
+) {
+  try {
+    let userCredential: UserCredential;
+    const isAlreadyRegisterOnce = await checkIfAlreadyRegisterOnce(
+      email,
+      password
+    );
+    if (isAlreadyRegisterOnce) {
+      userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const learnhubUserCredential: LearnhubUserCredential = JSON.parse(
+        userCredential.user.displayName
+      );
+      if (learnhubUserCredential.teacherID) {
+        throw new Error(
+          `this email is aleady register with studentID: ${learnhubUserCredential.teacherID}`
+        );
+      }
+      const teacherID = await createLearnhubTeacher(
+        userCredential.user.uid,
+        username,
+        fullName,
+        email
+      );
+      learnhubUserCredential.teacherID = teacherID;
+      await updateProfile(userCredential.user, {
+        displayName: JSON.stringify(learnhubUserCredential),
+      });
+      const learnhubUser: LearnhubUser = {
+        userType: "teacher",
+        userID: teacherID,
+        username: username,
+        email: email,
+        profilePicture:
+          "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+      };
+      return learnhubUser;
+    } else {
+      userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const teacherID = await createLearnhubStudent(
+        userCredential.user.uid,
+        username,
+        fullName,
+        email
+      );
+      const learnhubUserCredential: LearnhubUserCredential = {
+        teacherID: teacherID,
+      };
+      await updateProfile(userCredential.user, {
+        displayName: JSON.stringify(learnhubUserCredential),
+      });
+      const learnhubUser: LearnhubUser = {
+        userType: "teacher",
+        userID: teacherID,
+        username: username,
+        email: email,
+        profilePicture:
+          "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
+      };
+      return learnhubUser;
+    }
+  } catch (error) {
+    console.log(`error when create student with email`, error);
+  }
+}
+async function checkIfAlreadyRegisterOnce(email: string, password: string) {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
       auth,
       email,
       password
     );
-    const uid = userCredentail.user.uid;
-    const url: string = "http://localhost:8000/users/students";
-    const body = {
-      uid: uid,
-      username: username,
-      fullname: fullName,
-      email: email,
-    };
-    const res = await axios.post<{ student_id: string }>(url, body);
-    const studentID = res.data.student_id;
-
-    // change fullname of firebase
-    const user = userCredentail.user;
-    await updateProfile(user, { displayName: studentID });
-    const learnhubUser: LearnhubUser = {
-      userType: "student",
-      userID: uid,
-      username: username,
-      email: email,
-      profilePicture:
-        "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
-    };
-    return learnhubUser;
+    await auth.signOut();
+    return true;
   } catch (error) {
-    console.log(`error when create student with email`, error);
+    if (error.code === "auth/invalid-login-credentials") {
+      return false;
+    }
+    throw error;
   }
 }
 
@@ -82,12 +248,21 @@ async function signInWithEmail(
       password
     );
     const uid = userCredential.user.uid;
-    const learnhubUID = userCredential.user.displayName;
+    console.log(userCredential.user.displayName);
+    const learnhubUserCredential: LearnhubUserCredential = JSON.parse(
+      userCredential.user.displayName
+    );
+    let learnhubUID: string;
+    if (userType === "student") {
+      learnhubUID = learnhubUserCredential.studentID!;
+    } else {
+      learnhubUID = learnhubUserCredential.teacherID!;
+    }
     const url: string = `http://localhost:8000/users/${userType}s/${learnhubUID}`;
     const data = (await axios.get<LearnhubUserResponse>(url)).data;
     const learnhubUser: LearnhubUser = {
       userType: userType,
-      userID: uid,
+      userID: learnhubUID,
       username: data.username,
       email: data.email,
       profilePicture: data.profile_pic,
@@ -98,4 +273,10 @@ async function signInWithEmail(
   }
 }
 
-export { createStudentWithEmail, signIn, signInWithEmail };
+export {
+  checkIfAlreadyRegisterOnce,
+  createStudentWithEmail,
+  createTeacherWithEmail,
+  signIn,
+  signInWithEmail,
+};

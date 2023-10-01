@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Lesson } from "../types/lesson";
 import { Chapter } from "../types/chapter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +11,8 @@ import {
   faAngleDown,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { fetchLessons } from "../services/courses";
+
 interface LessonEntryProps {
   lesson: Lesson;
 }
@@ -18,18 +20,18 @@ interface LessonEntryProps {
 function LessonEntry(props: LessonEntryProps) {
   return (
     <div className="flex flex-row justify-left space-x-3">
-      {props.lesson.lessonType === "video" && (
+      {props.lesson.lessonType === "video" ? (
         <FontAwesomeIcon icon={faCirclePlay} color="#808080" />
-      )}
-      {props.lesson.lessonType === "doc" && (
+      ) : null }
+      {props.lesson.lessonType === "doc" ? (
         <FontAwesomeIcon icon={faFileLines} size="lg" color="#808080" />
-      )}
-      {props.lesson.lessonType === "quiz" && (
+      ) : null }
+      {props.lesson.lessonType === "quiz" ? (
         <FontAwesomeIcon icon={faClipboardList} size="lg" color="#808080" />
-      )}
-      {props.lesson.lessonType === "files" && (
+      ) : null }
+      {props.lesson.lessonType === "files" ? (
         <FontAwesomeIcon icon={faFolder} color="#808080" />
-      )}
+      ) : null }
       <div className="text-[#808080] font-normal text-[13px]">
         {props.lesson.name}
       </div>
@@ -57,26 +59,13 @@ interface ChapterEntryProps {
 
 function ChapterEntry(props: ChapterEntryProps) {
   const [isExpanded, setIsExpanded] = React.useState(false);
-  function handleExpand() {
+  const [lessons, setLessons] = React.useState<Lesson[]>([]);
+   async function handleExpand() {
+    const lessonsData = await fetchLessons(props.chapter.courseId ,props.chapter.id);
     setIsExpanded(!isExpanded);
+    setLessons(lessonsData);
   }
 
-  // TODO: Get lessons from backend.
-  const lessons: Lesson[] = [];
-  const lessonTypes = ["video", "doc", "quiz", "files"];
-  for (let i = 0; i < 4; i++) {
-    const lesson: Lesson = {
-      id: `${i}`,
-      courseId: props.chapter.courseId,
-      chapterId: props.chapter.id,
-      name: `Lesson ${i}`,
-      description: `This is lesson ${i}`,
-      lessonNum: i,
-      lessonType: lessonTypes[i % 4],
-      lessonLength: 1500 * (i + 1),
-    };
-    lessons.push(lesson);
-  }
 
   return (
     <>
@@ -92,7 +81,7 @@ function ChapterEntry(props: ChapterEntryProps) {
           />
         </div>
       </button>
-      {isExpanded && (
+      {isExpanded ? (
         <div className="bg-[#d9d9d980] w-full">
           <div className="m-4 flex flex-col justify-start space-y-3">
             {lessons.map((lesson) => (
@@ -100,7 +89,7 @@ function ChapterEntry(props: ChapterEntryProps) {
             ))}
           </div>
         </div>
-      )}
+      ) : null }
     </>
   );
 }

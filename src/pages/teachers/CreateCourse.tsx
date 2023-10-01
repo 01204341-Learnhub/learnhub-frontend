@@ -125,9 +125,9 @@ function _TopPanel({ course }: _TopPanelProps) {
         <CourseCardPreview
           courseThumbnailUrl={course.thumbnailUrl}
           courseName={course.name}
-          lvl={course.level}
+          level={course.level}
           price={course.price}
-          tag={
+          category={
             availableCategories.find(
               (category) => category.categoryId === course.categoryId,
             )?.name

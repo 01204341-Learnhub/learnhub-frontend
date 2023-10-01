@@ -1,6 +1,6 @@
 import { CourseContext } from "../../../pages/teachers/CreateCourse.tsx";
 import React, { useContext, useRef } from "react";
-import { availableCategories, availableLevels } from "../types/course.ts";
+import { availableCategories } from "../types/course.ts";
 
 function _Name() {
   const courseContext = useContext(CourseContext);
@@ -145,6 +145,7 @@ function _Price() {
       <input
         className="border-2 border-[#C0C0C0] py-2 px-3 w-1/10"
         type="number"
+        min="0"
         placeholder="ราคา"
         value={courseContext.course.price}
         onChange={(e) => {

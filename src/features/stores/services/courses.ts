@@ -1,6 +1,6 @@
 import axios from "axios";
 import { CourseDetailData, Course } from "../types/course";
-import { Tag } from "../types/course";
+import { Tag, CourseAnnouncement } from "../types/course";
 import { Chapter } from "../types/chapter";
 import {  ResponseGetCourses, 
           ResponseGetCourseId, 

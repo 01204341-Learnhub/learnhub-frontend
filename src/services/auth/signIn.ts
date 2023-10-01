@@ -287,6 +287,7 @@ async function signInWithEmail(
     return learnhubUser;
   } catch (error) {
     console.log(`error when sign in with email`, error);
+    throw error;
   }
 }
 

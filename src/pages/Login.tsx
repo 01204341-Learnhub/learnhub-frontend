@@ -27,7 +27,8 @@ export default function Login() {
     const handleSignIn = () => {
         signInWithEmail(email, password, mode).then((user) => {
             dispatch(setUser(user))
-            navigate("/home")
+            if (mode == "student") navigate("/home");
+            else navigate("/teach/overview");
         }).catch((error) => {
             alert(`cannot login ${error}`)
         })

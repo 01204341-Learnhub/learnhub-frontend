@@ -3,16 +3,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { createStudentWithEmail } from "../services/auth/signIn";
+import { createTeacherWithEmail } from "../services/auth/signIn";
 import { setUser } from "../slices/userSlice";
 
-function StudentsRegister() {
+function TeacherRegister() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [fullname, setFullname] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [fullname, setFullname] = useState('');
     const [confirmpassword, setConfirmPassword] = useState('');
 
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +41,7 @@ function StudentsRegister() {
             return
         }
         try {
-            const learnhubUser = await createStudentWithEmail(email, password, username, fullname)
+            const learnhubUser = await createTeacherWithEmail(email, password, username, fullname)
             dispatch(setUser(learnhubUser));
             navigate('/home');
         } catch (error) {
@@ -59,7 +59,7 @@ function StudentsRegister() {
 
                 <div className="bg-white h-screen flex flex-col justify-center items-center">
                     <div className="">
-                        <h1 className=" mb-[50px] text-center text-black text-[32px] font-bold">สร้างบัญชีผู้เรียน</h1>
+                        <h1 className=" mb-[50px] text-center text-black text-[32px] font-bold">สร้างบัญชีผู้สอน</h1>
                     </div>
                     <div className=" flex border-[2px]  rounded-xl space-x-10 object-contain h-[53px] w-[494px] items-center">
                         <div className="  opacity-50 flex space-x-10 ml-4 w-full ">
@@ -67,7 +67,7 @@ function StudentsRegister() {
                             <input
                                 type="text"
                                 className="border-none outline-none text-[24px] w-full bg-white"
-                                placeholder="ชื่อ-นามสกุล"
+                                placeholder="Username / ชื่อผู้ใช้งาน"
                                 value={fullname}
                                 onChange={handleFullnameChange}
                             />
@@ -135,4 +135,4 @@ function StudentsRegister() {
     )
 }
 
-export default StudentsRegister
+export default TeacherRegister

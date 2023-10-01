@@ -2,6 +2,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import studentImage from "../../src/assets/Images/regStudent.png";
 import teacherImage from "../../src/assets/Images/regTeacher.png";
 import StudentsRegister from "./StudentsRegister";
+import TeacherRegister from "./TeacherRegister";
 
 export default function Register() {
     const navigate = useNavigate()
@@ -59,8 +60,11 @@ export default function Register() {
                 <Link to="/login" replace={true} className=" font-bold text-blue-600">คลิกเพื่อลงชื่อเข้าสู่ระบบ</Link>
             </div>
         </>
-    ); 
+    );
     else if (searchParams.get("u") === "student") return (
         <StudentsRegister />
-    );
+    )
+    else if (searchParams.get("u") === "teacher") return (
+        <TeacherRegister />
+    )
 }

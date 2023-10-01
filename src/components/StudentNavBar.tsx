@@ -19,11 +19,11 @@ function StudentNavBar() {
                 <h1 className="ml-2 font-bold text-2xl">คลาสเรียนของฉัน</h1>
             </NavLink>
             <NavLink to="/learn/homework" replace={true} className={({ isActive }) => `flex items-center w-full my-2 py-2 hover:bg-[#d9d9d9] ${isActive ? "bg-[#d9d9d9]" : ""}`}>
-                <FontAwesomeIcon icon={faClipboardList} size="xl" className="pl-6 pr-3"/>
+                <FontAwesomeIcon icon={faClipboardList} size="2xl" className="pl-7 pr-3"/>
                 <h1 className="ml-2 font-bold text-2xl">งานที่ต้องทำ</h1>
             </NavLink>
             <NavLink to="/learn/schedule" replace={true} className={({ isActive }) => `flex items-center w-full my-2 py-2 hover:bg-[#d9d9d9] ${isActive ? "bg-[#d9d9d9]" : ""}`}>
-                <FontAwesomeIcon icon={faCalendar} size="xl" className="pl-6 pr-3" />
+                <FontAwesomeIcon icon={faCalendar} size="2xl" className="pl-6 pr-3" />
                 <h1 className="ml-2 font-bold text-2xl">ตารางเรียน</h1>
             </NavLink>
         </div>

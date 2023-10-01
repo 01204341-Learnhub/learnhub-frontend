@@ -28,6 +28,8 @@ export default function Login() {
         signInWithEmail(email, password, mode).then((user) => {
             dispatch(setUser(user))
             navigate("/home")
+        }).catch((error) => {
+            alert(`cannot login ${error}`)
         })
     }
     return (

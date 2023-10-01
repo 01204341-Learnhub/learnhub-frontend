@@ -40,9 +40,13 @@ function TeacherRegister() {
             alert("Password and Confirm Password not match");
             return
         }
-        const learnhubUser = await createTeacherWithEmail(email, password, username, fullname)
-        dispatch(setUser(learnhubUser));
-        navigate('/home');
+        try {
+            const learnhubUser = await createTeacherWithEmail(email, password, username, fullname)
+            dispatch(setUser(learnhubUser));
+            navigate('/home');
+        } catch (error) {
+            alert(`cannot register ${error}`);
+        }
     }
 
     return (

@@ -5,7 +5,7 @@ function Profile() {
     const { user } = useSelector((state: RootState) => state.user)
     return (
         <div className="w-full h-full">
-            <div className="flex">
+            <div className="flex text-2xl font-bold">
                 <h1>โปรไฟล์</h1>
                 <h1>ตั้งค่าบัญชี</h1>
             </div>

@@ -1,6 +1,8 @@
 import { faPaperclip, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import VideoPlayer from "../../../components/VideoPlayer";
+import { uploadFile } from "../../../services/uploader/file";
 import { Lesson } from "../types/course";
 
 function _Preview({ src }: { src: string | undefined }) {
@@ -21,9 +23,7 @@ function _Preview({ src }: { src: string | undefined }) {
         <h1 className=" mx-[40px] mt-[20px] font-semibold text-[18px]">
           Preview
         </h1>
-        <video width="400" className="mx-[40px] mt-[20px]" controls>
-          <source src={src} />
-        </video>
+        <VideoPlayer url={src} />
       </div>
     );
   }
@@ -48,22 +48,46 @@ function VideoLessonCreate({
   const onLessonNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLessonName(e.target.value);
   };
-  const [src, setSrc] = useState<string | undefined>(undefined);
-  const setSourceFromLink = (link: string) => {
-    setSrc(link);
-  };
-  const setSourceFromFile = (file: File) => {
-    setSrc(URL.createObjectURL(file));
-  };
+  const [fileSrc, setFileSrc] = useState<File | undefined>(undefined);
+  const [urlSrc, setUrlSrc] = useState<string>("");
   const handleSubmit = () => {
-    const lesson: Lesson = {
-      lessonId: "1234567890",
-      name: lessonName,
-      number: lessonNumber,
-      type: "video",
-      videoUrl: src,
-    };
-    onSubmit(lesson);
+    if (lessonName === "") {
+      alert("กรุณาใส่ชื่อบทเรียน");
+      return
+    }
+    if (fileSrc == undefined && urlSrc == "") {
+      alert("กรุณาใส่ไฟล์");
+      return
+    }
+    if (fileSrc != undefined) {
+      const file = new File([fileSrc!], lessonName + ".mp4", { type: "video/mp4" });
+      uploadFile(file)
+        .then((url) => {
+          const lesson: Lesson = {
+            lessonId: "1234567890",
+            name: lessonName,
+            number: lessonNumber,
+            type: "video",
+            videoUrl: url,
+          };
+          onSubmit(lesson);
+        })
+        .catch((err) => {
+          alert("ไม่สามารถอัพโหลดไฟล์ได้");
+          console.log(err);
+          return;
+        })
+    }
+    else {
+      const lesson: Lesson = {
+        lessonId: "1234567890",
+        name: lessonName,
+        number: lessonNumber,
+        type: "video",
+        videoUrl: urlSrc,
+      };
+      onSubmit(lesson);
+    }
   };
   return (
     <div className=" h-screen">
@@ -91,11 +115,24 @@ function VideoLessonCreate({
           วิดีโอ
         </h1>
         <div className="flex">
+          <dialog id="url_form_modal" className="modal">
+            <div className="modal-box">
+              <h1 className="font-semibold text-[16px] text-[#808080]">ลิ้งค์</h1>
+              <input type="text" value={urlSrc} onChange={(e) => setUrlSrc(e.target.value)}
+                className="input input-bordered mt-2" />
+              <div className="modal-action">
+                <form method="dialog">
+                  <button className="btn" onClick={() => {
+                    setUrlSrc(urlSrc);
+                    setFileSrc(undefined);
+                  }}>ตกลง</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
           <button
             className="mx-[40px] mt-[20px]"
-            onClick={() => {
-              setSourceFromLink("https://www.youtube.com/watch?v=30Dy3GERCqQ");
-            }}
+            onClick={() => { document.getElementById('url_form_modal').showModal() }}
           >
             <FontAwesomeIcon
               icon={faPaperclip}
@@ -116,7 +153,8 @@ function VideoLessonCreate({
               id="lessonFileSelector"
               style={{ display: "none" }}
               onChange={(e) => {
-                setSourceFromFile(e.target.files![0]);
+                setFileSrc(e.target.files![0]);
+                setUrlSrc("");
               }}
             />
             <button
@@ -139,8 +177,7 @@ function VideoLessonCreate({
         </div>
       </div>
       <div className="ml-[70px] mr-[100px] flex grow  bg-white drop-shadow-xl pt-2 pb-4 mt-5">
-        <_Preview src={src} />
-        <h1 className="my-auto mr-4 ml-4">{lessonName}</h1>
+        <_Preview src={fileSrc != undefined ? URL.createObjectURL(fileSrc) : urlSrc} />
       </div>
       <div className="flex mt-[40px] justify-end mr-[100px] w-full">
         <button className="btn bg-black text-white" onClick={handleSubmit}>

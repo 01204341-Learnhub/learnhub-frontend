@@ -6,7 +6,7 @@ import CourseCard from "../../features/teaches/components/CourseCard";
 import NewProgramClass from "../../features/teaches/components/NewProgramCard";
 import { listTeacherClasses } from "../../features/teaches/services/classes";
 import { listTeachCourse } from "../../features/teaches/services/courses";
-import { ClassInfo } from "../../features/teaches/types/classes";
+import { ClassInfo } from "../../features/teaches/types/class.ts";
 import { CourseInfo } from "../../features/teaches/types/course";
 
 function TeacherOverview() {

@@ -1,4 +1,4 @@
-import { ClassInfo } from "../types/classes";
+import { ClassInfo } from "../types/class.ts";
 
 async function listTeacherClasses(teacherID: string) {
   const mock: ClassInfo[] = [
@@ -54,4 +54,4 @@ async function listTeacherClasses(teacherID: string) {
   return mock;
 }
 
-export {listTeacherClasses};
+export { listTeacherClasses };

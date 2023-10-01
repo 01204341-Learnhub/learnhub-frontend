@@ -26,7 +26,7 @@ function Basket() {
                             </div>
                             <div className="flex">
                                 <h1 className=" mr-2 font-semibold text-[#808080] text-[14px]">• วิดิโอสอน {item.totalTime} ชั่วโมง</h1>
-                                <h1 className=" mr-2 font-semibold text-[#808080] text-[14px]">• {item.tag}</h1>
+                                <h1 className=" mr-2 font-semibold text-[#808080] text-[14px]">• {item.lvl}</h1>
                             </div>
                         </div>
                         <div className=" mr-[25px] justify-self-end flex flex-col">

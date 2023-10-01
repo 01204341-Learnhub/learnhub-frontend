@@ -30,6 +30,7 @@ import TeachingClasses from './pages/teachers/TeachingClasses'
 import TeachingCourses from './pages/teachers/TeachingCourses'
 import TeachingHomeworks from './pages/teachers/TeachingHomeworks'
 import store from './store'
+import TeacherProfile from './pages/TeacherProfile'
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -42,6 +43,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path='/profile' element={<Profile />} />
             </Route>
             <Route path='/home' element={<Home />} />
+            <Route path='/teacherprofile' element={<TeacherProfile />} />
             <Route path='/baskets' element={<Basket />} />
             <Route path='/home/courses' element={<AllCourses />}></Route>
             <Route path='/home/classes' element={<AllClasses />}></Route>

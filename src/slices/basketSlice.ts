@@ -15,7 +15,7 @@ const mockBasket: Basket = {
       rating: 4.5,
       voter: 32465,
       totalTime: 159,
-      tag: "พื้นฐาน"
+      lvl: "พื้นฐาน"
     },
     {
       thumbnailURL:
@@ -29,7 +29,7 @@ const mockBasket: Basket = {
       rating: 4.5,
       voter: 32465,
       totalTime: 159,
-      tag: "พื้นฐาน"
+      lvl: "พื้นฐาน"
     },
   ],
 };

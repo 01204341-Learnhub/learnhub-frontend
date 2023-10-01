@@ -131,7 +131,7 @@ function TeacherProfile() {
                     <div className="pl-3 mt-5 pt-8 grid grid-cols-4">
                         {renderProgramClass()} 
                     </div>
-                    {mockTeacher.classes > 4 ? (
+                    {(mockTeacher.classes > 4 && mockTeacher.classes > displayedClasses) ? (
                         <button
                             className="p-4 rounded-xl bg-[#505050] text-lg text-white font-bold shadow-xl"
                             onClick={loadMoreClasses}

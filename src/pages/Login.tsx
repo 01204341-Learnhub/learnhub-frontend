@@ -25,6 +25,11 @@ export default function Login() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const handleSignIn = () => {
+        if (password === "") {
+            alert("กรุณากรอกรหัสผ่าน")
+            return
+        }
+
         signInWithEmail(email, password, mode).then((user) => {
             dispatch(setUser(user))
             if (mode == "student") navigate("/home");
@@ -33,11 +38,16 @@ export default function Login() {
             alert(`cannot login ${error}`)
         })
     }
+
+    function handleBack() {
+        navigate(-1)
+    }
+
     return (
         <>
-            <Link to="/Register" className=" text-[24px] ml-5 mt-10">
+            <button className=" text-[24px] ml-5 mt-10" onClick={handleBack}>
                 Back
-            </Link>
+            </button>
 
             <div className="grid grid-cols-2">
                 <div className=" mt-36">
@@ -68,16 +78,16 @@ export default function Login() {
 
                     </div>
                     <div className=" mt-10 ml-48 flex border-[5px] rounded-xl space-x-10 object-contain h-[60px] w-[500px] items-center">
-                        <div className=" flex space-x-[6%] ml-[4%]">
+                        <div className=" flex space-x-[6%] ml-[4%] w-[95%]">
                             <FontAwesomeIcon icon={faEnvelope} size='2xl' className=" opacity-50"></FontAwesomeIcon>
-                            <input type="text" className=" text-[24px]" placeholder={mode == "student" ? "อีเมลล์ผู้เรียน" : "อีเมลล์ผู้สอน"} required
+                            <input type="text" className=" text-[24px] outline-none container" placeholder={mode == "student" ? "อีเมลล์ผู้เรียน" : "อีเมลล์ผู้สอน"} required
                                 value={email} onChange={handleEmailChange}></input>
                         </div>
                     </div>
                     <div className=" mt-10 ml-48 flex border-[5px] rounded-xl space-x-10 object-contain h-[60px] w-[500px] items-center">
-                        <div className=" flex space-x-[6%] ml-[4%]">
+                        <div className=" flex space-x-[6%] ml-[4%] w-[95%]">
                             <FontAwesomeIcon icon={faUnlockKeyhole} size='2xl' className=" opacity-50"></FontAwesomeIcon>
-                            <input type="text" className=" text-[24px]" placeholder={mode == "student" ? "รหัสผ่านผู้เรียน" : "รหัสผ่านผู้สอน"} required
+                            <input type="password" className=" text-[24px] outline-none container" placeholder={mode == "student" ? "รหัสผ่านผู้เรียน" : "รหัสผ่านผู้สอน"} required
                                 value={password}
                                 onChange={handlePasswordChange}></input>
                         </div>

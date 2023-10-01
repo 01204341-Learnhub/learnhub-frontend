@@ -40,21 +40,9 @@ function MainBar() {
                 />
             </div>
             <div className='w-2/12 flex justify-evenly my-2'>
-                <button onClick={() => toggleDropdown('mylearndropdown')}>
-                    <FontAwesomeIcon icon={faBook} size='xl' color={openDropdown === 'mylearndropdown' ? '#068FFF' : 'none'} />
-
-                    {/* Mylearn dropdown menu */}
-                    <div
-                        style={{ display: openDropdown === 'mylearndropdown' ? 'block' : 'none', top: '90%', right: '21%' }}
-                        className=" absolute w-[320px] h-[550px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
-                    >
-                        <div className="px-8 py-3">
-
-                        </div>
-                    </div>
-                    {/* Mylearn dropdown menu */}
-
-                </button>
+                <Link to={"/learn/overview"}>
+                    <FontAwesomeIcon icon={faBook} size='xl' />
+                </Link>
                 <button onClick={() => toggleDropdown('mypindropdown')}>
                     <FontAwesomeIcon icon={faHeart} size='xl' color={openDropdown === 'mypindropdown' ? '#FF2171' : 'none'} />
 
@@ -130,9 +118,9 @@ function MainBar() {
                             <a className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">หน้าแรก</a>
                         </li>
                         <li>
-                            <a className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100 ">การเรียนรู้ของฉัน
+                            <Link to={"/learn/overview"} className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100 ">การเรียนรู้ของฉัน
                                 <FontAwesomeIcon icon={faBook} size='xl' color='#068FFF' className='mx-3' />
-                            </a>
+                            </Link>
                         </li>
                         <li>
                             <a className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100 ">หลักสูตรที่อยากได้

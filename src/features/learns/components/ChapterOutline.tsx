@@ -44,7 +44,7 @@ export default function ChapterOutline({ chapter, chapterProgress, onSelectLesso
     return (
         <>
             <div className="flex flex-col items-center">
-                <button className="flex bg-[#ECF3F9] w-full justify-between" onClick={() => handleShow()}>
+                <div className="flex bg-[#ECF3F9] w-full justify-between" onClick={() => handleShow()}>
 
                     <div className="flex flex-col items-start flex-1 pl-6 py-4">
                         <h1 className="text-xl font-semibold">บทที่ : {chapter.name}</h1>
@@ -66,7 +66,7 @@ export default function ChapterOutline({ chapter, chapterProgress, onSelectLesso
                         </button>
                     </div>
 
-                </button>
+                </div>
                 <hr className="w-full text-[#b0b0b0] border-t-4 py-0.5" />
                 {show && lessons.map((lesson) => (
                     <div key={lesson.lessonID} className="w-full">
@@ -96,9 +96,11 @@ function LessonSlot({ lesson, finished, onSelectLesson }: LessonSlotProp) {
         <div className='flex justify-between' onClick={handleClick}>
             <div className="flex justify-center items-center pb-1.5">
                 <div className="flex h-24 w-24 bg-[#D9D9D9] justify-center items-center">
-                    {lesson.lessonType == "video" ? <FontAwesomeIcon icon={faCirclePlay} size='2xl' color="black" className="drop-shadow-lg"></FontAwesomeIcon>
-                    : lesson.lessonType == "file" ? <FontAwesomeIcon icon={faFile} color="#000" size='2xl' className="drop-shadow-lg"></FontAwesomeIcon>
-                        : <></>}
+                    {
+                    lesson.lessonType == "video" ? <FontAwesomeIcon icon={faCirclePlay} size='2xl' color="black" className="drop-shadow-lg"/>
+                    : lesson.lessonType == "doc" ? <FontAwesomeIcon icon={faFile} color="#000" size='2xl' className="drop-shadow-lg"/>
+                    : lesson.lessonType == "quiz" ? <FontAwesomeIcon icon={faClipboardList} color="#000" size="2xl" className="drop-shadow-lg"/> : <></>
+                    }
                 </div>
                 <div className='mx-5'>
                     <h1 className="font-semibold">{lesson.name}</h1>

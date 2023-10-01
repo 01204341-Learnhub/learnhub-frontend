@@ -30,9 +30,9 @@ type Class = {
   rating: number;
   studentCount: number;
   studentLimit: number;
-  startDate: Date;
-  endDate: Date;
-  lastDateToRegister: Date;
+  startDate?: Date;
+  endDate?: Date;
+  lastDateToRegister?: Date;
   threads: Thread[];
 };
 

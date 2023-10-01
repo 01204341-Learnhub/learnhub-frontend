@@ -151,7 +151,7 @@ function LearnCourse() {
                         <div className={`bg-black ${outlineViewMode == "announcements" ? "h-3" : "h-3 bg-transparent"}`}></div>
                     </button>
                 </div>
-                <div className="bg-white w-full px-10 py-12 ">
+                <div className="bg-white w-full px-20 pt-12 pb-8 ">
                     {(() => {
                         if (outlineViewMode == 'contents') {
                             return (

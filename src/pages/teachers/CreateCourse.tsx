@@ -268,7 +268,7 @@ function CreateCourse() {
   const [course, setCourse] = useState<Course>({
     courseId: "1234567890", // TODO: Get an ID, possibly uuid.
     name: "",
-    thumbnailUrl: "https://picsum.photos/seed/picsum/200/300",
+    thumbnailUrl: "https://picsum.photos/seed/picsum/1920/1080",
     categoryId: "",
     level: "",
     instructorName: "John Doe",

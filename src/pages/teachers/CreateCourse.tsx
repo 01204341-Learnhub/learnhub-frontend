@@ -1,21 +1,24 @@
+import { faCircle as faCircleRegular } from "@fortawesome/free-regular-svg-icons";
+import {
+  faArrowRight,
+  faCircle as faCircleSolid,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CourseCardPreview from "../../features/teaches/components/CourseCardPreview";
 import CourseChapterCreate from "../../features/teaches/components/CourseChapterCreate";
 import CourseChapterInfo from "../../features/teaches/components/CourseChapterInfo";
 import CourseCreateStepper from "../../features/teaches/components/CourseCreateStepper";
-import {
-  availableCategories,
-  Course,
-} from "../../features/teaches/types/course";
 import CourseGoalsInfoForm from "../../features/teaches/components/CourseGoalsInfoForm.tsx";
 import CoursePublishingInfoForm from "../../features/teaches/components/CoursePublishingInfoForm.tsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle as faCircleRegular } from "@fortawesome/free-regular-svg-icons";
+import { createCourse } from "../../features/teaches/services/courses.ts";
 import {
-  faCircle as faCircleSolid,
-  faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
+  Course,
+  availableCategories,
+} from "../../features/teaches/types/course";
+import { RootState } from "../../store.ts";
 
 interface _SideNavProps {
   currentTab: string;
@@ -77,19 +80,17 @@ function _SideNav({
         </button>
       </div>
       <button
-        className={`w-fit h-fit p-3 hover:drop-shadow-md ${
-          !readyToPublish || onPublish === undefined
-            ? "bg-gray-200"
-            : "bg-[#D9D9D9]"
-        }`}
+        className={`w-fit h-fit p-3 hover:drop-shadow-md ${!readyToPublish || onPublish === undefined
+          ? "bg-gray-200"
+          : "bg-[#D9D9D9]"
+          }`}
         onClick={onPublish}
       >
         <h1
-          className={`font-semibold text-[20px] ${
-            !readyToPublish || onPublish === undefined
-              ? "text-gray-400"
-              : "text-black"
-          }`}
+          className={`font-semibold text-[20px] ${!readyToPublish || onPublish === undefined
+            ? "text-gray-400"
+            : "text-black"
+            }`}
         >
           เผยแพร่คอร์ส
         </h1>
@@ -268,6 +269,7 @@ const CourseContext = React.createContext<CourseContextType | undefined>(
 
 function CreateCourse() {
   const navigate = useNavigate();
+  const teacherID = useSelector((state: RootState) => state.user.user.userID);
   const [course, setCourse] = useState<Course>({
     courseId: "1234567890", // TODO: Get an ID, possibly uuid.
     name: "",
@@ -293,7 +295,15 @@ function CreateCourse() {
 
   const handlePublishCourse = () => {
     // TODO: Send the course to the server.
-    console.log(course);
+    async function publishCourse() {
+      await createCourse(course, teacherID);
+    }
+    publishCourse().then(() => {
+      alert("Course published!");
+    }).catch((err) => {
+      alert("Error: " + err);
+    })
+
   };
 
   if (initializedCourse === false) {

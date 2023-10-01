@@ -83,7 +83,7 @@ function TeacherOverview() {
                 courseName={courseName}
                 courseThumbnailUrl={courseThumbnailUrl}
                 courseRating={courseRating}
-                studentcount={studentCount}
+                studentCount={studentCount}
               />
             </li>
           ),
@@ -119,4 +119,4 @@ function TeacherOverview() {
   );
 }
 
-export default TeacherOverview
+export default TeacherOverview;

@@ -60,7 +60,7 @@ function TeachingCourses() {
                 courseName={courseName}
                 courseThumbnailUrl={courseThumbnailUrl}
                 courseRating={courseRating}
-                studentcount={studentCount}
+                studentCount={studentCount}
               />
             </li>
           ),

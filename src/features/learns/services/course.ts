@@ -15,7 +15,6 @@ async function fetchChapters(courseID: string): Promise<CourseChapter[]> {
   try {
     const response = await axios.get<ResponseCourseChapters>(`http://localhost:8000/programs/courses/${courseID}/chapters/`)
     const courseChapterData = response.data.chapters
-    //console.log(JSON.stringify(response.data, null, 2))
     courseChapterData.map(chapter => {
       courseChapters.push({
         chapterID: chapter.chapter_id,
@@ -30,7 +29,6 @@ async function fetchChapters(courseID: string): Promise<CourseChapter[]> {
   }catch (err) {
     console.log(err)
   } finally {
-    //console.log(courseChapters)
     return courseChapters
   }
 

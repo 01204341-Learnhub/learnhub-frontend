@@ -9,10 +9,7 @@ export const userSlice = createSlice({
   reducers: {
     setUser: (state, action) => {
       const learnhubUser = action.payload as LearnhubUser;
-      console.log(`from setUser: ${JSON.stringify(learnhubUser)}`);
-
       state.user = learnhubUser;
-      console.log(`set user to ${JSON.stringify(state)}`);
     },
     removeUser: (state) => {
       state.user = undefined;

@@ -53,8 +53,8 @@ function StudentsRegister() {
         <div className=" bg-gray-300 h-screen">
             <div className="grid grid-cols-2">
                 <div className=" ">
-                    <Link to="/Register" className="text-[24px]">ย้อนกลับ</Link>
-                    <p className="text-[24px] text-center  mt-[100px]  font-bold">**text**</p>
+                    <Link to="/" className="text-[24px] ml-[2%]">Back</Link>
+                    <p className="text-[24px] text-center mt-[100px] font-bold">**text**</p>
                 </div>
 
                 <div className="bg-white h-screen flex flex-col justify-center items-center">
@@ -62,7 +62,7 @@ function StudentsRegister() {
                         <h1 className=" mb-[50px] text-center text-black text-[32px] font-bold">สร้างบัญชีผู้เรียน</h1>
                     </div>
                     <div className=" flex border-[2px]  rounded-xl space-x-10 object-contain h-[53px] w-[494px] items-center">
-                        <div className="  opacity-50 flex space-x-10 ml-4 w-full ">
+                        <div className="  opacity-50 flex space-x-10 ml-4 w-[95%] ">
                             <FontAwesomeIcon icon={faUser} size='2xl'></FontAwesomeIcon>
                             <input
                                 type="text"
@@ -73,49 +73,49 @@ function StudentsRegister() {
                             />
                         </div>
                     </div>
-                    <div className=" flex border-[2px]  rounded-xl space-x-10 object-contain h-[53px] w-[494px] items-center">
-                        <div className="  opacity-50 flex space-x-10 ml-4 w-full ">
+                    <div className=" mt-10 flex border-[2px]  rounded-xl space-x-10 object-contain h-[53px] w-[494px] items-center">
+                        <div className="  opacity-50 flex space-x-10 ml-4 w-[95%] ">
                             <FontAwesomeIcon icon={faUser} size='2xl'></FontAwesomeIcon>
                             <input
                                 type="text"
                                 className="border-none outline-none text-[24px] w-full bg-white"
-                                placeholder="Username / ชื่อผู้ใช้งาน"
+                                placeholder="Username"
                                 value={username}
                                 onChange={handleUsernameChange}
                             />
                         </div>
                     </div>
                     <div className=" mt-10 flex border-[2px] rounded-xl space-x-10 object-contain h-[53px] w-[494px] items-center">
-                        <div className=" opacity-50 flex space-x-10 ml-4 w-full">
+                        <div className=" opacity-50 flex space-x-10 ml-4 w-[95%]">
                             <FontAwesomeIcon icon={faEnvelope} size='2xl'></FontAwesomeIcon>
                             <input
                                 type="email"
                                 className="border-none outline-none text-[24px] w-full"
-                                placeholder="Email / อีเมล"
+                                placeholder="Email"
                                 value={email}
                                 onChange={handleEmailChange}
                             />
                         </div>
                     </div>
                     <div className=" mt-10 flex border-[2px] rounded-xl space-x-10 object-contain h-[53px] w-[494px] items-center">
-                        <div className=" opacity-50 flex space-x-10 ml-4 w-full">
+                        <div className=" opacity-50 flex space-x-10 ml-4 w-[95%]">
                             <FontAwesomeIcon icon={faUnlockKeyhole} size='2xl'></FontAwesomeIcon>
                             <input
                                 type="password"
                                 className="border-none outline-none text-[24px] w-full "
-                                placeholder="Password / รหัสผ่าน"
+                                placeholder="Password"
                                 value={password}
                                 onChange={handlePasswordChange}
                             />
                         </div>
                     </div>
                     <div className=" mt-10 flex border-[2px] rounded-xl space-x-10 object-contain h-[53px] w-[494px] items-center">
-                        <div className=" opacity-50 flex space-x-10 ml-4 w-full">
+                        <div className=" opacity-50 flex space-x-10 ml-4 w-[95%]">
                             <FontAwesomeIcon icon={faUnlockKeyhole} size='2xl'></FontAwesomeIcon>
                             <input
                                 type="password"
                                 className="border-none outline-none text-[24px] w-full "
-                                placeholder="Confirm Password / ยืนยันรหัสผ่าน"
+                                placeholder="Confirm Password"
                                 value={confirmpassword}
                                 onChange={handleConfirmPasswordChange}
                             />

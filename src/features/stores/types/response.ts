@@ -79,7 +79,17 @@ type ResponseChapter = {
     chapter_length: number
 }
 
+type ResponseLesson = {
+    lesson_id : string
+    lesson_num : number
+    name : string
+    lesson_type : string
+    lesson_length : number
+}
 
+export type ResponseLessons = {
+    lessons : ResponseLesson[]
+}
 
 export type ResponseChapters = {
     chapters : ResponseChapter[]

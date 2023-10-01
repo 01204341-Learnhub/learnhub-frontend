@@ -58,13 +58,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/learn/homework" element={<LearningHomeworks />} />
               <Route path="/learn/schedule" element={<LearningSchedule />} />
             </Route>
-            <Route element={<TeacherNavbarLayout />}>
-              <Route path="/teach/courses" element={<TeachingCourses />} />
-              <Route path="/teach/classes" element={<TeachingClasses />} />
-              <Route path="/teach/homework" element={<TeachingHomeworks />} />
-              <Route path="/teach/overview" element={<TeacherOverview />} />
-              <Route path="/teach/create/course" element={<CreateCourse />} />
-              <Route path="/teach/create/class" element={<CreateClass />} />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<TeacherNavbarLayout />}>
+                <Route path="/teach/courses" element={<TeachingCourses />} />
+                <Route path="/teach/classes" element={<TeachingClasses />} />
+                <Route path="/teach/homework" element={<TeachingHomeworks />} />
+                <Route path="/teach/overview" element={<TeacherOverview />} />
+                <Route path="/teach/create/course" element={<CreateCourse />} />
+                <Route path="/teach/create/class" element={<CreateClass />} />
+              </Route>
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

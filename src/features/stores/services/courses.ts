@@ -6,8 +6,11 @@ import {  ResponseGetCourses,
           ResponseGetCourseId, 
           PostDataCourse,
           ResponseChapters,
-          ResponseChapterDetail
+          ResponseChapterDetail,
+          ResponseLessons
         } from "../types/response";
+import { Lesson } from "../types/lesson";
+
 
 
 
@@ -58,6 +61,33 @@ async function getCourse(id: string): Promise<CourseDetailData> {
   }
 }
 
+async function fetchLessons(courseID : string, chapterID : string) {
+  const lessons : Lesson[] = []
+  console.log(courseID, chapterID)
+  try {
+    const response = await axios.get<ResponseLessons>(`http://localhost:8000/programs/courses/${courseID}/chapters/${chapterID}/lessons`)
+    const lessonsData = response.data.lessons
+    lessonsData.map(lesson => {
+      lessons.push({
+        id: lesson.lesson_id,
+        courseId: courseID,
+        chapterId: chapterID,
+        lessonNum : lesson.lesson_num,
+        name: lesson.name,
+        description: "",
+        lessonLength: lesson.lesson_length,
+        lessonType: lesson.lesson_type
+      })
+    })
+  } catch (err) {
+    console.log(err)
+  } finally {
+    console.log(lessons)
+    return lessons
+  }
+}
+
+
 async function postCourse(num: number) {
   for (let i = 0; i < num ; i++) {
     const courseGenarate : PostDataCourse  = {
@@ -89,7 +119,6 @@ async function getAllCourses(): Promise<Course[]> {
   try {
       const response = await axios.get<ResponseGetCourses>(`http://localhost:8000/programs/courses/`);
       const courseData = response.data.courses
-      
     
       courseData.map(async (program) => {
 
@@ -219,5 +248,6 @@ export {  getCourse,
           postCourse, 
           getChapterInCourse,
           getCourseAnnouncement,
-          listCourseAnnouncements
+          listCourseAnnouncements,
+          fetchLessons
         };

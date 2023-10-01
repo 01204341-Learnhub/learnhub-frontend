@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { createStudentWithEmail } from "../services/auth/signIn";
+import { createTeacherWithEmail } from "../services/auth/signIn";
 import { setUser } from "../slices/userSlice";
 
-function StudentsRegister() {
+function TeacherRegister() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
@@ -35,7 +35,7 @@ function StudentsRegister() {
             alert("Password and Confirm Password not match");
             return
         }
-        const learnhubUser = await createStudentWithEmail(email, password, username, "No fullname")
+        const learnhubUser = await createTeacherWithEmail(email, password, username, "No fullname")
         dispatch(setUser(learnhubUser));
         navigate('/home');
     }
@@ -50,7 +50,7 @@ function StudentsRegister() {
 
                 <div className="bg-white h-screen flex flex-col justify-center items-center">
                     <div className="">
-                        <h1 className=" mb-[50px] text-center text-black text-[32px] font-bold">สร้างบัญชีผู้เรียน</h1>
+                        <h1 className=" mb-[50px] text-center text-black text-[32px] font-bold">สร้างบัญชีผู้สอน</h1>
                     </div>
                     <div className=" flex border-[2px]  rounded-xl space-x-10 object-contain h-[53px] w-[494px] items-center">
                         <div className="  opacity-50 flex space-x-10 ml-4 w-full ">
@@ -114,4 +114,4 @@ function StudentsRegister() {
     )
 }
 
-export default StudentsRegister
+export default TeacherRegister

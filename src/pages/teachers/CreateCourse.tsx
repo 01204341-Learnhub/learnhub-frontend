@@ -228,11 +228,15 @@ function _TopPanel({ course }: _TopPanelProps) {
 
 function checkReadyToPublish(course: Course) {
   return (
+    course.courseId !== "" &&
     course.name !== "" &&
+    course.thumbnailUrl !== "" &&
     course.categoryId !== "" &&
     course.level !== "" &&
     course.instructorName !== "" &&
     course.description !== "" &&
+    course.objectives.every((objective) => objective !== "") &&
+    course.requirement !== "" &&
     course.chapters.length !== 0 &&
     course.chapters.every((chapter) => chapter.lessons.length !== 0) &&
     course.chapters.every((chapter) =>

@@ -137,20 +137,19 @@ function _TopPanel({ course }: _TopPanelProps) {
       </div>
       <div className="flex flex-col justify-start items-start space-y-3 px-10 py-6 bg-white w-full min-w-fit">
         <h1 className="text-black text-[20px] font-semibold mb-4">ภาพรวม</h1>
-        <div className="flex justify-between w-1/2 min-w-fit">
-          <h2 className="text-[#808080] text-[20px] font-semibold">
+        <div className="flex justify-between items-center w-[400px]">
+          <p className="text-[#808080] text-[20px] font-semibold">
             จำนวนบทเรียน
-          </h2>
-          <div className="flex-grow"></div>
-          <h2 className="text-[#808080] text-[20px] font-semibold">
+          </p>
+          <p className="text-[#808080] text-[20px] font-semibold">
             {course.chapters.length}
-          </h2>
+          </p>
         </div>
-        <div className="flex justify-between w-1/2 min-w-fit">
-          <h2 className="text-[#808080] text-[20px] font-semibold">
+        <div className="flex justify-between items-center w-[400px]">
+          <p className="text-[#808080] text-[20px] font-semibold">
             จำนวนคลิปวิดีโอ
-          </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold">
+          </p>
+          <p className="text-[#808080] text-[20px] font-semibold">
             {
               // the number of lessons of type "video" in all chapters
               course.chapters.reduce(
@@ -163,13 +162,13 @@ function _TopPanel({ course }: _TopPanelProps) {
                 0,
               )
             }
-          </h2>
+          </p>
         </div>
-        <div className="flex justify-between w-1/2 min-w-fit">
-          <h2 className="text-[#808080] text-[20px] font-semibold">
+        <div className="flex justify-between items-center w-[400px]">
+          <p className="text-[#808080] text-[20px] font-semibold">
             จำนวนเอกสาร
-          </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold">
+          </p>
+          <p className="text-[#808080] text-[20px] font-semibold">
             {
               // the number of lessons of type "doc" in all chapters
               course.chapters.reduce(
@@ -182,13 +181,13 @@ function _TopPanel({ course }: _TopPanelProps) {
                 0,
               )
             }
-          </h2>
+          </p>
         </div>
-        <div className="flex justify-between w-1/2 min-w-fit">
-          <h2 className="text-[#808080] text-[20px] font-semibold">
+        <div className="flex justify-between items-center w-[400px]">
+          <p className="text-[#808080] text-[20px] font-semibold">
             จำนวนแบบทดสอบ
-          </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold">
+          </p>
+          <p className="text-[#808080] text-[20px] font-semibold">
             {
               // the number of lessons of type "quiz" in all chapters
               course.chapters.reduce(
@@ -201,13 +200,13 @@ function _TopPanel({ course }: _TopPanelProps) {
                 0,
               )
             }
-          </h2>
+          </p>
         </div>
-        <div className="flex justify-between w-1/2 min-w-fit">
-          <h2 className="text-[#808080] text-[20px] font-semibold">
+        <div className="flex justify-between items-center w-[400px]">
+          <p className="text-[#808080] text-[20px] font-semibold">
             จำนวนไฟล์ที่ดาวน์โหลดได้
-          </h2>
-          <h2 className="text-[#808080] text-[20px] font-semibold">
+          </p>
+          <p className="text-[#808080] text-[20px] font-semibold">
             {
               // the number of lessons of type "file" in all chapters
               course.chapters.reduce(
@@ -220,7 +219,7 @@ function _TopPanel({ course }: _TopPanelProps) {
                 0,
               )
             }
-          </h2>
+          </p>
         </div>
       </div>
     </div>
@@ -268,10 +267,10 @@ function CreateCourse() {
   const [course, setCourse] = useState<Course>({
     courseId: "1234567890", // TODO: Get an ID, possibly uuid.
     name: "",
-    thumbnailUrl: "https://picsum.photos/seed/picsum/1920/1080",
+    thumbnailUrl: "https://placehold.co/1920x1080",
     categoryId: "",
     level: "",
-    instructorName: "John Doe",
+    instructorName: "John Doe", // TODO: Get from user profile.
     description: "",
     objectives: ["", "", "", ""],
     requirement: "",

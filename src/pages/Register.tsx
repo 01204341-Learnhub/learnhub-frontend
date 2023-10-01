@@ -13,7 +13,7 @@ export default function Register() {
     }
 
     if (searchParams.get("u") === null) return (
-        <div className="w-screen h-screen bg-red-100">
+        <div className="w-screen h-screen">
             <div className=" flex-row">
                 <button className=" ml-[1%] py-[0.5%] text-[24px]" onClick={handleBack}>ย้อนกลับ</button>
             </div>

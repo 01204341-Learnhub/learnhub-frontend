@@ -1,6 +1,41 @@
-import { CourseChapter, CourseLesson } from "../types/course";
+import axios from "axios";
+import { CourseChapter, CourseLesson, CourseLessons } from "../types/course";
+import { 
+    ResponseChapterId, 
+    ResponseLessonId, 
+    ResponseLessons ,
+    ResponseCourseChapters
+  } from "../types/response";
+
+
 
 async function fetchChapters(courseID: string): Promise<CourseChapter[]> {
+  const courseChapters : CourseChapter[] = []
+
+  try {
+    const response = await axios.get<ResponseCourseChapters>(`http://localhost:8000/programs/courses/${courseID}/chapters/`)
+    const courseChapterData = response.data.chapters
+    //console.log(JSON.stringify(response.data, null, 2))
+    courseChapterData.map(chapter => {
+      courseChapters.push({
+        chapterID: chapter.chapter_id,
+        chapterNum: chapter.chapter_num,
+        name : chapter.name,
+        courseID: courseID,
+        chapterLength: chapter.chapter_length,
+        lessonCount: chapter.lesson_count,
+        description: ""
+      })
+    })     
+  }catch (err) {
+    console.log(err)
+  } finally {
+    //console.log(courseChapters)
+    return courseChapters
+  }
+
+
+
   const mockChapters: CourseChapter[] = [
     {
       chapterID: "1",
@@ -26,29 +61,60 @@ async function fetchChapters(courseID: string): Promise<CourseChapter[]> {
 }
 
 async function fetchLessons(courseID: string, chapterID: string) {
-  const mockLessons: CourseLesson[] = [
-    {
-      lessonID: "1",
-      chapterID: chapterID,
-      courseID: courseID,
-      lessonNum: 1,
-      lessonType: "video",
-      name: "Lesson 1",
-      src: "https://www.youtube.com/embed/3qHkcs3kG44",
-      description: "This is a lesson 1",
-    },
-    {
-      lessonID: "2",
-      chapterID: chapterID,
-      courseID: courseID,
-      lessonNum: 2,
-      lessonType: "quiz",
-      name: "Lesson 2",
-      src: "https://www.youtube.com/embed/3qHkcs3kG44",
-      description: "This is a lesson 1",
-    },
-  ];
-  return mockLessons;
+
+  const lessons : CourseLesson[] = []
+
+  try {
+      const responseLessons= await axios.get<ResponseLessons>(`http://localhost:8000/programs/courses/${courseID}/chapters/${chapterID}/lessons`)
+      const lessonsData = responseLessons.data.lessons
+      lessonsData.map(lesson => {
+        lessons.push({
+          lessonID: lesson.lesson_id,
+          chapterID: chapterID,
+          courseID: courseID,
+          lessonNum: lesson.lesson_num,
+          lessonLength: lesson.lesson_length,
+          lessonType: lesson.lesson_type,
+          name: lesson.name,
+          src: "",
+        })
+      })
+  } catch(err) {
+    console.log(err)
+  } finally {
+    console.log(lessons)
+    return lessons
+  }
 }
 
-export { fetchChapters, fetchLessons };
+async function fetchLesson(courseID : string, chapterID: string, lessonID : string) {
+
+  
+  try {
+    const responseLesson = await axios.get<ResponseLessonId>(`http://localhost:8000/programs/courses/${courseID}/chapters/${chapterID}/lessons/${lessonID}`)
+    const lessonData = responseLesson.data
+    const lesson : CourseLesson = {
+      courseID: courseID,
+      chapterID: chapterID,
+      lessonID: lessonData.lesson_id,
+      lessonNum: lessonData.lesson_num,
+      lessonType: lessonData.lesson_type,
+      src: lessonData.src,
+      name: lessonData.name,
+      lessonLength: lessonData.lesson_length,
+      
+      
+    }
+    return lesson
+    
+
+  }catch (err) {
+
+  }
+}
+    
+
+
+
+
+export { fetchChapters, fetchLessons, fetchLesson };

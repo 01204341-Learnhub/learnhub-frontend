@@ -16,7 +16,7 @@ import {
 
 const auth = getAuth(app);
 const noImagePlaceholder =
-  "https://images.theconversation.com/files/102848/original/image-20151123-18264-j336wc.jpg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip";
+  "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 
 type LearnhubUserCredential = {
   studentID?: string;

@@ -14,17 +14,17 @@ function Register() {
     }
 
     function handleClickRegister() {
-        {navigate("/login")}
+        { navigate("/landing", { replace: true }) }
     }
 
     function handleClickStudent() {
         const queryparam = new URLSearchParams()
         queryparam.set('u', 'student')
-        {navigate({pathname: '/register', search: `?${queryparam.toString()}`}, {replace: true})}
+        { navigate({ pathname: '/register', search: `?${queryparam.toString()}` }, { replace: true }) }
     }
 
     function handleClickTeacher() {
-        {navigate("/register?u=teacher", {replace: true})}
+        { navigate("/register?u=teacher", { replace: true }) }
     }
 
     if (searchParams.get("u") === null) return (
@@ -49,12 +49,12 @@ function Register() {
                     </div>
 
                     <button className=" absolute z-40 bottom-[20%] left-[35%] text-white bg-[#007399] p-2 rounded-md shadow-md text-[24px]" onClick={handleClickStudent}>
-                       สร้างบัญชีผู้เรียน
+                        สร้างบัญชีผู้เรียน
                     </button>
-                    
-                    <img src={studentImage} alt="stdImg" className=" z-0 w-full h-full opacity-20 relative"/>
+
+                    <img src={studentImage} alt="stdImg" className=" z-0 w-full h-full opacity-20 relative" />
                 </div>
-                
+
                 <div className="w-full h-full relative">
                     <div className=" absolute z-40 text-3xl top-[5%] left-[40%]">
                         ผู้สอน
@@ -66,10 +66,10 @@ function Register() {
                     </div>
 
                     <button className=" absolute z-40 bottom-[20%] left-[35%] text-white bg-[#007399] p-2 rounded-md shadow-md text-[24px]" onClick={handleClickTeacher}>
-                       สร้างบัญชีผู้สอน
+                        สร้างบัญชีผู้สอน
                     </button>
 
-                    <img src={teacherImage} alt="teachImg" className=" z-0 w-full h-full opacity-20 relative"/>
+                    <img src={teacherImage} alt="teachImg" className=" z-0 w-full h-full opacity-20 relative" />
                 </div>
             </div>
 

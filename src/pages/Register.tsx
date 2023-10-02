@@ -14,7 +14,7 @@ function Register() {
     }
 
     function handleClickRegister() {
-        { navigate("/landing", { replace: true }) }
+        navigate("/", { replace: true })
     }
 
     function handleClickStudent() {

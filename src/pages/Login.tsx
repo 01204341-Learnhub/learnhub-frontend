@@ -33,14 +33,14 @@ export default function Login() {
         signInWithEmail(email, password, mode).then((user) => {
             dispatch(setUser(user))
             if (mode == "student") navigate("/home");
-            else navigate("/teach/overview");
+            else navigate("/teach/overview", { replace: true });
         }).catch((error) => {
             alert(`cannot login ${error}`)
         })
     }
 
     function handleBack() {
-        navigate("/")
+        navigate("/", { replace: true })
     }
 
     return (

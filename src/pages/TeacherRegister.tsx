@@ -2,7 +2,7 @@ import { faEnvelope, faUnlockKeyhole, faUser } from "@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { createTeacherWithEmail } from "../services/auth/signIn";
 import { setUser } from "../slices/userSlice";
 
@@ -53,7 +53,7 @@ function TeacherRegister() {
         <div className=" bg-gray-300 h-screen">
             <div className="grid grid-cols-2">
                 <div className=" ">
-                    <Link to="/" className="text-[24px] ml-[2%]">Back</Link>
+                    <button onClick={() => { navigate('/register', { replace: true }) }} className="text-[24px] ml-[2%]">Back</button>
                     <p className="text-[24px] text-center  mt-[100px]  font-bold">**text**</p>
                 </div>
 

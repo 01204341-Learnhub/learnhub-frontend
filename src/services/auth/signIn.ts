@@ -197,7 +197,7 @@ async function createTeacherWithEmail(
         email,
         password
       );
-      const teacherID = await createLearnhubStudent(
+      const teacherID = await createLearnhubTeacher(
         userCredential.user.uid,
         username,
         fullName,

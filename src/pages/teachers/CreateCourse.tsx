@@ -295,6 +295,7 @@ function CreateCourse() {
 
   const handlePublishCourse = () => {
     // TODO: Send the course to the server.
+    course.categoryId = "6509b76eda50b4eec1867261"
     async function publishCourse() {
       await createCourse(course, teacherID);
     }

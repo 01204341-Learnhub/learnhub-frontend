@@ -63,9 +63,9 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                             onChange={onWorkNameChange}
                             className="input input-bordered mb-2 mx-10 mt-10" 
                             placeholder="หัวข้อ"/>
-                        <textarea   
-                            // onChange={onWorkDescriptionChange}
-                            // value={work.description}
+                        <input type="text"
+                            onChange={onWorkDescriptionChange}
+                            value={work.description}
                             className="input input-bordered mt-2 mx-10 mb-10  " 
                             placeholder="อธิบายงานในส่วนนี้ (ไม่จำเป็นต้องกรอกก็ได้)"/>
                     </div>
@@ -91,14 +91,18 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                         </div>
                     </div>
                 </div>
-                <div className="w-1/4 bg-white">
+                <div className="w-1/4 bg-white ">
                     <div>
-                        <h1>คะแนน</h1>
-                        <input type="number" value={work.score} onChange={onWorkScoreChange} className="input input-bordered bg-gray-400" />
+                        <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">คะแนน</h1>
+                        <input  type="number" value={work.score} onChange={onWorkScoreChange} className="mx-10  mb-5  input input-bordered bg-gray-400" />
                     </div>
                     <div>
-                        <h1>กำหนดส่ง</h1>
-                        <div className="dropdown">
+                        <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">กำหนดส่ง</h1>
+                        <input type="time"  name="time" className="mx-10  mb-5 input input-bordered bg-gray-400"/>                                
+                    </div>
+                    <div>
+                        <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">กำหนดวัน & เวลา</h1>
+                        <div className="mx-10  mb-5  dropdown">
                             <label tabIndex={0} className="btn m-1">
                                 <h1>{work.dueDate ? work.dueDate.toString() : "ไม่มีกำหนดส่ง"}</h1>
                             </label>
@@ -109,8 +113,8 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                         </div>
                     </div>
                     <div>
-                        <h1>หัวข้อ</h1>
-                        <dialog id="create-topic-modal" className="modal">
+                        <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">หัวข้อ</h1>
+                        <dialog id="create-topic-modal " className="modal">
                             <div className="modal-box">
                                 <h3 className="font-bold text-lg">Hello!</h3>
                                 <p className="py-4">Press ESC key or click outside to close</p>
@@ -126,7 +130,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                                 <button>close</button>
                             </form>
                         </dialog>
-                        <div className="dropdown">
+                        <div className="dropdown mx-10">
                             <label tabIndex={0} className="btn m-1">
                                 {work.topic == "" ? "ไม่มีหัวข้อ" : work.topic}
                             </label>

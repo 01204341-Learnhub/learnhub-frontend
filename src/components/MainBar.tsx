@@ -15,6 +15,7 @@ function MainBar() {
     const [openDropdown, setOpenDropdown] = useState(null)
     const basketItems = useSelector((state: RootState) => state.basket.basket.items)
     const navigate = useNavigate()
+    const user = useSelector((state: RootState) => state.user.user)
     const toggleDropdown = (dropdownName) => {
         if (openDropdown === dropdownName) {
             // If the clicked dropdown is already open, close it
@@ -98,65 +99,80 @@ function MainBar() {
 
                 </button>
             </div>
-            <button
-                className="w-[50px] h-[50px] mr-3 justify-self-center"
-                onClick={() => toggleDropdown('userdropdown')}
-            >
-                <img src={mockprofile} alt="profile" className=' h-full rounded-full' />
+            {
+                (() => {
+                    if (user) {
+                        return (
+                            <button
+                                className="w-[50px] h-[50px] mr-3 justify-self-center"
+                                onClick={() => toggleDropdown('userdropdown')}
+                            >
+                                <img src={mockprofile} alt="profile" className=' h-full rounded-full' />
 
-                {/* User dropdown menu */}
-                <div
-                    style={{ display: openDropdown === 'userdropdown' ? 'block' : 'none', top: '90%', right: '5%' }}
-                    className=" absolute w-[320px] h-[550px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
-                >
-                    <div className="px-8 py-3">
-                        <img src={mockprofile} alt="profile" className=' h-[50px] w-[50px] rounded-full' />
-                        <span className="block text-[18px] font-bold text-black text-left">Barameehee</span>
-                        <span className="block text-[16px]  text-gray-500 truncate text-left ">barabara@mikelab.com</span>
-                    </div>
-                    <ul className="py-2" aria-labelledby="user-menu-button">
-                        <li>
-                            <a className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">หน้าแรก</a>
-                        </li>
-                        <li>
-                            <Link to={"/learn/overview"} className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100 ">การเรียนรู้ของฉัน
-                                <FontAwesomeIcon icon={faBook} size='xl' color='#068FFF' className='mx-3' />
-                            </Link>
-                        </li>
-                        <li>
-                            <a className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100 ">หลักสูตรที่อยากได้
-                                <FontAwesomeIcon icon={faBookmark} size='xl' color='#F1C93B' className='mx-3' />
-                            </a>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <a className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">ตั้งค่าบัญชี</a>
-                        </li>
-                        <li>
-                            <Link to={{ pathname: "/profile" }} className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">แก้ไขโปรไฟล์</Link>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <a className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">ประวัติการซื้อ</a>
-                        </li>
-                        <li>
-                            <a className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">วิธีการชำระเงิน</a>
-                        </li>
-                    </ul>
-                    <ul>
-                        <li>
-                            <a className=" absolute bottom-0 block w-full px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100"
-                                onClick={() => { signOut() }}>ออกจากระบบ
-                                <FontAwesomeIcon icon={faRightFromBracket} size='xl' className='mx-3' />
-                            </a>
+                                {/* User dropdown menu */}
+                                <div
+                                    style={{ display: openDropdown === 'userdropdown' ? 'block' : 'none', top: '90%', right: '5%' }}
+                                    className=" absolute w-[320px] h-[550px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
+                                >
+                                    <div className="px-8 py-3">
+                                        <img src={mockprofile} alt="profile" className=' h-[50px] w-[50px] rounded-full' />
+                                        <span className="block text-[18px] font-bold text-black text-left">Barameehee</span>
+                                        <span className="block text-[16px]  text-gray-500 truncate text-left ">barabara@mikelab.com</span>
+                                    </div>
+                                    <ul className="py-2" aria-labelledby="user-menu-button">
+                                        <li>
+                                            <a className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">หน้าแรก</a>
+                                        </li>
+                                        <li>
+                                            <Link to={"/learn/overview"} className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100 ">การเรียนรู้ของฉัน
+                                                <FontAwesomeIcon icon={faBook} size='xl' color='#068FFF' className='mx-3' />
+                                            </Link>
+                                        </li>
+                                        <li>
+                                            <a className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100 ">หลักสูตรที่อยากได้
+                                                <FontAwesomeIcon icon={faBookmark} size='xl' color='#F1C93B' className='mx-3' />
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li>
+                                            <a className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">ตั้งค่าบัญชี</a>
+                                        </li>
+                                        <li>
+                                            <Link to={{ pathname: "/profile" }} className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">แก้ไขโปรไฟล์</Link>
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li>
+                                            <a className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">ประวัติการซื้อ</a>
+                                        </li>
+                                        <li>
+                                            <a className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">วิธีการชำระเงิน</a>
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li>
+                                            <a className=" absolute bottom-0 block w-full px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100"
+                                                onClick={() => { signOut() }}>ออกจากระบบ
+                                                <FontAwesomeIcon icon={faRightFromBracket} size='xl' className='mx-3' />
+                                            </a>
 
-                        </li>
-                    </ul>
-                </div>
-                {/* User dropdown menu */}
-            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                                {/* User dropdown menu */}
+                            </button>
+                        )
+                    }
+                    else {
+                        return (
+                            <div>
+                                <button className='btn' onClick={() => { navigate("/register", { replace: true }) }}>สร้างบัญชี</button>
+                            </div>
+                        )
+                    }
+                })()
+            }
         </nav>
     )
 }

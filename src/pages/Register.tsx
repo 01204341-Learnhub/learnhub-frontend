@@ -14,7 +14,7 @@ function Register() {
     }
 
     function handleClickRegister() {
-        navigate("/", { replace: true })
+        navigate("/login", { replace: true })
     }
 
     function handleClickStudent() {

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import ImageLogo from "../assets/Images/bookLogo.png"
 import ImageElephant from "../assets/Images/elephantLogo.png"
 import ClassIcon from "../assets/Images/landingClassicIcon.png"
@@ -7,7 +7,7 @@ import ImageLogoText from "../assets/Images/textNameLogo.png"
 
 
 function Landingmiddle() {
-
+    const navigate = useNavigate()
     return (
         <>
             <div className="flex flex-row w-screen px-[10%] pt-[1.5%]">
@@ -19,8 +19,8 @@ function Landingmiddle() {
                         <img src={ImageLogoText} />
                     </div>
                     <Link to={"/home"} className="flex items-center font-bold mx-[2%] hover:text-[#007399]">หน้าแรก</Link>
-                    <div className="flex items-center font-bold mx-[2%] hover:text-[#007399]">คอร์สเรียน</div>
-                    <div className="flex items-center font-bold mx-[2%] hover:text-[#007399]">คลาสเรียน</div>
+                    <Link className="flex items-center font-bold mx-[2%] hover:text-[#007399]" to={"/home/courses"}>คอร์สเรียน</Link>
+                    <Link className="flex items-center font-bold mx-[2%] hover:text-[#007399]" to={"/home/classes"}>คลาสเรียน</Link>
                 </div>
                 <div className="flex flex-row w-full justify-end ">
                     <Link to={"/login"} className="flex items-center font-bold mx-[6%]  hover:text-[#007399]">เข้าสู่ระบบ</Link>
@@ -44,7 +44,8 @@ function Landingmiddle() {
                             <p>สัมผัสประสบการณ์การเรียนรู้ที่ไม่เหมือนใคร</p>
                         </div>
                         <div className="pt-[10%]">
-                            <button className="bg-[#18334E] hover:bg-blue-900 text-white font-semibold py-4 px-5 border border-gray-400 rounded shadow">
+                            <button className="bg-[#18334E] hover:bg-blue-900 text-white font-semibold py-4 px-5 border border-gray-400 rounded shadow"
+                                onClick={() => { navigate("/home") }}>
                                 ดูคอส/คลาสเรียนทั้งหมด
                             </button>
                         </div>

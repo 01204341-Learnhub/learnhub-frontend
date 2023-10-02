@@ -2,7 +2,7 @@ import { faBell, faBook, faBookmark, faCartShopping, faHeart, faMagnifyingGlass,
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import booklogo from '../assets/Images/bookLogo.png'
 import mockprofile from '../assets/Images/regStudent.png'
 import namelogo from '../assets/Images/textNameLogo.png'
@@ -14,6 +14,7 @@ function MainBar() {
 
     const [openDropdown, setOpenDropdown] = useState(null)
     const basketItems = useSelector((state: RootState) => state.basket.basket.items)
+    const navigate = useNavigate()
     const toggleDropdown = (dropdownName) => {
         if (openDropdown === dropdownName) {
             // If the clicked dropdown is already open, close it
@@ -29,7 +30,7 @@ function MainBar() {
             <div className=' flex flex-row items-center justify-center w-1/12'>
                 <img className=' w-2/5' src={booklogo} alt="booklogo" />
             </div>
-            <div className='flex flex-row items-center w-2/12'>
+            <div className='flex flex-row items-center w-2/12' onClick={() => { navigate("/home") }}>
                 <img className='' src={namelogo} alt="namelogo" />
             </div>
             <div className='bg-gray-300 flex rounded-full w-2/4 py-2 px-2'>

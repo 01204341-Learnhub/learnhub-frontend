@@ -40,7 +40,7 @@ export default function Login() {
     }
 
     function handleBack() {
-        navigate(-1)
+        navigate("/")
     }
 
     return (

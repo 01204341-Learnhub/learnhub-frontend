@@ -301,6 +301,7 @@ function CreateCourse() {
     }
     publishCourse().then(() => {
       alert("Course published!");
+      navigate("/teach/overview");
     }).catch((err) => {
       alert("Error: " + err);
     })

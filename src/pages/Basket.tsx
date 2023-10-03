@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from "react-redux"
 import { removeItem, addItem, setStatusFetchOnce, clearItem, setStatusIsLoading } from "../slices/basketSlice"
 import { RootState } from "../store"
-import { fetchBasketItems, deleteBasketItem } from '../features/stores/services/purchase'
+import { fetchBasketItems, deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
 import { useEffect, useState } from 'react'
 import { BasketItem } from '../features/stores/types/basket'
 
@@ -23,9 +23,16 @@ function Basket() {
     }
     
 
-    const handlePayment = () => {
+    // const handlePayment = async () => {
+    //     const transction = await purchaseCourse(userID, "1");
+    //     if (transction) {
+    //         alert("ชำระเงินสำเร็จ")
+    //     } else {
+    //         alert("ชำระเงินไม่สำเร็จ")
+    //     }
 
-    }
+    // }
+
     useEffect(() => {
         async function fetchBasket() {
             console.log(isFetchOnce)
@@ -49,8 +56,8 @@ function Basket() {
     
     return (
         <div className="bg-white flex flew-rox justify-center ">
-            <div>
-                <h1 className="font-semibold text-[32px]">รถเข็นสินค้า
+            <div className='pl-6'>
+                <h1 className="font-semibold text-[32px] pl-6">รถเข็นสินค้า
                     <FontAwesomeIcon className='ml-4' icon={faCartShopping} />
                 </h1>
                 
@@ -69,10 +76,10 @@ function Basket() {
                                 <h1 className=" mr-2 font-semibold text-[#808080] text-[14px]">• {item.level}</h1>
                             </div>
                         </div>
-                        <div className=" mr-[25px] justify-self-end flex flex-col">
+                        <div className=" mr-[25px] items-end flex flex-col">
                             <h1 className="mb-[15px] font-bold text-[20px] grow ">{item.price} บาท</h1>
                             <button 
-                                className=" bg-[#d9d9d9] font-bold py-[6px] text-[16px] "
+                                className=" bg-red-500 w-20 font-bold py-[6px] text-[16px] text-white hover:bg-red-600 hover:text-white"
                                 onClick={() => {
                                     handleDeleteBusketItems(item.itemID)
                             }}>ลบออก</button>
@@ -80,13 +87,13 @@ function Basket() {
                     </div>
                 ))}
             </div>
-            <div className="border-1 mx-[70px]" >
-                <h1 className="border-1 font-bold text-[32px]">ทั้งหมด</h1>
-                <h1 className="border-1 font-bold text-[40px]">{basket.items.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
+            <div className="border-1 mx-[70px] pl-4" >
+                <h1 className="border-1 font-bold text-[32px] py-2">ทั้งหมด</h1>
+                <h1 className="border-1 font-bold text-[40px] pb-4">{basket.items.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
                 <button
-                    onClick={handlePayment}
+                    onClick={() => {}}
                     type='button' 
-                    className=" px-[55px] py-[15px] bg-[#d9d9d9] font-bold text-[20px]">
+                    className=" px-[55px] py-[15px] bg-[#d9d9d9] font-bold text-[20px] bg-blue-400 text-gray-100 hover:bg-blue-300">
                     ชำระเงิน
                 </button>
             </div>

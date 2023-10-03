@@ -29,9 +29,7 @@ interface CourseDetailedSummaryProps {
 function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryProps){
 
     const dispatcher = useDispatch()
-    const studentID = useSelector((state: RootState) => state.user.user?.userID)
-    const { basket } = useSelector((state: RootState) => state.basket)
-    const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
+    const studentID = useSelector((state: RootState) => state.user.user?.userID) 
     async function handleAddBusketItems() {
         const basketItmeID = await addBasketItem(myCourseDetailedSummary.courseID, "course",studentID)
         console.log(basketItmeID)

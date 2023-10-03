@@ -86,19 +86,24 @@ function MainBar() {
                     <FontAwesomeIcon icon={faCartShopping} size='xl' color={openDropdown === 'mycartdropdown' ? 'red' : 'none'} />
 
                     {/* Mycart dropdown menu */}
-                    <div
+                    <div className='flex flex-col  absolute w-[320px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100'
                         style={{ display: openDropdown === 'mycartdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
-                        className=" absolute w-[320px]  bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
                     >
-                        <div className="px-8 py-3">
-                            {basketItems.map((item) => (
-                                <div key={item.itemID}>
-                                    <BasketItemSlot item={item} />
-                                </div>
-                            ))}
-                            <h1 className=' font-bold text-[20px]'>{basketItems.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
+                        <div
+                            className='overflow-y-auto max-h-[450px] min-h-0'
+                            style={{ display: openDropdown === 'mycartdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
+                            
+                        >
+                            <div className="px-8 py-3">
+                                {basketItems.map((item) => (
+                                    <div key={item.itemID}>
+                                        <BasketItemSlot item={item} />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div className='bg-[#d9d9d9] px-[40px] py-[15px] m-2'>
+                        <h1 className=' font-bold text-[20px]'>{basketItems.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
+                        <div className='bg-[#d9d9d9] px-[40px] py-3 m-2'>
                             <Link to={{ pathname: "/baskets" }} className=' font-semibold text-[20px]'>ไปยังรถเข็น</Link>
                         </div>
                     </div>

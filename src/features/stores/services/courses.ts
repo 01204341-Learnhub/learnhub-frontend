@@ -11,7 +11,7 @@ import {  ResponseGetCourses,
         } from "../types/response";
 import { Lesson } from "../types/lesson";
 
-
+const baseUrl = "http://localhost:8000"
 
 
 async function listCourse() {
@@ -23,7 +23,7 @@ async function listCourse() {
 async function getCourse(id: string): Promise<CourseDetailData> {
 
   try {
-    const response = await axios.get<ResponseGetCourseId>(`http://localhost:8000/programs/courses/${id}`)
+    const response = await axios.get<ResponseGetCourseId>(`${baseUrl}/programs/courses/${id}`)
     const courseIdData = response.data
     
     return {
@@ -65,7 +65,7 @@ async function fetchLessons(courseID : string, chapterID : string) {
   const lessons : Lesson[] = []
   console.log(courseID, chapterID)
   try {
-    const response = await axios.get<ResponseLessons>(`http://localhost:8000/programs/courses/${courseID}/chapters/${chapterID}/lessons`)
+    const response = await axios.get<ResponseLessons>(`${baseUrl}/programs/courses/${courseID}/chapters/${chapterID}/lessons`)
     const lessonsData = response.data.lessons
     lessonsData.map(lesson => {
       lessons.push({
@@ -104,7 +104,7 @@ async function postCourse(num: number) {
 
     console.log(courseGenarate.course_objective);
     try {
-      const response = await axios.post("http://localhost:8000/programs/courses/", courseGenarate);
+      const response = await axios.post(`${baseUrl}/programs/courses/`, courseGenarate);
       console.log(response);
     } catch (err) {
       console.log(err);
@@ -117,7 +117,7 @@ async function getAllCourses(): Promise<Course[]> {
   
 
   try {
-      const response = await axios.get<ResponseGetCourses>(`http://localhost:8000/programs/courses/`);
+      const response = await axios.get<ResponseGetCourses>(`${baseUrl}/programs/courses/`);
       const courseData = response.data.courses
     
       courseData.map(async (program) => {
@@ -154,7 +154,7 @@ type ChapterPreview = Omit<Chapter, "description">
 async function getChapterInCourse(id:string) {
   const chapterCourse : Chapter[] = []
   try {
-    const response = await axios.get<ResponseChapters>(`http://localhost:8000/programs/courses/${id}/chapters`)
+    const response = await axios.get<ResponseChapters>(`${baseUrl}/programs/courses/${id}/chapters`)
     const chapterData = response.data.chapters
 
     chapterData.map( chapter => {

@@ -99,3 +99,26 @@ export type ResponseGetCourses = {
     courses : ResponseDataCourse[]
 }
 
+type BasketData = {
+    basket_item_id : string
+    name : string
+    type : string
+    price : number
+    program_id : string
+    rating: number
+    review_count: number
+    total_video_length : number
+    difficulty_level: string
+    program_pic: string
+    teacher : {
+        teacher_id : string
+        teacher_name : string
+        profile_pic: string
+    }
+}
+
+export type ResponseBasket = {
+    basket : BasketData[]
+}
+
+

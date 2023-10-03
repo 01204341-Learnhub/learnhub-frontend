@@ -1,12 +1,52 @@
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from "react-redux"
-import { removeItem } from "../slices/basketSlice"
+import { removeItem, addItem, setStatusFetchOnce, clearItem, setStatusIsLoading } from "../slices/basketSlice"
 import { RootState } from "../store"
+import { fetchBasketItems, deleteBasketItem } from '../features/stores/services/purchase'
+import { useEffect, useState } from 'react'
+import { BasketItem } from '../features/stores/types/basket'
 
 function Basket() {
+    //console.log("in basket")
     const { basket } = useSelector((state: RootState) => state.basket)
+    const userID = useSelector((state: RootState) => state.user.user?.userID)
+    const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
     const dispatcher = useDispatch()
+    const [basketItemsState, setBasketItems] = useState< {items : BasketItem[]} | null>(null)
+    
+
+    async function handleDeleteBusketItems(itemID: string) {
+        dispatcher(removeItem(itemID))
+        const isDelete = await deleteBasketItem(userID, itemID)
+        console.log(isDelete)
+    }
+    
+
+    const handlePayment = () => {
+
+    }
+    useEffect(() => {
+        async function fetchBasket() {
+            console.log(isFetchOnce)
+            if (!isFetchOnce) {
+                const BasketItems = await fetchBasketItems(userID)
+                setBasketItems(BasketItems)
+                dispatcher(setStatusFetchOnce(true))
+                dispatcher(clearItem())
+                BasketItems.items.map((item) => {
+                    dispatcher(addItem(item))
+                })
+                setStatusIsLoading(true)
+                
+            }
+        }
+        fetchBasket()
+        
+        
+    }, []);
+    
+    
     return (
         <div className="bg-white flex flew-rox justify-center ">
             <div>
@@ -26,7 +66,7 @@ function Basket() {
                             </div>
                             <div className="flex">
                                 <h1 className=" mr-2 font-semibold text-[#808080] text-[14px]">• วิดิโอสอน {item.totalTime} ชั่วโมง</h1>
-                                <h1 className=" mr-2 font-semibold text-[#808080] text-[14px]">• {item.lvl}</h1>
+                                <h1 className=" mr-2 font-semibold text-[#808080] text-[14px]">• {item.level}</h1>
                             </div>
                         </div>
                         <div className=" mr-[25px] justify-self-end flex flex-col">
@@ -34,7 +74,7 @@ function Basket() {
                             <button 
                                 className=" bg-[#d9d9d9] font-bold py-[6px] text-[16px] "
                                 onClick={() => {
-                                dispatcher(removeItem(item.itemID))
+                                    handleDeleteBusketItems(item.itemID)
                             }}>ลบออก</button>
                         </div>
                     </div>
@@ -43,7 +83,12 @@ function Basket() {
             <div className="border-1 mx-[70px]" >
                 <h1 className="border-1 font-bold text-[32px]">ทั้งหมด</h1>
                 <h1 className="border-1 font-bold text-[40px]">{basket.items.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
-                <button className=" px-[55px] py-[15px] bg-[#d9d9d9] font-bold text-[20px]">ชำระเงิน</button>
+                <button
+                    onClick={handlePayment}
+                    type='button' 
+                    className=" px-[55px] py-[15px] bg-[#d9d9d9] font-bold text-[20px]">
+                    ชำระเงิน
+                </button>
             </div>
         </div>
     )

@@ -1,15 +1,21 @@
 import { faBell, faBook, faBookmark, faCartShopping, faHeart, faMagnifyingGlass, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import booklogo from '../assets/Images/bookLogo.png'
 import namelogo from '../assets/Images/textNameLogo.png'
 import BasketItemSlot from '../features/stores/components/BasketItemSlot'
 import { signOut } from '../services/auth/signOut'
 import { RootState } from '../store'
+import { fetchBasketItems } from '../features/stores/services/purchase'
+import { addItem, setStatusFetchOnce, clearItem } from '../slices/basketSlice'
 
 function MainBar() {
+    const { basket } = useSelector((state: RootState) => state.basket)
+    const userID = useSelector((state: RootState) => state.user.user?.userID)
+    const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
+    const dispatcher = useDispatch()
 
     const [openDropdown, setOpenDropdown] = useState(null)
     const basketItems = useSelector((state: RootState) => state.basket.basket.items)
@@ -23,6 +29,23 @@ function MainBar() {
             // If a different dropdown is open, close it and open the clicked one
             setOpenDropdown(dropdownName)
         }
+    }
+
+    const handleClickBasket = () => {
+        async function fetchBasket() {
+            console.log(isFetchOnce)
+            if (!isFetchOnce) {
+                const BasketItems = await fetchBasketItems(userID)
+                
+                dispatcher(setStatusFetchOnce(true))
+                dispatcher(clearItem())
+                BasketItems.items.map((item) => {
+                    dispatcher(addItem(item))
+                })
+            }
+        }
+        fetchBasket()
+        toggleDropdown('mycartdropdown')
     }
 
     return (
@@ -59,7 +82,7 @@ function MainBar() {
                     {/* Mypin dropdown menu */}
 
                 </button>
-                <button onClick={() => toggleDropdown('mycartdropdown')}>
+                <button onClick={handleClickBasket}>
                     <FontAwesomeIcon icon={faCartShopping} size='xl' color={openDropdown === 'mycartdropdown' ? 'red' : 'none'} />
 
                     {/* Mycart dropdown menu */}
@@ -171,9 +194,16 @@ function MainBar() {
                     }
                     else {
                         return (
-                            <div>
-                                <button className='btn' onClick={() => { navigate("/register", { replace: true }) }}>สร้างบัญชี</button>
+                            <>
+                            <div className='flex w-80'>
+                                <div className='px-2'>
+                                    <button className='btn' onClick={() => { navigate("/register", { replace: true }) }}>สร้างบัญชี</button>
+                                </div>
+                                <div className='px-2'>
+                                    <button className='btn' onClick={() => { navigate("/login", { replace: true }) }}>เข้าสู่ระบบ</button>
+                                </div>
                             </div>
+                            </>
                         )
                     }
                 })()

@@ -8,6 +8,10 @@ import { faClipboardList } from "@fortawesome/free-solid-svg-icons"
 import { faInfinity } from "@fortawesome/free-solid-svg-icons"
 import { faFileArrowDown } from "@fortawesome/free-solid-svg-icons"
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
+import { useDispatch, useSelector } from "react-redux"
+import { addItem, setStatusFetchOnce } from "../../../slices/basketSlice"
+import { addBasketItem } from "../services/purchase"
+import { RootState } from "../../../store"
 
 
 interface CourseDetailedSummaryProps {
@@ -19,9 +23,25 @@ interface CourseDetailedSummaryProps {
     examples: number;
     status : string;
     availablesource : number;
+    courseID : string;
   }
 
 function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryProps){
+
+    const dispatcher = useDispatch()
+    const studentID = useSelector((state: RootState) => state.user.user?.userID)
+    const { basket } = useSelector((state: RootState) => state.basket)
+    const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
+    async function handleAddBusketItems() {
+        const basketItmeID = await addBasketItem(myCourseDetailedSummary.courseID, "course",studentID)
+        console.log(basketItmeID)
+        dispatcher(setStatusFetchOnce(false))
+
+    }
+    
+    
+    
+
 
     return (
         <>
@@ -122,7 +142,12 @@ function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryPro
                     </button>
                 </div>
                 <div className="px-2">
-                    <button className="flex justify-center items-center content-center bg-white shadow-xl hover:shadow-2xl cursor-pointer w-[165px] h-[65px] text-black font-bold text-xl border-2 border-gray-300 rounded-3xl ">
+                    <button
+                        onClick={() => {
+                            handleAddBusketItems()
+                        }}
+                        type="button"
+                        className="flex justify-center items-center content-center bg-white shadow-xl hover:shadow-2xl cursor-pointer w-[165px] h-[65px] text-black font-bold text-xl border-2 border-gray-300 rounded-3xl ">
                         <FontAwesomeIcon icon={faCartShopping} color="#000000" size="xl"/>
                         <p className="ml-3">
                             ใส่รถเข็น

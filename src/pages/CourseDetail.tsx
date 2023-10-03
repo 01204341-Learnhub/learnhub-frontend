@@ -6,10 +6,13 @@ import { getCourse, getChapterInCourse } from "../features/stores/services/cours
 import { CourseDetailData } from "../features/stores/types/course"
 import { CourseChaptersOutline } from "../features/stores/components/CourseChaptersOutline"
 import { Chapter } from "../features/stores/types/chapter"
+import { useDispatch, useSelector } from "react-redux"
+import { BasketItem } from "../features/stores/types/basket"
 
 type ChapterPreview = Omit<Chapter, "description">
 
 function CourseDetail() {
+    const dispatcher = useDispatch()
     const { id } = useParams()
     const [course, setCourse] = useState<CourseDetailData | null>(null)
     const [chapter, setChapters] = useState<Chapter[] | null>(null)
@@ -79,6 +82,7 @@ function CourseDetail() {
                     hours={course.videoCount}
                     examples={course.quizCount}
                     status="Available"
+                    courseID={course.courseId}
                 />
 
                 <div className="px-2 py-4 mt-8 mr-32">

@@ -4,7 +4,7 @@ interface CourseCardProps {
   courseThumbnailUrl: string;
   courseName: string;
   courseRating: number;
-  studentcount: number;
+  studentCount: number;
 }
 
 export default function CourseCard(myCoursesCard: CourseCardProps) {
@@ -22,7 +22,7 @@ export default function CourseCard(myCoursesCard: CourseCardProps) {
         <ReviewStarsDisplay rating={myCoursesCard.courseRating} />
       </div>
       <div className="px-3 pt-4 text-[14px] font-semibold">
-        จำนวนผู้เรียน {myCoursesCard.studentcount} คน
+        จำนวนผู้เรียน {myCoursesCard.studentCount} คน
       </div>
       <div className="absolute right-[12px] bottom-[12px]">
         <button className="w-[60px] h-[30px] rounded-full bg-gray-600 hover:shadow-xl hover:bg-gray-800">

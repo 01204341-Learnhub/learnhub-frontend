@@ -15,11 +15,11 @@ export default function ProgramCoverWithInstructorProfile({ instructor, programC
             <div className="relative h-[400px]">
                 <img
                     src={programCoverUrl}
-                    className="w-full h-full object-cover rounded-xl"
+                    className="w-[1000px] h-[400px] object-cover rounded-xl"
                     alt="Program cover"
                 />
                 <img
-                    className="border-white border-8 absolute bottom-[-40px] left-0 rounded-lg"
+                    className="border-white border-8 w-28 h-28 absolute bottom-[-60px] left-9 rounded-lg"
                     src={instructor.profileUrl}
                     width={80}
                     height={100}
@@ -27,11 +27,14 @@ export default function ProgramCoverWithInstructorProfile({ instructor, programC
                     style={{ objectFit: "cover" }}
                 />
             </div>
-            <div className="mx-[85px]">
-                <h2 className="font-bold text-black">{instructor.name}</h2>
-                <h3 className="text-gray-400">{instructor.jobTitle}</h3>
+            <div className=" flex flex-col ml-[160px] mr-[20px] mt-2">
+                <div></div>
+                <h2 className="font-bold text-lg text-black">{instructor.name}</h2>
+                <div className="flex justify-between">
+                    <h3 className="text-[#808080]">{instructor.jobTitle}</h3>
+                    <h3 className="text-[#606060]">{reviewCount} ผู้รีวิว</h3>
+                </div>
             </div>
-            <h3 className="text-gray-400 ml-auto">{reviewCount} ผู้รีวิว</h3>
         </div>
     )
 }

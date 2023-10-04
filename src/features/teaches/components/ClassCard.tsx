@@ -1,10 +1,10 @@
 interface ClassCardProps {
-    classThumbnailUrl: string;
-    className: string;
-    percentCompleted: number;
-    participantCount: number;
-    participantLimit: number;
-  }
+  classThumbnailUrl: string;
+  className: string;
+  percentCompleted: number;
+  studentCount: number;
+  studentLimit: number;
+}
 
 export default function ClassCard(myClassesCard: ClassCardProps) {
   return (
@@ -26,7 +26,9 @@ export default function ClassCard(myClassesCard: ClassCardProps) {
         ></progress>
       </div>
       <div className="px-3 pt-1 text-[12px] font-semibold text-end">{`${myClassesCard.percentCompleted}%`}</div>
-      <div className="px-3 pt-1 text-[12px] font-semibold">มีผู้เรียน {myClassesCard.participantCount}/{myClassesCard.participantLimit}</div>
+      <div className="px-3 pt-1 text-[12px] font-semibold">
+        มีผู้เรียน {myClassesCard.studentCount}/{myClassesCard.studentLimit}
+      </div>
     </div>
   );
 }

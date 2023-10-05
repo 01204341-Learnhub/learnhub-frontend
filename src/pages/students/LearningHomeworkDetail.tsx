@@ -33,23 +33,27 @@ type HomeworkContext = {
 const HomeworkContext = createContext<HomeworkContext | undefined>(undefined);
 
 function _TopNavbar() {
-  const { cls } = useContext(HomeworkContext);
+  const { cls, thread } = useContext(HomeworkContext);
   const navigate = useNavigate();
   return (
     <div className="flex space-x-4 p-5 border-b-2">
-      <h1
-        className="text-black text-[32px] font-bold cursor-pointer"
+      <button
+        className="text-black text-[32px] font-bold hover:opacity-80"
         onClick={() => navigate("/learn/classes")}
       >
         {"คลาสเรียน"}
-      </h1>
-      <h1 className="text-black text-[32px] font-bold ml-2">{">"}</h1>
-      <h1
-        className="text-black text-[32px] font-bold ml-2 cursor-pointer"
+      </button>
+      <h1 className="text-black text-[32px] font-bold">{">"}</h1>
+      <button
+        className="text-black text-[32px] font-bold ml-2 hover:opacity-80"
         onClick={() => navigate(`/learn/classes/${cls.classId}`)}
       >
         {cls.name}
-      </h1>
+      </button>
+      <h1 className="text-black text-[32px] font-bold">{">"}</h1>
+      <button className="text-black text-[32px] font-bold ml-2 hover:opacity-80">
+        {thread.name}
+      </button>
     </div>
   );
 }
@@ -87,7 +91,7 @@ function _ReplyEntry({ reply, currentDate }: _ReplyEntryProps) {
 }
 
 function _ReplyInputBar() {
-  const { user, handleAddReply: onAddReply } = useContext(HomeworkContext);
+  const { user, handleAddReply } = useContext(HomeworkContext);
   const textareaRef = React.useRef<HTMLTextAreaElement>(null);
   const [replyText, setReplyText] = useState<string>("");
 
@@ -121,7 +125,7 @@ function _ReplyInputBar() {
         className="flex flex-col justify-end pb-3 hover:opacity-80"
         onClick={() => {
           if (replyText === "") return;
-          onAddReply(replyText);
+          handleAddReply(replyText);
           setReplyText("");
         }}
       >
@@ -150,19 +154,33 @@ function _MainContent() {
           </h1>
         </div>
       </div>
+      <div className={!showRepliesAndTextBox ? "block" : "hidden"}>
+        <button
+          className="text-[#404040] text-[18px] font-bold mx-3 mt-5 hover:opacity-80"
+          onClick={() => setShowRepliesAndTextBox(!showRepliesAndTextBox)}
+        >
+          เพิ่มความคิดเห็นสำหรับงานนี้
+        </button>
+      </div>
       <div className={showRepliesAndTextBox ? "block" : "hidden"}>
-        <div className="flex items-center space-x-5 px-3 pt-5">
+        <div className="flex items-center space-x-5 mx-3 mt-5">
           <img src={PeopleSvg} width={23} />
           <h3 className="text-[#808080] text-[18px] font-bold">
             ความคิดเห็นสำหรับงานนี้
           </h3>
         </div>
-        <div className="flex flex-col space-y-5 px-4 pt-6">
-          {thread.replies.map((reply, index) => (
-            <_ReplyEntry key={index} reply={reply} currentDate={currentDate} />
-          ))}
+        <div className={thread.replies.length > 0 ? "block" : "hidden"}>
+          <div className="flex flex-col space-y-5 mx-3 mt-5">
+            {thread.replies.map((reply, index) => (
+              <_ReplyEntry
+                key={index}
+                reply={reply}
+                currentDate={currentDate}
+              />
+            ))}
+          </div>
         </div>
-        <div className="mt-10 w-[95%]">
+        <div className="mt-8 w-[95%]">
           <_ReplyInputBar />
         </div>
       </div>
@@ -171,10 +189,8 @@ function _MainContent() {
 }
 
 function _FileUploader() {
-  const {
-    handleAddHomeworkFile: onAddHomeworkFile,
-    handleDeleteHomeworkFile: onDeleteHomeworkFile,
-  } = useContext(HomeworkContext);
+  const { handleAddHomeworkFile, handleDeleteHomeworkFile } =
+    useContext(HomeworkContext);
   return <div className="bg-red-200">hello</div>;
 }
 
@@ -200,7 +216,7 @@ function LearningHomeworkDetail() {
         setThread(thread);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   });
 
@@ -213,6 +229,16 @@ function LearningHomeworkDetail() {
       .catch((err) => {
         console.error(err);
       });
+    mock
+      .fetchThread()
+      .then((thread) => {
+        setThread(thread);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    console.log(thread.replies.length);
+    console.log(thread.replies);
   };
 
   const handleAddHomeworkFile = (file: File) => {
@@ -226,6 +252,14 @@ function LearningHomeworkDetail() {
       .catch((err) => {
         console.error(err);
       });
+    mock
+      .fetchThread()
+      .then((thread) => {
+        setThread(thread);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const handleDeleteHomeworkFile = (fileId: string) => {
@@ -233,6 +267,14 @@ function LearningHomeworkDetail() {
       .deleteHomeworkFile(fileId)
       .then((response) => {
         console.log(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    mock
+      .fetchThread()
+      .then((thread) => {
+        setThread(thread);
       })
       .catch((err) => {
         console.error(err);

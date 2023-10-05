@@ -237,8 +237,6 @@ function LearningHomeworkDetail() {
       .catch((err) => {
         console.error(err);
       });
-    console.log(thread.replies.length);
-    console.log(thread.replies);
   };
 
   const handleAddHomeworkFile = (file: File) => {

@@ -11,12 +11,13 @@ import AllClasses from './pages/AllClasses'
 import AllCourses from './pages/AllCourses'
 import Basket from './pages/Basket'
 import ClassDetail from './pages/ClassDetail'
-import CourseDetail from './pages/CourseDetail'
+import CourseDetailPage from './pages/CourseDetail'
 import Home from './pages/Home'
 import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 import Register from './pages/Register'
+import TeacherProfile from './pages/TeacherProfile'
 import LearnCourse from './pages/students/LearnCourse'
 import LearningClasses from './pages/students/LearningClasses'
 import LearningHomeworks from './pages/students/LearningHomeworks'
@@ -30,7 +31,6 @@ import TeachingClasses from './pages/teachers/TeachingClasses'
 import TeachingCourses from './pages/teachers/TeachingCourses'
 import TeachingHomeworks from './pages/teachers/TeachingHomeworks'
 import store from './store'
-import TeacherProfile from './pages/TeacherProfile'
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -47,7 +47,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route path='/baskets' element={<Basket />} />
             <Route path='/home/courses' element={<AllCourses />}></Route>
             <Route path='/home/classes' element={<AllClasses />}></Route>
-            <Route path='/detail/course/:id' element={<CourseDetail />} />
+            <Route path='/detail/course/:id' element={<CourseDetailPage />} />
             <Route path='/detail/class/:id' element={<ClassDetail />} />
             <Route element={<StudentNavbarLayout />}>
               <Route path="/learn/overview" element={<LearningOverview />} />

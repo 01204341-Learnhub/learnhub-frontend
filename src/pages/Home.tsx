@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
-import { Link } from "react-router-dom"
-import { getAllCourses, getPopularCourse, postCourse,  } from "../features/stores/services/courses";
 import { getAllClasses, getNewClasses } from "../features/stores/services/classes";
-import { Course } from "../features/stores/types/course";
+import { getAllCourses, getPopularCourse } from "../features/stores/services/courses";
 import { ClassProgram } from "../features/stores/types/class";
+import { Course } from "../features/stores/types/course";
 
 
 
-type ProgramCardProps =  {
+type ProgramCardProps = {
     programThumbnailUrl: string;
     programName: string;
     programId: string;
@@ -62,7 +62,7 @@ export default function Home() {
         popCourses?.forEach((program) => {
             coursePopularSlot.push({
                 programName: program.name,
-                programId: program.courseId,
+                programId: program.courseID,
                 instructorName: program.intructor.name,
                 percentCompleted: 100,
                 programThumbnailUrl: program.cover,
@@ -73,7 +73,7 @@ export default function Home() {
 
 
     function classNewSlotProp() {
-        const classNewSlot  = []
+        const classNewSlot = []
         newClasses?.forEach((program) => {
             classNewSlot.push({
                 programName: program.name,
@@ -90,21 +90,21 @@ export default function Home() {
         return (
             <>
                 {courses.map((program, index) => {
-                    if (index > 7){
+                    if (index > 7) {
                         return null
                     } else {
                         return (
-                            <Link to={`/detail/course/${program.courseId}`} key={index} className="my-4 px-6" >
+                            <Link to={`/detail/course/${program.courseID}`} key={index} className="my-4 px-6" >
                                 <ProgramSlot key={index} courseThumbnailUrl={program.cover}
                                     courseName={program.name}
                                     instructorName={program.intructor.name}
                                     percentCompleted={100}
-                                    regisDate={""} voter={program.rating} price={program.price} tag={program.tags[0].tagName}
+                                    regisDate={""} voter={program.rating} price={program.price} tag={program.tags[0].name}
                                     lvl={"พื้นฐาน"} />
                             </Link>
                         )
                     }
-                })}  
+                })}
             </>
         )
     }
@@ -114,7 +114,7 @@ export default function Home() {
         return (
             <>
                 {classes.map((program, index) => {
-                    if (index > 7){
+                    if (index > 7) {
                         return null
                     } else {
 
@@ -137,13 +137,13 @@ export default function Home() {
     return (
         <div className="flex flex-col items-center w-full">
             <div className="mt-5">
-                <ProgramCarousel 
+                <ProgramCarousel
                     type="course"
                     programs={poppularCourseSlotProp()}
                     carouselName="คอร์สเรียนยอดนิยม"
                     displayCount={3} />
             </div>
-            <hr className="border-[#d9d9d9] my-8 w-full"/>
+            <hr className="border-[#d9d9d9] my-8 w-full" />
 
             <div className="mt-5 mb-4">
                 <ProgramCarousel
@@ -152,12 +152,12 @@ export default function Home() {
                     carouselName="คลาสเรียนใหม่ล่าสุด"
                     displayCount={3} />
             </div>
-            <hr className="border-[#d9d9d9] my-8 w-full"/>
+            <hr className="border-[#d9d9d9] my-8 w-full" />
 
             <section className="relative flex flex-col items-center w-full overflow-hidden">
                 <h1 className="absolute left-[16%] pb-12 text-2xl font-bold self-start">คลาสเรียน</h1>
                 <div className="pl-6 mt-5 pt-8 grid overflow-hidden grid-cols-4">
-                    {renderProgramClasses()} 
+                    {renderProgramClasses()}
                 </div>
                 <Link to={`/home/classes`}>
                     <div className="flex pb-4 pt-2">
@@ -169,12 +169,12 @@ export default function Home() {
                     </div>
                 </Link>
             </section>
-            <hr className="border-[#d9d9d9] my-8 w-full"/>
+            <hr className="border-[#d9d9d9] my-8 w-full" />
 
             <section className="relative flex flex-col items-center w-full overflow-hidden">
                 <h1 className="absolute left-[16%] pb-12 text-2xl font-bold self-start">คอร์สเรียน</h1>
                 <div className="pl-6 mt-5 pt-8 grid grid-cols-4">
-                    {renderProgramsCourse()} 
+                    {renderProgramsCourse()}
                 </div>
                 <Link to={`/home/courses`}>
                     <div className="flex pb-4 pt-2">

@@ -133,6 +133,7 @@ async function createStudentWithEmail(
     }
   } catch (error) {
     console.log(`error when create student with email`, error);
+    throw error;
   }
 }
 
@@ -205,6 +206,7 @@ async function createTeacherWithEmail(
     }
   } catch (error) {
     console.log(`error when create student with email`, error);
+    throw error;
   }
 }
 

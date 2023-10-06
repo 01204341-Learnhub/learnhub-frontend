@@ -6,11 +6,12 @@ import { RootState } from "../store"
 import { fetchBasketItems, deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
 import { useEffect, useState } from 'react'
 import { BasketItem } from '../features/stores/types/basket'
+import { useUser } from '../hooks/useUser'
 
 function Basket() {
     //console.log("in basket")
+    const { user, isFetching } = useUser()
     const { basket } = useSelector((state: RootState) => state.basket)
-    const userID = useSelector((state: RootState) => state.user.user?.userID)
     const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
     const dispatcher = useDispatch()
     const [basketItemsState, setBasketItems] = useState< {items : BasketItem[]} | null>(null)
@@ -18,7 +19,7 @@ function Basket() {
 
     async function handleDeleteBusketItems(itemID: string) {
         dispatcher(removeItem(itemID))
-        const isDelete = await deleteBasketItem(userID, itemID)
+        const isDelete = await deleteBasketItem(user.userID, itemID)
         console.log(isDelete)
     }
     
@@ -37,7 +38,7 @@ function Basket() {
         async function fetchBasket() {
             console.log(isFetchOnce)
             if (!isFetchOnce) {
-                const BasketItems = await fetchBasketItems(userID)
+                const BasketItems = await fetchBasketItems(user.userID)
                 setBasketItems(BasketItems)
                 dispatcher(setStatusFetchOnce(true))
                 dispatcher(clearItem())

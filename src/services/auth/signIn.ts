@@ -9,18 +9,6 @@ import {
 } from "../../types/user";
 
 const auth = getAuth(app);
-async function checkIfAlreadyRegisterOnce(email: string, password: string) {
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    await auth.signOut();
-    return true;
-  } catch (error) {
-    if (error.code === "auth/invalid-login-credentials") {
-      return false;
-    }
-    throw error;
-  }
-}
 
 async function signInWithEmail(
   email: string,
@@ -73,4 +61,4 @@ async function signInWithEmail(
   }
 }
 
-export { checkIfAlreadyRegisterOnce, signInWithEmail };
+export { signInWithEmail };

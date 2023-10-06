@@ -8,11 +8,23 @@ import {
 } from "firebase/auth";
 import { app } from "../../firebase/firebase";
 import { LearnhubUser, LearnhubUserCredential } from "../../types/user";
-import { checkIfAlreadyRegisterOnce } from "./signIn";
 
 const noImagePlaceholder =
   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 const auth = getAuth(app);
+
+async function checkIfAlreadyRegisterOnce(email: string, password: string) {
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    await auth.signOut();
+    return true;
+  } catch (error) {
+    if (error.code === "auth/invalid-login-credentials") {
+      return false;
+    }
+    throw error;
+  }
+}
 
 async function createLearnhubStudent(
   uid: string,

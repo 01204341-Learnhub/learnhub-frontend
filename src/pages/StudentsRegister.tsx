@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createStudentWithEmail } from "../services/auth/createUser";
-import { setUser } from "../slices/userSlice";
 
 function StudentsRegister() {
     const dispatch = useDispatch();
@@ -41,8 +40,7 @@ function StudentsRegister() {
             return
         }
         try {
-            const learnhubUser = await createStudentWithEmail(email, password, username, fullname)
-            dispatch(setUser(learnhubUser));
+            await createStudentWithEmail(email, password, username, fullname)
             navigate('/login', { replace: true });
         } catch (error) {
             alert(`cannot register ${error}`);

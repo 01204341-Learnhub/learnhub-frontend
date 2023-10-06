@@ -1,8 +1,14 @@
-import { useSelector } from "react-redux"
-import { RootState } from "../store"
+import { useUser } from "../hooks/useUser"
 
 function Profile() {
-    const { user } = useSelector((state: RootState) => state.user)
+    const { user, isFetching } = useUser()
+    if (isFetching) {
+        return (
+            <div className="w-full h-full flex justify-center items-center">
+                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-black"></div>
+            </div>
+        )
+    }
     return (
         <div className="w-full h-full">
             <div className="flex text-2xl font-bold">

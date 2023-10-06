@@ -54,6 +54,7 @@ async function signInWithEmail(
         profilePicture: data.profile_pic,
       };
     }
+    localStorage.setItem("learnhubUser", JSON.stringify(learnhubUser));
     return learnhubUser;
   } catch (error) {
     console.log(`error when sign in with email`, error);

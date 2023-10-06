@@ -11,11 +11,7 @@ import {
 const auth = getAuth(app);
 async function checkIfAlreadyRegisterOnce(email: string, password: string) {
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    await signInWithEmailAndPassword(auth, email, password);
     await auth.signOut();
     return true;
   } catch (error) {
@@ -37,7 +33,6 @@ async function signInWithEmail(
       email,
       password
     );
-    const uid = userCredential.user.uid;
     console.log(userCredential.user.displayName);
     const learnhubUserCredential: LearnhubUserCredential = JSON.parse(
       userCredential.user.displayName

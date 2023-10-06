@@ -1,12 +1,10 @@
 import { faEnvelope, faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import bookLogo from "../../src/assets/Images/bookLogo.png";
 import textNameLogo from "../../src/assets/Images/textNameLogo.png";
 import { signInWithEmail } from "../services/auth/signIn";
-import { setUser } from "../slices/userSlice";
 
 
 export default function Login() {
@@ -22,7 +20,6 @@ export default function Login() {
         setPassword(event.target.value)
     }
 
-    const dispatch = useDispatch()
     const navigate = useNavigate()
     const handleSignIn = () => {
         if (password === "") {
@@ -31,7 +28,6 @@ export default function Login() {
         }
 
         signInWithEmail(email, password, mode).then((user) => {
-            dispatch(setUser(user))
             if (mode == "student") navigate("/home");
             else navigate("/teach/overview", { replace: true });
         }).catch((error) => {
@@ -48,7 +44,6 @@ export default function Login() {
             <button className=" text-[24px] ml-5 mt-10" onClick={handleBack}>
                 Back
             </button>
-
             <div className="grid grid-cols-2">
                 <div className=" mt-36">
                     <div className="flex flex-row justify-center space-x-4 scale-150">

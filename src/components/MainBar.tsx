@@ -1,26 +1,26 @@
 import { faBell, faBook, faBookmark, faCartShopping, faHeart, faMagnifyingGlass, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import booklogo from '../assets/Images/bookLogo.png'
 import namelogo from '../assets/Images/textNameLogo.png'
 import BasketItemSlot from '../features/stores/components/BasketItemSlot'
-import { signOut } from '../services/auth/signOut'
-import { RootState } from '../store'
 import { fetchBasketItems } from '../features/stores/services/purchase'
-import { addItem, setStatusFetchOnce, clearItem } from '../slices/basketSlice'
+import { useUser } from '../hooks/useUser'
+import { signOut } from '../services/auth/signOut'
+import { addItem, clearItem, setStatusFetchOnce } from '../slices/basketSlice'
+import { RootState } from '../store'
 
 function MainBar() {
     const { basket } = useSelector((state: RootState) => state.basket)
-    const userID = useSelector((state: RootState) => state.user.user?.userID)
+    const { user } = useUser()
     const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
     const dispatcher = useDispatch()
 
     const [openDropdown, setOpenDropdown] = useState(null)
     const basketItems = useSelector((state: RootState) => state.basket.basket.items)
     const navigate = useNavigate()
-    const user = useSelector((state: RootState) => state.user.user)
     const toggleDropdown = (dropdownName) => {
         if (openDropdown === dropdownName) {
             // If the clicked dropdown is already open, close it
@@ -35,8 +35,8 @@ function MainBar() {
         async function fetchBasket() {
             console.log(isFetchOnce)
             if (!isFetchOnce) {
-                const BasketItems = await fetchBasketItems(userID)
-                
+                const BasketItems = await fetchBasketItems(user.userID)
+
                 dispatcher(setStatusFetchOnce(true))
                 dispatcher(clearItem())
                 BasketItems.items.map((item) => {
@@ -92,7 +92,7 @@ function MainBar() {
                         <div
                             className='overflow-y-auto max-h-[450px] min-h-0'
                             style={{ display: openDropdown === 'mycartdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
-                            
+
                         >
                             <div className="px-8 py-3">
                                 {basketItems.map((item) => (
@@ -200,14 +200,14 @@ function MainBar() {
                     else {
                         return (
                             <>
-                            <div className='flex w-80'>
-                                <div className='px-2'>
-                                    <button className='btn' onClick={() => { navigate("/register", { replace: true }) }}>สร้างบัญชี</button>
+                                <div className='flex w-80'>
+                                    <div className='px-2'>
+                                        <button className='btn' onClick={() => { navigate("/register", { replace: true }) }}>สร้างบัญชี</button>
+                                    </div>
+                                    <div className='px-2'>
+                                        <button className='btn' onClick={() => { navigate("/login", { replace: true }) }}>เข้าสู่ระบบ</button>
+                                    </div>
                                 </div>
-                                <div className='px-2'>
-                                    <button className='btn' onClick={() => { navigate("/login", { replace: true }) }}>เข้าสู่ระบบ</button>
-                                </div>
-                            </div>
                             </>
                         )
                     }

@@ -3,8 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createStudentWithEmail } from "../services/auth/signIn";
-import { setUser } from "../slices/userSlice";
+import { createStudentWithEmail } from "../services/auth/createUser";
 
 function StudentsRegister() {
     const dispatch = useDispatch();
@@ -41,9 +40,8 @@ function StudentsRegister() {
             return
         }
         try {
-            const learnhubUser = await createStudentWithEmail(email, password, username, fullname)
-            dispatch(setUser(learnhubUser));
-            navigate('/home');
+            await createStudentWithEmail(email, password, username, fullname)
+            navigate('/login', { replace: true });
         } catch (error) {
             alert(`cannot register ${error}`);
         }

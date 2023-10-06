@@ -5,6 +5,8 @@ import { LearnhubUser } from "../types/user";
 
 function useUser() {
   const [user, setUser] = useState<LearnhubUser>();
+  const [isFetching, setIsFetching] = useState<boolean>(true);
+
   useEffect(() => {
     const user = localStorage.getItem("learnhubUser");
     if (user) {
@@ -12,6 +14,7 @@ function useUser() {
     }
     const auth = getAuth(app);
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      setIsFetching(false);
       if (user == null) {
         localStorage.removeItem("learnhubUser");
         setUser(undefined);
@@ -19,7 +22,8 @@ function useUser() {
     });
     return unsubscribe;
   }, []);
-  return user;
+
+  return { user, isFetching };
 }
 
 export { useUser };

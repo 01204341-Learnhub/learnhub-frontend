@@ -43,7 +43,7 @@ function TeacherRegister() {
         try {
             const learnhubUser = await createTeacherWithEmail(email, password, username, fullname)
             dispatch(setUser(learnhubUser));
-            navigate('/teach/overview');
+            navigate('/login', { replace: true });
         } catch (error) {
             alert(`cannot register ${error}`);
         }

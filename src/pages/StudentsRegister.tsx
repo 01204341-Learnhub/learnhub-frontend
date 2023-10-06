@@ -43,7 +43,7 @@ function StudentsRegister() {
         try {
             const learnhubUser = await createStudentWithEmail(email, password, username, fullname)
             dispatch(setUser(learnhubUser));
-            navigate('/home');
+            navigate('/login', { replace: true });
         } catch (error) {
             alert(`cannot register ${error}`);
         }

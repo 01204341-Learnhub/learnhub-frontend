@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createStudentWithEmail } from "../services/auth/signIn";
+import { createStudentWithEmail } from "../services/auth/createUser";
 import { setUser } from "../slices/userSlice";
 
 function StudentsRegister() {

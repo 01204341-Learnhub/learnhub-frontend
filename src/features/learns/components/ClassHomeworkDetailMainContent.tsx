@@ -106,17 +106,34 @@ function MainContent({ thread, onAddReply }: MainContent) {
   );
   const currentDateTime = new Date();
   return (
-    <div className="bg-white p-5">
-      <div className="flex items-center space-x-5 pb-5 border-b-2">
-        <div className="flex justify-center items-center rounded-full bg-[#d9d9d9] w-[60px] h-[60px]">
+    <div className="bg-white p-5 w-full">
+      <div className="flex items-center space-x-5 pb-5 border-b-2 w-full">
+        <div className="flex justify-center items-center rounded-full bg-[#d9d9d9] min-w-[55px] min-h-[55px]">
           <FontAwesomeIcon icon={faClipboardList} size="2x" />
         </div>
-        <div>
+        <div className="w-full">
           <h1 className="text-black text-[22px] font-bold">{thread.name}</h1>
-          <h1 className="text-[#404040] text-[14px] font-semibold">
-            {thread.homeworkFullPoints} คะแนน
-          </h1>
+          <div className="flex justify-between w-full mt-0.5">
+            <p className="text-[#404040] text-[14px] font-semibold">
+              {thread.homeworkFullPoints} คะแนน
+            </p>
+            <p className="text-[#404040] text-[14px] font-semibold">
+              กำหนดส่ง{" "}
+              {thread.homeworkDueDateTime.toLocaleString("th-TH", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
+          </div>
         </div>
+      </div>
+      <div className={thread.text != "" ? "block" : "hidden"}>
+        <p className="text-[#404040] text-[16px] font-medium mt-5 pb-5 border-b-2 w-full">
+          {thread.text}
+        </p>
       </div>
       <div className={!showRepliesAndTextBox ? "block" : "hidden"}>
         <button

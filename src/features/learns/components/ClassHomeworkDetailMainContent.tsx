@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Reply, Thread } from "../types/thread";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {

@@ -2,18 +2,18 @@ import { Thread } from "../types/thread";
 
 interface FileUploaderProps {
   thread: Thread;
-  onAddHomeworkFile: (name: string, src: string) => void;
-  onRemoveHomeworkFile: (homeworkFileId: string) => void;
+  onAddHomeworkSubmissionFile: (name: string, src: string) => void;
+  onRemoveHomeworkSubmissionFile: (homeworkFileId: string) => void;
 }
 
 function FileUploader({
   thread,
-  onAddHomeworkFile,
-  onRemoveHomeworkFile,
+  onAddHomeworkSubmissionFile,
+  onRemoveHomeworkSubmissionFile,
 }: FileUploaderProps) {
   thread;
-  onAddHomeworkFile;
-  onRemoveHomeworkFile;
+  onAddHomeworkSubmissionFile;
+  onRemoveHomeworkSubmissionFile;
   return <div className="bg-red-200">hello</div>;
 }
 

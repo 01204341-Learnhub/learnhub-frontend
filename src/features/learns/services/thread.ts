@@ -7,7 +7,7 @@ async function getThread(
   typ: "announcement" | "homework"
 ) {
   console.log(
-    `Fetching ${typ} thread ${threadId} in class ${classId} by user ${userId}`
+    `Getting ${typ} thread ${threadId} in class ${classId} by user ${userId}`
   );
   // Call different API endpoints depending on typ
   // then populate and return a Thread object accordingly.
@@ -23,12 +23,12 @@ async function postReply(
   text: string
 ) {
   console.log(
-    `Adding reply to thread ${threadId} in class ${classId} by user ${userId} with text ${text} at time ${dateTime.toLocaleString()}`
+    `Posting reply to thread ${threadId} in class ${classId} by user ${userId} with text ${text} at time ${dateTime.toLocaleString()}`
   );
-  console.log("Reply added");
+  console.log("Reply posted");
 }
 
-async function postHomeworkFile(
+async function postHomeworkSubmissionFile(
   userId: string,
   classId: string,
   threadId: string,
@@ -37,23 +37,30 @@ async function postHomeworkFile(
   src: string
 ) {
   console.log(
-    `Adding homework file to homework thread ${threadId} in class ${classId} by user ${userId} with name ${name} and src ${src} at time ${dateTime.toLocaleString()}`
+    `Posting homework submission file to homework thread ${threadId} in class ${classId} by user ${userId} with name ${name} and src ${src} at time ${dateTime.toLocaleString()}`
   );
-  const homeworkFileId = `homework-file${Math.floor(Math.random() * 100)}`;
-  console.log("Homework file added");
-  return homeworkFileId;
+  const homeworkSubmissionFileId = `homework-submission-file${Math.floor(
+    Math.random() * 100
+  )}`;
+  console.log("Homework submission file posted");
+  return homeworkSubmissionFileId;
 }
 
-async function deleteHomeworkFile(
+async function deleteHomeworkSubmissionFile(
   userId: string,
   classId: string,
   threadId: string,
-  homeworkFileId: string
+  homeworkSubmissionFileId: string
 ) {
   console.log(
-    `Deleting homework file ${homeworkFileId} from homework thread ${threadId} in class ${classId} by user ${userId}`
+    `Deleting homework file ${homeworkSubmissionFileId} from homework thread ${threadId} in class ${classId} by user ${userId}`
   );
   console.log("Homework file deleted");
 }
 
-export { getThread, postReply, postHomeworkFile, deleteHomeworkFile };
+export {
+  getThread,
+  postReply,
+  postHomeworkSubmissionFile,
+  deleteHomeworkSubmissionFile,
+};

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { Thread } from "../features/learns/types/thread";
 import { LearnhubUser } from "../types/user";
 import {
-  deleteHomeworkFile,
+  deleteHomeworkSubmissionFile,
   getThread,
-  postHomeworkFile,
+  postHomeworkSubmissionFile,
   postReply,
 } from "../features/learns/services/thread";
 
@@ -25,7 +25,8 @@ function useThread(
         console.error(err);
         alert("Failed to fetch thread");
       });
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // IMPORTANT: Empty dependency array in useEffect is needed to prevent infinite loop.
   const addReply = (text: string) => {
     const dateTime = new Date();
     postReply(user.userID, thread.cls.classId, thread.threadId, dateTime, text)
@@ -47,14 +48,14 @@ function useThread(
         alert("Failed to add reply");
       });
   };
-  const addHomeworkFile = (name: string, src: string) => {
+  const addHomeworkSubmissionFile = (name: string, src: string) => {
     if (typ !== "homework") {
       console.error(
         new Error("Cannot add homework file to non-homework thread")
       );
     }
     const dateTime = new Date();
-    postHomeworkFile(
+    postHomeworkSubmissionFile(
       user.userID,
       thread.cls.classId,
       thread.threadId,
@@ -62,13 +63,13 @@ function useThread(
       name,
       src
     )
-      .then((homeworkFileId) => {
+      .then((homeworkSubmissionFileId) => {
         setThread({
           ...thread,
-          homeworkFiles: [
-            ...thread.homeworkFiles,
+          homeworkSubmissionFiles: [
+            ...thread.homeworkSubmissionFiles,
             {
-              homeworkFileId: homeworkFileId,
+              homeworkSubmissionFileId: homeworkSubmissionFileId,
               name,
               src,
             },
@@ -80,23 +81,24 @@ function useThread(
         alert("Failed to add homework file");
       });
   };
-  const removeHomeworkFile = (homeworkFileId: string) => {
+  const removeHomeworkSubmissionFile = (homeworkSubmissionFileId: string) => {
     if (typ !== "homework") {
       console.error(
         new Error("Cannot remove homework file from non-homework thread")
       );
     }
-    deleteHomeworkFile(
+    deleteHomeworkSubmissionFile(
       user.userID,
       thread.cls.classId,
       thread.threadId,
-      homeworkFileId
+      homeworkSubmissionFileId
     )
       .then(() => {
         setThread({
           ...thread,
-          homeworkFiles: thread.homeworkFiles.filter(
-            (homeworkFile) => homeworkFile.homeworkFileId !== homeworkFileId
+          homeworkSubmissionFiles: thread.homeworkSubmissionFiles.filter(
+            (homeworkFile) =>
+              homeworkFile.homeworkSubmissionFileId !== homeworkSubmissionFileId
           ),
         });
       })
@@ -108,8 +110,8 @@ function useThread(
   return {
     thread,
     addReply,
-    addHomeworkFile,
-    removeHomeworkFile,
+    addHomeworkSubmissionFile,
+    removeHomeworkSubmissionFile,
   };
 }
 

@@ -1,4 +1,4 @@
-import { faClipboardList, faFile, faUpload, faX } from "@fortawesome/free-solid-svg-icons"
+import { faClipboardList, faFile, faUpload, faX, faCaretUp, faCaretDown } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import Calendar from "../../learns/components/Calendar"
@@ -21,14 +21,21 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
         setWork((p) => ({ ...p, description: e.target.value }))
     }
     const onWorkScoreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setWork((p) => ({ ...p, score: Number(e.target.value) }))
+        if(e.target.value != '' && Number(e.target.value) >= 0){
+            setWork((p) => ({ ...p, score: Number(e.target.value) }))
+            console.log(e.target.value)
+        }
     }
     const onWorkDateChange = (date: Date) => {
+        if(selectedShowTime == null){
+            setSelectedShowTime('00:00')//default
+            setSelectedDate(date)
+        }
+        else{
+            date.setHours(Number(`${selectedShowTime[0]=='0'?'':selectedShowTime[0]}${selectedShowTime[1]}`))
+            date.setMinutes(Number(`${selectedShowTime[3]=='0'?'':selectedShowTime[3]}${selectedShowTime[4]}`))
+        }
         setWork((p) => ({ ...p, dueDate: date }))
-    }
-    const onWorkTimeChange = (date: Date) => {
-        console.log(JSON.stringify(date))
-        // setWork((p) => ({ ...p, dueDate: date }))
     }
     const setWorkTopic = (topic: string) => {
         setWork((p) => ({ ...p, topic: topic }))
@@ -47,7 +54,19 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
             setWorkTopic(newTopic)
         }
     }
-    
+    const [selectedTime, setSelectedDate] = useState<Date>();
+    const [selectedShowTime, setSelectedShowTime] = useState<string>();
+    const onWorkTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(1)
+        setSelectedShowTime(event.target.value)
+        console.log(2)
+        selectedTime.setHours(Number(`${event.target.value[0]=='0'?'':event.target.value[0]}${event.target.value[1]}`))
+        selectedTime.setMinutes(Number(`${event.target.value[3]=='0'?'':event.target.value[3]}${event.target.value[4]}`))
+        console.log(3)
+        setSelectedDate(selectedTime)
+        console.log(4)
+        setWork((p) => ({ ...p, dueDate: selectedTime }))        
+      };
     return (
         <div className="w-full h-full">
             <div className="flex justify-between">
@@ -100,28 +119,43 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                 <div className="w-1/4 bg-white ">
                     <div>
                         <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">คะแนน</h1>
-                        <input  type="number" value={work.score} onChange={onWorkScoreChange} className="mx-10  mb-5  input input-bordered bg-[#E0E0E0]" />
+                        <input type="number"  min="0" max="100"  onChange={onWorkScoreChange} className="mx-10  mb-5  input input-bordered bg-[#E0E0E0]" />
                     </div>
                     <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">กำหนดเวลา</h1>
                     <div className="flex w-[100%] ml-10 ">
-                        <button onClick={() => {setdropdowndete(!dropdowndete)}} className="flex justify-end items-center h-14 w-[70%] bg-[#E0E0E0] hover:bg-gray-200 pr-5 rounded-xl">{dropdowndete? "open":"off"}</button>
+                        <button onClick={() => {setdropdowndete(!dropdowndete)}} className="flex justify-end items-center h-12 w-[70%] border-solid border-2 border-gray-400 bg-[#E0E0E0] hover:bg-gray-200 pr-5 rounded-xl">
+                             <div className="mr-1">
+                                {work.dueDate ? `${work.dueDate.toLocaleTimeString()} ${work.dueDate.toDateString()}` : ""}
+                             </div>
+                            {dropdowndete?<FontAwesomeIcon icon={faCaretDown} size="lg" onClick={()=>{setdropdowndete(!dropdowndete)}}  />
+                            :<FontAwesomeIcon icon={faCaretUp} size="lg" onClick={()=>{setdropdowndete(!dropdowndete)}} />
+                        }</button>
                     </div>
                     {dropdowndete&&
-                    <div className="w-[70%] bg-white pr-5 mt-2 rounded-xl ml-10 border-solid border-2 border-gray-200 shadow-2xl">
-                        <div>
-                            <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">กำหนดวัน & เวลา</h1>
-                            <input type="time"  name="time"  className="mx-10  mb-5 input input-bordered bg-[#E0E0E0] hover:bg-gray-200 w-[70%]"/>                                
-                        </div>
-                        <div>
-                            <div className="mx-10  mb-5  dropdown">
-                                <label tabIndex={0} className="btn m-1 border-solid border-2 border-gray-200 shadow-md over">
-                                    <h1>{work.dueDate ? work.dueDate.toString() : "ไม่มีกำหนดส่ง"}</h1>
+                    <div className="w-[70%] bg-white  mt-2 rounded-xl ml-10 border-solid border-2 border-gray-200 shadow-2xl">
+                        <div className="mb-5">
+                            <div className="flex justify-center w-[100%]">
+                                <h1 className="w-[90%] mt-5 mb-1 text-l font-bold">กำหนดวัน & เวลา</h1>
+                            </div>
+                            <div className="w-[90%] h-0.5 bg-gray-200 mb-5 mx-[5%]"></div>
+
+                            {/* <input type="time"  name="time"  className="mx-10  mb-5 input input-bordered bg-[#E0E0E0] hover:bg-gray-200 w-[70%]"/>                                 */}
+                            <div className="flex justify-center w-[100%] mb-5  dropdown">
+                                <label tabIndex={0} className="w-[90%] btn  border-solid border-2 border-gray-200 shadow-md over">
+                                    <h1>{work.dueDate ? work.dueDate.toDateString()  : "ไม่มีกำหนดส่ง"}</h1>
                                 </label>
-                                <div tabIndex={0} className="dropdown-content z-[1] p-2 bg-white ">
-                                    <Calendar targetDate={work.dueDate} onDateSelect={onWorkTimeChange} />
-                                    <h1 className="btn">เลือกเวลาแต่ยังไม่ได้ทำ</h1>
+                                <div tabIndex={0} className="dropdown-content z-[1] p-2  bg-white ">
+                                    <Calendar targetDate={work.dueDate} onDateSelect={onWorkDateChange} />
                                 </div>
                             </div>
+                        </div>
+                        <div className="flex justify-center w-100% mb-4">
+                            <input
+                                className="w-[90%] p-2 m-[5%] rounded-lg border-solid border-2 border-gray-200 shadow-md  bg-gray-100 hover:bg-gray-200"
+                                type="time"
+                                value={selectedShowTime}
+                                onChange={onWorkTimeChange}
+                            />
                         </div>
                     </div>
 

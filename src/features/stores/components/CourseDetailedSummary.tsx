@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import { useUser } from "../../../hooks/useUser"
 import { setStatusFetchOnce } from "../../../slices/basketSlice"
 import { addBasketItem } from "../services/purchase"
-
+import Swal from "sweetalert2"
 
 interface CourseDetailedSummaryProps {
     costs: number;
@@ -24,8 +24,22 @@ function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryPro
     const { user } = useUser()
     async function handleAddBusketItems() {
         const basketItmeID = await addBasketItem(myCourseDetailedSummary.courseID, "course", user.userID)
-        console.log(basketItmeID)
-        dispatcher(setStatusFetchOnce(false))
+        if (!basketItmeID) {
+            Swal.fire({
+                title: 'ไม่สามารถดำเนินการนี้ได้',
+                text: 'คุณมีคอร์สนี้อยู่แล้ว หรือ คอร์สนี้อยู่ในรถเข็นอยู่แล้ว',
+                icon: 'error'
+            })
+            
+        } else {
+            Swal.fire({
+                title: 'เพิ่มไปยังรถเข็นแล้ว',
+                icon: 'success',
+                confirmButtonColor: 'green'
+                
+            })
+            dispatcher(setStatusFetchOnce(false))
+        }
 
     }
 

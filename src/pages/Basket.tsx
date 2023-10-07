@@ -6,6 +6,8 @@ import { RootState } from "../store"
 import { fetchBasketItems, deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
 import { useEffect} from 'react'
 import { useUser } from '../hooks/useUser'
+import Swal from 'sweetalert2'
+
 
 function Basket() {
     //console.log("in basket")
@@ -26,10 +28,18 @@ function Basket() {
     const handlePayment = async () => {
         const transction = await purchaseCourse(user.userID, "1111111111111");
         if (transction) {
-            alert("ชำระเงินสำเร็จ")
+            Swal.fire({
+                title: "ชำระเงินสำเร็จ",
+                text: "",
+                icon: "success",
+                confirmButtonColor: "green"
+            })
             dispatcher(clearItem())
         } else {
-            alert("ชำระเงินไม่สำเร็จ")
+            Swal.fire({
+                title: 'error',
+                icon: 'error'
+            })
         }
 
     }

@@ -1,7 +1,6 @@
 import axios from "axios"
 import { ResponseBasket } from "../types/response"
 import { BasketItem, Basket } from "../types/basket"
-import { da } from "date-fns/locale"
 
 const baseUrl = "http://localhost:8000"
 

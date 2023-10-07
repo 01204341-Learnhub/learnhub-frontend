@@ -148,7 +148,9 @@ function MainBar() {
                                     </div>
                                     <ul className="py-2" aria-labelledby="user-menu-button">
                                         <li>
-                                            <a className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">หน้าแรก</a>
+                                            <Link to={"/home"}>
+                                                <p className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">หน้าแรก</p>
+                                            </Link>
                                         </li>
                                         {user.userType === 'student' ?
                                             <li>

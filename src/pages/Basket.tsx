@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { removeItem, addItem, setStatusFetchOnce, clearItem, setStatusIsLoading } from "../slices/basketSlice"
 import { RootState } from "../store"
 import { fetchBasketItems, deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
-import { useEffect, useState } from 'react'
-import { BasketItem } from '../features/stores/types/basket'
+import { useEffect} from 'react'
 import { useUser } from '../hooks/useUser'
 
 function Basket() {
@@ -14,7 +13,7 @@ function Basket() {
     const { basket } = useSelector((state: RootState) => state.basket)
     const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
     const dispatcher = useDispatch()
-    const [basketItemsState, setBasketItems] = useState< {items : BasketItem[]} | null>(null)
+   
     
 
     async function handleDeleteBusketItems(itemID: string) {
@@ -40,7 +39,6 @@ function Basket() {
             console.log(isFetchOnce)
             if (!isFetchOnce) {
                 const BasketItems = await fetchBasketItems(user.userID)
-                setBasketItems(BasketItems)
                 dispatcher(setStatusFetchOnce(true))
                 dispatcher(clearItem())
                 BasketItems.items.map((item) => {

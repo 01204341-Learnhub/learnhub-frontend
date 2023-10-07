@@ -1,29 +1,23 @@
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useDispatch, useSelector } from "react-redux"
-import { removeItem, addItem, setStatusFetchOnce, clearItem, setStatusIsLoading } from "../slices/basketSlice"
-import { RootState } from "../store"
-import { fetchBasketItems, deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
-import { useEffect} from 'react'
+import { useDispatch} from "react-redux"
+import { removeItem, clearItem, } from "../slices/basketSlice"
+import { deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
 import { useUser } from '../hooks/useUser'
 import Swal from 'sweetalert2'
+import { useBasket } from '../features/stores/hooks/useBasket'
 
 
 function Basket() {
-    //console.log("in basket")
     const { user } = useUser()
-    const { basket } = useSelector((state: RootState) => state.basket)
-    const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
+    const basket = useBasket()
     const dispatcher = useDispatch()
    
-    
-
     async function handleDeleteBusketItems(itemID: string) {
         dispatcher(removeItem(itemID))
         const isDelete = await deleteBasketItem(user.userID, itemID)
         console.log(isDelete)
     }
-    
 
     const handlePayment = async () => {
         const transction = await purchaseCourse(user.userID, "1111111111111");
@@ -44,26 +38,6 @@ function Basket() {
 
     }
 
-    useEffect(() => {
-        async function fetchBasket() {
-            console.log(isFetchOnce)
-            if (!isFetchOnce) {
-                const BasketItems = await fetchBasketItems(user.userID)
-                dispatcher(setStatusFetchOnce(true))
-                dispatcher(clearItem())
-                BasketItems.items.map((item) => {
-                    dispatcher(addItem(item))
-                })
-                setStatusIsLoading(true)
-                
-            }
-        }
-        fetchBasket()
-        
-        
-    }, []);
-    
-    
     return (
         <div className="bg-white flex flew-rox justify-center ">
             <div className='pl-6'>

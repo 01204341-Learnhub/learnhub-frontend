@@ -11,22 +11,21 @@ import { useUser } from '../hooks/useUser'
 import { signOut } from '../services/auth/signOut'
 import { addItem, clearItem, setStatusFetchOnce } from '../slices/basketSlice'
 import { RootState } from '../store'
+import { useBasket } from '../features/stores/hooks/useBasket'
 
 function MainBar() {
-    const { basket } = useSelector((state: RootState) => state.basket)
+    const basket = useBasket()
+    const basketItems = basket.items
     const { user } = useUser()
     const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
     const dispatcher = useDispatch()
-
     const [openDropdown, setOpenDropdown] = useState(null)
-    const basketItems = useSelector((state: RootState) => state.basket.basket.items)
+    //const basketItems = useSelector((state: RootState) => state.basket.basket.items)
     const navigate = useNavigate()
     const toggleDropdown = (dropdownName) => {
         if (openDropdown === dropdownName) {
-            // If the clicked dropdown is already open, close it
             setOpenDropdown(null)
         } else {
-            // If a different dropdown is open, close it and open the clicked one
             setOpenDropdown(dropdownName)
         }
     }
@@ -36,7 +35,6 @@ function MainBar() {
             console.log(isFetchOnce)
             if (!isFetchOnce) {
                 const BasketItems = await fetchBasketItems(user.userID)
-
                 dispatcher(setStatusFetchOnce(true))
                 dispatcher(clearItem())
                 BasketItems.items.map((item) => {

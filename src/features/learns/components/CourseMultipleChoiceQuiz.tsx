@@ -1,63 +1,61 @@
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
-import { CourseQuiz, MultipleChoiceQuestion, MultipleChoiceQuestionAnswer } from "../types/quiz"
-
-interface MultipleChoiceQuizProps {
-    quiz: CourseQuiz
-}
+import { CourseQuiz, CourseQuizProblem, CourseQuizSubmission } from "../types/quiz"
 
 interface _QuestionProps {
-    question: MultipleChoiceQuestion
-    onNext?: (answer: MultipleChoiceQuestionAnswer) => void,
-    onPrev?: (answer: MultipleChoiceQuestionAnswer) => void,
+    problem: CourseQuizProblem,
+    submission: CourseQuizSubmission,
+    onNext?: (submission: CourseQuizSubmission) => void,
+    onPrev?: (submission: CourseQuizSubmission) => void,
     isLast: boolean
 }
 
-function _Question({ question, onNext, onPrev, isLast }: _QuestionProps) {
-    const [selected, setSelected] = useState<number[]>([])
-    const handleSelect = (index: number) => {
-        if (selected.includes(index)) {
-            setSelected(p => p.filter((i) => i != index))
-        }
-        else {
-            setSelected(p => [...p, index])
-        }
+function _Question({ problem, submission, onNext, onPrev, isLast }: _QuestionProps) {
+    const [answer, setAnswer] = useState(submission.answers[problem.problemNumber - 1].answer)
+    const handleSelect = (key: string) => {
+        setAnswer(p => {
+            return {
+                ...p,
+                [key]: !p[key]
+            }
+        })
     }
+    const isSelect = (key: string) => {
+        return answer[key]
+    }
+
     const handleNext = () => {
+        submission.answers[problem.problemNumber - 1].answer = answer
         if (onNext) {
-            onNext({
-                questionNumber: question.questionNumber,
-                answers: selected
-            })
+            onNext(submission)
         }
     }
 
     const handlePrev = () => {
+        submission.answers[problem.problemNumber - 1].answer = answer
         if (onPrev) {
-            onPrev({
-                questionNumber: question.questionNumber,
-                answers: selected
-            })
+            onPrev(submission)
         }
     }
     return (
         <div className="bg-white">
-            <h1 className="text-2xl font-bold mx-[3%] my-5">คำถามที่ {question.questionNumber}: </h1>
-            <p className="text-xl  mx-[5%] my-5">{question.question}</p>
-            {question.options.map((option, index) => (
-            
-                <div key={index} className="flex items-center text-lg font-bold mx-[5%] my-10">
-                    <div className="flex rounded-full justify-center items-center w-5 h-5 bg-gray-400">
-                        <div className="flex rounded-full justify-center items-center w-5 h-5">
-                            <button className={`rounded-full w-4 h-4 ${selected.includes(index) ? 'bg-black' : 'bg-white'} border-2 border-black}`}
-                                onClick={() => { handleSelect(index) }}></button>
+            <h1 className="text-2xl font-bold mx-[3%] my-5">คำถามที่ {problem.problemNumber}: </h1>
+            <p className="text-xl  mx-[5%] my-5">{problem.question}</p>
+            {Object.entries(problem.choices).map(([k, v], index) => {
+                if (v == "") return (<></>)
+                else return (
+                    <div key={index} className="flex items-center text-lg font-bold mx-[5%] my-10">
+                        <div className="flex rounded-full justify-center items-center w-5 h-5 bg-gray-400">
+                            <div className="flex rounded-full justify-center items-center w-5 h-5">
+                                <button className={`rounded-full w-4 h-4 ${isSelect(k) ? 'bg-black' : 'bg-white'} border-2 border-black}`}
+                                    onClick={() => { handleSelect(k) }}></button>
+                            </div>
                         </div>
+                        <p className="mx-2">{v}</p>
                     </div>
-                    <p className="mx-2">{option}</p>
-                </div>
-                
-            ))}
+                )
+            })}
             <div className="flex justify-end mx-[3%]">
                 <button className={`flex justify-center items-center px-4 h-11 m-2 rounded-md ${onPrev ? "bg-black" : "bg-gray-300"} text-white`
                 } onClick={handlePrev}>
@@ -74,35 +72,48 @@ function _Question({ question, onNext, onPrev, isLast }: _QuestionProps) {
     )
 }
 
+function _genSubmission(numberOfProblems: number) {
+    const submission: CourseQuizSubmission = {
+        status: "i don't know",
+        answers: []
+    }
+    for (let i = 0; i < numberOfProblems; i++) {
+        submission.answers.push({
+            problemNumber: i + 1,
+            answer: {
+                choiceA: false,
+                choiceB: false,
+                choiceC: false,
+                choiceD: false,
+                choiceE: false,
+                choiceF: false
+            }
+        })
+    }
+    return submission
+}
+
+interface MultipleChoiceQuizProps {
+    quiz: CourseQuiz
+}
 function CourseMultipleChoiceQuiz({ quiz }: MultipleChoiceQuizProps) {
     const [started, setStarted] = useState(false)
     const [currentQuestion, setCurrentQuestion] = useState(0)
-    const [answers, setAnswers] = useState<MultipleChoiceQuestionAnswer[]>([])
+    const [submission, setSubmission] = useState<CourseQuizSubmission>(_genSubmission(quiz.problems.length))
     const handleStart = () => {
         setStarted(true)
     }
-    const handleAnswer = (answer: MultipleChoiceQuestionAnswer) => {
-        const idx = answers.findIndex((a) => a.questionNumber == currentQuestion)
-        if (idx == -1) {
-            setAnswers(p => [...p, answer])
-        }
-        else {
-            setAnswers(p => {
-                const newAnswers = [...p]
-                newAnswers[idx] = answer
-                return newAnswers
-            })
-        }
-    }
-    const handleNext = (answer: MultipleChoiceQuestionAnswer) => {
-        handleAnswer(answer)
-        if (currentQuestion < quiz.questions.length - 1) {
+    const handleNext = (submission: CourseQuizSubmission) => {
+        setSubmission(submission)
+        if (currentQuestion < quiz.problems.length - 1) {
             setCurrentQuestion(p => p + 1)
         }
     }
-    const handlePrev = (answer: MultipleChoiceQuestionAnswer) => {
-        handleAnswer(answer)
-        setCurrentQuestion(p => p - 1)
+    const handlePrev = (submission: CourseQuizSubmission) => {
+        setSubmission(submission)
+        if (currentQuestion > 0) {
+            setCurrentQuestion(p => p - 1)
+        }
     }
     if (!started) {
         return (
@@ -119,8 +130,13 @@ function CourseMultipleChoiceQuiz({ quiz }: MultipleChoiceQuizProps) {
     else {
         return (
             <div className="bg-white border-2 border-black">
-                <_Question question={quiz.questions[currentQuestion]} onNext={currentQuestion < quiz.questions.length ? handleNext : undefined}
-                    onPrev={currentQuestion > 0 ? handlePrev : undefined} isLast={currentQuestion == quiz.questions.length - 1} />
+                {quiz.problems.map((problem, index) => {
+                    if (index == currentQuestion) {
+                        return (
+                            <_Question key={index} problem={problem} submission={submission} onNext={handleNext} onPrev={handlePrev} isLast={index == quiz.problems.length - 1} />
+                        )
+                    }
+                })}
             </div>
         )
     }

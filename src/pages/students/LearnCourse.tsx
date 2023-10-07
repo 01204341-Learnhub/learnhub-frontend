@@ -41,34 +41,45 @@ function _LessonDisplay({ lesson }: { lesson: CourseLesson | undefined }) {
             quizID: "1",
             name: "Quiz 1",
             description: "Quiz 1 description",
-            questions: [
+            problems: [
                 {
-                    questionNumber: 1,
+                    problemNumber: 1,
                     question: "Question 1",
-                    options: [
-                        "Option 1",
-                        "Option 2",
-                        "Option 3",
-                    ]
+                    multipleCorrectAnswers: true,
+                    choices: {
+                        choiceA: "Choice A",
+                        choiceB: "Choice B",
+                        choiceC: "Choice C",
+                        choiceD: "Choice D",
+                        choiceE: "Choice E",
+                        choiceF: "Choice F",
+                    }
                 },
                 {
-                    questionNumber: 2,
-                    question: "Question 2",
-                    options: [
-                        "Option 1",
-                        "Option 2",
-                        "Option 3",
-                        "Option 4",
-                    ]
-                },
-                {
-                    questionNumber: 3,
+                    problemNumber: 2,
                     question: "Question 3",
-                    options: [
-                        "Option 1",
-                        "Option 3",
-                        "Option 4",
-                    ]
+                    multipleCorrectAnswers: true,
+                    choices: {
+                        choiceA: "Choice A",
+                        choiceB: "Choice B",
+                        choiceC: "Choice C",
+                        choiceD: "Choice D",
+                        choiceE: "Choice E",
+                        choiceF: "Choice F",
+                    }
+                },
+                {
+                    problemNumber: 3,
+                    question: "Queslion 3",
+                    multipleCorrectAnswers: true,
+                    choices: {
+                        choiceA: "Choice A",
+                        choiceB: "Choice B",
+                        choiceC: "Choice C",
+                        choiceD: "Choice D",
+                        choiceE: "Choice E",
+                        choiceF: "Choice F",
+                    }
                 },
             ]
         }

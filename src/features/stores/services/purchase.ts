@@ -9,7 +9,7 @@ async function purchaseCourse(studentID : string, paymentMethodID : string) {
     const url = `${baseUrl}/transactions/course/purchase`
     const body = {
         student_id : studentID,
-        paymen_method_id : paymentMethodID
+        payment_method_id : paymentMethodID
     }
 
     try {

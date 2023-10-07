@@ -10,7 +10,7 @@ import { useUser } from '../hooks/useUser'
 
 function Basket() {
     //console.log("in basket")
-    const { user, isFetching } = useUser()
+    const { user } = useUser()
     const { basket } = useSelector((state: RootState) => state.basket)
     const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
     const dispatcher = useDispatch()
@@ -24,15 +24,16 @@ function Basket() {
     }
     
 
-    // const handlePayment = async () => {
-    //     const transction = await purchaseCourse(userID, "1");
-    //     if (transction) {
-    //         alert("ชำระเงินสำเร็จ")
-    //     } else {
-    //         alert("ชำระเงินไม่สำเร็จ")
-    //     }
+    const handlePayment = async () => {
+        const transction = await purchaseCourse(user.userID, "1111111111111");
+        if (transction) {
+            alert("ชำระเงินสำเร็จ")
+            dispatcher(clearItem())
+        } else {
+            alert("ชำระเงินไม่สำเร็จ")
+        }
 
-    // }
+    }
 
     useEffect(() => {
         async function fetchBasket() {
@@ -92,7 +93,7 @@ function Basket() {
                 <h1 className="border-1 font-bold text-[32px] py-2">ทั้งหมด</h1>
                 <h1 className="border-1 font-bold text-[40px] pb-4">{basket.items.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
                 <button
-                    onClick={() => {}}
+                    onClick={handlePayment}
                     type='button' 
                     className=" px-[55px] py-[15px] bg-[#d9d9d9] font-bold text-[20px] bg-blue-400 text-gray-100 hover:bg-blue-300">
                     ชำระเงิน

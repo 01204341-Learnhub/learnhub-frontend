@@ -1,7 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Class, Reply, Thread } from "../../features/learns/types/thread";
-import Mock from "../../features/learns/services/thread";
+import {
+  Class,
+  Reply,
+  Thread,
+  generateMockUser,
+} from "../../features/learns/types/thread";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClipboardList,
@@ -9,31 +13,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import PeopleSvg from "../../assets/images/people.svg";
 import { LearnhubUser } from "../../types/user";
+import useThread from "../../hooks/useThread";
 
-type PathParams = {
-  [key: string]: string;
-  classId: string;
-  homeworkId: string;
-};
-
-interface _ReplyEntryProps {
-  reply: Reply;
-  currentDate: Date;
+interface _TopNavbarProps {
+  cls: Class;
+  threadName: string;
 }
 
-type HomeworkContext = {
-  user: LearnhubUser;
-  cls: Class;
-  thread: Thread;
-  handleAddReply: (text: string) => void;
-  handleAddHomeworkFile: (file: File) => void;
-  handleDeleteHomeworkFile: (fileId: string) => void;
-};
-
-const HomeworkContext = createContext<HomeworkContext | undefined>(undefined);
-
-function _TopNavbar() {
-  const { cls, thread } = useContext(HomeworkContext);
+function _TopNavbar({ cls, threadName }: _TopNavbarProps) {
   const navigate = useNavigate();
   return (
     <div className="flex space-x-4 p-5 border-b-2">
@@ -52,13 +39,18 @@ function _TopNavbar() {
       </button>
       <h1 className="text-black text-[32px] font-bold">{">"}</h1>
       <button className="text-black text-[32px] font-bold ml-2 hover:opacity-80">
-        {thread.name}
+        {threadName}
       </button>
     </div>
   );
 }
 
-function _ReplyEntry({ reply, currentDate }: _ReplyEntryProps) {
+interface _ReplyEntryProps {
+  reply: Reply;
+  currentDateTime: Date;
+}
+
+function _ReplyEntry({ reply, currentDateTime }: _ReplyEntryProps) {
   return (
     <div className="flex space-x-5">
       <img
@@ -72,13 +64,14 @@ function _ReplyEntry({ reply, currentDate }: _ReplyEntryProps) {
             {reply.user.username}
           </p>
           <p className="text-[#707070] text-[14px] font-normal">
-            {currentDate.getTime() - reply.date.getTime() > 1000 * 60 * 60 * 24
-              ? reply.date.toLocaleDateString("th-TH", {
+            {currentDateTime.getTime() - reply.dateTime.getTime() >
+            1000 * 60 * 60 * 24
+              ? reply.dateTime.toLocaleDateString("th-TH", {
                   day: "2-digit",
                   month: "2-digit",
                   year: "2-digit",
                 })
-              : `${reply.date.toLocaleTimeString("th-TH", {
+              : `${reply.dateTime.toLocaleTimeString("th-TH", {
                   hour: "2-digit",
                   minute: "2-digit",
                 })} น.`}
@@ -90,14 +83,18 @@ function _ReplyEntry({ reply, currentDate }: _ReplyEntryProps) {
   );
 }
 
-function _ReplyInputBar() {
-  const { user, handleAddReply } = useContext(HomeworkContext);
-  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-  const [replyText, setReplyText] = useState<string>("");
+interface _ReplyInputBarProps {
+  onAddReply: (text: string) => void;
+}
+
+function _ReplyInputBar({ onAddReply }: _ReplyInputBarProps) {
+  const user = useContext(UserContext);
+  const [replyTextInput, setReplyTextInput] = useState<string>("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleTextareaChange = () => {
     if (textareaRef.current) {
-      setReplyText(textareaRef.current.value);
+      setReplyTextInput(textareaRef.current.value);
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${
         textareaRef.current.scrollHeight + 4
@@ -116,7 +113,7 @@ function _ReplyInputBar() {
         id="reply-textarea"
         name="reply-textarea"
         ref={textareaRef}
-        value={replyText}
+        value={replyTextInput}
         onChange={handleTextareaChange}
         className="resize-none border-2 border-[#808080] rounded-[15px] py-2 px-3 w-full"
         placeholder="เพิ่มความเห็น ..."
@@ -124,9 +121,9 @@ function _ReplyInputBar() {
       <button
         className="flex flex-col justify-end pb-3 hover:opacity-80"
         onClick={() => {
-          if (replyText === "") return;
-          handleAddReply(replyText);
-          setReplyText("");
+          if (replyTextInput === "") return;
+          onAddReply(replyTextInput);
+          setReplyTextInput("");
         }}
       >
         <FontAwesomeIcon icon={faPaperPlane} size="lg" />
@@ -135,12 +132,16 @@ function _ReplyInputBar() {
   );
 }
 
-function _MainContent() {
-  const { thread } = useContext(HomeworkContext);
+interface _MainContentProps {
+  thread: Thread;
+  onAddReply: (text: string) => void;
+}
+
+function _MainContent({ thread, onAddReply }: _MainContentProps) {
   const [showRepliesAndTextBox, setShowRepliesAndTextBox] = useState<boolean>(
     thread.replies.length === 0 ? false : true
   );
-  const currentDate = new Date();
+  const currentDateTime = new Date();
   return (
     <div className="bg-white p-5">
       <div className="flex items-center space-x-5 pb-5 border-b-2">
@@ -175,135 +176,77 @@ function _MainContent() {
               <_ReplyEntry
                 key={index}
                 reply={reply}
-                currentDate={currentDate}
+                currentDateTime={currentDateTime}
               />
             ))}
           </div>
         </div>
         <div className="mt-8 w-[95%]">
-          <_ReplyInputBar />
+          <_ReplyInputBar onAddReply={onAddReply} />
         </div>
       </div>
     </div>
   );
 }
 
-function _FileUploader() {
-  const { handleAddHomeworkFile, handleDeleteHomeworkFile } =
-    useContext(HomeworkContext);
+interface _FileUploaderProps {
+  thread: Thread;
+  onAddHomeworkFile: (name: string, src: string) => void;
+  onRemoveHomeworkFile: (homeworkFileId: string) => void;
+}
+
+function _FileUploader({
+  thread,
+  onAddHomeworkFile,
+  onRemoveHomeworkFile,
+}: _FileUploaderProps) {
+  thread;
+  onAddHomeworkFile;
+  onRemoveHomeworkFile;
   return <div className="bg-red-200">hello</div>;
 }
 
+type PathParams = {
+  [key: string]: string;
+  classId: string;
+  homeworkId: string;
+};
+
+const UserContext = createContext<LearnhubUser | undefined>(undefined);
+
 function LearningHomeworkDetail() {
   const { classId, homeworkId } = useParams<PathParams>();
-  // const { user } = useSelector((state: RootState) => state.user);
-  const user = Mock.students[0];
-  const [cls, setCls] = React.useState<Class | undefined>(undefined);
-  const [thread, setThread] = React.useState<Thread | undefined>(undefined);
-  const mock = new Mock(classId, homeworkId, user, true);
-  useEffect(() => {
-    mock
-      .fetchClass()
-      .then((cls) => {
-        setCls(cls);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    mock
-      .fetchThread()
-      .then((thread) => {
-        setThread(thread);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  });
-
-  const handleAddReply = (text: string) => {
-    mock
-      .addReply(text)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    mock
-      .fetchThread()
-      .then((thread) => {
-        setThread(thread);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const handleAddHomeworkFile = (file: File) => {
-    mock
-      .addHomeworkFile(file, (progress) => {
-        console.log(progress);
-      })
-      .then((id) => {
-        console.log(`file id: ${id}`);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    mock
-      .fetchThread()
-      .then((thread) => {
-        setThread(thread);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const handleDeleteHomeworkFile = (fileId: string) => {
-    mock
-      .deleteHomeworkFile(fileId)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-    mock
-      .fetchThread()
-      .then((thread) => {
-        setThread(thread);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  // Call useUser hook here and remove the mock user below.
+  const user = generateMockUser("student", "student0");
+  const { thread, addReply, addHomeworkFile, removeHomeworkFile } = useThread(
+    user,
+    classId,
+    homeworkId,
+    "homework"
+  );
 
   return (
-    <div className="w-full h-full bg-[#eeeeee80] overflow-auto">
-      {user && cls && thread && (
-        <HomeworkContext.Provider
-          value={{
-            user: user,
-            cls: cls,
-            thread: thread,
-            handleAddReply: handleAddReply,
-            handleAddHomeworkFile: handleAddHomeworkFile,
-            handleDeleteHomeworkFile: handleDeleteHomeworkFile,
-          }}
-        >
-          <_TopNavbar />
-          <div className="flex p-5 mt-5 justify-center items-start space-x-5 w-full">
-            <div className="max-w-[760px] min-w-[380px] w-full">
-              <_MainContent />
+    <UserContext.Provider value={user}>
+      <div className="w-full h-full bg-[#eeeeee80] overflow-auto">
+        {thread && (
+          <>
+            <_TopNavbar cls={thread.cls} threadName={thread.name} />
+            <div className="flex p-5 mt-5 justify-center items-start space-x-5 w-full">
+              <div className="max-w-[760px] min-w-[380px] w-full">
+                <_MainContent thread={thread} onAddReply={addReply} />
+              </div>
+              <div className="min-w-[300px] w-[300px]">
+                <_FileUploader
+                  thread={thread}
+                  onAddHomeworkFile={addHomeworkFile}
+                  onRemoveHomeworkFile={removeHomeworkFile}
+                />
+              </div>
             </div>
-            <div className="min-w-[300px] w-[300px]">
-              <_FileUploader />
-            </div>
-          </div>
-        </HomeworkContext.Provider>
-      )}
-    </div>
+          </>
+        )}
+      </div>
+    </UserContext.Provider>
   );
 }
 

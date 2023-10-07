@@ -12,6 +12,7 @@ interface WorkCreateProps {
 
 function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
     const [work, setWork] = useState<Work>({ name: '', description: '', attachments: [], score: 0, topic: '' })
+    const [dropdowndete,setdropdowndete] = useState<boolean>(false)
 
     const onWorkNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setWork((p) => ({ ...p, name: e.target.value }))
@@ -24,6 +25,10 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
     }
     const onWorkDateChange = (date: Date) => {
         setWork((p) => ({ ...p, dueDate: date }))
+    }
+    const onWorkTimeChange = (date: Date) => {
+        console.log(JSON.stringify(date))
+        // setWork((p) => ({ ...p, dueDate: date }))
     }
     const setWorkTopic = (topic: string) => {
         setWork((p) => ({ ...p, topic: topic }))
@@ -42,6 +47,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
             setWorkTopic(newTopic)
         }
     }
+    
     return (
         <div className="w-full h-full">
             <div className="flex justify-between">
@@ -94,24 +100,32 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                 <div className="w-1/4 bg-white ">
                     <div>
                         <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">คะแนน</h1>
-                        <input  type="number" value={work.score} onChange={onWorkScoreChange} className="mx-10  mb-5  input input-bordered bg-gray-400" />
+                        <input  type="number" value={work.score} onChange={onWorkScoreChange} className="mx-10  mb-5  input input-bordered bg-[#E0E0E0]" />
                     </div>
-                    <div>
-                        <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">กำหนดส่ง</h1>
-                        <input type="time"  name="time" className="mx-10  mb-5 input input-bordered bg-gray-400"/>                                
+                    <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">กำหนดเวลา</h1>
+                    <div className="flex w-[100%] ml-10 ">
+                        <button onClick={() => {setdropdowndete(!dropdowndete)}} className="flex justify-end items-center h-14 w-[70%] bg-[#E0E0E0] hover:bg-gray-200 pr-5 rounded-xl">{dropdowndete? "open":"off"}</button>
                     </div>
-                    <div>
-                        <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">กำหนดวัน & เวลา</h1>
-                        <div className="mx-10  mb-5  dropdown">
-                            <label tabIndex={0} className="btn m-1">
-                                <h1>{work.dueDate ? work.dueDate.toString() : "ไม่มีกำหนดส่ง"}</h1>
-                            </label>
-                            <div tabIndex={0} className="dropdown-content z-[1] p-2 bg-white">
-                                <Calendar targetDate={work.dueDate} onDateSelect={onWorkDateChange} />
-                                <h1 className="btn">เลือกเวลาแต่ยังไม่ได้ทำ</h1>
+                    {dropdowndete&&
+                    <div className="w-[70%] bg-white pr-5 mt-2 rounded-xl ml-10 border-solid border-2 border-gray-200 shadow-2xl">
+                        <div>
+                            <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">กำหนดวัน & เวลา</h1>
+                            <input type="time"  name="time"  className="mx-10  mb-5 input input-bordered bg-[#E0E0E0] hover:bg-gray-200 w-[70%]"/>                                
+                        </div>
+                        <div>
+                            <div className="mx-10  mb-5  dropdown">
+                                <label tabIndex={0} className="btn m-1 border-solid border-2 border-gray-200 shadow-md over">
+                                    <h1>{work.dueDate ? work.dueDate.toString() : "ไม่มีกำหนดส่ง"}</h1>
+                                </label>
+                                <div tabIndex={0} className="dropdown-content z-[1] p-2 bg-white ">
+                                    <Calendar targetDate={work.dueDate} onDateSelect={onWorkTimeChange} />
+                                    <h1 className="btn">เลือกเวลาแต่ยังไม่ได้ทำ</h1>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    }
                     <div>
                         <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">หัวข้อ</h1>
                         <dialog id="create-topic-modal " className="modal">

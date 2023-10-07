@@ -74,18 +74,21 @@ async function deleteBasketItem(studentID : string, basketItemID : string) {
 
 
 
-async function addBasketItem(programID : string, typeProgram : string, studentID : string) {
-    //console.log("eiei")
+async function addBasketItem(programID : string, typeProgram : string, studentID : string) : Promise<string | boolean> {
+  
     const url = `${baseUrl}/users/students/${studentID}/basket`
     const body = {
         program_id : programID,
         type : typeProgram
     }
-    //console.log(body)
     
     try {
         const response = await axios.post<{ basket_item_id : string }>(url, body)
         const basketItemID = response.data.basket_item_id
+        if ( response.status == 422 ) {
+            return false
+        }
+
         return basketItemID
     } catch (err) {
         console.log("errr")

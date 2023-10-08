@@ -1,28 +1,35 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useParams } from "react-router-dom"
 import VideoPlayer from "../../components/VideoPlayer"
 import ChapterOutline from "../../features/learns/components/ChapterOutline"
 import CourseAnnouncementDropdown from "../../features/learns/components/CourseAnnouncementDropdown"
 import CourseMultipleChoiceQuiz from "../../features/learns/components/CourseMultipleChoiceQuiz"
-import { fetchChapters } from "../../features/learns/services/courses"
-import { fetchUserCourseProgress } from "../../features/learns/services/progress"
-import { CourseChapter, CourseLesson } from "../../features/learns/types/course"
-import { UserCourseProgress } from "../../features/learns/types/progress"
+import { useCourseChapters } from "../../features/learns/hooks/useCourseChapters"
+import { useStudentCourseProgress } from "../../features/learns/hooks/useStudentCourseProgress"
+import { CourseChapter } from "../../features/learns/types/courseChapters"
+import { CourseLesson } from "../../features/learns/types/lessons"
+import { StudentCourseProgress } from "../../features/learns/types/progress"
 import { CourseQuiz } from "../../features/learns/types/quiz"
-import { listCourseAnnouncements } from "../../features/stores/services/courses"
 import { CourseAnnouncement } from "../../features/stores/types/course"
+import { useUser } from "../../hooks/useUser"
 
 interface _CourseContentProp {
     chapters: CourseChapter[]
-    chapterProgress: UserCourseProgress,
+    studentCourseProgress: StudentCourseProgress,
     onSelectLesson?: (lesson: CourseLesson) => void
 }
 
-function _CourseContent({ chapters, chapterProgress, onSelectLesson }: _CourseContentProp) {
+function _CourseContent({ chapters, studentCourseProgress, onSelectLesson }: _CourseContentProp) {
+    function _getChapterProgress(chapterID: string) {
+        return studentCourseProgress.lessons.filter((lesson) => {
+            if (lesson.chapterID == chapterID) return true
+            return false
+        })
+    }
     return (
         <div>
             {chapters.map((chapter, index) => (
-                <ChapterOutline chapter={chapter} chapterProgress={chapterProgress} onSelectLesson={onSelectLesson} key={index} />
+                <ChapterOutline chapter={chapter} lessonsProgress={_getChapterProgress(chapter.chapterID)} onSelectLesson={onSelectLesson} key={index} />
             ))}
         </div>
     )
@@ -91,27 +98,12 @@ function _LessonDisplay({ lesson }: { lesson: CourseLesson | undefined }) {
 
 function LearnCourse() {
     const { courseID } = useParams<{ courseID: string }>()
-    const [fetching, setFetching] = useState(false)
-    const [progress, setProgress] = useState<UserCourseProgress | undefined>()
-    const [chapters, setChapters] = useState<CourseChapter[]>([])
+    const { user } = useUser()
+    const { progress } = useStudentCourseProgress(user.userID, courseID)
+    const { chapters } = useCourseChapters(courseID)
     const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>('contents')
     const [currentLesson, setCurrentLesson] = useState<CourseLesson | undefined>(undefined)
     const [announcements, setAnnouncements] = useState<CourseAnnouncement[]>([])
-
-    useEffect(() => {
-        if (!courseID) return
-        async function fetchData(courseID: string) {
-            const fetchedChapters = await fetchChapters(courseID)
-            const progress = await fetchUserCourseProgress(courseID)
-            const fetchedAnnouncements = await listCourseAnnouncements(courseID)
-            setChapters(fetchedChapters)
-            setProgress(progress)
-            setAnnouncements(fetchedAnnouncements)
-        }
-
-        setFetching(true)
-        fetchData(courseID).then(() => { setFetching(false) })
-    }, [courseID])
 
     const announcementAdapter = (announcement: CourseAnnouncement) => {
         return {
@@ -128,9 +120,6 @@ function LearnCourse() {
         if (idx == -1) throw new Error("Chapter not found")
         return chapters[idx]
     }
-
-    if (fetching) return (<div>Fetching...</div>)
-    if (!progress || !chapters) return (<div>Not found</div>)
     return (
         <div className="bg-[#eeeeee80] h-full pb-20">
             <div className="flex pt-8 pl-14 pb-14">
@@ -147,7 +136,7 @@ function LearnCourse() {
                     const currentChapter = getChapter(currentLesson.chapterID)
                     return (
                         <div className="self-start">
-                            <h1 className="text-black font-bold text-2xl pb-4">คำอธิบาย (ของ ch) บทที่ {currentChapter.chapterNum}: {currentChapter.name}</h1>
+                            <h1 className="text-black font-bold text-2xl pb-4">คำอธิบาย (ของ ch) บทที่ {currentChapter.chapterNumber}: {currentChapter.name}</h1>
                             <p className="font-medium text-lg" >{currentChapter.description}</p>
                         </div>
                     )
@@ -166,7 +155,7 @@ function LearnCourse() {
                     {(() => {
                         if (outlineViewMode == 'contents') {
                             return (
-                                <_CourseContent chapters={chapters} chapterProgress={progress} onSelectLesson={(l) => { setCurrentLesson(l) }} />
+                                <_CourseContent chapters={chapters} studentCourseProgress={progress} onSelectLesson={(l) => { setCurrentLesson(l) }} />
 
                             )
                         }

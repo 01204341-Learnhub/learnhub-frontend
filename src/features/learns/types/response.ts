@@ -1,44 +1,3 @@
-export type ResponseChapterId = {
-  chapter_id: string;
-  course_id: string;
-  chapter_num: string;
-  name: string;
-  description: string;
-};
-
-type LessonData = {
-  lesson_id: string;
-  lesson_num: number;
-  name: string;
-  lesson_type: string;
-  lesson_length: number;
-};
-
-type CourseChapter = {
-  chapter_id: string;
-  chapter_num: number;
-  name: string;
-  lesson_count: number;
-  chapter_length: number;
-};
-
-export type ResponseCourseChapters = {
-  chapters: CourseChapter[];
-};
-
-export type ResponseLessons = {
-  lessons: LessonData[];
-};
-
-export type ResponseLessonId = {
-  lesson_id: string;
-  lesson_num: number;
-  name: string;
-  lesson_type: string;
-  lesson_length: number;
-  src: string;
-};
-
 type ListEnrolledCoursesResponse = {
   courses: {
     course_id: string;
@@ -75,4 +34,53 @@ type GetQuizResponse = {
   }[];
 };
 
-export type { GetQuizResponse, ListEnrolledCoursesResponse };
+type GetCourseLessonResponse = {
+  lesson_id: string;
+  lesson_num: number;
+  name: string;
+  lesson_type: string;
+  lesson_length: number;
+  src: string;
+};
+
+type ListCourseLessonsResponse = {
+  lessons: Omit<GetCourseLessonResponse, "src">[];
+};
+
+type GetCourseChapterResponse = {
+  chapter_id: string;
+  course_id: string;
+  chapter_num: number;
+  name: string;
+  description: string;
+};
+
+type ListCourseChaptersResponse = {
+  chapters: {
+    chapter_id: string;
+    chapter_num: number;
+    name: string;
+    lesson_count: number;
+    chapter_length: number;
+  }[];
+};
+
+type GetStudentCourseProgressResponse = {
+  progress: number;
+  lessons: {
+    lesson_id: string;
+    chapter_id: string;
+    finished: boolean;
+    lessons_completed: number;
+  }[];
+};
+
+export type {
+  GetCourseChapterResponse,
+  GetCourseLessonResponse,
+  GetQuizResponse,
+  GetStudentCourseProgressResponse,
+  ListCourseChaptersResponse,
+  ListCourseLessonsResponse,
+  ListEnrolledCoursesResponse,
+};

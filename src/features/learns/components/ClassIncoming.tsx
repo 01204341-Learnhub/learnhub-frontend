@@ -21,7 +21,7 @@ export default function ClassIncoming (props: ClassIncomingProps) {
     
             <div className=" flex flex-rows-3 relative bg-white">
                 <div className="py-4">
-                    <p className=" font-bold pb-2 px-2 text-xl ml-[2%]">{props.titleName}</p>
+                    <p className=" font-bold pb-2 px-2 text-xl ml-[2%] truncate">{props.titleName}</p>
                     <hr className=" bg-[#EBEBEB] w-[450px] h-[2px]" />
                 </div>
                 <div className=" absolute left-3 top-16 flex space-x-3 px-2 pt-2">
@@ -36,7 +36,7 @@ export default function ClassIncoming (props: ClassIncomingProps) {
                     <div className="w-8 h-8 bg-slate-200 rounded-full">
                         <img src="" alt="" />
                     </div>
-                    <div className="px-2 text-[#8f8f8f] text-sm font-bold">{props.instrName}</div>
+                    <div className="px-2 text-[#8f8f8f] text-sm font-bold truncate">{props.instrName}</div>
                 </div>
             </div>
         </div>

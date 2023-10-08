@@ -6,14 +6,6 @@ export type ResponseChapterId = {
   description: string;
 };
 
-type LessonData = {
-  lesson_id: string;
-  lesson_num: number;
-  name: string;
-  lesson_type: string;
-  lesson_length: number;
-};
-
 type CourseChapter = {
   chapter_id: string;
   chapter_num: number;
@@ -75,4 +67,22 @@ type GetQuizResponse = {
   }[];
 };
 
-export type { GetQuizResponse, ListEnrolledCoursesResponse };
+type GetCourseLessonResponse = {
+  lesson_id: string;
+  lesson_num: number;
+  name: string;
+  lesson_type: string;
+  lesson_length: number;
+  src: string;
+};
+
+type ListCourseLessonsResponse = {
+  lessons: Omit<GetCourseLessonResponse, "src">[];
+};
+
+export type {
+  GetCourseLessonResponse,
+  GetQuizResponse,
+  ListCourseLessonsResponse,
+  ListEnrolledCoursesResponse,
+};

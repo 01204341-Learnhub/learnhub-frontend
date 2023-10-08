@@ -13,6 +13,7 @@ interface _ProblemCreateProps {
 function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
     const [question, setQuestion] = useState<string>("")
     const [numChoice, setNumChoice] = useState<number>(1)
+    const [explaination, setExplaination] = useState<string>("")
     const [choices, setChoices] = useState<CourseQuizProblem["choices"]>({
         choiceA: "",
         choiceB: "",
@@ -29,8 +30,11 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
         choiceE: false,
         choiceF: false,
     })
-    const [explaination, setExplaination] = useState<string>("")
     const handleSubmit = () => {
+        if (question === "" || explaination === "") {
+            alert("ต้องกรอกคำถามและคำอธิบาย")
+            return
+        }
         for (let i = 0; i < numChoice; i++) {
             if (choices[Object.keys(choices)[i]] === "") {
                 alert("ต้องกรอกตัวเลือกทั้งหมด")
@@ -168,6 +172,8 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                                 )
                             }
                         })}
+                        <hr />
+                        <h1>คำอธิบาย: {problem.explaination}</h1>
                     </div>
                 )
             })}

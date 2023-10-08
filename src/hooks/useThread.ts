@@ -4,6 +4,8 @@ import { LearnhubUser } from "../types/user";
 import {
   deleteHomeworkSubmissionFile,
   getThread,
+  patchSubmitHomework,
+  patchUnsubmitHomework,
   postHomeworkSubmissionFile,
   postReply,
 } from "../features/learns/services/thread";
@@ -54,6 +56,11 @@ function useThread(
         new Error("Cannot add homework file to non-homework thread")
       );
     }
+    if (thread.homeworkSubmitted) {
+      console.error(
+        new Error("Cannot add homework file to submitted homework thread")
+      );
+    }
     const dateTime = new Date();
     postHomeworkSubmissionFile(
       user.userID,
@@ -87,6 +94,11 @@ function useThread(
         new Error("Cannot remove homework file from non-homework thread")
       );
     }
+    if (thread.homeworkSubmitted) {
+      console.error(
+        new Error("Cannot remove homework file from submitted homework thread")
+      );
+    }
     deleteHomeworkSubmissionFile(
       user.userID,
       thread.cls.classId,
@@ -107,11 +119,62 @@ function useThread(
         alert("Failed to remove homework file");
       });
   };
+  const submitHomework = () => {
+    if (typ !== "homework") {
+      console.error(
+        new Error("Cannot submit homework from non-homework thread")
+      );
+    }
+    if (thread.homeworkSubmitted) {
+      console.error(new Error("Already submitted"));
+    }
+    const dateTime = new Date();
+    patchSubmitHomework(
+      user.userID,
+      thread.cls.classId,
+      thread.threadId,
+      dateTime
+    )
+      .then(() => {
+        setThread({
+          ...thread,
+          homeworkSubmitted: true,
+          homeworkLastSubmissionDateTime: dateTime,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Failed to submit homework");
+      });
+  };
+  const unsubmitHomework = () => {
+    if (typ !== "homework") {
+      console.error(
+        new Error("Cannot unsubmit homework from non-homework thread")
+      );
+    }
+    if (!thread.homeworkSubmitted) {
+      console.error(new Error("Not yet submitted"));
+    }
+    patchUnsubmitHomework(user.userID, thread.cls.classId, thread.threadId)
+      .then(() => {
+        setThread({
+          ...thread,
+          homeworkSubmitted: false,
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Failed to unsubmit homework");
+      });
+  };
   return {
     thread,
     addReply,
     addHomeworkSubmissionFile,
     removeHomeworkSubmissionFile,
+    submitHomework,
+    unsubmitHomework,
   };
 }
 

@@ -13,7 +13,7 @@ interface _TopNavbarProps {
 function _TopNavbar({ thread }: _TopNavbarProps) {
   const navigate = useNavigate();
   return (
-    <div className="flex space-x-4 p-5 border-b-2">
+    <div className="flex items-center space-x-4 p-5 border-b-2">
       <button
         className="text-black text-[32px] font-bold hover:opacity-80"
         onClick={() => navigate("/learn/classes")}
@@ -45,13 +45,15 @@ const UserContext = createContext<LearnhubUser | undefined>(undefined);
 
 function LearningHomeworkDetail() {
   const { classId, homeworkId } = useParams<PathParams>();
-  // Call useUser hook here and remove the mock user below.
+  // TODO: use useUser hook
   const user = generateMockUser("student", "student0");
   const {
     thread,
     addReply,
     addHomeworkSubmissionFile,
     removeHomeworkSubmissionFile,
+    submitHomework,
+    unsubmitHomework,
   } = useThread(user, classId, homeworkId, "homework");
 
   return (
@@ -61,14 +63,16 @@ function LearningHomeworkDetail() {
           <>
             <_TopNavbar thread={thread} />
             <div className="flex p-5 mt-5 justify-center items-start space-x-5 w-full">
-              <div className="max-w-[760px] min-w-[380px] w-full">
+              <div className="min-w-[400px] max-w-[760px] w-full">
                 <MainContent thread={thread} onAddReply={addReply} />
               </div>
-              <div className="min-w-[300px] w-[300px]">
+              <div className="min-w-[310px] max-w-[310px]">
                 <FileUploader
                   thread={thread}
                   onAddHomeworkSubmissionFile={addHomeworkSubmissionFile}
                   onRemoveHomeworkSubmissionFile={removeHomeworkSubmissionFile}
+                  onSubmitHomework={submitHomework}
+                  onUnsubmitHomework={unsubmitHomework}
                 />
               </div>
             </div>

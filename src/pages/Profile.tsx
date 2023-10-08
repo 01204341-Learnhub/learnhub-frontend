@@ -1,8 +1,11 @@
-import { useUser } from "../hooks/useUser";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useUser } from "../hooks/useUser";
+import { changeProfilePicture } from "../slices/userSlice";
 
 function Profile() {
   const { user, isFetching } = useUser();
+  const dispatch = useDispatch();
   const [selectProfile, setSelectProfile] = useState<boolean>(true);
   const [selectSetting, setSelectSetting] = useState<boolean>(false);
 
@@ -64,7 +67,17 @@ function Profile() {
             <div className="w-40 h-40 rounded-full">
               <img src={user.profilePicture} />
             </div>
-            <button className="bg-gray-100 font-semibold w-20 absolute bottom-[-15px] left-24">
+            <input
+              type="file"
+              id="editProfilePicture"
+              style={{ display: "none" }}
+              value={[]}
+              onChange={(e) => {
+                dispatch(changeProfilePicture(URL.createObjectURL(e.target.files![0])));
+              }}
+            />
+            <button className="bg-gray-100 font-semibold w-20 absolute bottom-[-15px] left-24"
+              onClick={() => { document.getElementById("editProfilePicture").click() }}>
               แก้ไข
             </button>
           </div>

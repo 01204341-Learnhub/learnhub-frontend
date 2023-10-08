@@ -7,7 +7,7 @@ type StudentCourseLessonProgress = {
   lessonID: string;
   chapterID: string;
   finished: boolean;
-  lessonsCompleted: number;
+  lessonCompleted: number;
 };
 
 export type { StudentCourseLessonProgress, StudentCourseProgress };

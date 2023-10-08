@@ -18,9 +18,10 @@ interface ChapterOutlineProp {
     chapter: CourseChapter
     lessonsProgress: StudentCourseLessonProgress[]
     onSelectLesson?: (lesson: CourseLesson) => void
+    onUpdateProgress?: (progress: StudentCourseLessonProgress) => void
 }
 
-export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesson }: ChapterOutlineProp) {
+export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesson, onUpdateProgress }: ChapterOutlineProp) {
     const [show, setShow] = useState(false)
     const { lessons } = useCourseLessons(chapter.courseID, chapter.chapterID)
 
@@ -65,7 +66,12 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
                 <hr className="w-full text-[#b0b0b0] border-t-4 py-0.5" />
                 {show && lessons.map((lesson) => (
                     <div key={lesson.lessonID} className="w-full">
-                        <LessonSlot lesson={lesson} finished={checkIfFinished(lesson.lessonID)} onSelectLesson={onSelectLesson} />
+                        <LessonSlot lesson={lesson} finished={checkIfFinished(lesson.lessonID)} onSelectLesson={onSelectLesson}
+                            onFinishedChange={(f) => {
+                                const lessonProgress = lessonsProgress.find((lp) => lp.lessonID == lesson.lessonID)
+                                lessonProgress.finished = f
+                                onUpdateProgress(lessonProgress)
+                            }} />
                     </div>
                 ))
                 }
@@ -78,14 +84,18 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
 interface LessonSlotProp {
     lesson: CourseLesson
     finished: boolean
-    onSelectLesson?: (lesson: CourseLesson) => void
+    onSelectLesson?: (lesson: CourseLesson) => void,
+    onFinishedChange: (finished: boolean) => void
 }
 
 
 
-function LessonSlot({ lesson, finished, onSelectLesson }: LessonSlotProp) {
+function LessonSlot({ lesson, finished, onSelectLesson, onFinishedChange }: LessonSlotProp) {
     const handleClick = () => {
         if (onSelectLesson) onSelectLesson(lesson)
+    }
+    const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        onFinishedChange(e.target.checked)
     }
     return (
         <div className='flex justify-between' onClick={handleClick}>
@@ -101,7 +111,7 @@ function LessonSlot({ lesson, finished, onSelectLesson }: LessonSlotProp) {
                     <h1 className="font-semibold">{lesson.name}</h1>
                 </div>
             </div>
-            <input type="checkbox" className='mx-5' checked={finished}></input>
+            <input type="checkbox" className='mx-5' checked={finished} onChange={onCheckboxChange}></input>
         </div>
     )
 }

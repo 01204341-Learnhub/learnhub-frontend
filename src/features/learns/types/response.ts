@@ -71,7 +71,7 @@ type GetStudentCourseProgressResponse = {
     lesson_id: string;
     chapter_id: string;
     finished: boolean;
-    lessons_completed: number;
+    lesson_completed: number;
   }[];
 };
 

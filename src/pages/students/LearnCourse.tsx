@@ -8,7 +8,7 @@ import { useCourseChapters } from "../../features/learns/hooks/useCourseChapters
 import { useStudentCourseProgress } from "../../features/learns/hooks/useStudentCourseProgress"
 import { CourseChapter } from "../../features/learns/types/courseChapters"
 import { CourseLesson } from "../../features/learns/types/lessons"
-import { StudentCourseProgress } from "../../features/learns/types/progress"
+import { StudentCourseLessonProgress, StudentCourseProgress } from "../../features/learns/types/progress"
 import { CourseQuiz } from "../../features/learns/types/quiz"
 import { CourseAnnouncement } from "../../features/stores/types/course"
 import { useUser } from "../../hooks/useUser"
@@ -16,10 +16,11 @@ import { useUser } from "../../hooks/useUser"
 interface _CourseContentProp {
     chapters: CourseChapter[]
     studentCourseProgress: StudentCourseProgress,
-    onSelectLesson?: (lesson: CourseLesson) => void
+    onSelectLesson?: (lesson: CourseLesson) => void,
+    onUpdateProgress?: (progress: StudentCourseLessonProgress) => void,
 }
 
-function _CourseContent({ chapters, studentCourseProgress, onSelectLesson }: _CourseContentProp) {
+function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onSelectLesson }: _CourseContentProp) {
     function _getChapterProgress(chapterID: string) {
         return studentCourseProgress.lessons.filter((lesson) => {
             if (lesson.chapterID == chapterID) return true
@@ -29,7 +30,8 @@ function _CourseContent({ chapters, studentCourseProgress, onSelectLesson }: _Co
     return (
         <div>
             {chapters.map((chapter, index) => (
-                <ChapterOutline chapter={chapter} lessonsProgress={_getChapterProgress(chapter.chapterID)} onSelectLesson={onSelectLesson} key={index} />
+                <ChapterOutline chapter={chapter} lessonsProgress={_getChapterProgress(chapter.chapterID)} onSelectLesson={onSelectLesson} key={index}
+                    onUpdateProgress={onUpdateProgress} />
             ))}
         </div>
     )
@@ -99,7 +101,7 @@ function _LessonDisplay({ lesson }: { lesson: CourseLesson | undefined }) {
 function LearnCourse() {
     const { courseID } = useParams<{ courseID: string }>()
     const { user } = useUser()
-    const { progress } = useStudentCourseProgress(user.userID, courseID)
+    const { progress, updateLessonProgress } = useStudentCourseProgress(user.userID, courseID)
     const { chapters } = useCourseChapters(courseID)
     const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>('contents')
     const [currentLesson, setCurrentLesson] = useState<CourseLesson | undefined>(undefined)
@@ -155,8 +157,8 @@ function LearnCourse() {
                     {(() => {
                         if (outlineViewMode == 'contents') {
                             return (
-                                <_CourseContent chapters={chapters} studentCourseProgress={progress} onSelectLesson={(l) => { setCurrentLesson(l) }} />
-
+                                <_CourseContent chapters={chapters} studentCourseProgress={progress} onSelectLesson={(l) => { setCurrentLesson(l) }}
+                                    onUpdateProgress={updateLessonProgress} />
                             )
                         }
                         else {

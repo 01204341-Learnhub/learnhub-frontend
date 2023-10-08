@@ -21,7 +21,7 @@ const DataHomework =[{
 function LearningOverview() {
     return (
         <div className="flex justify-center">
-            <div className="flex flex-col items-center bg-[#f5f5f580]">
+            <div className="flex flex-col items-center pb-10 bg-[#f5f5f580]">
                 <div className="flex justify-center w-full mt-10">   
                     <div className="w-[900px] pr-20 pb-4">
                         <div className="text-3xl font-bold mt-8 pb-4 overflow-hidden">การเรียนรู้ของฉัน</div>
@@ -66,6 +66,26 @@ function LearningOverview() {
                             ))}
                         
                         </div>
+                </div>
+
+                <div className="self-start w-[500px]">
+                    <h1 className="font-bold text-2xl pb-4">ประกาศจากผู้สอน</h1>
+                    <div className="flex flex-col bg-white drop-shadow-lg pl-8 py-6">
+                        <div className="flex items-center px-2 pt-2 pb-4">
+                            <span className="text-xl px-1 font-semibold">ประกาศจากผู้สอน</span>
+                            <span className="px-1 truncate font-semibold text-xl">classname</span>
+                        </div>
+                        <div className="flex">
+                            <div className=" h-16 w-16 bg-slate-500 rounded-full mx-4">
+                                <img src="" alt="" />
+                            </div>
+                            <div className="flex flex-col w-[280px]">
+                                <span className="text-lg truncate">Name Instructor</span>
+                                <span className="text-base">โพสประกาศ วัน อ.19 ก.ย.</span>
+                                <h1 className="font-semibold truncate text-lg">headerName</h1>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

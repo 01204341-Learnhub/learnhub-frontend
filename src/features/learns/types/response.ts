@@ -55,4 +55,24 @@ type ListEnrolledCoursesResponse = {
   }[];
 };
 
-export type { ListEnrolledCoursesResponse };
+type GetQuizResponse = {
+  name: string;
+  description: string;
+  time_limit: number;
+  quiz_pic: string;
+  problems: {
+    problem_num: number;
+    question: string;
+    multiple_correct_answers: boolean;
+    choice: {
+      choice_a: string;
+      choice_b: string;
+      choice_c: string;
+      choice_d: string;
+      choice_e: string;
+      choice_f: string;
+    };
+  }[];
+};
+
+export type { GetQuizResponse, ListEnrolledCoursesResponse };

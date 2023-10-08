@@ -112,10 +112,8 @@ function LearningClasses() {
         )
     }
 
-
-
     return (
-        <div className='bg-[#eeeeee80] '>
+        <div className=''>
             <header className='flex items-center px-12 h-40 pb-6'>
                 <span className='text-3xl font-bold'>คลาสเรียนของฉัน</span>
                 <div className='flex w-64 h-8 mx-4 items-center'>

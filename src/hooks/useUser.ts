@@ -1,12 +1,11 @@
 import { getAuth } from "firebase/auth";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { app } from "../firebase/firebase";
-import { LearnhubUser } from "../types/user";
+import { RootState } from "../store";
 
 function useUser() {
-  const [user, setUser] = useState<LearnhubUser>(
-    JSON.parse(localStorage.getItem("learnhubUser"))
-  );
+  const user = useSelector((state: RootState) => state.user);
   const [isFetching, setIsFetching] = useState<boolean>(true);
   useEffect(() => {
     const auth = getAuth(app);
@@ -14,7 +13,7 @@ function useUser() {
       setIsFetching(false);
       if (user == null) {
         localStorage.removeItem("learnhubUser");
-        setUser(undefined);
+        // setUser(undefined);
       }
     });
     return unsubscribe;

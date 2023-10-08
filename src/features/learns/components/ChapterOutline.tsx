@@ -1,14 +1,14 @@
-import {    
-    faCirclePlay, 
-    faFile,
+import {
     faAngleDown,
     faAngleUp,
+    faCirclePlay,
+    faClipboardList,
     faClock,
-    faClipboardList, 
+    faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { fetchLessons } from "../services/course";
+import { fetchLessons } from "../services/courses";
 import { CourseChapter, CourseLesson } from "../types/course";
 import { UserCourseProgress } from "../types/progress";
 
@@ -50,7 +50,7 @@ export default function ChapterOutline({ chapter, chapterProgress, onSelectLesso
                         <h1 className="text-xl font-semibold">บทที่ : {chapter.name}</h1>
                         <div className="py-1">
                             <span className='text-base text-[#606060] pr-4'>{1}/{chapter.lessonCount}</span>
-                            <FontAwesomeIcon icon={faClock} color="#606060" className="pr-4"/>
+                            <FontAwesomeIcon icon={faClock} color="#606060" className="pr-4" />
                             <span className='text-base text-[#606060]'>
                                 {chapter.chapterLength / 3600 >= 1 ? chapter.chapterLength / 3600 + "ชั่วโมง" + ((chapter.chapterLength % 3600 > 0) ? chapter.chapterLength % 3600 + "นาที" : "") : chapter.chapterLength / 60 + "นาที"}
                             </span>
@@ -97,9 +97,9 @@ function LessonSlot({ lesson, finished, onSelectLesson }: LessonSlotProp) {
             <div className="flex justify-center items-center pb-1.5">
                 <div className="flex h-24 w-24 bg-[#D9D9D9] justify-center items-center">
                     {
-                    lesson.lessonType == "video" ? <FontAwesomeIcon icon={faCirclePlay} size='2xl' color="black" className="drop-shadow-lg"/>
-                    : lesson.lessonType == "doc" ? <FontAwesomeIcon icon={faFile} color="#000" size='2xl' className="drop-shadow-lg"/>
-                    : lesson.lessonType == "quiz" ? <FontAwesomeIcon icon={faClipboardList} color="#000" size="2xl" className="drop-shadow-lg"/> : <></>
+                        lesson.lessonType == "video" ? <FontAwesomeIcon icon={faCirclePlay} size='2xl' color="black" className="drop-shadow-lg" />
+                            : lesson.lessonType == "doc" ? <FontAwesomeIcon icon={faFile} color="#000" size='2xl' className="drop-shadow-lg" />
+                                : lesson.lessonType == "quiz" ? <FontAwesomeIcon icon={faClipboardList} color="#000" size="2xl" className="drop-shadow-lg" /> : <></>
                     }
                 </div>
                 <div className='mx-5'>

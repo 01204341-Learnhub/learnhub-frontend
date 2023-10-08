@@ -4,14 +4,11 @@ import { app } from "../firebase/firebase";
 import { LearnhubUser } from "../types/user";
 
 function useUser() {
-  const [user, setUser] = useState<LearnhubUser>();
+  const [user, setUser] = useState<LearnhubUser>(
+    JSON.parse(localStorage.getItem("learnhubUser"))
+  );
   const [isFetching, setIsFetching] = useState<boolean>(true);
-
   useEffect(() => {
-    const user = localStorage.getItem("learnhubUser");
-    if (user) {
-      setUser(JSON.parse(user));
-    }
     const auth = getAuth(app);
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setIsFetching(false);

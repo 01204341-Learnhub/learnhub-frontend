@@ -2,22 +2,56 @@ type CourseQuiz = {
   quizID: string;
   name: string;
   description: string;
-  questions: MultipleChoiceQuestion[];
+  problems: CourseQuizProblem[];
 };
 
-type MultipleChoiceQuestion = {
-  questionNumber: number;
+type CourseQuizProblem = {
+  problemNumber: number;
   question: string;
-  options: string[];
+  multipleCorrectAnswers: boolean;
+  choices: {
+    choiceA: string;
+    choiceB: string;
+    choiceC: string;
+    choiceD: string;
+    choiceE: string;
+    choiceF: string;
+  };
 };
 
-type MultipleChoiceQuestionAnswer = {
-  questionNumber: number;
-  answers: number[];
+type CourseQuizSubmission = {
+  status: string;
+  answers: {
+    problemNumber: number;
+    answer: {
+      choiceA: boolean;
+      choiceB: boolean;
+      choiceC: boolean;
+      choiceD: boolean;
+      choiceE: boolean;
+      choiceF: boolean;
+    };
+  }[];
+};
+
+type CourseQuizSolution = {
+  answer_responses: {
+    problemNumber: number;
+    correctAnswer: {
+      choiceA: boolean;
+      choiceB: boolean;
+      choiceC: boolean;
+      choiceD: boolean;
+      choiceE: boolean;
+      choiceF: boolean;
+    };
+    explaination: string;
+  }[];
 };
 
 export type {
   CourseQuiz,
-  MultipleChoiceQuestion,
-  MultipleChoiceQuestionAnswer,
+  CourseQuizProblem,
+  CourseQuizSolution,
+  CourseQuizSubmission,
 };

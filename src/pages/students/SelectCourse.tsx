@@ -1,26 +1,17 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Link } from "react-router-dom"
 import CourseCard from "../../features/learns/components/CourseCard"
-import { listEnrolledCourses } from "../../features/learns/services/programs"
-import { EnrolledCourse } from "../../features/learns/types/programs"
+import { useEnrolledCourses } from "../../features/learns/hooks/useEnrolledCourses"
+import { useUser } from "../../hooks/useUser"
 
 export default function SelectCourse() {
-    const [enrolledCourses, setEnrolledCourses] = useState<EnrolledCourse[]>([])
-    const [loading, setLoading] = useState(false)
+    const { user } = useUser()
+    const { enrolledCourses, isFetching } = useEnrolledCourses(user.userID)
     const [query, setQuery] = useState("IN-PROGRESS")
 
-    useEffect(() => {
-        // get enrolled courses
-        async function fetchEnrolledCourses() {
-            const data = await listEnrolledCourses("1")
-            setEnrolledCourses(data)
-        }
-        setLoading(true)
-        fetchEnrolledCourses().then(() => { setLoading(false) }).catch(() => { setLoading(false) })
-    }, [])
-    if (loading) return <div>Loading...</div>
+    if (isFetching) return <div>Loading...</div>
     return (
         <div className="">
             <div className="flex mt-5">
@@ -52,13 +43,13 @@ export default function SelectCourse() {
             </div>
             <h1 className="ml-5 text-xl font-bold mt-20">คอร์สเรียน</h1>
             <ul className="grid grid-cols-5 mx-5">
-                {enrolledCourses.map((course) => (
-                    <li key={course.id} className={`flex justify-center mt-5`}>
-                        <Link to={`/learn/courses/${course.id}`}>
-                            <CourseCard courseName={course.name}
-                                courseThumbnailUrl={course.thumbnailUrl}
-                                instructorName={course.instructor[0]}
-                                percentCompleted={course.progress} />
+                {enrolledCourses.map(({ courseID, name, thumbnailUrl, teacher, progress }) => (
+                    <li key={courseID} className={`flex justify-center mt-5`}>
+                        <Link to={`/learn/courses/${courseID}`}>
+                            <CourseCard courseName={name}
+                                courseThumbnailUrl={thumbnailUrl}
+                                instructorName={teacher.name}
+                                percentCompleted={progress} />
                         </Link>
                     </li>
                 ))}

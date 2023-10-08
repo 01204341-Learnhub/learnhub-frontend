@@ -2,7 +2,6 @@
 
 import { faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from "react-router-dom";
 
 interface ClassTeachNowProp {
     ThumbnailUrl: string;
@@ -13,20 +12,19 @@ interface ClassTeachNowProp {
 export default function ClassTeachNow (props:ClassTeachNowProp) {
 
     return (
-    <div className="relative w-[100%] h-[220px]">
-        <div className="static">
-            <img src={props.ThumbnailUrl} alt="Thumbnail Picture" className=" object-cover w-[100%] h-[220px] opacity-70 rounded-xl hover:opacity-50" />
-            <div className="absolute top-2 left-4">
-                <div className="text-4xl font-bold ">{props.TitleName}</div>
-                <div className=" flex space-x-2 items-center">
-                    <div className="text-[20px] font-bold translate-y-[40%] bg-[#ADE792] rounded-xl p-1">กำลังสอน</div>
+    <div className="relative w-[720px] h-[240px] border-4">
+        <div className="w-full h-full">
+            <img src={props.ThumbnailUrl} alt="Thumbnail Picture" className=" object-cover w-[100%] h-[240px] opacity-50 rounded-xl hover:opacity-30" />
+            <div className="absolute top-0">
+                <div className="text-4xl font-bold pt-4 pb-0.5 px-4">{props.TitleName}</div>
+                <div className=" flex space-x-2 px-4 items-center">
+                    <div className="text-[20px] font-bold translate-y-[40%] px-2 space-x-4 bg-[#ADE792] rounded-xl p-1">กำลังสอน</div>
                     <FontAwesomeIcon icon={faClockRotateLeft} className=" translate-y-[60%]" size="xl"></FontAwesomeIcon>
                     <div className=" text-[20px] font-bold translate-y-[50%]">เริ่มสอนไปแล้ว {props.Minute} นาที</div>
                 </div>
             </div>
-
+            <button className="absolute bottom-2 right-5 px-4 py-1 bg-black text-white p-1 rounded-xl text-[20px] font-bold">ไปยังคลาสเรียนนี้</button>
         </div>
-        <Link to="/Login" className=" absolute bottom-2 right-4 bg-black text-white p-1 rounded-xl text-[20px] font-bold">ไปยังคลาสเรียนนี้</Link>
     </div>
     )
 }

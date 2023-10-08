@@ -87,7 +87,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                         <input type="text" value={work.name}
                             onChange={onWorkNameChange}
                             className="input input-bordered mb-2 mx-10 mt-10" 
-                            placeholder="หัวข้อ"/>
+                            placeholder="ชื่องาน"/>
                         <input type="text"
                             onChange={onWorkDescriptionChange}
                             value={work.description}
@@ -160,13 +160,13 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                     </div>
 
                     }
-                    <div>
+                    <div className="w-[100%]">
                         <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">หัวข้อ</h1>
-                        <dialog id="create-topic-modal " className="modal">
+                        <dialog id="create-topic-modal" className="modal">
                             <div className="modal-box">
-                                <h3 className="font-bold text-lg">Hello!</h3>
-                                <p className="py-4">Press ESC key or click outside to close</p>
-                                <input type="text" value={newTopic} onChange={onNewTopicChange} placeholder="หัวข้อใหม่" />
+                                <h3 className="font-bold text-lg">กรุณากรอกชื่อหัวข้อ</h3>
+                                {/* <p className="py-4">Press ESC key or click outside to close</p> */}
+                                <input type="text" value={newTopic} onChange={onNewTopicChange} placeholder="หัวข้อใหม่" className="mt-4 rounded-lg border-gray-300 border-2" />
                                 <div className="modal-action">
                                     <form method="dialog">
                                         {/* if there is a button in form, it will close the modal */}
@@ -178,12 +178,12 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                                 <button>close</button>
                             </form>
                         </dialog>
-                        <div className="dropdown mx-10">
-                            <label tabIndex={0} className="btn m-1">
+                        <div className="dropdown  w-[100%]">
+                            <label tabIndex={0} className="btn m-1 mx-10 w-[72%]">
                                 {work.topic == "" ? "ไม่มีหัวข้อ" : work.topic}
                             </label>
-                            <div tabIndex={0} className="dropdown-content z-[1] p-2 bg-white">
-                                <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 w-52">
+                            <div tabIndex={0} className="dropdown-content bg-white mx-10 w-[72%]">
+                                <ul className="p-2 shadow-2xl menu dropdown-content  bg-base-100 w-[100%]">
                                     <li><a onClick={() => { setWorkTopic("") }}>ไม่มีหัวข้อ</a></li>
                                     <li><a onClick={createNewTopic}>{newTopic ? newTopic + " (หัวข้อใหม่)" : "สร้างหัวข้อใหม่"}</a></li>
                                     <hr />

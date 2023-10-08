@@ -1,22 +1,13 @@
-type UserCourseProgress = {
-  studentID: string;
-  courseID: string;
-  finished: boolean;
-  lessons: {
-    lessonID: string;
-    chapterID: string;
-    finished: boolean;
-    lessonCompleted: number;
-  }[];
+type StudentCourseProgress = {
+  progress: number;
+  lessons: StudentCourseLessonProgress[];
 };
 
-type UserCourseChapterProgress = {
+type StudentCourseLessonProgress = {
+  lessonID: string;
+  chapterID: string;
   finished: boolean;
   lessonsCompleted: number;
-  lessons: {
-    lessonID: string;
-    finished: boolean;
-  }[];
 };
 
-export type { UserCourseChapterProgress, UserCourseProgress };
+export type { StudentCourseLessonProgress, StudentCourseProgress };

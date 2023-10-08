@@ -65,10 +65,21 @@ type ListCourseChaptersResponse = {
   }[];
 };
 
+type GetStudentCourseProgressResponse = {
+  progress: number;
+  lessons: {
+    lesson_id: string;
+    chapter_id: string;
+    finished: boolean;
+    lessons_completed: number;
+  }[];
+};
+
 export type {
   GetCourseChapterResponse,
   GetCourseLessonResponse,
   GetQuizResponse,
+  GetStudentCourseProgressResponse,
   ListCourseChaptersResponse,
   ListCourseLessonsResponse,
   ListEnrolledCoursesResponse,

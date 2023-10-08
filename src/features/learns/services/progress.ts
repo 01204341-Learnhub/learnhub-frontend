@@ -1,22 +1,24 @@
-import { UserCourseProgress } from "../types/progress";
+import axios from "axios";
+import { StudentCourseProgress } from "../types/progress";
+import { GetStudentCourseProgressResponse } from "../types/response";
 
-async function fetchUserCourseProgress(
-  course_id: string
-): Promise<UserCourseProgress> {
-  const mockData: UserCourseProgress = {
-    studentID: "1",
-    courseID: course_id,
-    finished: false,
-    lessons: [
-      {
-        lessonID: "1",
-        chapterID: "1",
-        finished: false,
-        lessonCompleted: 0,
-      },
-    ],
+const baseURL = "http://localhost:8000";
+
+async function getStudentCourseProgress(studentID: string, courseID: string) {
+  const url = `${baseURL}/users/students/${studentID}/course_progress/${courseID}`;
+  const res = await axios.get<GetStudentCourseProgressResponse>(url);
+  const progress: StudentCourseProgress = {
+    progress: res.data.progress,
+    lessons: res.data.lessons.map((lesson) => {
+      return {
+        lessonID: lesson.lesson_id,
+        chapterID: lesson.chapter_id,
+        finished: lesson.finished,
+        lessonsCompleted: lesson.lessons_completed,
+      };
+    }),
   };
-  return mockData;
+  return progress;
 }
 
-export { fetchUserCourseProgress };
+export { getStudentCourseProgress };

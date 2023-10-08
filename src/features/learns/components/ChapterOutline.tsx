@@ -11,16 +11,16 @@ import { useState } from 'react';
 import { useCourseLessons } from "../hooks/useCourseLessons";
 import { CourseChapter } from "../types/courseChapters";
 import { CourseLesson } from "../types/lessons";
-import { UserCourseProgress } from "../types/progress";
+import { StudentCourseLessonProgress } from "../types/progress";
 
 
 interface ChapterOutlineProp {
     chapter: CourseChapter
-    chapterProgress: UserCourseProgress
+    lessonsProgress: StudentCourseLessonProgress[]
     onSelectLesson?: (lesson: CourseLesson) => void
 }
 
-export default function ChapterOutline({ chapter, chapterProgress, onSelectLesson }: ChapterOutlineProp) {
+export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesson }: ChapterOutlineProp) {
     const [show, setShow] = useState(false)
     const { lessons } = useCourseLessons(chapter.courseID, chapter.chapterID)
 
@@ -28,11 +28,13 @@ export default function ChapterOutline({ chapter, chapterProgress, onSelectLesso
         setShow((prev) => !prev)
     }
     const checkIfFinished = (lessonID: string) => {
-        // TODO: check if lesson is finished
+        for (let i = 0; i < lessonsProgress.length; i++) {
+            if (lessonsProgress[i].lessonID == lessonID) {
+                return lessonsProgress[i].finished
+            }
+        }
+        console.warn("Lesson not found in progress");
         return false
-        const idx = chapterProgress.lessons.findIndex((lesson) => lesson.lessonID == lessonID)
-        if (idx == -1) return false
-        return chapterProgress.lessons[idx].finished
     }
     return (
         <>

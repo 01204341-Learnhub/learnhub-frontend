@@ -30,9 +30,9 @@ function TeachingCourses() {
   if (isFetching) return <div>loading...</div>;
   return (
     <div className="ml-10">
-      <div className="flex m-6">
+      <div className="flex items-center m-6">
         <h1 className="font-bold text-2xl">คอร์สเรียนของฉัน</h1>
-        <h2 className="rounded-t-lg rounded-b-lg bg-pink-500 justify-center items-center flex m-3">
+        <h2 className="rounded-full font-semibold px-2 py-1 bg-[#FF9B9B] ml-5">
           course
         </h2>
         <div className="flex drop-shadow-md ml-5">

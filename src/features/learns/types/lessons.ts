@@ -1,5 +1,7 @@
 type CourseLesson = {
   lessonID: string;
+  chapterID: string;
+  courseID: string;
   lessonNumber: number;
   name: string;
   lessonType: string;

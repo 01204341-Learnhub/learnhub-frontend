@@ -8,8 +8,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
-import { fetchLessons } from "../services/courses";
-import { CourseChapter, CourseLesson } from "../types/course";
+import { useCourseLessons } from "../hooks/useCourseLessons";
+import { CourseChapter } from "../types/courseChapters";
+import { CourseLesson } from "../types/lessons";
 import { UserCourseProgress } from "../types/progress";
 
 
@@ -21,26 +22,18 @@ interface ChapterOutlineProp {
 
 export default function ChapterOutline({ chapter, chapterProgress, onSelectLesson }: ChapterOutlineProp) {
     const [show, setShow] = useState(false)
-    const [lessons, setLessons] = useState<CourseLesson[]>([])
+    const { lessons } = useCourseLessons(chapter.courseID, chapter.chapterID)
 
     const handleShow = async () => {
-        if (lessons.length == 0) {
-            const fetchedLessons = await fetchLessons(chapter.courseID, chapter.chapterID)
-            setLessons(fetchedLessons)
-        }
         setShow((prev) => !prev)
     }
     const checkIfFinished = (lessonID: string) => {
+        // TODO: check if lesson is finished
+        return false
         const idx = chapterProgress.lessons.findIndex((lesson) => lesson.lessonID == lessonID)
         if (idx == -1) return false
         return chapterProgress.lessons[idx].finished
     }
-
-    const handleClickdropDown = () => {
-        setShow(!show)
-        handleShow()
-    }
-
     return (
         <>
             <div className="flex flex-col items-center">

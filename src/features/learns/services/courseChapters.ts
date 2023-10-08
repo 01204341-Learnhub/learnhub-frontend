@@ -14,6 +14,7 @@ async function getCourseChapter(
   const res = await axios.get<GetCourseChapterResponse>(url);
   const chapter: Omit<CourseChapter, "chapterLength" | "lessonCount"> = {
     chapterID: res.data.chapter_id,
+    courseID: courseID,
     chapterNumber: res.data.chapter_num,
     name: res.data.name,
     description: res.data.description,

@@ -17,6 +17,8 @@ async function getCourseLesson(
   const courseLessonData = res.data;
   const courseLesson: CourseLesson = {
     lessonID: courseLessonData.lesson_id,
+    chapterID: chapterID,
+    courseID: courseID,
     lessonNumber: courseLessonData.lesson_num,
     name: courseLessonData.name,
     lessonType: courseLessonData.lesson_type,

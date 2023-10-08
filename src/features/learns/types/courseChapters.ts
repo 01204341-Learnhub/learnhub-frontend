@@ -1,5 +1,6 @@
 type CourseChapter = {
   chapterID: string;
+  courseID: string;
   chapterNumber: number;
   name: string;
   lessonCount: number;

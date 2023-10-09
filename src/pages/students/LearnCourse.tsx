@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useReducer, useState } from "react"
 import { useParams } from "react-router-dom"
 import VideoPlayer from "../../components/VideoPlayer"
 import ChapterOutline from "../../features/learns/components/ChapterOutline"
@@ -37,7 +37,14 @@ function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onS
     )
 }
 
-function _LessonDisplay({ lesson, progress }: { lesson: CourseLesson | undefined, progress: StudentCourseLessonProgress }) {
+interface _LessonDisplayProp {
+    lesson: CourseLesson | undefined,
+    progress: StudentCourseLessonProgress | undefined
+    onLessonEnd: () => void
+}
+
+function _LessonDisplay({ lesson, progress, onLessonEnd }: _LessonDisplayProp) {
+    const [_, forceUpdate] = useReducer((x) => x + 1, 0)
     if (!lesson) return (<div>Not found</div>)
     if (lesson.lessonType == 'video') {
         return (
@@ -52,7 +59,12 @@ function _LessonDisplay({ lesson, progress }: { lesson: CourseLesson | undefined
             )
         } else {
             return (
-                <CourseMultipleChoiceQuiz lesson={lesson} progress={progress} />
+                <CourseMultipleChoiceQuiz lesson={lesson} progress={progress}
+                    onDone={() => {
+                        progress.finished = true
+                        forceUpdate()
+                        onLessonEnd()
+                    }} />
             )
         }
     }
@@ -66,6 +78,7 @@ function LearnCourse() {
     const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>('contents')
     const [currentLesson, setCurrentLesson] = useState<CourseLesson | undefined>(undefined)
     const [announcements, setAnnouncements] = useState<CourseAnnouncement[]>([])
+    const [_, forceUpdate] = useReducer((x) => x + 1, 0)
 
     const announcementAdapter = (announcement: CourseAnnouncement) => {
         return {
@@ -88,6 +101,13 @@ function LearnCourse() {
         if (idx == -1) return undefined
         return progress.lessons[idx]
     }
+    function onLessonEnd() {
+        // set current lesson progress to finished
+        if (currentLesson == undefined) return
+        const currentProgress = getCurrentLessonProgress()
+        currentProgress.finished = true
+        updateLessonProgress(currentProgress).then(() => { forceUpdate() })
+    }
     return (
         <div className="bg-[#eeeeee80] h-full pb-20">
             <div className="flex pt-8 pl-14 pb-14">
@@ -95,7 +115,7 @@ function LearnCourse() {
                 <h1 className="text-gray-600 font-semibold text-3xl my-auto ml-4"></h1>
             </div>
             <div className="flex items-center justify-center">
-                <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} />
+                <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} onLessonEnd={onLessonEnd} />
             </div>
             <div className="flex flex-col items-center mx-20 mt-20">
 

@@ -76,9 +76,6 @@ function CourseMultipleChoiceQuizReport({ quizID }: CourseMultipleChoiceQuizRepo
                     </div>
                 )
             })}
-            <button className="btn bg-black text-white">
-                บทเรียนต่อไป
-            </button>
         </div>
     )
 }

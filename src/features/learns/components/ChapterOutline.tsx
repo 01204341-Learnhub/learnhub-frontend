@@ -7,7 +7,7 @@ import {
     faFile,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
 import { useCourseLessons } from "../hooks/useCourseLessons";
 import { CourseChapter } from "../types/courseChapters";
 import { CourseLesson } from "../types/lessons";
@@ -23,6 +23,7 @@ interface ChapterOutlineProp {
 
 export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesson, onUpdateProgress }: ChapterOutlineProp) {
     const [show, setShow] = useState(false)
+    const [_, forceUpdate] = useReducer((x) => x + 1, 0)
     const { lessons } = useCourseLessons(chapter.courseID, chapter.chapterID)
 
     const handleShow = async () => {
@@ -71,6 +72,7 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
                                 const lessonProgress = lessonsProgress.find((lp) => lp.lessonID == lesson.lessonID)
                                 lessonProgress.finished = f
                                 onUpdateProgress(lessonProgress)
+                                forceUpdate()
                             }} />
                     </div>
                 ))

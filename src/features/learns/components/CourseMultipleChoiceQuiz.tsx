@@ -100,9 +100,10 @@ function _genSubmission(numberOfProblems: number) {
 
 interface MultipleChoiceQuizProps {
     lesson: CourseLesson,
-    progress: StudentCourseLessonProgress
+    progress: StudentCourseLessonProgress,
+    onDone: () => void
 }
-function CourseMultipleChoiceQuiz({ lesson, progress }: MultipleChoiceQuizProps) {
+function CourseMultipleChoiceQuiz({ lesson, progress, onDone }: MultipleChoiceQuizProps) {
     const [started, setStarted] = useState(false)
     const { quiz, isFetching } = useCourseQuiz(lesson.src)
     const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -118,7 +119,7 @@ function CourseMultipleChoiceQuiz({ lesson, progress }: MultipleChoiceQuizProps)
             setCurrentQuestion(p => p + 1)
         } else {
             submitCourseQuiz(submission, lesson, progress, user.userID).then(() => {
-                alert("ส่งคำตอบสำเร็จ")
+                onDone()
             })
         }
     }

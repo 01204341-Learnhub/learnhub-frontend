@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { app } from "../../firebase/firebase";
+import store from "../../store";
 import {
   LearnhubStudentResponse,
   LearnhubTeacherResponse,
@@ -54,6 +55,7 @@ async function signInWithEmail(
         profilePicture: data.profile_pic,
       };
     }
+    store.dispatch({ type: "user/setLearnhubUser", payload: learnhubUser });
     localStorage.setItem("learnhubUser", JSON.stringify(learnhubUser));
     return learnhubUser;
   } catch (error) {

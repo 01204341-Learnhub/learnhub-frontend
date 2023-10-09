@@ -18,10 +18,11 @@ interface ChapterOutlineProp {
     chapter: CourseChapter
     lessonsProgress: StudentCourseLessonProgress[]
     onSelectLesson?: (lesson: CourseLesson) => void
-    onUpdateProgress?: (progress: StudentCourseLessonProgress) => void
+    onUpdateProgress?: (progress: StudentCourseLessonProgress) => void,
+    currentLesson: CourseLesson | undefined
 }
 
-export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesson, onUpdateProgress }: ChapterOutlineProp) {
+export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesson, onUpdateProgress, currentLesson }: ChapterOutlineProp) {
     const [show, setShow] = useState(false)
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
     const { lessons } = useCourseLessons(chapter.courseID, chapter.chapterID)
@@ -68,6 +69,7 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
                 {show && lessons.map((lesson) => (
                     <div key={lesson.lessonID} className="w-full">
                         <LessonSlot lesson={lesson} finished={checkIfFinished(lesson.lessonID)} onSelectLesson={onSelectLesson}
+                            isFocused={currentLesson?.lessonID == lesson.lessonID}
                             onFinishedChange={(f) => {
                                 const lessonProgress = lessonsProgress.find((lp) => lp.lessonID == lesson.lessonID)
                                 lessonProgress.finished = f
@@ -85,6 +87,7 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
 
 interface LessonSlotProp {
     lesson: CourseLesson
+    isFocused: boolean
     finished: boolean
     onSelectLesson?: (lesson: CourseLesson) => void,
     onFinishedChange: (finished: boolean) => void
@@ -92,7 +95,8 @@ interface LessonSlotProp {
 
 
 
-function LessonSlot({ lesson, finished, onSelectLesson, onFinishedChange }: LessonSlotProp) {
+function LessonSlot({ lesson, finished, onSelectLesson, onFinishedChange, isFocused }: LessonSlotProp) {
+    const [_, forceUpdate] = useReducer((x) => x + 1, 0)
     const handleClick = () => {
         if (onSelectLesson) onSelectLesson(lesson)
     }
@@ -100,18 +104,22 @@ function LessonSlot({ lesson, finished, onSelectLesson, onFinishedChange }: Less
         onFinishedChange(e.target.checked)
     }
     return (
-        <div className='flex justify-between' onClick={handleClick}>
-            <div className="flex justify-center items-center pb-1.5">
-                <div className="flex h-24 w-24 bg-[#D9D9D9] justify-center items-center">
-                    {
-                        lesson.lessonType == "video" ? <FontAwesomeIcon icon={faCirclePlay} size='2xl' color="black" className="drop-shadow-lg" />
-                            : lesson.lessonType == "doc" ? <FontAwesomeIcon icon={faFile} color="#000" size='2xl' className="drop-shadow-lg" />
-                                : lesson.lessonType == "quiz" ? <FontAwesomeIcon icon={faClipboardList} color="#000" size="2xl" className="drop-shadow-lg" /> : <></>
-                    }
+        <div className={`flex ${isFocused ? "bg-[#E3F6F5] drop-shadow-lg" : ""} w-full`}>
+            <div className="flex justify-between items-center pb-1.5 w-11/12"
+                onClick={handleClick}>
+                <div className="flex">
+                    <div className="flex h-24 w-24 bg-[#D9D9D9] justify-center items-center">
+                        {
+                            lesson.lessonType == "video" ? <FontAwesomeIcon icon={faCirclePlay} size='2xl' color="black" className="drop-shadow-lg" />
+                                : lesson.lessonType == "doc" ? <FontAwesomeIcon icon={faFile} color="#000" size='2xl' className="drop-shadow-lg" />
+                                    : lesson.lessonType == "quiz" ? <FontAwesomeIcon icon={faClipboardList} color="#000" size="2xl" className="drop-shadow-lg" /> : <></>
+                        }
+                    </div>
+                    <div className='mx-5 my-auto'>
+                        <h1 className="font-semibold">{lesson.name}</h1>
+                    </div>
                 </div>
-                <div className='mx-5'>
-                    <h1 className="font-semibold">{lesson.name}</h1>
-                </div>
+                <div></div>
             </div>
             <input type="checkbox" className='mx-5' checked={finished} onChange={onCheckboxChange}></input>
         </div>

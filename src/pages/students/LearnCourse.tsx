@@ -16,11 +16,12 @@ import { useUser } from "../../hooks/useUser"
 interface _CourseContentProp {
     chapters: CourseChapter[]
     studentCourseProgress: StudentCourseProgress,
+    currentLesson?: CourseLesson,
     onSelectLesson?: (lesson: CourseLesson) => void,
     onUpdateProgress?: (progress: StudentCourseLessonProgress) => void,
 }
 
-function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onSelectLesson }: _CourseContentProp) {
+function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onSelectLesson, currentLesson }: _CourseContentProp) {
     function _getChapterProgress(chapterID: string) {
         return studentCourseProgress.lessons.filter((lesson) => {
             if (lesson.chapterID == chapterID) return true
@@ -31,7 +32,7 @@ function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onS
         <div>
             {chapters.map((chapter, index) => (
                 <ChapterOutline chapter={chapter} lessonsProgress={_getChapterProgress(chapter.chapterID)} onSelectLesson={onSelectLesson} key={index}
-                    onUpdateProgress={onUpdateProgress} />
+                    onUpdateProgress={onUpdateProgress} currentLesson={currentLesson} />
             ))}
         </div>
     )
@@ -143,8 +144,11 @@ function LearnCourse() {
                     {(() => {
                         if (outlineViewMode == 'contents') {
                             return (
-                                <_CourseContent chapters={chapters} studentCourseProgress={progress} onSelectLesson={(l) => { setCurrentLesson(l) }}
-                                    onUpdateProgress={updateLessonProgress} />
+                                <_CourseContent chapters={chapters} studentCourseProgress={progress} onSelectLesson={(l) => {
+                                    setCurrentLesson(l)
+                                    forceUpdate()
+                                }}
+                                    onUpdateProgress={updateLessonProgress} currentLesson={currentLesson} />
                             )
                         }
                         else {

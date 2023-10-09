@@ -8,17 +8,19 @@ import { listTeacherClasses } from "../../features/teaches/services/classes";
 import { listTeachCourse } from "../../features/teaches/services/courses";
 import { ClassInfo } from "../../features/teaches/types/class.ts";
 import { CourseInfo } from "../../features/teaches/types/course";
+import { useUser } from "../../hooks/useUser.ts";
 
 function TeacherOverview() {
   const [courses, setCourses] = useState<CourseInfo[]>([]);
   const [classes, setClasses] = useState<ClassInfo[]>([]);
   const [isFetching, setIsFetching] = useState<boolean>(false);
+  const { user } = useUser()
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchCoursesAndClasses() {
-      const fetchedCourses = await listTeachCourse("1");
-      const fetchedClasses = await listTeacherClasses("1");
+      const fetchedCourses = await listTeachCourse(user.userID);
+      const fetchedClasses = await listTeacherClasses(user.userID);
       setCourses(fetchedCourses);
       setClasses(fetchedClasses);
     }
@@ -74,9 +76,9 @@ function TeacherOverview() {
         {courses.map(
           ({
             courseID,
-            courseName,
-            courseRating,
-            courseThumbnailUrl,
+            name: courseName,
+            rating: courseRating,
+            thumbnailUrl: courseThumbnailUrl,
             studentCount,
           }) => (
             <li key={courseID}>

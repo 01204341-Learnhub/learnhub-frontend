@@ -75,11 +75,37 @@ type GetStudentCourseProgressResponse = {
   }[];
 };
 
+type GetStudentCourseQuizReportResponse = {
+  status: string;
+  score: number;
+  problems: {
+    problem_num: number;
+    answer: {
+      answer_a: boolean;
+      answer_b: boolean;
+      answer_c: boolean;
+      answer_d: boolean;
+      answer_e: boolean;
+      answer_f: boolean;
+    };
+    correct_answer: {
+      answer_a: boolean;
+      answer_b: boolean;
+      answer_c: boolean;
+      answer_d: boolean;
+      answer_e: boolean;
+      answer_f: boolean;
+    };
+    explanation: string;
+  }[];
+};
+
 export type {
   GetCourseChapterResponse,
   GetCourseLessonResponse,
   GetQuizResponse,
   GetStudentCourseProgressResponse,
+  GetStudentCourseQuizReportResponse,
   ListCourseChaptersResponse,
   ListCourseLessonsResponse,
   ListEnrolledCoursesResponse,

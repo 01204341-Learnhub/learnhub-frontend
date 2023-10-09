@@ -1,5 +1,7 @@
 import axios from "axios";
 import { Chapter, Course, CourseInfo, Lesson } from "../types/course";
+import { CourseQuiz } from "../types/courseQuiz";
+import { createCourseQuiz } from "./courseQuiz";
 
 const baseURL = "http://localhost:8000";
 async function listTeacherCourse(teacherID: string) {
@@ -56,11 +58,29 @@ async function createLesson(
   lesson: Lesson
 ) {
   const url = `${baseURL}/programs/courses/${courseID}/chapters/${chapterID}/lessons`;
-  const body = {
-    name: lesson.name,
-    src: lesson.videoUrl,
-    lesson_length: 378,
+  let body: {
+    name: string;
+    src: string;
+    lesson_type: string;
+    lesson_length: number;
   };
+  if (lesson.type === "video") {
+    body = {
+      name: lesson.name,
+      src: lesson.videoUrl as string,
+      lesson_type: "video",
+      lesson_length: 999,
+    };
+  } else if (lesson.type === "quiz") {
+    const quiz = JSON.parse(lesson.quiz as string) as CourseQuiz;
+    const quizID = await createCourseQuiz(quiz);
+    body = {
+      name: lesson.name,
+      src: quizID,
+      lesson_type: "quiz",
+      lesson_length: 999,
+    };
+  }
   const lessonID = (await axios.post<{ lesson_id: string }>(url, body)).data
     .lesson_id;
   return lessonID;

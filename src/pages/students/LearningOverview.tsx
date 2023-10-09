@@ -20,12 +20,12 @@ const DataHomework =[{
 
 function LearningOverview() {
     return (
-        <div className="flex justify-center">
-            <div className="flex flex-col items-center pb-10 bg-[#f5f5f580]">
+        <div className="overflow-hidden flex justify-center">
+            <div className="flex flex-col pb-10 bg-[#f5f5f580]">
                 <div className="flex justify-center w-full mt-10">   
                     <div className="w-[900px] pr-20 pb-4">
-                        <div className="text-3xl font-bold mt-8 pb-4 overflow-hidden">การเรียนรู้ของฉัน</div>
-                        <div className="text-xl font-bold pb-3 pt-4 overflow-hidden">คลาสเรียนที่กำลังสอนแล้ว</div>
+                        <div className="text-3xl font-bold mt-8 pb-4">การเรียนรู้ของฉัน</div>
+                        <div className="text-xl font-bold pb-3 pt-4">คลาสเรียนที่กำลังสอนแล้ว</div>
                     
                             <ClassTeachNow 
                             ThumbnailUrl={"https://image.makewebeasy.net/makeweb/m_1920x0/FZoJyLend/Home/zone9_pic3.png"} 

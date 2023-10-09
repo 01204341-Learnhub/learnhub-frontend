@@ -1,7 +1,8 @@
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
-import { CourseQuiz, CourseQuizProblem, CourseQuizSubmission } from "../types/quiz"
+import { useCourseQuiz } from "../hooks/useCourseQuiz"
+import { CourseQuizProblem, CourseQuizSubmission } from "../types/quiz"
 
 interface _QuestionProps {
     problem: CourseQuizProblem,
@@ -94,13 +95,15 @@ function _genSubmission(numberOfProblems: number) {
 }
 
 interface MultipleChoiceQuizProps {
-    quiz: CourseQuiz
+    quizID: string
 }
-function CourseMultipleChoiceQuiz({ quiz }: MultipleChoiceQuizProps) {
+function CourseMultipleChoiceQuiz({ quizID }: MultipleChoiceQuizProps) {
     const [started, setStarted] = useState(false)
+    const { quiz, isFetching } = useCourseQuiz(quizID)
     const [currentQuestion, setCurrentQuestion] = useState(0)
-    const [submission, setSubmission] = useState<CourseQuizSubmission>(_genSubmission(quiz.problems.length))
+    const [submission, setSubmission] = useState<CourseQuizSubmission>()
     const handleStart = () => {
+        setSubmission(_genSubmission(quiz.problems.length))
         setStarted(true)
     }
     const handleNext = (submission: CourseQuizSubmission) => {
@@ -114,6 +117,13 @@ function CourseMultipleChoiceQuiz({ quiz }: MultipleChoiceQuizProps) {
         if (currentQuestion > 0) {
             setCurrentQuestion(p => p - 1)
         }
+    }
+    if (isFetching || !quiz) {
+        return (
+            <div className="bg-white border-2 border-black">
+                <h1 className="text-3xl font-bold mx-[5%] my-10 ">Loading...</h1>
+            </div>
+        )
     }
     if (!started) {
         return (

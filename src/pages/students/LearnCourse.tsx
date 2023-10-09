@@ -9,7 +9,6 @@ import { useStudentCourseProgress } from "../../features/learns/hooks/useStudent
 import { CourseChapter } from "../../features/learns/types/courseChapters"
 import { CourseLesson } from "../../features/learns/types/lessons"
 import { StudentCourseLessonProgress, StudentCourseProgress } from "../../features/learns/types/progress"
-import { CourseQuiz } from "../../features/learns/types/quiz"
 import { CourseAnnouncement } from "../../features/stores/types/course"
 import { useUser } from "../../hooks/useUser"
 
@@ -45,55 +44,9 @@ function _LessonDisplay({ lesson }: { lesson: CourseLesson | undefined }) {
                 <VideoPlayer url={lesson.src} />
             </div>
         )
-    } else {
-        const quiz: CourseQuiz = {
-            quizID: "1",
-            name: "Quiz 1",
-            description: "Quiz 1 description",
-            problems: [
-                {
-                    problemNumber: 1,
-                    question: "Question 1",
-                    multipleCorrectAnswers: true,
-                    choices: {
-                        choiceA: "Choice A",
-                        choiceB: "Choice B",
-                        choiceC: "Choice C",
-                        choiceD: "Choice D",
-                        choiceE: "Choice E",
-                        choiceF: "Choice F",
-                    }
-                },
-                {
-                    problemNumber: 2,
-                    question: "Question 3",
-                    multipleCorrectAnswers: true,
-                    choices: {
-                        choiceA: "Choice A",
-                        choiceB: "Choice B",
-                        choiceC: "Choice C",
-                        choiceD: "Choice D",
-                        choiceE: "Choice E",
-                        choiceF: "Choice F",
-                    }
-                },
-                {
-                    problemNumber: 3,
-                    question: "Queslion 3",
-                    multipleCorrectAnswers: true,
-                    choices: {
-                        choiceA: "Choice A",
-                        choiceB: "Choice B",
-                        choiceC: "Choice C",
-                        choiceD: "Choice D",
-                        choiceE: "Choice E",
-                        choiceF: "Choice F",
-                    }
-                },
-            ]
-        }
+    } else if (lesson.lessonType == "quiz") {
         return (
-            <CourseMultipleChoiceQuiz quiz={quiz} />
+            <CourseMultipleChoiceQuiz quizID={lesson.src} />
         )
     }
 }

@@ -1,7 +1,11 @@
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
+import { useUser } from "../../../hooks/useUser"
 import { useCourseQuiz } from "../hooks/useCourseQuiz"
+import { submitCourseQuiz } from "../services/courseQuiz"
+import { CourseLesson } from "../types/lessons"
+import { StudentCourseLessonProgress } from "../types/progress"
 import { CourseQuizProblem, CourseQuizSubmission } from "../types/quiz"
 
 interface _QuestionProps {
@@ -95,13 +99,15 @@ function _genSubmission(numberOfProblems: number) {
 }
 
 interface MultipleChoiceQuizProps {
-    quizID: string
+    lesson: CourseLesson,
+    progress: StudentCourseLessonProgress
 }
-function CourseMultipleChoiceQuiz({ quizID }: MultipleChoiceQuizProps) {
+function CourseMultipleChoiceQuiz({ lesson, progress }: MultipleChoiceQuizProps) {
     const [started, setStarted] = useState(false)
-    const { quiz, isFetching } = useCourseQuiz(quizID)
+    const { quiz, isFetching } = useCourseQuiz(lesson.src)
     const [currentQuestion, setCurrentQuestion] = useState(0)
     const [submission, setSubmission] = useState<CourseQuizSubmission>()
+    const { user } = useUser()
     const handleStart = () => {
         setSubmission(_genSubmission(quiz.problems.length))
         setStarted(true)
@@ -110,6 +116,10 @@ function CourseMultipleChoiceQuiz({ quizID }: MultipleChoiceQuizProps) {
         setSubmission(submission)
         if (currentQuestion < quiz.problems.length - 1) {
             setCurrentQuestion(p => p + 1)
+        } else {
+            submitCourseQuiz(submission, lesson, progress, user.userID).then(() => {
+                alert("ส่งคำตอบสำเร็จ")
+            })
         }
     }
     const handlePrev = (submission: CourseQuizSubmission) => {

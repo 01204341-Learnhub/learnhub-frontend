@@ -4,6 +4,7 @@ import VideoPlayer from "../../components/VideoPlayer"
 import ChapterOutline from "../../features/learns/components/ChapterOutline"
 import CourseAnnouncementDropdown from "../../features/learns/components/CourseAnnouncementDropdown"
 import CourseMultipleChoiceQuiz from "../../features/learns/components/CourseMultipleChoiceQuiz"
+import CourseMultipleChoiceQuizReport from "../../features/learns/components/CourseMultipleChoiceQuizReport"
 import { useCourseChapters } from "../../features/learns/hooks/useCourseChapters"
 import { useStudentCourseProgress } from "../../features/learns/hooks/useStudentCourseProgress"
 import { CourseChapter } from "../../features/learns/types/courseChapters"
@@ -36,7 +37,7 @@ function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onS
     )
 }
 
-function _LessonDisplay({ lesson }: { lesson: CourseLesson | undefined }) {
+function _LessonDisplay({ lesson, progress }: { lesson: CourseLesson | undefined, progress: StudentCourseLessonProgress }) {
     if (!lesson) return (<div>Not found</div>)
     if (lesson.lessonType == 'video') {
         return (
@@ -45,9 +46,15 @@ function _LessonDisplay({ lesson }: { lesson: CourseLesson | undefined }) {
             </div>
         )
     } else if (lesson.lessonType == "quiz") {
-        return (
-            <CourseMultipleChoiceQuiz quizID={lesson.src} />
-        )
+        if (progress.finished) {
+            return (
+                <CourseMultipleChoiceQuizReport quizID={lesson.src} />
+            )
+        } else {
+            return (
+                <CourseMultipleChoiceQuiz lesson={lesson} progress={progress} />
+            )
+        }
     }
 }
 
@@ -75,14 +82,20 @@ function LearnCourse() {
         if (idx == -1) throw new Error("Chapter not found")
         return chapters[idx]
     }
+    function getCurrentLessonProgress() {
+        if (currentLesson == undefined) return undefined
+        const idx = progress.lessons.findIndex((lesson) => lesson.lessonID == currentLesson.lessonID)
+        if (idx == -1) return undefined
+        return progress.lessons[idx]
+    }
     return (
         <div className="bg-[#eeeeee80] h-full pb-20">
             <div className="flex pt-8 pl-14 pb-14">
                 <h1 className="text-black font-bold text-4xl">คอร์สเรียน</h1>
-                <h1 className="text-gray-600 font-semibold text-3xl my-auto ml-4">No name course</h1>
+                <h1 className="text-gray-600 font-semibold text-3xl my-auto ml-4"></h1>
             </div>
             <div className="flex items-center justify-center">
-                <_LessonDisplay lesson={currentLesson} />
+                <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} />
             </div>
             <div className="flex flex-col items-center mx-20 mt-20">
 
@@ -124,7 +137,6 @@ function LearnCourse() {
                                     ))}
                                 </div>
                             )
-
                         }
                     })()}
                 </div>

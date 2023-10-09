@@ -1,41 +1,22 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Calendar from "../../features/learns/components/Calendar";
 import ClassCard from "../../features/teaches/components/ClassCard";
 import CourseCard from "../../features/teaches/components/CourseCard";
 import NewProgramClass from "../../features/teaches/components/NewProgramCard";
-import { listTeacherClasses } from "../../features/teaches/services/classes";
-import { listTeachCourse } from "../../features/teaches/services/courses";
-import { ClassInfo } from "../../features/teaches/types/class.ts";
-import { CourseInfo } from "../../features/teaches/types/course";
-import { useUser } from "../../hooks/useUser.ts";
+import { useTeachCourses } from "../../features/teaches/hooks/useTeachCourses";
+import { useTeachClasses } from "../../features/teaches/hooks/useTeachClasses";
 
 function TeacherOverview() {
-  const [courses, setCourses] = useState<CourseInfo[]>([]);
-  const [classes, setClasses] = useState<ClassInfo[]>([]);
-  const [isFetching, setIsFetching] = useState<boolean>(false);
-  const { user } = useUser()
+
   const navigate = useNavigate();
-
-  useEffect(() => {
-    async function fetchCoursesAndClasses() {
-      const fetchedCourses = await listTeachCourse(user.userID);
-      const fetchedClasses = await listTeacherClasses(user.userID);
-      setCourses(fetchedCourses);
-      setClasses(fetchedClasses);
-    }
-
-    setIsFetching(true);
-    fetchCoursesAndClasses().then(() => {
-      setIsFetching(false);
-    });
-  }, []);
+  const {courses,isFetchingCourse}=useTeachCourses()
+  const {classes,isFetchingClasses}=useTeachClasses()
 
   function handleNavigate(type: string) {
     navigate(`/teach/create/${type}`);
   }
 
-  if (isFetching) return <div>loading...</div>;
+  if (isFetchingCourse || isFetchingClasses) return <div>loading...</div>;
 
   return (
     <div className="flex flex-col px-8 pb-6">

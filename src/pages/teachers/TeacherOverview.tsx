@@ -9,8 +9,8 @@ import { useTeachClasses } from "../../features/teaches/hooks/useTeachClasses";
 function TeacherOverview() {
 
   const navigate = useNavigate();
-  const {courses,isFetchingCourse}=useTeachCourses()
-  const {classes,isFetchingClasses}=useTeachClasses()
+  const { courses, isFetchingCourse } = useTeachCourses()
+  const { classes, isFetchingClasses } = useTeachClasses()
 
   function handleNavigate(type: string) {
     navigate(`/teach/create/${type}`);

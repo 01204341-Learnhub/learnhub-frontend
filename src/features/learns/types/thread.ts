@@ -3,19 +3,23 @@ import { LearnhubUser } from "../../../types/user";
 type Thread = {
   cls: Class;
   threadId: string;
-  name: string; // title
+  name: string; // Title
   typ: "announcement" | "homework";
   text: string;
   attachments: Attachment[];
-  lastEdit: Date; // last edit date by teacher
+  lastEdit: Date; // Last edit date by teacher
   replies: Reply[];
-  homeworkTopicName?: string; // for homework threads
-  homeworkDueDateTime?: Date; // for homework threads
-  homeworkFullPoints?: number; // for homework threads
-  homeworkSubmitted?: boolean; // for homework threads
-  homeworkLastSubmissionDateTime?: Date; // for homework threads
-  homeworkSubmissionFiles?: HomeworkSubmissionFile[]; // for homework threads
-  homeworkSubmissionPoints?: number; // for homework threads
+  homeworkTopicName?: string; // For homework threads
+  homeworkDueDateTime?: Date; // For homework threads
+  homeworkStatus?: "open" | "closed"; // For homework threads
+  homeworkFullScore?: number; // For homework threads
+  homeworkSubmissionStatus?:
+    | "not-submitted"
+    | "submitted"
+    | "submitted-and-graded"; // For homework threads
+  homeworkLastSubmissionDateTime?: Date; // For homework threads
+  homeworkSubmissionFiles?: HomeworkSubmissionFile[]; // For homework threads
+  homeworkGotScore?: number; // For homework threads
 };
 
 type Class = {
@@ -36,8 +40,7 @@ type Reply = {
 };
 
 type HomeworkSubmissionFile = {
-  homeworkSubmissionFileId: string;
-  name: string;
+  typ: string;
   src: string;
 };
 
@@ -48,41 +51,26 @@ function generateMockUser(
   return {
     userType: typ,
     userID: userId,
-    username: userId,
+    username: `User ${userId}`,
     email: `${userId}@gmail.com`,
     profilePicture: `https://robohash.org/${userId}`,
   };
 }
 
-function generateMockHomeworkSubmissionFile(
-  homeworkSubmissionFileId: string,
-  typ: string
-) {
+function generateMockHomeworkSubmissionFile(typ: string) {
+  if (!["image", "video", "doc", "file"].includes(typ)) {
+    console.error(new Error(`Invalid homework submission file type ${typ}`));
+  }
   const urls = {
-    zip: "https://file-examples.com/wp-content/storage/2017/02/zip_2MB.zip",
-    txt: "https://filesamples.com/samples/document/txt/sample3.txt",
-    pdf: "https://file-examples.com/wp-content/storage/2017/10/file-example_PDF_500_kB.pdf",
-    docx: "https://file-examples.com/wp-content/storage/2017/02/file-sample_500kB.docx",
-    ppt: "https://file-examples.com/wp-content/storage/2017/08/file_example_PPT_500kB.ppt",
-    xlsx: "https://file-examples.com/wp-content/storage/2017/02/file_example_XLSX_100.xlsx",
-    jpg: "https://file-examples.com/wp-content/storage/2017/10/file_example_JPG_1MB.jpg",
-    png: "https://file-examples.com/wp-content/storage/2017/10/file_example_PNG_1MB.png",
-    gif: "https://file-examples.com/wp-content/storage/2017/10/file_example_GIF_1MB.gif",
-    tiff: "https://file-examples.com/wp-content/storage/2017/10/file_example_TIFF_1MB.tiff",
-    ico: "https://file-examples.com/wp-content/storage/2017/10/file_example_favicon.ico",
-    svg: "https://file-examples.com/wp-content/storage/2020/03/file_example_SVG_30kB.svg",
-    webp: "https://file-examples.com/wp-content/storage/2020/03/file_example_WEBP_500kB.webp",
-    avi: "https://file-examples.com/wp-content/storage/2018/04/file_example_AVI_1920_2_3MG.avi",
-    mov: "https://file-examples.com/wp-content/storage/2018/04/file_example_MOV_1920_2_2MB.mov",
-    mp4: "https://file-examples.com/wp-content/storage/2017/04/file_example_MP4_1280_10MG.mp4",
-    wmv: "https://file-examples.com/wp-content/storage/2018/04/file_example_WMV_1920_9_3MB.wmv",
-    webm: "https://file-examples.com/wp-content/storage/2020/03/file_example_WEBM_1920_3_7MB.webm",
-    mp3: "https://file-examples.com/wp-content/storage/2017/11/file_example_MP3_5MG.mp3",
-    wav: "https://file-examples.com/wp-content/storage/2017/11/file_example_WAV_10MG.wav",
+    image:
+      "https://file-examples.com/wp-content/storage/2017/10/file_example_JPG_1MB.jpg",
+    video:
+      "https://file-examples.com/wp-content/storage/2017/04/file_example_MP4_1280_10MG.mp4",
+    doc: "https://github.com/mxstbr/markdown-test-file/blob/master/TEST.md",
+    file: "https://file-examples.com/wp-content/storage/2017/10/file-example_PDF_500_kB.pdf",
   };
   return {
-    homeworkSubmissionFileId: homeworkSubmissionFileId,
-    name: `File ${homeworkSubmissionFileId}`,
+    typ: typ,
     src: urls[typ],
   };
 }
@@ -104,41 +92,48 @@ function generateMockThread(
       typ == "announcement" ? "Announcement" : "Homework"
     } thread ${threadId}`,
     typ: typ,
-    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel. Mauris quis pellentesque tortor. In tempus cursus augue, in tincidunt leo.",
+    text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
     attachments: [],
-    lastEdit: new Date(),
+    lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
     replies: [
       {
         user: generateMockUser("student", "student1"),
-        dateTime: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 7),
+        dateTime: new Date(
+          new Date().getTime() - 1000 * 60 * 60 * 24 * 7 - 1000 * 60 * 60 * 4
+        ),
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
       },
       {
         user: generateMockUser("student", "student2"),
-        dateTime: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 1),
+        dateTime: new Date(
+          new Date().getTime() - 1000 * 60 * 60 * 24 * 1 - 1000 * 60 * 60 * 1
+        ),
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
       },
       {
         user: teacher,
-        dateTime: new Date(),
+        dateTime: new Date(new Date().getTime() - 1000 * 60 * 30),
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
       },
     ],
     homeworkTopicName: `Topic ${threadId.length % 5}`,
     homeworkDueDateTime:
       typ === "homework"
-        ? new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 7)
+        ? new Date(
+            new Date().getTime() + 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 4
+          )
         : undefined,
-    homeworkFullPoints: typ === "homework" ? 100 : undefined,
-    homeworkSubmitted: typ === "homework" ? false : undefined,
+    homeworkStatus: typ === "homework" ? "open" : undefined,
+    homeworkFullScore: typ === "homework" ? 100 : undefined,
+    homeworkSubmissionStatus: typ === "homework" ? "not-submitted" : undefined,
     homeworkLastSubmissionDateTime: typ === "homework" ? undefined : undefined,
     homeworkSubmissionFiles:
       typ === "homework"
-        ? ["zip", "txt", "pdf", "docx", "ppt", "xlsx", "jpg", "mp4", "mp3"].map(
-            (typ, i) => generateMockHomeworkSubmissionFile(`file${i}`, typ)
+        ? ["image", "video", "doc", "file"].map(
+            generateMockHomeworkSubmissionFile
           )
         : undefined,
-    homeworkSubmissionPoints: typ === "homework" ? undefined : undefined,
+    homeworkGotScore: typ === "homework" ? undefined : undefined,
   };
 }
 

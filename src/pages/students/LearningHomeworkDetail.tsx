@@ -2,7 +2,7 @@ import React, { createContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Thread, generateMockUser } from "../../features/learns/types/thread";
 import { LearnhubUser } from "../../types/user";
-import useThread from "../../hooks/useThread";
+import useThread from "../../features/learns/hooks/useThread";
 import MainContent from "../../features/learns/components/ClassHomeworkDetailMainContent";
 import FileUploader from "../../features/learns/components/ClassHomeworkDetailFileUploader";
 

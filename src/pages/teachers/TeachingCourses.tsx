@@ -50,9 +50,9 @@ function TeachingCourses() {
         {courses.map(
           ({
             courseID,
-            courseName,
-            courseRating,
-            courseThumbnailUrl,
+            name: courseName,
+            rating: courseRating,
+            thumbnailUrl: courseThumbnailUrl,
             studentCount,
           }) => (
             <li key={courseID} className="mt-5">

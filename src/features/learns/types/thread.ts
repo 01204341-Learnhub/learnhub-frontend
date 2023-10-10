@@ -57,17 +57,35 @@ function generateMockUser(
   };
 }
 
+function generateMockAttachment(typ: string) {
+  if (!["image", "video", "doc", "file"].includes(typ)) {
+    console.error(new Error(`Invalid attachment type ${typ}`));
+  }
+  const urls = {
+    image:
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2F7uwufn4ugyh%00test-image.png%00?alt=media&token=3a0191b2-27f1-4385-9dd6-0c7b155a9f22",
+    video:
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fjprsf09d5qs%00test-video.mp4%00?alt=media&token=b88584d7-b8a9-4c8e-9eb5-444f30d29123",
+    doc: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fjvhkj7tuzl%00test-doc.md%00?alt=media&amp;token=f1e96b77-3979-4178-94ad-1b46585d3167",
+    file: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2F5f9d61u601h%00test-file.pdf%00?alt=media&token=4ef7acb1-83de-4c8d-8aab-9d95de27a385",
+  };
+  return {
+    typ: typ,
+    src: urls[typ],
+  };
+}
+
 function generateMockHomeworkSubmissionFile(typ: string) {
   if (!["image", "video", "doc", "file"].includes(typ)) {
     console.error(new Error(`Invalid homework submission file type ${typ}`));
   }
   const urls = {
     image:
-      "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg",
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2F7uwufn4ugyh%00test-image.png%00?alt=media&token=3a0191b2-27f1-4385-9dd6-0c7b155a9f22",
     video:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    doc: "https://raw.githubusercontent.com/mxstbr/markdown-test-file/master/TEST.md",
-    file: "https://file-examples.com/wp-content/storage/2017/10/file-example_PDF_500_kB.pdf",
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fjprsf09d5qs%00test-video.mp4%00?alt=media&token=b88584d7-b8a9-4c8e-9eb5-444f30d29123",
+    doc: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fjvhkj7tuzl%00test-doc.md%00?alt=media&amp;token=f1e96b77-3979-4178-94ad-1b46585d3167",
+    file: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2F5f9d61u601h%00test-file.pdf%00?alt=media&token=4ef7acb1-83de-4c8d-8aab-9d95de27a385",
   };
   return {
     typ: typ,
@@ -93,20 +111,7 @@ function generateMockThread(
     } thread ${threadId}`,
     typ: typ,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
-    attachments: [
-      {
-        typ: "image",
-        src: "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg",
-      },
-      {
-        typ: "video",
-        src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      },
-      {
-        typ: "image",
-        src: "https://images6.alphacoders.com/133/1330235.png",
-      },
-    ],
+    attachments: ["image", "video", "doc", "file"].map(generateMockAttachment),
     lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
     replies: [
       {

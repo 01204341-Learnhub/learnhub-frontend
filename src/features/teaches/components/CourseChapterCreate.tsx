@@ -7,10 +7,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useState } from "react";
+import { CourseContext } from "../../../pages/teachers/CreateCourse.tsx";
 import { Chapter, Lesson } from "../types/course";
 import FileLessonCreate from "./FileLessonCreate";
+import QuizLessonCreate from "./QuizLessonCreate.tsx";
 import VideoLessonCreate from "./VideoLessonCreate";
-import { CourseContext } from "../../../pages/teachers/CreateCourse.tsx";
 
 interface _LessonTypeSelectorProps {
   onSelect: (lessonType: string) => void;
@@ -47,7 +48,8 @@ function _LessonTypeSelector({ onSelect }: _LessonTypeSelectorProps) {
               <FontAwesomeIcon icon={faFileLines} color="#505050" size="xl" />
               <h1 className="ml-5">เอกสาร</h1>
             </button>
-            <button className="flex my-2 p-2 hover:bg-gray-200 w-full">
+            <button className="flex my-2 p-2 hover:bg-gray-200 w-full"
+              onClick={() => { onSelect("quiz") }}>
               <FontAwesomeIcon
                 icon={faClipboardList}
                 color="#505050"
@@ -172,6 +174,13 @@ function CourseChapterCreate({ onSubmit, onCancel }: CourseChapterCreateProps) {
         }}
       />
     );
+  }
+  if (mode == "add-quiz") {
+    return (
+      <QuizLessonCreate chapterName={chapterName} chapterNumber={chapterNumber}
+        lessonNumber={lessons.length + 1} onCancel={() => { setMode("main") }}
+        onSubmit={handleAddLesson} />
+    )
   }
   return (
     <div className="w-full h-screen">

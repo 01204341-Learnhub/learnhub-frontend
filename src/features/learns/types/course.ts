@@ -1,3 +1,17 @@
+type EnrolledCourse = {
+  courseID: string;
+  thumbnailUrl: string;
+  name: string;
+  status: string;
+  teacher: {
+    teacherID: string;
+    name: string;
+    avatarUrl: string;
+  };
+  progress: number;
+  rating: number;
+};
+
 export type CourseChapter = {
   chapterID: string;
   chapterNum: number;
@@ -26,17 +40,16 @@ export type CourseLesson = {
   courseID: string;
   chapterID: string;
   lessonType: string;
-  lessonLength : number;
+  lessonLength: number;
   src: string;
 };
 
-
-
-
 export type CourseLessons = {
-  lessonID : string
-  lessonNum : number
-  name : string
-  lessonType : string
-  lessonLength : string
-}
+  lessonID: string;
+  lessonNum: number;
+  name: string;
+  lessonType: string;
+  lessonLength: string;
+};
+
+export type { EnrolledCourse };

@@ -10,9 +10,10 @@ const storage = getStorage(app);
 
     @return Promise<string> - File URL
 */
-async function uploadFile(file: File): Promise<string> {
+async function uploadFile(file: File, fileName?: string): Promise<string> {
   const randomID = Math.random().toString(36).substring(2);
-  const fileRef = ref(storage, `videos/${randomID}`);
+  const identifier = fileName ? `${randomID}.${fileName}` : `${randomID}`;
+  const fileRef = ref(storage, `file/${identifier}}`);
   try {
     await uploadBytes(fileRef, file);
   } catch (error) {

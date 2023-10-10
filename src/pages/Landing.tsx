@@ -1,13 +1,20 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, Navigate, useNavigate } from "react-router-dom"
 import ImageLogo from "../assets/Images/bookLogo.png"
 import ImageElephant from "../assets/Images/elephantLogo.png"
 import ClassIcon from "../assets/Images/landingClassicIcon.png"
 import CouseIcon from "../assets/Images/landingCourseIcon.png"
 import ImageLogoText from "../assets/Images/textNameLogo.png"
+import { useUser } from "../hooks/useUser"
 
 
 function Landingmiddle() {
     const navigate = useNavigate()
+    const { user } = useUser()
+    if (user) {
+        return (
+            <Navigate to={"/home"} replace={true} state={{ from: "/" }} />
+        )
+    }
     return (
         <>
             <div className="flex flex-row w-screen px-[10%] pt-[1.5%]">

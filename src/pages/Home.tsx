@@ -8,17 +8,6 @@ import { ClassProgram } from "../features/stores/types/class";
 import { Course } from "../features/stores/types/course";
 
 
-
-type ProgramCardProps = {
-    programThumbnailUrl: string;
-    programName: string;
-    programId: string;
-    instructorName: string;
-    percentCompleted: number;
-}
-
-
-
 export default function Home() {
 
     const [courses, setCouses] = useState<Course[] | null>(null)
@@ -63,9 +52,9 @@ export default function Home() {
             coursePopularSlot.push({
                 programName: program.name,
                 programId: program.courseID,
-                instructorName: program.intructor.name,
+                instructorName: program.instructor.name,
                 percentCompleted: 100,
-                programThumbnailUrl: program.cover,
+                programThumbnailUrl: program.thumbnailUrl,
             })
         })
         return coursePopularSlot
@@ -95,9 +84,9 @@ export default function Home() {
                     } else {
                         return (
                             <Link to={`/detail/course/${program.courseID}`} key={index} className="my-4 px-6" >
-                                <ProgramSlot key={index} courseThumbnailUrl={program.cover}
+                                <ProgramSlot key={index} courseThumbnailUrl={program.thumbnailUrl}
                                     courseName={program.name}
-                                    instructorName={program.intructor.name}
+                                    instructorName={program.instructor.name}
                                     percentCompleted={100}
                                     regisDate={""} voter={program.rating} price={program.price} tag={program.tags[0].name}
                                     lvl={"พื้นฐาน"} />

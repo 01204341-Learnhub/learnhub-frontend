@@ -1,13 +1,13 @@
-import { useContext, useRef, useState } from "react";
-import { Reply, Thread } from "../types/thread";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClipboardList,
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
-import PeopleSvg from "../../../assets/images/people.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext, useRef, useState } from "react";
+import PeopleSvg from "../../../assets/Images/people.svg";
 import { UserContext } from "../../../pages/students/LearningHomeworkDetail";
 import { toDateTimeStringOmitDateOnSameDay } from "../../../utils/functions";
+import { Reply, Thread } from "../types/thread";
 
 interface _ReplyEntryProps {
   reply: Reply;
@@ -50,9 +50,8 @@ function _ReplyInputBar({ onAddReply }: _ReplyInputBarProps) {
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${
-        textareaRef.current.scrollHeight + 4
-      }px`;
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 4
+        }px`;
     }
   };
 
@@ -113,7 +112,7 @@ function MainContent({ thread, onAddReply }: MainContent) {
           <div className="flex justify-between items-start w-full mt-1">
             <p className="text-[#404040] text-[14px] font-semibold">
               {thread.homeworkSubmissionStatus === "submitted-and-graded" &&
-              thread.homeworkGotScore !== undefined
+                thread.homeworkGotScore !== undefined
                 ? `${thread.homeworkGotScore}/`
                 : ""}
               {thread.homeworkFullScore} คะแนน

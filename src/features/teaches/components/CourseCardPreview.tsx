@@ -1,9 +1,11 @@
-interface ProgramSlotProps {
+import { Tag } from "../types/tags";
+
+interface CourseCardPreviewProps {
   courseThumbnailUrl: string;
   courseName: string;
   instructorName: string;
   price: number;
-  category: string;
+  tag: Tag;
   level: string;
 }
 
@@ -12,9 +14,9 @@ function CourseCardPreview({
   courseName,
   instructorName,
   price,
-  category,
+  tag,
   level,
-}: ProgramSlotProps) {
+}: CourseCardPreviewProps) {
   return (
     <div className="m-2 rounded-[20px] w-[286px] h-[350px] max-w-sm overflow-hidden shadow-lg bg-white">
       <div className=" w-[286px] h-[146px]">
@@ -34,7 +36,7 @@ function CourseCardPreview({
         <p className="mb-5 text-[18px] font-bold">{price} บาท</p>
         <div className="my-1 flex justify-between items-center">
           <h1 className="bg-[#FF8989] h-[34px] font-semibold text-black text-[13px] flex items-center justify-center">
-            {category}
+            {tag.name}
           </h1>
           <div className="flex items-center ">
             <img

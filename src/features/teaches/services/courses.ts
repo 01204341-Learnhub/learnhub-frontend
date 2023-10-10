@@ -74,7 +74,7 @@ async function createCourse(course: Course, teacherID: string) {
     course_pic: course.thumbnailUrl,
     description: course.description,
     course_objective: course.objectives,
-    tag_ids: [course.categoryId],
+    tag_ids: [course.tag.tagID],
     course_requirement: course.requirement,
     difficulty_level: course.level,
     price: course.price,

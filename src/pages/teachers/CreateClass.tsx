@@ -1,19 +1,19 @@
+import { faCircle as faCircleRegular } from "@fortawesome/free-regular-svg-icons";
+import {
+  faArrowRight,
+  faCircle as faCircleSolid,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClassCardPreview from "../../features/teaches/components/ClassCardPreview.tsx";
+import ClassDatesInfoForm from "../../features/teaches/components/ClassDatesInfoForm.tsx";
+import ClassGoalsInfoForm from "../../features/teaches/components/ClassGoalsInfoForm.tsx";
+import ClassPublishingInfoForm from "../../features/teaches/components/ClassPublishingInfoForm.tsx";
 import {
   availableCategories,
   Class,
 } from "../../features/teaches/types/class.ts";
-import ClassGoalsInfoForm from "../../features/teaches/components/ClassGoalsInfoForm.tsx";
-import ClassPublishingInfoForm from "../../features/teaches/components/ClassPublishingInfoForm.tsx";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle as faCircleRegular } from "@fortawesome/free-regular-svg-icons";
-import {
-  faCircle as faCircleSolid,
-  faArrowRight,
-} from "@fortawesome/free-solid-svg-icons";
-import ClassDatesInfoForm from "../../features/teaches/components/ClassDatesInfoForm.tsx";
 
 interface _SideNavProps {
   currentTab: string;
@@ -75,19 +75,17 @@ function _SideNav({
         </button>
       </div>
       <button
-        className={`w-fit h-fit p-3 hover:drop-shadow-md ${
-          !readyToPublish || onPublish === undefined
+        className={`w-fit h-fit p-3 hover:drop-shadow-md ${!readyToPublish || onPublish === undefined
             ? "bg-gray-200"
             : "bg-[#D9D9D9]"
-        }`}
+          }`}
         onClick={onPublish}
       >
         <h1
-          className={`font-semibold text-[20px] ${
-            !readyToPublish || onPublish === undefined
+          className={`font-semibold text-[20px] ${!readyToPublish || onPublish === undefined
               ? "text-gray-400"
               : "text-black"
-          }`}
+            }`}
         >
           เผยแพร่คลาส
         </h1>
@@ -127,7 +125,7 @@ function _TopPanel({ cls }: _TopPanelProps) {
           className={cls.name}
           level={cls.level}
           price={cls.price}
-          category={
+          tag={
             availableCategories.find(
               (category) => category.categoryId === cls.categoryId,
             )?.name

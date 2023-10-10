@@ -43,6 +43,7 @@ async function signInWithEmail(
         userType: "student",
         userID: (data as LearnhubStudentResponse).student_id,
         username: data.username,
+        fullname: data.fullname,
         email: data.email,
         profilePicture: data.profile_pic,
       };
@@ -51,6 +52,7 @@ async function signInWithEmail(
         userType: "teacher",
         userID: (data as LearnhubTeacherResponse).teacher_id,
         username: data.username,
+        fullname: data.fullname,
         email: data.email,
         profilePicture: data.profile_pic,
       };

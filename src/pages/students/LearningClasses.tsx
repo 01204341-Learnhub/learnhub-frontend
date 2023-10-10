@@ -112,16 +112,29 @@ function LearningClasses() {
         )
     }
 
-
-
     return (
-        <div className='bg-[#eeeeee80] '>
+        <div className=''>
             <header className='flex items-center px-12 h-40 pb-6'>
                 <span className='text-3xl font-bold'>คลาสเรียนของฉัน</span>
-                <div>serach bar</div>
+                <div className='flex w-64 h-8 mx-4 items-center'>
+                    <div className='flex basis-3/4 items-center bg-white drop-shadow-lg w-full h-full'>
+                        <input
+                            placeholder='ค้นหาคลาสเรียน'
+                            className='outline-none w-full h-full px-4 text-sm'
+                            name='search'
+                            id='search' 
+                            type="text" />
+                    </div>
+                    <button
+                        type='button' 
+                        className='basis-1/4 bg-black drop-shadow-lg w-full h-full'
+                        >
+                            <span className='text-white font-bold text-sm'>ค้นหา</span>
+                    </button>
+                </div>
             </header>
             <article className='flex flex-col'>
-                <section className='flex flex-col items-center pt-4 px-12 bg-[#d9d9d9] h-[400px]'>
+                <section className='flex flex-col items-center pt-4 px-12 bg-[#d9d9d9] h-[360px]'>
                     <h1 className='text-2xl font-semibold self-start pb-8'>คลาสเรียนที่กำลังสอน</h1>
                     <div className='flex items-center justify-center  w-[90%]'>
                         <ClassTeachNow {...mockClassTeachNow} />

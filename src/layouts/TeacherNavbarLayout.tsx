@@ -1,11 +1,11 @@
 
-import { useSelector } from "react-redux"
 import { Outlet } from "react-router-dom"
 import TeacherNavBar from "../components/TeacherNavBar"
-import { RootState } from "../store"
+import { useUser } from "../hooks/useUser"
 
 function TeacherNavbarLayout() {
-    const user = useSelector((state: RootState) => state.user.user)
+    const { user, isFetching } = useUser()
+    if (isFetching) return (<div>Loading...</div>)
     if (user === undefined || user.userType !== "teacher") {
         return (
             <h1 className=" flex justify-center items-center h-screen font-bold text-7xl">How You get Here</h1>

@@ -1,6 +1,11 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HomeworkSubmissionFile, Thread } from "../types/thread";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCirclePlay,
+  faDownload,
+  faFileLines,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   getFileTypeFromSrc,
   toDateTimeStringOmitDateOnSameDay,
@@ -22,13 +27,6 @@ function _FileEntry({
   homeworkSubmissionFile,
   onRemoveHomeworkSubmissionFile,
 }: _FileEntryProps) {
-  const handleOpenHomeworkSubmissionFile = (
-    homeworkSubmissionFile: HomeworkSubmissionFile
-  ) => {
-    // TODO: Open file
-    alert(`Open file: ${homeworkSubmissionFile.src}`);
-  };
-
   const handleRemoveHomeworkSubmissionFile = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -40,15 +38,43 @@ function _FileEntry({
     <div
       className="group flex items-center space-x-3 h-[60px] bg-white rounded-[6px] border-[1px] border-[#DADCE0] hover:shadow-md cursor-pointer"
       onClick={() => {
-        handleOpenHomeworkSubmissionFile(homeworkSubmissionFile);
+        window.open(homeworkSubmissionFile.src, "_blank");
       }}
     >
-      <img
-        // TODO: Change to real thumbnail
-        src={`https://robohash.org/${homeworkSubmissionFile.src}?set=set4`}
-        alt="File Thumbnail"
-        className="h-full aspect-square rounded-l-[5px] object-cover border-r-[1px] border-[#DADCE0]"
-      />
+      <div className="h-full aspect-square flex items-center justify-center border-r-[1px]">
+        {(() => {
+          if (homeworkSubmissionFile.typ === "image") {
+            return (
+              <img
+                src={homeworkSubmissionFile.src}
+                alt="File homeworkSubmissionFilehumbnail"
+                className="rounded-l-[5px] h-full aspect-square object-cover"
+              />
+            );
+          }
+          if (homeworkSubmissionFile.typ === "video") {
+            return (
+              <div className="flex justify-center items-center">
+                <FontAwesomeIcon icon={faCirclePlay} size="2x" />
+              </div>
+            );
+          }
+          if (homeworkSubmissionFile.typ === "doc") {
+            return (
+              <div className="flex justify-center items-center">
+                <FontAwesomeIcon icon={faFileLines} size="2x" />
+              </div>
+            );
+          }
+          if (homeworkSubmissionFile.typ === "file") {
+            return (
+              <div className="flex justify-center items-center">
+                <FontAwesomeIcon icon={faDownload} size="2x" />
+              </div>
+            );
+          }
+        })()}
+      </div>
       <div className="w-1/2">
         <p className="text-[#707070] group-hover:text-black text-[16px] font-semibold truncate">
           {homeworkSubmissionFile.src}

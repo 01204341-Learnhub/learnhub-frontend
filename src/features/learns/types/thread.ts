@@ -63,10 +63,10 @@ function generateMockHomeworkSubmissionFile(typ: string) {
   }
   const urls = {
     image:
-      "https://file-examples.com/wp-content/storage/2017/10/file_example_JPG_1MB.jpg",
+      "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg",
     video:
-      "https://file-examples.com/wp-content/storage/2017/04/file_example_MP4_1280_10MG.mp4",
-    doc: "https://github.com/mxstbr/markdown-test-file/blob/master/TEST.md",
+      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    doc: "https://raw.githubusercontent.com/mxstbr/markdown-test-file/master/TEST.md",
     file: "https://file-examples.com/wp-content/storage/2017/10/file-example_PDF_500_kB.pdf",
   };
   return {
@@ -93,7 +93,20 @@ function generateMockThread(
     } thread ${threadId}`,
     typ: typ,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
-    attachments: [],
+    attachments: [
+      {
+        typ: "image",
+        src: "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg",
+      },
+      {
+        typ: "video",
+        src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      },
+      {
+        typ: "image",
+        src: "https://images6.alphacoders.com/133/1330235.png",
+      },
+    ],
     lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
     replies: [
       {

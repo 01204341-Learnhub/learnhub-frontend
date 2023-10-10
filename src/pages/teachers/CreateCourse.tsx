@@ -5,7 +5,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CourseCardPreview from "../../features/teaches/components/CourseCardPreview";
 import CourseChapterCreate from "../../features/teaches/components/CourseChapterCreate";
@@ -18,7 +17,7 @@ import {
   Course,
   availableCategories,
 } from "../../features/teaches/types/course";
-import { RootState } from "../../store.ts";
+import { useUser } from "../../hooks/useUser.ts";
 
 interface _SideNavProps {
   currentTab: string;
@@ -269,7 +268,8 @@ const CourseContext = React.createContext<CourseContextType | undefined>(
 
 function CreateCourse() {
   const navigate = useNavigate();
-  const teacherID = useSelector((state: RootState) => state.user.user.userID);
+  const { user } = useUser();
+  const teacherID = user.userID;
   const [course, setCourse] = useState<Course>({
     courseId: "1234567890", // TODO: Get an ID, possibly uuid.
     name: "",

@@ -1,59 +1,43 @@
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useDispatch, useSelector } from "react-redux"
-import { removeItem, addItem, setStatusFetchOnce, clearItem, setStatusIsLoading } from "../slices/basketSlice"
-import { RootState } from "../store"
-import { fetchBasketItems, deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
-import { useEffect, useState } from 'react'
-import { BasketItem } from '../features/stores/types/basket'
+import { useDispatch} from "react-redux"
+import { removeItem, clearItem, } from "../slices/basketSlice"
+import { deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
+import { useUser } from '../hooks/useUser'
+import Swal from 'sweetalert2'
+import { useBasket } from '../features/stores/hooks/useBasket'
+
 
 function Basket() {
-    //console.log("in basket")
-    const { basket } = useSelector((state: RootState) => state.basket)
-    const userID = useSelector((state: RootState) => state.user.user?.userID)
-    const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
+    const { user } = useUser()
+    const basket = useBasket()
     const dispatcher = useDispatch()
-    const [basketItemsState, setBasketItems] = useState< {items : BasketItem[]} | null>(null)
-    
-
+   
     async function handleDeleteBusketItems(itemID: string) {
         dispatcher(removeItem(itemID))
-        const isDelete = await deleteBasketItem(userID, itemID)
+        const isDelete = await deleteBasketItem(user.userID, itemID)
         console.log(isDelete)
     }
-    
 
-    // const handlePayment = async () => {
-    //     const transction = await purchaseCourse(userID, "1");
-    //     if (transction) {
-    //         alert("ชำระเงินสำเร็จ")
-    //     } else {
-    //         alert("ชำระเงินไม่สำเร็จ")
-    //     }
-
-    // }
-
-    useEffect(() => {
-        async function fetchBasket() {
-            console.log(isFetchOnce)
-            if (!isFetchOnce) {
-                const BasketItems = await fetchBasketItems(userID)
-                setBasketItems(BasketItems)
-                dispatcher(setStatusFetchOnce(true))
-                dispatcher(clearItem())
-                BasketItems.items.map((item) => {
-                    dispatcher(addItem(item))
-                })
-                setStatusIsLoading(true)
-                
-            }
+    const handlePayment = async () => {
+        const transction = await purchaseCourse(user.userID, "1111111111111");
+        if (transction) {
+            Swal.fire({
+                title: "ชำระเงินสำเร็จ",
+                text: "",
+                icon: "success",
+                confirmButtonColor: "green"
+            })
+            dispatcher(clearItem())
+        } else {
+            Swal.fire({
+                title: 'error',
+                icon: 'error'
+            })
         }
-        fetchBasket()
-        
-        
-    }, []);
-    
-    
+
+    }
+
     return (
         <div className="bg-white flex flew-rox justify-center ">
             <div className='pl-6'>
@@ -91,7 +75,7 @@ function Basket() {
                 <h1 className="border-1 font-bold text-[32px] py-2">ทั้งหมด</h1>
                 <h1 className="border-1 font-bold text-[40px] pb-4">{basket.items.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
                 <button
-                    onClick={() => {}}
+                    onClick={handlePayment}
                     type='button' 
                     className=" px-[55px] py-[15px] bg-[#d9d9d9] font-bold text-[20px] bg-blue-400 text-gray-100 hover:bg-blue-300">
                     ชำระเงิน

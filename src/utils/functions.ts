@@ -7,8 +7,6 @@ export function getCustomFileTypeFromFile(file: File) {
     return "image";
   } else if (file.type.startsWith("video/")) {
     return "video";
-  } else if (file.name.endsWith("md")) {
-    return "doc";
   } else {
     return "file";
   }
@@ -16,12 +14,15 @@ export function getCustomFileTypeFromFile(file: File) {
 
 export function getFileNameFromSrc(src: string) {
   const startIndex = src.indexOf("%00") + 3;
-  const endIndex = src.indexOf("%00", startIndex);
-  if (startIndex === -1 || endIndex === -1) {
+  const endIndex = src.indexOf("?", startIndex);
+  if (startIndex === -1) {
     console.error(
-      new Error("src does not contain two delimiting null characters")
+      new Error("Invalid src, cannot find %00 marking start of file name")
     );
-    return "";
+    return src;
+  }
+  if (endIndex === -1) {
+    return src.substring(startIndex);
   }
   return src.substring(startIndex, endIndex);
 }

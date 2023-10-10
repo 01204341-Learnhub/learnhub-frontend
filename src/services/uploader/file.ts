@@ -12,7 +12,7 @@ const storage = getStorage(app);
 */
 async function uploadFile(file: File): Promise<string> {
   const randomID = Math.random().toString(36).substring(2);
-  const fileRef = ref(storage, `file/${randomID}\0${file.name}\0`);
+  const fileRef = ref(storage, `file/${randomID}\0${file.name}`);
   try {
     await uploadBytes(fileRef, file);
   } catch (error) {

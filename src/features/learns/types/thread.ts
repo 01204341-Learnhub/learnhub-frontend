@@ -58,16 +58,15 @@ function generateMockUser(
 }
 
 function generateMockAttachment(typ: string) {
-  if (!["image", "video", "doc", "file"].includes(typ)) {
+  if (!["image", "video", "file"].includes(typ)) {
     console.error(new Error(`Invalid attachment type ${typ}`));
   }
   const urls = {
     image:
-      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2F7uwufn4ugyh%00test-image.png%00?alt=media&token=3a0191b2-27f1-4385-9dd6-0c7b155a9f22",
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Favcirn6x434%00test-image.png?alt=media&token=80167929-e90a-4ff0-a623-d898fe50abc6",
     video:
-      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fjprsf09d5qs%00test-video.mp4%00?alt=media&token=b88584d7-b8a9-4c8e-9eb5-444f30d29123",
-    doc: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fjvhkj7tuzl%00test-doc.md%00?alt=media&amp;token=f1e96b77-3979-4178-94ad-1b46585d3167",
-    file: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2F5f9d61u601h%00test-file.pdf%00?alt=media&token=4ef7acb1-83de-4c8d-8aab-9d95de27a385",
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Ffsjqm90y2vk%00test-video.mp4?alt=media&token=a25fb4ef-ec66-4ac2-aaba-8a9f99975284",
+    file: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fe623mdlccss%00test-file.pdf?alt=media&token=7fe9e0dc-93b9-4805-b537-df563fbfc2de",
   };
   return {
     typ: typ,
@@ -76,16 +75,15 @@ function generateMockAttachment(typ: string) {
 }
 
 function generateMockHomeworkSubmissionFile(typ: string) {
-  if (!["image", "video", "doc", "file"].includes(typ)) {
+  if (!["image", "video", "file"].includes(typ)) {
     console.error(new Error(`Invalid homework submission file type ${typ}`));
   }
   const urls = {
     image:
-      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2F7uwufn4ugyh%00test-image.png%00?alt=media&token=3a0191b2-27f1-4385-9dd6-0c7b155a9f22",
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Favcirn6x434%00test-image.png?alt=media&token=80167929-e90a-4ff0-a623-d898fe50abc6",
     video:
-      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fjprsf09d5qs%00test-video.mp4%00?alt=media&token=b88584d7-b8a9-4c8e-9eb5-444f30d29123",
-    doc: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fjvhkj7tuzl%00test-doc.md%00?alt=media&amp;token=f1e96b77-3979-4178-94ad-1b46585d3167",
-    file: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2F5f9d61u601h%00test-file.pdf%00?alt=media&token=4ef7acb1-83de-4c8d-8aab-9d95de27a385",
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Ffsjqm90y2vk%00test-video.mp4?alt=media&token=a25fb4ef-ec66-4ac2-aaba-8a9f99975284",
+    file: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fe623mdlccss%00test-file.pdf?alt=media&token=7fe9e0dc-93b9-4805-b537-df563fbfc2de",
   };
   return {
     typ: typ,
@@ -111,7 +109,7 @@ function generateMockThread(
     } thread ${threadId}`,
     typ: typ,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
-    attachments: ["image", "video", "doc", "file"].map(generateMockAttachment),
+    attachments: ["image", "video", "file"].map(generateMockAttachment),
     lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
     replies: [
       {
@@ -147,9 +145,7 @@ function generateMockThread(
     homeworkLastSubmissionDateTime: typ === "homework" ? undefined : undefined,
     homeworkSubmissionFiles:
       typ === "homework"
-        ? ["image", "video", "doc", "file"].map(
-            generateMockHomeworkSubmissionFile
-          )
+        ? ["image", "video", "file"].map(generateMockHomeworkSubmissionFile)
         : undefined,
     homeworkGotScore: typ === "homework" ? undefined : undefined,
   };

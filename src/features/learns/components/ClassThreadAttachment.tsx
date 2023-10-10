@@ -1,11 +1,7 @@
 import React from "react";
 import { Attachment } from "../types/thread";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCirclePlay,
-  faDownload,
-  faFileLines,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlay, faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { getFileNameFromSrc } from "../../../utils/functions";
 
 interface ClassThreadAttachmentProps {
@@ -35,18 +31,10 @@ function ClassThreadAttachment({ attachment }: ClassThreadAttachmentProps) {
                 <FontAwesomeIcon icon={faCirclePlay} size="2x" />
               </div>
             );
-          }
-          if (attachment.typ === "doc") {
+          } else {
             return (
               <div className="flex justify-center items-center">
                 <FontAwesomeIcon icon={faFileLines} size="2x" />
-              </div>
-            );
-          }
-          if (attachment.typ === "file") {
-            return (
-              <div className="flex justify-center items-center">
-                <FontAwesomeIcon icon={faDownload} size="2x" />
               </div>
             );
           }

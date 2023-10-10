@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HomeworkSubmissionFile, Thread } from "../types/thread";
 import {
   faCirclePlay,
-  faDownload,
   faFileLines,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
@@ -59,17 +58,10 @@ function _FileEntry({
                 <FontAwesomeIcon icon={faCirclePlay} size="2x" />
               </div>
             );
-          }
-          if (homeworkSubmissionFile.typ === "doc") {
-            return (
-              <div className="flex justify-center items-center">
-                <FontAwesomeIcon icon={faFileLines} size="2x" />
-              </div>
-            );
           } else {
             return (
               <div className="flex justify-center items-center">
-                <FontAwesomeIcon icon={faDownload} size="2x" />
+                <FontAwesomeIcon icon={faFileLines} size="2x" />
               </div>
             );
           }

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
 import WorkCreate from "../../features/teaches/components/WorkCreate"
 import { Work } from "../../features/teaches/types/classWork"
-
+import Workreview from "../../features/teaches/components/reviewwork"
 type View = 'main' | 'works' | 'members' | 'create-work'
 
 type ClassInfoPrototype = {
@@ -37,13 +37,35 @@ function _ViewSlector({ currentView, setView }: ViewSlectorProps) {
 }
 
 function _WorkSlot({ work }: { work: Work }) {
+    const [isOpen, setISOpen] = useState(false);
     return (
+        <div>
+        <button className="bg-white flex m-3 items-center w-full" onClick={() => setISOpen(!isOpen)}>
         <div className="bg-white flex m-3 items-center">
-            <div className="flex justify-center items-center bg-[#D9D9D9] w-16 h-16 m-2 rounded-full">
+            <div className="flex justify-center items-center bg-[#D9D9D9] w-16 h-16 m-2 rounded-full" >
                 <FontAwesomeIcon icon={faClipboardList} size="2xl" />
             </div>
             <h1 className="text-xl text-gray-600 font-bold ml-5">{work.name}</h1>
         </div>
+        </button>
+        {isOpen && <div>
+            <div className="bg-white flex items-center border-2 px-5 py-5 h-fit">
+            <p className="w-8/12 h-fit break-all">{work.description}</p>
+            <div className="w-2/12 items-end"><p className="w-full text-xl text-gray-600 font-bold ml-5">{work.send}</p>
+            <p className="text-xl text-gray-600 font-bold ml-5">ส่งแล้ว</p></div>
+            <div className="w-2/12 items-end"><p className="w-full text-xl text-gray-600 font-bold ml-5">{work.nosend}</p>
+            <p className="text-xl text-gray-600 font-bold ml-5">ยังไม่ส่ง</p></div>
+            </div>
+            <div className="bg-white flex  items-center border-2 py-5 px-5">
+            <a href="" className="text-blue-600 w-10/12" >ดูวิธีการ</a>
+            <div className="w-2/12 items-end">
+            <button className="bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 border border-blue-700 rounded">ตรวจงาน</button>
+            </div>
+            </div>
+            </div>
+            
+       }
+       </div>
     )
 }
 
@@ -96,38 +118,48 @@ function _ClassWorks({ onCreateClassWork, works }: _ClassWorksProps) {
 const mockWorks: Work[] = [
     {
         name: "Mock",
-        description: "Mockckdkkfdksfk",
+        description: "Moc65d4f9asd4f9as49f84asd9asd1f8as1d4f9as49f84asd9asd1f8as18ad4f9as49f84asd9asd1f8as18ad4f9as49f84asd9asd1f8as18ad4f9as49f84asd9asd1f8as18a8a1fas9d5sdff651as6f1as65fas65dd1ffdksfk",
         topic: "ไม่ได้กำหนดหัวข้อ",
         attachments: [],
-        score: 0
+        score: 0,
+        send: 10,
+        nosend: 15
     },
     {
         name: "Mock 3",
         description: "Mockckdkkfdksfk",
         topic: "ไม่ได้กำหนดหัวข้อ",
         attachments: [],
-        score: 0
+        score: 0,
+        send: 10,
+        nosend: 15
     },
     {
         name: "Mock 2",
         description: "Mockckdkkfdksfk",
         topic: "ไม่ได้กำหนดหัวข้อ",
         attachments: [],
-        score: 0
+        score: 0,
+        send: 10,
+        nosend: 15
     },
     {
         name: "Mock 2",
         description: "Mockckdkkfdksfk",
         topic: "หัวข้อที่ 1",
         attachments: [],
-        score: 0
+        score: 0,
+        send: 10,
+        nosend: 15
     },
     {
         name: "Mock 2",
         description: "Mockckdkkfdksfk",
         topic: "หัวข้อที่ 2",
         attachments: [],
-        score: 0
+        score: 0,
+        send: 10,
+        nosend: 15
     },
 ]
 
@@ -175,6 +207,11 @@ function TeachingClasses() {
                 setWorks((p) => [...p, w])
                 setView("works")
             }} />
+        )
+    }
+    else if (view == "review-work"){
+        return(
+            <Workreview/>
         )
     }
 }

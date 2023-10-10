@@ -40,9 +40,9 @@ type Course = {
 
 type CourseInfo = {
   courseID: string;
-  courseThumbnailUrl: string;
-  courseName: string;
-  courseRating: number;
+  thumbnailUrl: string;
+  name: string;
+  rating: number;
   studentCount: number;
 };
 const availableCategories: Category[] = [
@@ -90,5 +90,5 @@ const availableCategories: Category[] = [
 
 const availableLevels: string[] = ["Beginner", "Intermediate", "Advanced"];
 
-export type { Category, Chapter, Lesson, Course, CourseInfo };
 export { availableCategories, availableLevels };
+export type { Category, Chapter, Course, CourseInfo, Lesson };

@@ -4,7 +4,7 @@ import { CourseQuiz } from "../types/quiz";
 
 function useCourseQuiz(quizID: string) {
   const [quiz, setQuiz] = useState<CourseQuiz>();
-  const [isFetching, setIsFetching] = useState<boolean>(false);
+  const [isFetching, setIsFetching] = useState<boolean>(true);
   async function fetchCourseQuiz(quizID: string) {
     const fetchedQuiz = await getCourseQuiz(quizID);
     setQuiz(fetchedQuiz);

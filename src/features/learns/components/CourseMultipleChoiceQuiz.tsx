@@ -1,7 +1,12 @@
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react"
-import { CourseQuiz, CourseQuizProblem, CourseQuizSubmission } from "../types/quiz"
+import { useUser } from "../../../hooks/useUser"
+import { useCourseQuiz } from "../hooks/useCourseQuiz"
+import { submitCourseQuiz } from "../services/courseQuiz"
+import { CourseLesson } from "../types/lessons"
+import { StudentCourseLessonProgress } from "../types/progress"
+import { CourseQuizProblem, CourseQuizSubmission } from "../types/quiz"
 
 interface _QuestionProps {
     problem: CourseQuizProblem,
@@ -94,19 +99,28 @@ function _genSubmission(numberOfProblems: number) {
 }
 
 interface MultipleChoiceQuizProps {
-    quiz: CourseQuiz
+    lesson: CourseLesson,
+    progress: StudentCourseLessonProgress,
+    onDone: () => void
 }
-function CourseMultipleChoiceQuiz({ quiz }: MultipleChoiceQuizProps) {
+function CourseMultipleChoiceQuiz({ lesson, progress, onDone }: MultipleChoiceQuizProps) {
     const [started, setStarted] = useState(false)
+    const { quiz, isFetching } = useCourseQuiz(lesson.src)
     const [currentQuestion, setCurrentQuestion] = useState(0)
-    const [submission, setSubmission] = useState<CourseQuizSubmission>(_genSubmission(quiz.problems.length))
+    const [submission, setSubmission] = useState<CourseQuizSubmission>()
+    const { user } = useUser()
     const handleStart = () => {
+        setSubmission(_genSubmission(quiz.problems.length))
         setStarted(true)
     }
     const handleNext = (submission: CourseQuizSubmission) => {
         setSubmission(submission)
         if (currentQuestion < quiz.problems.length - 1) {
             setCurrentQuestion(p => p + 1)
+        } else {
+            submitCourseQuiz(submission, lesson, progress, user.userID).then(() => {
+                onDone()
+            })
         }
     }
     const handlePrev = (submission: CourseQuizSubmission) => {
@@ -114,6 +128,13 @@ function CourseMultipleChoiceQuiz({ quiz }: MultipleChoiceQuizProps) {
         if (currentQuestion > 0) {
             setCurrentQuestion(p => p - 1)
         }
+    }
+    if (isFetching || !quiz) {
+        return (
+            <div className="bg-white border-2 border-black">
+                <h1 className="text-3xl font-bold mx-[5%] my-10 ">Loading...</h1>
+            </div>
+        )
     }
     if (!started) {
         return (

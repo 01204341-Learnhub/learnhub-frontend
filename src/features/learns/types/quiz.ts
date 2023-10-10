@@ -49,9 +49,35 @@ type CourseQuizSolution = {
   }[];
 };
 
+type CourseQuizReport = {
+  staus: string;
+  score: number;
+  problems: {
+    problemNumber: number;
+    answer: {
+      choiceA: boolean;
+      choiceB: boolean;
+      choiceC: boolean;
+      choiceD: boolean;
+      choiceE: boolean;
+      choiceF: boolean;
+    };
+    correctAnswer: {
+      choiceA: boolean;
+      choiceB: boolean;
+      choiceC: boolean;
+      choiceD: boolean;
+      choiceE: boolean;
+      choiceF: boolean;
+    };
+    explaination: string;
+  }[];
+};
+
 export type {
   CourseQuiz,
   CourseQuizProblem,
+  CourseQuizReport,
   CourseQuizSolution,
   CourseQuizSubmission,
 };

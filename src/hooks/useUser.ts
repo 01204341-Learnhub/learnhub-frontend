@@ -5,7 +5,7 @@ import { app } from "../firebase/firebase";
 import { RootState } from "../store";
 
 function useUser() {
-  const user = useSelector((state: RootState) => state.user);
+  const { user } = useSelector((state: RootState) => state.user);
   const [isFetching, setIsFetching] = useState<boolean>(true);
   useEffect(() => {
     const auth = getAuth(app);

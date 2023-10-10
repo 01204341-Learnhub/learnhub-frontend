@@ -6,12 +6,13 @@ import { Link, useNavigate } from 'react-router-dom'
 import booklogo from '../assets/Images/bookLogo.png'
 import namelogo from '../assets/Images/textNameLogo.png'
 import BasketItemSlot from '../features/stores/components/BasketItemSlot'
+import { useBasket } from '../features/stores/hooks/useBasket'
 import { fetchBasketItems } from '../features/stores/services/purchase'
 import { useUser } from '../hooks/useUser'
 import { signOut } from '../services/auth/signOut'
 import { addItem, clearItem, setStatusFetchOnce } from '../slices/basketSlice'
+import { clearUser } from '../slices/userSlice'
 import { RootState } from '../store'
-import { useBasket } from '../features/stores/hooks/useBasket'
 
 function MainBar() {
     const basket = useBasket()
@@ -46,8 +47,15 @@ function MainBar() {
         toggleDropdown('mycartdropdown')
     }
 
+    const handleSignOut = () => {
+        signOut().then(() => {
+            dispatcher(clearUser())
+            navigate('/', { replace: true })
+        })
+    }
+
     return (
-        <nav style={{ height: '100px', zIndex: 1000 }} className='fixed bg-white flex w-screen items-center py-5'>
+        <nav style={{ height: '100px', zIndex: 1000 }} className='fixed bg-white border-b-2 flex w-screen items-center py-5'>
             <div className=' flex flex-row items-center justify-center w-1/12'>
                 <img className=' w-2/5' src={booklogo} alt="booklogo" />
             </div>
@@ -186,7 +194,7 @@ function MainBar() {
                                     <ul>
                                         <li>
                                             <a className=" absolute bottom-0 block w-full px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100"
-                                                onClick={() => { signOut().then(() => navigate('/', { replace: true })) }}>ออกจากระบบ
+                                                onClick={handleSignOut}>ออกจากระบบ
                                                 <FontAwesomeIcon icon={faRightFromBracket} size='xl' className='mx-3' />
                                             </a>
 
@@ -213,7 +221,9 @@ function MainBar() {
                     }
                 })()
             }
+
         </nav>
+
     )
 }
 

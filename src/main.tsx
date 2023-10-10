@@ -39,8 +39,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route element={<MainbarLayout />}>
-            <Route element={<ProtectedRoute />} >
-              <Route path='/profile' element={<Profile />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path='/home' element={<Home />} />
             <Route path='/teacherprofile' element={<TeacherProfile />} />
@@ -57,6 +57,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 element={<LearnCourse />}
               />
               <Route path="/learn/classes" element={<LearningClasses />} />
+              <Route
+                path="/learn/classes/:classId/homeworks/:homeworkId"
+                element={<LearningHomeworkDetail />}
+              />
               <Route path="/learn/homework" element={<LearningHomeworks />} />
               <Route path="/learn/schedule" element={<LearningSchedule />} />
             </Route>
@@ -76,5 +80,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         </Routes>
       </BrowserRouter>
     </Provider>
-  </React.StrictMode>,
+  </React.StrictMode>
 );

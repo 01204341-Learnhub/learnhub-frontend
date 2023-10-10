@@ -63,7 +63,7 @@ function LearningHomeworkDetail() {
           <>
             <_TopNavbar thread={thread} />
             <div className="flex p-5 mt-5 justify-center items-start space-x-5 w-full">
-              <div className="min-w-[400px] max-w-[760px] w-full">
+              <div className="min-w-[410px] max-w-[770px] w-full">
                 <MainContent thread={thread} onAddReply={addReply} />
               </div>
               <div className="min-w-[310px] max-w-[310px]">

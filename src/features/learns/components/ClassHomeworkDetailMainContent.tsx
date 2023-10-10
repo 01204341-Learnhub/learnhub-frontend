@@ -1,13 +1,14 @@
+import { useContext, useRef, useState } from "react";
+import { Reply, Thread } from "../types/thread";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faClipboardList,
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useContext, useRef, useState } from "react";
 import PeopleSvg from "../../../assets/Images/people.svg";
 import { UserContext } from "../../../pages/students/LearningHomeworkDetail";
 import { toDateTimeStringOmitDateOnSameDay } from "../../../utils/functions";
-import { Reply, Thread } from "../types/thread";
+import ClassThreadAttachment from "./ClassThreadAttachment";
 
 interface _ReplyEntryProps {
   reply: Reply;
@@ -50,8 +51,9 @@ function _ReplyInputBar({ onAddReply }: _ReplyInputBarProps) {
   const adjustTextareaHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 4
-        }px`;
+      textareaRef.current.style.height = `${
+        textareaRef.current.scrollHeight + 4
+      }px`;
     }
   };
 
@@ -112,7 +114,7 @@ function MainContent({ thread, onAddReply }: MainContent) {
           <div className="flex justify-between items-start w-full mt-1">
             <p className="text-[#404040] text-[14px] font-semibold">
               {thread.homeworkSubmissionStatus === "submitted-and-graded" &&
-                thread.homeworkGotScore !== undefined
+              thread.homeworkGotScore !== undefined
                 ? `${thread.homeworkGotScore}/`
                 : ""}
               {thread.homeworkFullScore} คะแนน
@@ -136,7 +138,15 @@ function MainContent({ thread, onAddReply }: MainContent) {
           <p className="text-[#404040] text-[16px] font-medium mx-3 w-[95%] break-words">
             {thread.text}
           </p>
-          {/* show thread attachments here */}
+          <div className={thread.attachments.length > 0 ? "block" : "hidden"}>
+            <div className="flex flex-wrap  mt-4">
+              {thread.attachments.map((attachment, index) => (
+                <div className="m-2">
+                  <ClassThreadAttachment key={index} attachment={attachment} />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       <div className={showRepliesAndTextBox ? "hidden" : "block"}>

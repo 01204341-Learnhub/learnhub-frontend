@@ -141,7 +141,7 @@ function MainContent({ thread, onAddReply }: MainContent) {
           <div className={thread.attachments.length > 0 ? "block" : "hidden"}>
             <div className="flex flex-wrap  mt-4">
               {thread.attachments.map((attachment, index) => (
-                <div key={index} className="m-2">
+                <div key={index} className="m-1">
                   <ClassThreadAttachment attachment={attachment} />
                 </div>
               ))}

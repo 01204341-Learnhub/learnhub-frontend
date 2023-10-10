@@ -20,6 +20,7 @@ import Register from "./pages/Register";
 import TeacherProfile from "./pages/TeacherProfile";
 import LearnCourse from "./pages/students/LearnCourse";
 import LearningClasses from "./pages/students/LearningClasses";
+import LearningHomeworkDetail from "./pages/students/LearningHomeworkDetail";
 import LearningHomeworks from "./pages/students/LearningHomeworks";
 import LearningOverview from "./pages/students/LearningOverview";
 import LearningSchedule from "./pages/students/LearningSchedule";
@@ -31,7 +32,6 @@ import TeachingClasses from "./pages/teachers/TeachingClasses";
 import TeachingCourses from "./pages/teachers/TeachingCourses";
 import TeachingHomeworks from "./pages/teachers/TeachingHomeworks";
 import store from "./store";
-import LearningHomeworkDetail from "./pages/students/LearningHomeworkDetail";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

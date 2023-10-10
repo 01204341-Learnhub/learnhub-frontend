@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import mockprofile_pic from "../assets/Images/regTeacher.png";
 import TeacherProfileCard from "../features/profiles/components/TeacherProfileCard.tsx";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
-import { getAllClasses } from "../features/stores/services/classes";
 import { getAllCourses } from "../features/stores/services/courses";
 import { ClassProgram } from "../features/stores/types/class";
 import { Course } from "../features/stores/types/course";

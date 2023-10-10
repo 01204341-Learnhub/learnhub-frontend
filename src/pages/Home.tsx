@@ -1,54 +1,22 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
-import { getAllClasses, getNewClasses } from "../features/stores/services/classes";
-import { getAllCourses, getPopularCourse } from "../features/stores/services/courses";
-import { ClassProgram } from "../features/stores/types/class";
-import { Course } from "../features/stores/types/course";
+import { useAllClasses } from "../features/stores/hooks/useAllClasses";
+import { useAllCourses } from "../features/stores/hooks/useAllCourses";
 
 
 export default function Home() {
 
-    const [courses, setCouses] = useState<Course[] | null>(null)
-    const [popCourses, setPopCouses] = useState<Course[] | null>(null)
-    const [classes, setClasses] = useState<ClassProgram[] | null>(null)
-    const [newClasses, setNewClasses] = useState<ClassProgram[] | null>(null)
+    const { courses, isFetching: isFetchingCourses } = useAllCourses()
+    const { classes, isFetching: isFetchingClasses } = useAllClasses()
 
-    useEffect(() => {
-        async function fetchCourse() {
-            const coursePrograms = await getAllCourses()
-            setCouses(coursePrograms)
-        }
-
-        async function fetchClass() {
-            const classProgram = await getAllClasses(8)
-            setClasses(classProgram)
-        }
-
-        async function fetchPopularCourse() {
-            const popularCourse = await getPopularCourse(8)
-            setPopCouses(popularCourse)
-        }
-
-        async function fetchNewClass() {
-            const newClass = await getNewClasses(8)
-            setNewClasses(newClass)
-        }
-
-        fetchCourse()
-        fetchClass()
-        fetchPopularCourse()
-        fetchNewClass()
-
-    }, [])
-    if (courses === null || classes === null || newClasses === null || popCourses === null) {
-        return null;
+    if (isFetchingCourses || isFetchingClasses) {
+        return <div className="flex justify-center items-center h-screen">Loading...</div>
     }
 
     function poppularCourseSlotProp() {
         const coursePopularSlot = []
-        popCourses?.forEach((program) => {
+        courses?.forEach((program) => {
             coursePopularSlot.push({
                 programName: program.name,
                 programId: program.courseID,
@@ -63,13 +31,13 @@ export default function Home() {
 
     function classNewSlotProp() {
         const classNewSlot = []
-        newClasses?.forEach((program) => {
+        classes?.forEach((program) => {
             classNewSlot.push({
                 programName: program.name,
-                programId: program.id,
-                instructorName: program.intructor.name,
+                programId: program.classID,
+                instructorName: program.instructor.name,
                 percentCompleted: 100,
-                programThumbnailUrl: program.cover,
+                programThumbnailUrl: program.thumbnailURL,
             })
         })
         return classNewSlot
@@ -108,12 +76,12 @@ export default function Home() {
                     } else {
 
                         return (
-                            <Link to={`/detail/class/${program.id}`} key={index} className="my-4 px-6" >
-                                <ProgramSlot key={index} courseThumbnailUrl={program.cover}
+                            <Link to={`/detail/class/${program.classID}`} key={index} className="my-4 px-6" >
+                                <ProgramSlot key={index} courseThumbnailUrl={program.thumbnailURL}
                                     courseName={program.name}
-                                    instructorName={program.intructor.name}
+                                    instructorName={program.instructor.name}
                                     percentCompleted={100}
-                                    regisDate={program.registerEndedDate} voter={0} price={3000} tag={program.tags[0].tagName}
+                                    regisDate={program.registerEndedDate.toString()} voter={0} price={3000} tag={program.tags[0].name}
                                     lvl={"พื้นฐาน"} />
                             </Link>
                         )

@@ -1,92 +1,108 @@
-import { ClassProgram } from "../types/class";
+import axios from "axios";
+import { ClassProgram, ClassProgramDetail } from "../types/class";
+import { GetClassResponse, ListClassesResponse } from "../types/response";
 
 async function listClass() {
   return [];
 }
-
-async function getClass(id: string): Promise<ClassProgram> {
-  return {
-    id: id,
-    name: "What is Eren doing?",
-    description:
-      "Eren Yeager (エレン・イェーガー Eren Yēgā?) was a former member of the Survey Corps. He was the main protagonist of Attack on Titan. He lived in Shiganshina District with his parents until the fall of Wall Maria, where he impotently witnessed his mother being eaten by a Titan.[33] This event would lead to Eren's intense hatred towards the Titans as he swore to wipe all of them off the face of the Earth.[34] ",
-    price: 100,
-    cover:
-      "https://w.wallhaven.cc/full/rd/wallhaven-rdvxzj.jpg",
-    intructor: {
-      id: id,
-      name: "Eren Yeager",
-      avatarUrl:
-        "https://i.pinimg.com/1200x/99/71/76/997176fee7a0a8f2c3ff56cc211d7190.jpg",
-      jobTitle: "The Scout Regiment",
-      
-    },
-    tags: [
-      {
-        tagId: id,
-        tagName: "ML"
-      }
-    ],
-    registerEndedDate: "120945"
-  };
-}
-
-async function getAllClasses(num: number) : Promise<ClassProgram[]> {
-  const programClasses : ClassProgram[] = []
-  for (let i = 0; i < num; i++ ) {
-    programClasses.push(
-      {
-        id: `${i+1}`,
-        description: "",
-        name: "How to be a Good boy like Boom",
-        price: 999,
-        cover: `https://picsum.photos/${i}/${300}`,
-        intructor: {
-          id: "1",
-          name: "Barammey Kung",
-          avatarUrl: "",
-          jobTitle: "Good Guy",
-        },
-        tags: [
-          {
-            tagId: `${i+1}`,
-            tagName: "Life"
-          },
-        ],
-        registerEndedDate:"120945"
-      }
-    )
-  }
-  return programClasses
-}
+const baseURL = "http://localhost:8000";
 
 async function getNewClasses(num: number) {
-  const newClasses = []
+  const newClasses = [];
   for (let i = 0; i < num; i++) {
-    newClasses.push(
-      {
-        id: `${i+1}`,
-        description: "",
-        name: "How to be a Good boy like Boom",
-        price: 999,
-        cover: `https://picsum.photos/${i}/${300}`,
-        intructor: {
-          id: "1",
-          name: "Barammey Kung",
-          avatarUrl: "",
-          jobTitle: "Good Guy",
+    newClasses.push({
+      id: `${i + 1}`,
+      description: "",
+      name: "How to be a Good boy like Boom",
+      price: 999,
+      cover: `https://picsum.photos/${i}/${300}`,
+      intructor: {
+        id: "1",
+        name: "Barammey Kung",
+        avatarUrl: "",
+        jobTitle: "Good Guy",
+      },
+      tags: [
+        {
+          tagId: `${i + 1}`,
+          tagName: "Hot",
         },
-        tags: [
-          {
-            tagId: `${i+1}`,
-            tagName: "Hot"
-          },
-        ],
-        registerEndedDate:"120945"
-      }
-    )
+      ],
+      registerEndedDate: "120945",
+    });
   }
-  return newClasses
+  return newClasses;
 }
 
-export { getClass, listClass, getAllClasses, getNewClasses };
+async function listAllClasses(): Promise<ClassProgram[]> {
+  const url = `${baseURL}/programs/classes`;
+  const res = await axios.get<ListClassesResponse>(url);
+  const classes = res.data.classes.map<ClassProgram>((c) => {
+    return {
+      classID: c.class_id,
+      name: c.name,
+      thumbnailURL: c.class_pic,
+      instructor: {
+        name: c.teacher.teacher_name,
+        id: c.teacher.teacher_id,
+        avatarURL: c.teacher.profile_pic,
+      },
+      description: c.description,
+      status: c.status,
+      tags: c.tags.map((t) => {
+        return {
+          tagID: t.tag_id,
+          name: t.tag_name,
+        };
+      }),
+      registerEndedDate: c.registration_ended_date,
+      openDate: c.open_date,
+      classEndedDate: c.class_ended_date,
+      price: c.price,
+    };
+  });
+  return classes;
+}
+
+async function getClasses(classID: string) {
+  const url = `${baseURL}/programs/classes/${classID}`;
+  const res = await axios.get<GetClassResponse>(url);
+  const classProgram: ClassProgramDetail = {
+    classID: classID,
+    name: res.data.name,
+    thumbnailURL: res.data.class_pic,
+    instructor: {
+      name: res.data.teacher.teacher_name,
+      teacherID: res.data.teacher.teacher_id,
+      avatarURL: res.data.teacher.profile_pic,
+    },
+    description: res.data.description,
+    tags: res.data.tags.map((t) => {
+      return {
+        tagID: t.tag_id,
+        name: t.tag_name,
+      };
+    }),
+    status: res.data.status,
+    schedules: res.data.schedules.map((s) => {
+      return {
+        start: s.start,
+        end: s.end,
+      };
+    }),
+    registerEndedDate: res.data.registration_ended_date,
+    openDate: res.data.open_date,
+    classEndedDate: res.data.class_ended_date,
+    price: res.data.price,
+    classObjective: [],
+    classRequirement: res.data.class_requirement,
+    difficultyLevel: res.data.difficulty_level,
+    meetingCount: res.data.schedules.length,
+    studentCount: res.data.student_count,
+    maxStudent: res.data.max_student,
+    assignmentCount: res.data.assignment_count,
+  };
+  return classProgram;
+}
+
+export { getClasses, getNewClasses, listAllClasses, listClass };

@@ -94,7 +94,7 @@ function _FileEntry({
     </div>
   );
 }
-interface FileUploaderProps {
+interface ClassHomeworkDetailFileUploaderProps {
   thread: Thread;
   onAddHomeworkSubmissionFile: (file: File) => void;
   onRemoveHomeworkSubmissionFile: (src: string) => void;
@@ -102,13 +102,13 @@ interface FileUploaderProps {
   onUnsubmitHomework: () => void;
 }
 
-function FileUploader({
+function ClassHomeworkDetailFileUploader({
   thread,
   onAddHomeworkSubmissionFile,
   onRemoveHomeworkSubmissionFile,
   onSubmitHomework,
   onUnsubmitHomework,
-}: FileUploaderProps) {
+}: ClassHomeworkDetailFileUploaderProps) {
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleAddHomeworkSubmissionFile = (
@@ -228,4 +228,4 @@ function FileUploader({
   );
 }
 
-export default FileUploader;
+export default ClassHomeworkDetailFileUploader;

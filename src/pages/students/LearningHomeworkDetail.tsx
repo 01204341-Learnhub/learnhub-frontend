@@ -1,10 +1,8 @@
-import React, { createContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Thread, generateMockUser } from "../../features/learns/types/thread";
-import { LearnhubUser } from "../../types/user";
 import useThread from "../../features/learns/hooks/useThread";
-import MainContent from "../../features/learns/components/ClassHomeworkDetailMainContent";
-import FileUploader from "../../features/learns/components/ClassHomeworkDetailFileUploader";
+import ClassHomeworkDetailMainContent from "../../features/learns/components/ClassHomeworkDetailMainContent";
+import ClassHomeworkDetailFileUploader from "../../features/learns/components/ClassHomeworkDetailFileUploader";
 
 interface _TopNavbarProps {
   thread: Thread;
@@ -41,8 +39,6 @@ type PathParams = {
   homeworkId: string;
 };
 
-const UserContext = createContext<LearnhubUser | undefined>(undefined);
-
 function LearningHomeworkDetail() {
   const { classId, homeworkId } = useParams<PathParams>();
   // TODO: use useUser hook
@@ -57,31 +53,32 @@ function LearningHomeworkDetail() {
   } = useThread(user, classId, homeworkId, "homework");
 
   return (
-    <UserContext.Provider value={user}>
-      <div className="w-full h-full bg-[#eeeeee80] overflow-auto">
-        {thread && (
-          <>
-            <_TopNavbar thread={thread} />
-            <div className="flex p-5 mt-5 justify-center items-start space-x-5 w-full">
-              <div className="min-w-[410px] max-w-[770px] w-full">
-                <MainContent thread={thread} onAddReply={addReply} />
-              </div>
-              <div className="min-w-[310px] max-w-[310px]">
-                <FileUploader
-                  thread={thread}
-                  onAddHomeworkSubmissionFile={addHomeworkSubmissionFile}
-                  onRemoveHomeworkSubmissionFile={removeHomeworkSubmissionFile}
-                  onSubmitHomework={submitHomework}
-                  onUnsubmitHomework={unsubmitHomework}
-                />
-              </div>
+    <div className="w-full h-full bg-[#eeeeee80] overflow-auto">
+      {thread && (
+        <>
+          <_TopNavbar thread={thread} />
+          <div className="flex p-5 mt-5 justify-center items-start space-x-5 w-full">
+            <div className="min-w-[410px] max-w-[770px] w-full">
+              <ClassHomeworkDetailMainContent
+                user={user}
+                thread={thread}
+                onAddReply={addReply}
+              />
             </div>
-          </>
-        )}
-      </div>
-    </UserContext.Provider>
+            <div className="min-w-[310px] max-w-[310px]">
+              <ClassHomeworkDetailFileUploader
+                thread={thread}
+                onAddHomeworkSubmissionFile={addHomeworkSubmissionFile}
+                onRemoveHomeworkSubmissionFile={removeHomeworkSubmissionFile}
+                onSubmitHomework={submitHomework}
+                onUnsubmitHomework={unsubmitHomework}
+              />
+            </div>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 
 export default LearningHomeworkDetail;
-export { UserContext };

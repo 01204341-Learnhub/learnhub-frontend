@@ -31,13 +31,12 @@ const CourseAnnouncementDropdown = (
 
   function formatDate(timestamp: number): string {
     const date = new Date(timestamp * 1000);
-    const options = {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      weekday: "short",
-    };
-    return date.toLocaleDateString("th-TH", options);
+    return date.toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        weekday: "short",
+      });
   }
 
   const toggleExpansion = () => {

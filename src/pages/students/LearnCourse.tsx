@@ -10,8 +10,8 @@ import { useStudentCourseProgress } from "../../features/learns/hooks/useStudent
 import { CourseChapter } from "../../features/learns/types/courseChapters"
 import { CourseLesson } from "../../features/learns/types/lessons"
 import { StudentCourseLessonProgress, StudentCourseProgress } from "../../features/learns/types/progress"
-import { CourseAnnouncement } from "../../features/stores/types/course"
 import { useUser } from "../../hooks/useUser"
+import { useAnnouncementsCourses } from "../../features/stores/hooks/useListAnnouncementsCourses"
 
 interface _CourseContentProp {
     chapters: CourseChapter[]
@@ -75,32 +75,26 @@ function LearnCourse() {
     const { user } = useUser()
     const { progress, updateLessonProgress } = useStudentCourseProgress(user.userID, courseID)
     const { chapters } = useCourseChapters(courseID)
+    const { announcements, isFetching } = useAnnouncementsCourses(courseID)
     const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>('contents')
     const [currentLesson, setCurrentLesson] = useState<CourseLesson | undefined>(undefined)
-    const [announcements, setAnnouncements] = useState<CourseAnnouncement[]>([])
+    //const [announcements, setAnnouncements] = useState<CourseAnnouncement[]>([])
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
 
-    const announcementAdapter = (announcement: CourseAnnouncement) => {
-        return {
-            topic: announcement.name,
-            postDate: "091223",
-            content: announcement.text,
-            teacherName: "Mister Hardcode",
-            teacherProfile: "https://www.w3schools.com/howto/img_avatar.png"
-        }
-    }
 
     const getChapter = (chapterID: string) => {
         const idx = chapters.findIndex((chapter) => chapter.chapterID == chapterID)
         if (idx == -1) throw new Error("Chapter not found")
         return chapters[idx]
     }
+    
     function getCurrentLessonProgress() {
         if (currentLesson == undefined) return undefined
         const idx = progress.lessons.findIndex((lesson) => lesson.lessonID == currentLesson.lessonID)
         if (idx == -1) return undefined
         return progress.lessons[idx]
     }
+
     function onLessonEnd() {
         // set current lesson progress to finished
         if (currentLesson == undefined) return
@@ -148,11 +142,16 @@ function LearnCourse() {
                             )
                         }
                         else {
+                            if (isFetching) {
+                                return (
+                                    <div>is loading</div>
+                                )
+                            }
                             return (
                                 <div className="">
                                     {announcements.map((announcement) => (
                                         <div key={announcement.announcementID}>
-                                            <CourseAnnouncementDropdown {...announcementAdapter(announcement)} />
+                                            <CourseAnnouncementDropdown {...announcement} />
                                         </div>
                                     ))}
                                 </div>

@@ -13,6 +13,7 @@ function Profile() {
   const [lastName, setLastName] = useState<string>(user.fullname.split(" ")[1]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isChangePassword, setIsChangePassword] = useState<boolean>(false);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [newProfile, setNewProfile] = useState<File>()
 
   const classNameSelectProfile = selectProfile
@@ -39,8 +40,10 @@ function Profile() {
   const handleClickEditProfile = () => {
     if (isEdit) {
       if (newProfile) {
+        setIsUpdating(true);
         updateProfileFromFile(user.userType, user.userID, newProfile).then((res) => {
           dispatch(changeProfilePicture(res))
+          setIsUpdating(false);
         })
       }
     }
@@ -68,9 +71,7 @@ function Profile() {
   }
 
 
-  if (isFetching) {
-    console.log("isFetching", isFetching);
-
+  if (isFetching || isUpdating) {
     return (
       <div className="w-full h-full flex justify-center items-center">
         <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-black"></div>

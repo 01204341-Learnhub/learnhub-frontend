@@ -162,7 +162,7 @@ function CourseChapterCreate({ onSubmit, onCancel }: CourseChapterCreateProps) {
       />
     );
   }
-  if (mode == "add-files") {
+  if (mode == "add-file") {
     return (
       <FileLessonCreate
         chapterNumber={chapterNumber}

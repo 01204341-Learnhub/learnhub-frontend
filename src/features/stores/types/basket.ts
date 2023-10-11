@@ -14,6 +14,11 @@ type BasketItem = {
   voter: number;
   totalTime: number;
   tag: string;
+  level : string
 };
+
+
+
+
 
 export type { Basket, BasketItem };

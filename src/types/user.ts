@@ -2,8 +2,14 @@ type LearnhubUser = {
   userType: "student" | "teacher" | "admin";
   userID: string;
   username: string;
+  fullname: string;
   email: string;
   profilePicture: string;
+};
+
+type LearnhubUserCredential = {
+  studentID?: string;
+  teacherID?: string;
 };
 
 type LearnhubStudentResponse = {
@@ -24,4 +30,9 @@ type LearnhubTeacherResponse = {
   profile_pic: string;
 };
 
-export type { LearnhubStudentResponse, LearnhubTeacherResponse, LearnhubUser };
+export type {
+  LearnhubStudentResponse,
+  LearnhubTeacherResponse,
+  LearnhubUser,
+  LearnhubUserCredential,
+};

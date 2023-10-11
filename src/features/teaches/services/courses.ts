@@ -1,53 +1,23 @@
 import axios from "axios";
 import { Chapter, Course, CourseInfo, Lesson } from "../types/course";
+import { CourseQuiz } from "../types/courseQuiz";
+import { ListTeacherCourseResponse } from "../types/responses";
+import { createCourseQuiz } from "./courseQuiz";
 
-const baseURL = "http://localhost:8000";
-async function listTeacherCourse(teacherID: string) {
-  const mock: CourseInfo[] = [
-    {
-      courseID: "1",
-      courseName: "Course 1",
-      courseRating: 4,
-      courseThumbnailUrl: "https://picsum.photos/200",
-      studentCount: 100,
-    },
-    {
-      courseID: "2",
-      courseName: "Course 2",
-      courseRating: 2,
-      courseThumbnailUrl: "https://picsum.photos/300",
-      studentCount: 200,
-    },
-    {
-      courseID: "3",
-      courseName: "Course 3",
-      courseRating: 2,
-      courseThumbnailUrl: "https://picsum.photos/100",
-      studentCount: 200,
-    },
-    {
-      courseID: "4",
-      courseName: "Course 4",
-      courseRating: 2,
-      courseThumbnailUrl: "https://picsum.photos/600",
-      studentCount: 200,
-    },
-    {
-      courseID: "5",
-      courseName: "Course 5",
-      courseRating: 2,
-      courseThumbnailUrl: "https://picsum.photos/500",
-      studentCount: 200,
-    },
-    {
-      courseID: "6",
-      courseName: "Course 6",
-      courseRating: 2,
-      courseThumbnailUrl: "https://picsum.photos/700",
-      studentCount: 200,
-    },
-  ];
-  return mock;
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
+async function listTeacherCourse(teacherID: string): Promise<CourseInfo[]> {
+  const url = `${baseURL}/users/teachers/${teacherID}/courses`;
+  const res = await axios.get<ListTeacherCourseResponse>(url);
+  const courses: CourseInfo[] = res.data.courses.map((course) => {
+    return {
+      courseID: course.course_id,
+      thumbnailUrl: course.course_pic,
+      name: course.name,
+      rating: course.rating,
+      studentCount: course.student_count,
+    };
+  });
+  return courses;
 }
 
 async function createLesson(
@@ -56,11 +26,29 @@ async function createLesson(
   lesson: Lesson
 ) {
   const url = `${baseURL}/programs/courses/${courseID}/chapters/${chapterID}/lessons`;
-  const body = {
-    name: lesson.name,
-    src: lesson.videoUrl,
-    lesson_length: 378,
+  let body: {
+    name: string;
+    src: string;
+    lesson_type: string;
+    lesson_length: number;
   };
+  if (lesson.type === "video") {
+    body = {
+      name: lesson.name,
+      src: lesson.videoUrl as string,
+      lesson_type: "video",
+      lesson_length: 999,
+    };
+  } else if (lesson.type === "quiz") {
+    const quiz = JSON.parse(lesson.quiz as string) as CourseQuiz;
+    const quizID = await createCourseQuiz(quiz);
+    body = {
+      name: lesson.name,
+      src: quizID,
+      lesson_type: "quiz",
+      lesson_length: 999,
+    };
+  }
   const lessonID = (await axios.post<{ lesson_id: string }>(url, body)).data
     .lesson_id;
   return lessonID;
@@ -86,7 +74,7 @@ async function createCourse(course: Course, teacherID: string) {
     course_pic: course.thumbnailUrl,
     description: course.description,
     course_objective: course.objectives,
-    tag_ids: [course.categoryId],
+    tag_ids: [course.tag.tagID],
     course_requirement: course.requirement,
     difficulty_level: course.level,
     price: course.price,

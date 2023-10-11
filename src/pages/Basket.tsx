@@ -1,16 +1,47 @@
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useDispatch, useSelector } from "react-redux"
-import { removeItem } from "../slices/basketSlice"
-import { RootState } from "../store"
+import { useDispatch} from "react-redux"
+import { removeItem, clearItem, } from "../slices/basketSlice"
+import { deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
+import { useUser } from '../hooks/useUser'
+import Swal from 'sweetalert2'
+import { useBasket } from '../features/stores/hooks/useBasket'
+
 
 function Basket() {
-    const { basket } = useSelector((state: RootState) => state.basket)
+    const { user } = useUser()
+    const basket = useBasket()
     const dispatcher = useDispatch()
+   
+    async function handleDeleteBusketItems(itemID: string) {
+        dispatcher(removeItem(itemID))
+        const isDelete = await deleteBasketItem(user.userID, itemID)
+        console.log(isDelete)
+    }
+
+    const handlePayment = async () => {
+        const transction = await purchaseCourse(user.userID, "1111111111111");
+        if (transction) {
+            Swal.fire({
+                title: "ชำระเงินสำเร็จ",
+                text: "",
+                icon: "success",
+                confirmButtonColor: "green"
+            })
+            dispatcher(clearItem())
+        } else {
+            Swal.fire({
+                title: 'error',
+                icon: 'error'
+            })
+        }
+
+    }
+
     return (
         <div className="bg-white flex flew-rox justify-center ">
-            <div>
-                <h1 className="font-semibold text-[32px]">รถเข็นสินค้า
+            <div className='pl-6'>
+                <h1 className="font-semibold text-[32px] pl-6">รถเข็นสินค้า
                     <FontAwesomeIcon className='ml-4' icon={faCartShopping} />
                 </h1>
                 
@@ -26,24 +57,29 @@ function Basket() {
                             </div>
                             <div className="flex">
                                 <h1 className=" mr-2 font-semibold text-[#808080] text-[14px]">• วิดิโอสอน {item.totalTime} ชั่วโมง</h1>
-                                <h1 className=" mr-2 font-semibold text-[#808080] text-[14px]">• {item.lvl}</h1>
+                                <h1 className=" mr-2 font-semibold text-[#808080] text-[14px]">• {item.level}</h1>
                             </div>
                         </div>
-                        <div className=" mr-[25px] justify-self-end flex flex-col">
+                        <div className=" mr-[25px] items-end flex flex-col">
                             <h1 className="mb-[15px] font-bold text-[20px] grow ">{item.price} บาท</h1>
                             <button 
-                                className=" bg-[#d9d9d9] font-bold py-[6px] text-[16px] "
+                                className=" bg-red-500 w-20 font-bold py-[6px] text-[16px] text-white hover:bg-red-600 hover:text-white"
                                 onClick={() => {
-                                dispatcher(removeItem(item.itemID))
+                                    handleDeleteBusketItems(item.itemID)
                             }}>ลบออก</button>
                         </div>
                     </div>
                 ))}
             </div>
-            <div className="border-1 mx-[70px]" >
-                <h1 className="border-1 font-bold text-[32px]">ทั้งหมด</h1>
-                <h1 className="border-1 font-bold text-[40px]">{basket.items.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
-                <button className=" px-[55px] py-[15px] bg-[#d9d9d9] font-bold text-[20px]">ชำระเงิน</button>
+            <div className="border-1 mx-[70px] pl-4" >
+                <h1 className="border-1 font-bold text-[32px] py-2">ทั้งหมด</h1>
+                <h1 className="border-1 font-bold text-[40px] pb-4">{basket.items.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
+                <button
+                    onClick={handlePayment}
+                    type='button' 
+                    className=" px-[55px] py-[15px] bg-[#d9d9d9] font-bold text-[20px] bg-blue-400 text-gray-100 hover:bg-blue-300">
+                    ชำระเงิน
+                </button>
             </div>
         </div>
     )

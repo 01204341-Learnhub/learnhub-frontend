@@ -1,15 +1,12 @@
-import { useSelector } from "react-redux"
-import { Navigate, Outlet } from "react-router-dom"
-import { RootState } from "../store"
+import { Outlet } from "react-router-dom";
+import { useUser } from "../hooks/useUser";
+import Login from "../pages/Login";
 
 function ProtectedRoute() {
-    const { user } = useSelector((state: RootState) => state.user)
-    if (user) {
-        return <Outlet />
-    }
-    return (
-        <Navigate to="/login" />
-    )
+    const { user, isFetching } = useUser()
+    if (isFetching) return <div>loading</div>
+    if (user) return <Outlet />
+    return <Login />
 }
 
 export default ProtectedRoute

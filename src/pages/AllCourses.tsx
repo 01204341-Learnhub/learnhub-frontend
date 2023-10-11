@@ -1,43 +1,37 @@
 // use effect fetch data from services
-import { useEffect, useState } from "react"
-import ProgramSlot from "../features/stores/components/ProgramSlot"
 import { Link } from "react-router-dom"
-import { Course } from "../features/stores/types/course"
-import { getAllCourses } from "../features/stores/services/courses"
+import ProgramSlot from "../features/stores/components/ProgramSlot"
+import { useAllCourses } from "../features/stores/hooks/useAllCourses"
 
 
 
 
 
 export default function AllCloures() {
-    const [courses, setCourses] = useState<Course[] | null>(null)
-    useEffect(() => {
-        async function fetchProgramCourses() {
-            const courses = await getAllCourses()
-            setCourses(courses)
-        }
-        fetchProgramCourses()
-    }, [])
-    console.log(courses)
-    if (courses === null) {
-        return null;
-    }
+    const { courses, isFetching } = useAllCourses()
     const renderCourse = () => {
         return (
             <>
                 {courses.map((course, index) => {
-                        return (
-                            <Link to={`/detail/course/${course.courseId}`} key={index} className="mx-5 my-2" >
-                                <ProgramSlot key={index} courseThumbnailUrl={course.cover}
-                                    courseName={course.name}
-                                    instructorName={course.intructor.name}
-                                    percentCompleted={100}
-                                    regisDate={""} voter={1000} price={course.price} tag={"ยอดนิยม"}
-                                    lvl={"พื้นฐาน"} />
-                            </Link>
-                        )
-                })}  
+                    return (
+                        <Link to={`/detail/course/${course.courseID}`} key={index} className="mx-5 my-2" >
+                            <ProgramSlot key={index} courseThumbnailUrl={course.thumbnailUrl}
+                                courseName={course.name}
+                                instructorName={course.instructor.name}
+                                percentCompleted={100}
+                                regisDate={""} voter={1000} price={course.price} tag={course.tags[0].name}
+                                lvl={"HARDCODE"} />
+                        </Link>
+                    )
+                })}
             </>
+        )
+    }
+    if (isFetching) {
+        return (
+            <div className="flex">
+                <h1>Loading...</h1>
+            </div>
         )
     }
     return (

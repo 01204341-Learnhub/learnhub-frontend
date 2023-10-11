@@ -2,19 +2,23 @@ import { createSlice } from "@reduxjs/toolkit";
 import { LearnhubUser } from "../types/user";
 
 export const userSlice = createSlice({
-  name: "ui",
+  name: "user",
   initialState: {
-    user: undefined as LearnhubUser | undefined,
+    user: JSON.parse(localStorage.getItem("learnhubUser")) as LearnhubUser,
   },
   reducers: {
-    setUser: (state, action) => {
-      const learnhubUser = action.payload as LearnhubUser;
-      state.user = learnhubUser;
+    changeProfilePicture: (state, action) => {
+      const newProfilePic = action.payload as string;
+      state.user.profilePicture = newProfilePic;
     },
-    removeUser: (state) => {
+    clearUser: (state) => {
       state.user = undefined;
+    },
+    setLearnhubUser: (state, action) => {
+      state.user = action.payload as LearnhubUser;
     },
   },
 });
 export default userSlice.reducer;
-export const { setUser, removeUser } = userSlice.actions;
+export const { changeProfilePicture, clearUser, setLearnhubUser } =
+  userSlice.actions;

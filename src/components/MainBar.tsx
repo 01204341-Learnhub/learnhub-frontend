@@ -1,32 +1,77 @@
 import { faBell, faBook, faBookmark, faCartShopping, faHeart, faMagnifyingGlass, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
 import booklogo from '../assets/Images/bookLogo.png'
 import namelogo from '../assets/Images/textNameLogo.png'
 import BasketItemSlot from '../features/stores/components/BasketItemSlot'
+import { useBasket } from '../features/stores/hooks/useBasket'
+import { fetchBasketItems } from '../features/stores/services/purchase'
+import { useUser } from '../hooks/useUser'
 import { signOut } from '../services/auth/signOut'
+import { addItem, clearItem, setStatusFetchOnce } from '../slices/basketSlice'
+import { clearUser } from '../slices/userSlice'
 import { RootState } from '../store'
 
 function MainBar() {
-
+    const basket = useBasket()
+    const basketItems = basket.items
+    const { user } = useUser()
+    const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
+    const dispatcher = useDispatch()
     const [openDropdown, setOpenDropdown] = useState(null)
-    const basketItems = useSelector((state: RootState) => state.basket.basket.items)
+    //const basketItems = useSelector((state: RootState) => state.basket.basket.items)
     const navigate = useNavigate()
-    const user = useSelector((state: RootState) => state.user.user)
     const toggleDropdown = (dropdownName) => {
         if (openDropdown === dropdownName) {
-            // If the clicked dropdown is already open, close it
             setOpenDropdown(null)
         } else {
-            // If a different dropdown is open, close it and open the clicked one
             setOpenDropdown(dropdownName)
         }
     }
 
+    const handleClickBasket = () => {
+        async function fetchBasket() {
+            console.log(isFetchOnce)
+            if (!isFetchOnce) {
+                const BasketItems = await fetchBasketItems(user.userID)
+                dispatcher(setStatusFetchOnce(true))
+                dispatcher(clearItem())
+                BasketItems.items.map((item) => {
+                    dispatcher(addItem(item))
+                })
+            }
+        }
+        fetchBasket()
+        toggleDropdown('mycartdropdown')
+    }
+
+    const handleSignOut = () => {
+        signOut().then(() => {
+            dispatcher(clearUser())
+            navigate('/', { replace: true })
+        })
+    }
+    if (!user) {
+        Swal.fire({
+            title: 'คุณยังไม่ได้เข้าสู่ระบบ',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'เข้าสู่ระบบ',
+            cancelButtonText: 'สมัครบัญชี',
+        }).then((reslt) => {
+            if (reslt.isConfirmed) {
+                navigate('/login', { replace: true })
+            } else if (reslt.dismiss === Swal.DismissReason.cancel) {
+                navigate('/register', { replace: true })
+            }
+        })
+    }
+
     return (
-        <nav style={{ height: '100px', zIndex: 1000 }} className='fixed bg-white flex w-screen items-center py-5'>
+        <nav style={{ height: '100px', zIndex: 1000 }} className='fixed bg-white border-b-2 flex w-screen items-center py-5'>
             <div className=' flex flex-row items-center justify-center w-1/12'>
                 <img className=' w-2/5' src={booklogo} alt="booklogo" />
             </div>
@@ -59,23 +104,28 @@ function MainBar() {
                     {/* Mypin dropdown menu */}
 
                 </button>
-                <button onClick={() => toggleDropdown('mycartdropdown')}>
+                <button onClick={handleClickBasket}>
                     <FontAwesomeIcon icon={faCartShopping} size='xl' color={openDropdown === 'mycartdropdown' ? 'red' : 'none'} />
 
                     {/* Mycart dropdown menu */}
-                    <div
+                    <div className='flex flex-col  absolute w-[320px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100'
                         style={{ display: openDropdown === 'mycartdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
-                        className=" absolute w-[320px]  bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
                     >
-                        <div className="px-8 py-3">
-                            {basketItems.map((item) => (
-                                <div key={item.itemID}>
-                                    <BasketItemSlot item={item} />
-                                </div>
-                            ))}
-                            <h1 className=' font-bold text-[20px]'>{basketItems.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
+                        <div
+                            className='overflow-y-auto max-h-[450px] min-h-0'
+                            style={{ display: openDropdown === 'mycartdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
+
+                        >
+                            <div className="px-8 py-3">
+                                {basketItems.map((item) => (
+                                    <div key={item.itemID}>
+                                        <BasketItemSlot item={item} />
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div className='bg-[#d9d9d9] px-[40px] py-[15px] m-2'>
+                        <h1 className=' font-bold text-[20px]'>{basketItems.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
+                        <div className='bg-[#d9d9d9] px-[40px] py-3 m-2'>
                             <Link to={{ pathname: "/baskets" }} className=' font-semibold text-[20px]'>ไปยังรถเข็น</Link>
                         </div>
                     </div>
@@ -120,7 +170,9 @@ function MainBar() {
                                     </div>
                                     <ul className="py-2" aria-labelledby="user-menu-button">
                                         <li>
-                                            <a className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">หน้าแรก</a>
+                                            <Link to={"/home"}>
+                                                <p className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">หน้าแรก</p>
+                                            </Link>
                                         </li>
                                         {user.userType === 'student' ?
                                             <li>
@@ -158,7 +210,7 @@ function MainBar() {
                                     <ul>
                                         <li>
                                             <a className=" absolute bottom-0 block w-full px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100"
-                                                onClick={() => { signOut().then(() => navigate('/', { replace: true })) }}>ออกจากระบบ
+                                                onClick={handleSignOut}>ออกจากระบบ
                                                 <FontAwesomeIcon icon={faRightFromBracket} size='xl' className='mx-3' />
                                             </a>
 
@@ -171,14 +223,23 @@ function MainBar() {
                     }
                     else {
                         return (
-                            <div>
-                                <button className='btn' onClick={() => { navigate("/register", { replace: true }) }}>สร้างบัญชี</button>
-                            </div>
+                            <>
+                                <div className='flex w-80'>
+                                    <div className='px-2'>
+                                        <button className='btn' onClick={() => { navigate("/register", { replace: true }) }}>สร้างบัญชี</button>
+                                    </div>
+                                    <div className='px-2'>
+                                        <button className='btn' onClick={() => { navigate("/login", { replace: true }) }}>เข้าสู่ระบบ</button>
+                                    </div>
+                                </div>
+                            </>
                         )
                     }
                 })()
             }
+
         </nav>
+
     )
 }
 

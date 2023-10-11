@@ -5,6 +5,7 @@ import { faBook } from "@fortawesome/free-solid-svg-icons"
 import { faChartColumn } from "@fortawesome/free-solid-svg-icons"
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons"
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
+import{ useDispatch } from "react-redux"
 
 
 interface ClassDetailedSummaryProps {
@@ -18,6 +19,7 @@ interface ClassDetailedSummaryProps {
   }
 
 function ClassDetailedSummary(myClassDetailedSummary: ClassDetailedSummaryProps){
+    const dispatcher = useDispatch()
 
     return (
         <>

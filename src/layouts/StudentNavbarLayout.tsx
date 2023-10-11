@@ -8,7 +8,7 @@ function StudentNavbarLayout() {
                 <div className="col-span-2 border-r-4 border-[#e0e0e0]">
                     <StudentNavBar />
                 </div>
-                <div className="col-span-10">
+                <div className="col-span-10 bg-[#eeeeee80]">
                     <Outlet />
                 </div>
             </div>

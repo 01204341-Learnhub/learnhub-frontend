@@ -1,3 +1,5 @@
+import { Tag } from "./tags";
+
 type Category = {
   categoryId: string;
   name: string;
@@ -26,7 +28,7 @@ type Course = {
   courseId: string;
   name: string;
   thumbnailUrl: string;
-  categoryId: string;
+  tag: Tag;
   level: string;
   instructorName: string;
   description: string;
@@ -40,55 +42,13 @@ type Course = {
 
 type CourseInfo = {
   courseID: string;
-  courseThumbnailUrl: string;
-  courseName: string;
-  courseRating: number;
+  thumbnailUrl: string;
+  name: string;
+  rating: number;
   studentCount: number;
 };
-const availableCategories: Category[] = [
-  {
-    categoryId: "1",
-    name: "Web Development",
-  },
-  {
-    categoryId: "2",
-    name: "Mobile Development",
-  },
-  {
-    categoryId: "3",
-    name: "Data Science",
-  },
-  {
-    categoryId: "4",
-    name: "Machine Learning",
-  },
-  {
-    categoryId: "5",
-    name: "Artificial Intelligence",
-  },
-  {
-    categoryId: "6",
-    name: "Cyber Security",
-  },
-  {
-    categoryId: "7",
-    name: "Cloud Computing",
-  },
-  {
-    categoryId: "8",
-    name: "DevOps",
-  },
-  {
-    categoryId: "9",
-    name: "Game Development",
-  },
-  {
-    categoryId: "10",
-    name: "Programming Languages",
-  },
-];
 
 const availableLevels: string[] = ["Beginner", "Intermediate", "Advanced"];
 
-export type { Category, Chapter, Lesson, Course, CourseInfo };
-export { availableCategories, availableLevels };
+export { availableLevels };
+export type { Category, Chapter, Course, CourseInfo, Lesson };

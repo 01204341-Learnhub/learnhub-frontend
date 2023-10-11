@@ -5,7 +5,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CourseCardPreview from "../../features/teaches/components/CourseCardPreview";
 import CourseChapterCreate from "../../features/teaches/components/CourseChapterCreate";
@@ -13,12 +12,12 @@ import CourseChapterInfo from "../../features/teaches/components/CourseChapterIn
 import CourseCreateStepper from "../../features/teaches/components/CourseCreateStepper";
 import CourseGoalsInfoForm from "../../features/teaches/components/CourseGoalsInfoForm.tsx";
 import CoursePublishingInfoForm from "../../features/teaches/components/CoursePublishingInfoForm.tsx";
+import { useTags } from "../../features/teaches/hooks/useTags.ts";
 import { createCourse } from "../../features/teaches/services/courses.ts";
 import {
   Course,
-  availableCategories,
 } from "../../features/teaches/types/course";
-import { RootState } from "../../store.ts";
+import { useUser } from "../../hooks/useUser.ts";
 
 interface _SideNavProps {
   currentTab: string;
@@ -120,6 +119,8 @@ interface _TopPanelProps {
 }
 
 function _TopPanel({ course }: _TopPanelProps) {
+  const { tags: availableTags, isFetching: isFetchingTags } = useTags()
+  if (isFetchingTags) return (<div>Loading...</div>)
   return (
     <div className="flex justify-start items-stretch space-x-10 w-full">
       <div className="bg-[#D9D9D9] p-6 w-fit h-fit">
@@ -128,10 +129,10 @@ function _TopPanel({ course }: _TopPanelProps) {
           courseName={course.name}
           level={course.level}
           price={course.price}
-          category={
-            availableCategories.find(
-              (category) => category.categoryId === course.categoryId,
-            )?.name
+          tag={
+            availableTags.find(
+              (tag) => tag.tagID === course.tag.tagID,
+            ) ?? { tagID: "", name: "" }
           }
           instructorName={course.instructorName}
         />
@@ -232,7 +233,6 @@ function checkReadyToPublish(course: Course) {
     course.courseId !== "" &&
     course.name !== "" &&
     course.thumbnailUrl !== "" &&
-    course.categoryId !== "" &&
     course.level !== "" &&
     course.instructorName !== "" &&
     course.description !== "" &&
@@ -269,14 +269,18 @@ const CourseContext = React.createContext<CourseContextType | undefined>(
 
 function CreateCourse() {
   const navigate = useNavigate();
-  const teacherID = useSelector((state: RootState) => state.user.user.userID);
+  const { user } = useUser();
+  const teacherID = user.userID;
   const [course, setCourse] = useState<Course>({
     courseId: "1234567890", // TODO: Get an ID, possibly uuid.
     name: "",
     thumbnailUrl: "https://placehold.co/1920x1080",
-    categoryId: "",
+    tag: {
+      name: "computer",
+      tagID: "6509b76eda50b4eec1867261",
+    },
     level: "",
-    instructorName: "John Doe", // TODO: Get from user profile.
+    instructorName: user.fullname, // TODO: Get from user profile.
     description: "",
     objectives: ["", "", "", ""],
     requirement: "",
@@ -295,7 +299,6 @@ function CreateCourse() {
 
   const handlePublishCourse = () => {
     // TODO: Send the course to the server.
-    course.categoryId = "6509b76eda50b4eec1867261"
     async function publishCourse() {
       await createCourse(course, teacherID);
     }

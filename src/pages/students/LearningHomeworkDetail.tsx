@@ -23,9 +23,9 @@ function _TopNavbar({ thread }: _TopNavbarProps) {
       <h1 className="text-black text-[32px] font-bold">{">"}</h1>
       <button
         className="text-black text-[32px] font-bold ml-2 hover:opacity-80"
-        onClick={() => navigate(`/learn/classes/${thread.cls.classId}`)}
+        onClick={() => navigate(`/learn/classes/${thread.classId}`)}
       >
-        {thread.cls.name}
+        {thread.clsName}
       </button>
       <h1 className="text-black text-[32px] font-bold">{">"}</h1>
       <button className="text-black text-[32px] font-bold ml-2 hover:opacity-80">

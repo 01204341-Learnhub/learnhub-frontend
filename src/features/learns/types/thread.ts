@@ -1,7 +1,9 @@
 import { LearnhubUser } from "../../../types/user";
 
 type Thread = {
-  cls: Class;
+  classId: string;
+  clsName: string;
+  teacher: LearnhubUser;
   threadId: string;
   name: string; // Title
   typ: "announcement" | "homework";
@@ -20,12 +22,6 @@ type Thread = {
   homeworkLastSubmissionDateTime?: Date; // For homework threads
   homeworkSubmissionFiles?: HomeworkSubmissionFile[]; // For homework threads
   homeworkGotScore?: number; // For homework threads
-};
-
-type Class = {
-  classId: string;
-  name: string;
-  teacher: LearnhubUser;
 };
 
 type Attachment = {
@@ -98,11 +94,9 @@ function generateMockThread(
 ): Thread {
   const teacher = generateMockUser("teacher", "teacher0");
   return {
-    cls: {
-      classId: classId,
-      name: `Class ${classId}`,
-      teacher: teacher,
-    },
+    classId: classId,
+    clsName: `Class ${classId}`,
+    teacher: teacher,
     threadId: threadId,
     name: `${
       typ == "announcement" ? "Announcement" : "Homework"
@@ -151,6 +145,6 @@ function generateMockThread(
   };
 }
 
-export type { Thread, Class, Attachment, Reply, HomeworkSubmissionFile };
+export type { Thread, Attachment, Reply, HomeworkSubmissionFile };
 
 export { generateMockUser, generateMockThread };

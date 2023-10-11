@@ -12,7 +12,6 @@ import {
   ListCourseChapterOutlineResponse,
   ListCoursesResponse,
   ResponseChapters,
-  ResponseGetCourses,
   ResponseLessons,
 } from "../types/response";
 
@@ -137,42 +136,6 @@ async function fetchLessons(courseID: string, chapterID: string) {
   }
 }
 
-async function getAllCourses(): Promise<Course[]> {
-  const programCourse: Course[] = [];
-
-  try {
-    const response = await axios.get<ResponseGetCourses>(
-      `${baseUrl}/programs/courses/`
-    );
-    const courseData = response.data.courses;
-
-    courseData.map(async (program) => {
-      programCourse.push({
-        courseID: program.course_id,
-        name: program.name,
-        description: "hello",
-        price: program.price,
-        cover: program.course_pic,
-        intructor: {
-          id: program.teacher.teacher_id,
-          name: program.teacher.teacher_name,
-          avatarUrl: program.teacher.profile_pic,
-          jobTitle: "Scotte lungnuk",
-        },
-        reviewerCount: program.review_count,
-        rating: program.rating,
-        tags: program.tags.map((tag) => ({
-          tagId: tag.tag_id,
-          tagName: tag.tag_name,
-        })),
-      });
-    });
-  } catch (err) {
-    console.log(err);
-  }
-  return programCourse;
-}
-
 async function getChapterInCourse(id: string) {
   const chapterCourse: Chapter[] = [];
   try {
@@ -263,7 +226,6 @@ async function getCourseAnnouncement(courseID: string, announcementID: string) {
 export {
   ListCourseChaptersOutline,
   fetchLessons,
-  getAllCourses,
   getChapterInCourse,
   getCourseAnnouncement,
   getCourseDetail,

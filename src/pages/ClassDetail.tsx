@@ -26,7 +26,7 @@ function ClassDetail() {
                     <span className="mx-2 text-2xl font-bold text-gray-500">{classProgram.name}</span>
                 </div>
                 <ProgramCoverWithInstructorProfile programCoverUrl={classProgram.thumbnailURL}
-                    instructor={{ profileUrl: classProgram.instructor.avatarURL, name: classProgram.instructor.name, jobTitle: classProgram.instructor.jobTitle }}
+                    instructor={{ profileUrl: classProgram.instructor.avatarURL, name: classProgram.instructor.name, jobTitle: "HARDCODE JOBTITLE" }}
                     reviewCount={0}
                     rating={0} />
                 <h1 className="text-5xl font-bold mt-3">{classProgram.name}</h1>

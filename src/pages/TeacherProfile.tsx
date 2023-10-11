@@ -1,70 +1,44 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import mockprofile_pic from "../assets/Images/regTeacher.png";
 import TeacherProfileCard from "../features/profiles/components/TeacherProfileCard.tsx";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
-import { getAllCourses } from "../features/stores/services/courses";
-import { ClassProgram } from "../features/stores/types/class";
-import { Course } from "../features/stores/types/course";
+import { useTeachClasses } from "../features/teaches/hooks/useTeachClasses.ts";
+import { useTeachCourses } from "../features/teaches/hooks/useTeachCourses.ts";
 
 
-
-const mockTeacher = {
-    email: "babarara@Gaymale.com",
-    profile_pic: mockprofile_pic,
-    fullname: "Bararynka Kapealla",
-    rating: Math.floor(Math.random() * 5),
-    students: Math.floor(Math.random() * 100),
-    classes: Math.floor(Math.random() * 10),
-    courses: Math.floor(Math.random() * 10)
-};
 
 
 function TeacherProfile() {
-    const [mockcourses, setCouses] = useState<Course[] | null>(null)
-    const [mockclasses, setClasses] = useState<ClassProgram[] | null>(null)
     const [displayedCourses, setDisplayedCourses] = useState<number>(4)
     const [displayedClasses, setDisplayedClasses] = useState<number>(4)
+    const { courses, isFetchingCourse } = useTeachCourses()
+    const { classes, isFetchingClasses } = useTeachClasses()
 
-
-
-    useEffect(() => {
-        async function fetchCourse() {
-            const coursePrograms = await getAllCourses(mockTeacher.courses)
-            setCouses(coursePrograms)
-        }
-
-        async function fetchClass() {
-            const classProgram = await getAllClasses(mockTeacher.classes)
-            setClasses(classProgram)
-        }
-
-        fetchCourse()
-        fetchClass()
-
-    }, [])
-
-    if (mockcourses === null || mockclasses === null) {
-        return null;
+    if (isFetchingCourse || isFetchingClasses) {
+        return (
+            <div>
+                LOADING...
+            </div>
+        );
     }
 
     const renderProgramCourse = () => {
         return (
             <>
-                {mockcourses.slice(0, displayedCourses).map((program, index) => {
+                {courses.slice(0, displayedCourses).map((program, index) => {
                     return (
-                        <Link to={`/detail/course/${program.id}`} key={index} className="my-4 px-6">
+                        <Link to={`/detail/course/${program.courseID}`} key={index} className="my-4 px-6">
                             <ProgramSlot
                                 key={index}
-                                courseThumbnailUrl={program.cover}
+                                courseThumbnailUrl={program.thumbnailUrl}
                                 courseName={program.name}
-                                instructorName={mockTeacher.fullname}
+                                instructorName={"FULLNAME OF TEACHER"}
                                 percentCompleted={100}
                                 regisDate={""}
                                 voter={program.rating}
-                                price={program.price}
-                                tag={program.tags[0].name}
-                                lvl={"พื้นฐาน"}
+                                price={-99999}
+                                tag={"HARDCODE TAG"}
+                                lvl={"HARDCODE LEVEL"}
                             />
                         </Link>
                     )
@@ -76,14 +50,14 @@ function TeacherProfile() {
     const renderProgramClass = () => {
         return (
             <>
-                {mockclasses.slice(0, displayedClasses).map((program, index) => {
+                {classes.slice(0, displayedClasses).map((program, index) => {
                     return (
-                        <Link to={`/detail/class/${program.id}`} key={index} className="my-4 px-6" >
-                            <ProgramSlot key={index} courseThumbnailUrl={program.cover}
-                                courseName={program.name}
-                                instructorName={program.intructor.name}
+                        <Link to={`/detail/class/${program.classID}`} key={index} className="my-4 px-6" >
+                            <ProgramSlot key={index} courseThumbnailUrl={program.classThumbnailUrl}
+                                courseName={program.className}
+                                instructorName={"HARDCODE INSTRUCTOR"}
                                 percentCompleted={100}
-                                regisDate={program.registerEndedDate} voter={0} price={3000} tag={program.tags[0].tagName}
+                                regisDate={"2030303"} voter={0} price={3000} tag={"HARDCODE TAG"}
                                 lvl={"พื้นฐาน"} />
                         </Link>
                     )
@@ -99,13 +73,13 @@ function TeacherProfile() {
         <div className=" bg-[#F0F0F0] h-full w-full flex flex-row">
             <div className=" h-full bg-white ">
                 <TeacherProfileCard
-                    email={mockTeacher.email}
-                    profile_pic={mockTeacher.profile_pic}
-                    fullname={mockTeacher.fullname}
-                    rating={mockTeacher.rating}
-                    students={mockTeacher.students}
-                    classes={mockTeacher.classes}
-                    courses={mockTeacher.courses}
+                    email={"HARDCODE EMAIL"}
+                    profile_pic={"HARDCODE PROFILE PIC"}
+                    fullname={"HARDCODE FULLNAME"}
+                    rating={-1}
+                    students={-1}
+                    classes={-1}
+                    courses={-1}
                 />
             </div>
             <div>
@@ -114,7 +88,7 @@ function TeacherProfile() {
                     <div className="pl-5 mt-5 pt-8 grid grid-cols-4">
                         {renderProgramCourse()}
                     </div>
-                    {mockTeacher.courses > 4 ? (
+                    {(4 > 4 && 3 > 1) ? (
                         <button
                             className="p-4 rounded-xl bg-[#505050] text-lg text-white font-bold shadow-xl"
                             onClick={loadMoreCourses}
@@ -130,7 +104,7 @@ function TeacherProfile() {
                     <div className="pl-3 mt-5 pt-8 grid grid-cols-4">
                         {renderProgramClass()}
                     </div>
-                    {(mockTeacher.classes > 4 && mockTeacher.classes > displayedClasses) ? (
+                    {(5 > 4 && 4 > displayedClasses) ? (
                         <button
                             className="p-4 rounded-xl bg-[#505050] text-lg text-white font-bold shadow-xl"
                             onClick={loadMoreClasses}

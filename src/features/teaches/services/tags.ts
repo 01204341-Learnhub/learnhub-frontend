@@ -2,7 +2,7 @@ import axios from "axios";
 import { ListTagsResponse } from "../types/responses";
 import { Tag } from "../types/tags";
 
-const baseURL = "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 async function listTags() {
   const url = `${baseURL}/programs/tags`;
   const res = await axios.get<ListTagsResponse>(url);

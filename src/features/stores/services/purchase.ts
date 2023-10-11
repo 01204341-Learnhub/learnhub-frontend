@@ -2,7 +2,7 @@ import axios from "axios";
 import { Basket, BasketItem } from "../types/basket";
 import { ResponseBasket } from "../types/response";
 
-const baseUrl = "http://localhost:8000";
+const baseUrl = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function purchaseCourse(studentID: string, paymentMethodID: string) {
   // TODO: use real payment_method_id

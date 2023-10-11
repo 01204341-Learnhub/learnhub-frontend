@@ -16,7 +16,7 @@ import {
   ResponseLessons,
 } from "../types/response";
 
-const baseUrl = "http://localhost:8000";
+const baseUrl = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function listCourse(): Promise<Course[]> {
   const url = `${baseUrl}/programs/courses/`;
@@ -134,10 +134,8 @@ async function fetchLessons(courseID: string, chapterID: string) {
     return lessons;
   } catch (err) {
     console.log(err);
-  } 
+  }
 }
-
-
 
 async function getAllCourses(): Promise<Course[]> {
   const programCourse: Course[] = [];
@@ -170,7 +168,7 @@ async function getAllCourses(): Promise<Course[]> {
       });
     });
   } catch (err) {
-    console.log(err)
+    console.log(err);
   }
   return programCourse;
 }

@@ -4,7 +4,7 @@ import { CourseQuiz } from "../types/courseQuiz";
 import { ListTeacherCourseResponse } from "../types/responses";
 import { createCourseQuiz } from "./courseQuiz";
 
-const baseURL = "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 async function listTeacherCourse(teacherID: string): Promise<CourseInfo[]> {
   const url = `${baseURL}/users/teachers/${teacherID}/courses`;
   const res = await axios.get<ListTeacherCourseResponse>(url);

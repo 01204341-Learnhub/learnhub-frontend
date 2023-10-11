@@ -12,7 +12,7 @@ import {
 } from "../types/response";
 import { updateStudentCourseLessonProgress } from "./progress";
 
-const baseURL = "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 async function getCourseQuiz(quizID: string): Promise<CourseQuiz> {
   const url = `${baseURL}/quizzes/${quizID}/`;
   const res = await axios.get<GetQuizResponse>(url);

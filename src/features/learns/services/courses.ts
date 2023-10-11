@@ -2,7 +2,7 @@ import axios from "axios";
 import { EnrolledCourse } from "../types/course";
 import { ListEnrolledCoursesResponse } from "../types/response";
 
-const baseURL = "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function listEnrolledCourses(
   studentID: string

@@ -10,6 +10,7 @@ import {
 } from "../../types/user";
 
 const auth = getAuth(app);
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function signInWithEmail(
   email: string,
@@ -32,7 +33,7 @@ async function signInWithEmail(
     } else {
       learnhubUID = learnhubUserCredential.teacherID!;
     }
-    const url: string = `http://localhost:8000/users/${userType}s/${learnhubUID}`;
+    const url: string = `${baseURL}/users/${userType}s/${learnhubUID}`;
     const data = (
       await axios.get<LearnhubStudentResponse | LearnhubTeacherResponse>(url)
     ).data;

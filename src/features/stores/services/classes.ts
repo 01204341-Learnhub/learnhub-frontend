@@ -5,7 +5,7 @@ import { GetClassResponse, ListClassesResponse } from "../types/response";
 async function listClass() {
   return [];
 }
-const baseURL = "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function getNewClasses(num: number) {
   const newClasses = [];

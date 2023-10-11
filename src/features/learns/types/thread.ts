@@ -53,7 +53,7 @@ function generateMockUser(
   };
 }
 
-function generateMockAttachment(typ: string) {
+function generateMockAttachment(typ: string): Attachment {
   if (!["image", "video", "file"].includes(typ)) {
     console.error(new Error(`Invalid attachment type ${typ}`));
   }
@@ -70,7 +70,9 @@ function generateMockAttachment(typ: string) {
   };
 }
 
-function generateMockHomeworkSubmissionFile(typ: string) {
+function generateMockHomeworkSubmissionFile(
+  typ: string
+): HomeworkSubmissionFile {
   if (!["image", "video", "file"].includes(typ)) {
     console.error(new Error(`Invalid homework submission file type ${typ}`));
   }

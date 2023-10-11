@@ -29,6 +29,7 @@ import TeachingClasses from "./pages/teachers/TeachingClasses";
 import TeachingCourses from "./pages/teachers/TeachingCourses";
 import TeachingHomeworks from "./pages/teachers/TeachingHomeworks";
 import store from "./store";
+import LearningClass from "./pages/students/LearningClass";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -56,6 +57,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               />
               <Route path="/learn/classes" element={<LearningClasses />} />
               <Route
+                path="/learn/classes/:classId"
+                element={<LearningClass />}
+              />
+              <Route
                 path="/learn/classes/:classId/homeworks/:homeworkId"
                 element={<LearningHomeworkDetail />}
               />
@@ -63,10 +68,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/learn/schedule" element={<LearningSchedule />} />
             </Route>
             <Route element={<TeacherNavbarLayout />}>
-              <Route path='/teach/courses' element={<TeachingCourses />} />
-              <Route path='/teach/classes' element={<TeachingClasses />} />
-              <Route path='/teach/classes/assignment/:assignmentID' element={<TeachingClasses />} />
-              <Route path='/teach/homework' element={<TeachingHomeworks />} />
+              <Route path="/teach/courses" element={<TeachingCourses />} />
+              <Route path="/teach/classes" element={<TeachingClasses />} />
+              <Route
+                path="/teach/classes/assignment/:assignmentID"
+                element={<TeachingClasses />}
+              />
+              <Route path="/teach/homework" element={<TeachingHomeworks />} />
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

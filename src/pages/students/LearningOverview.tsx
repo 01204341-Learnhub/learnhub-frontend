@@ -2,6 +2,8 @@ import Calendar from "../../features/learns/components/Calendar"
 import ClassHomeworkIncoming from "../../features/learns/components/ClassHomeworkIncoming"
 import ClassIncoming from "../../features/learns/components/ClassIncoming"
 import ClassTeachNow from "../../features/learns/components/ClassTeachNow"
+import { useStudentDashboard } from "../../features/learns/hooks/useStudentDashboard"
+import { useUser } from "../../hooks/useUser"
 
 
 const DataHomework =[{
@@ -19,6 +21,10 @@ const DataHomework =[{
 
 
 function LearningOverview() {
+    const {user} = useUser()
+    const {dashboard,isFetching}=useStudentDashboard(user.userID)
+    
+    if(isFetching) return(<div>loading......</div>)
     return (
         <div className="overflow-hidden flex justify-center">
             <div className="flex flex-col pb-10 bg-[#f5f5f580]">

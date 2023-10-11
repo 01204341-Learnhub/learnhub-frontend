@@ -132,7 +132,7 @@ function VideoLessonCreate({
           </dialog>
           <button
             className="mx-[40px] mt-[20px]"
-            onClick={() => { document.getElementById('url_form_modal').showModal() }}
+            onClick={() => { (document.getElementById('url_form_modal') as HTMLDialogElement).showModal() }}
           >
             <FontAwesomeIcon
               icon={faPaperclip}

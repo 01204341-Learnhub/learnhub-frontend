@@ -1,9 +1,11 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { useContext, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { availableCategories, availableLevels, Course } from "../types/course";
 import { CourseContext } from "../../../pages/teachers/CreateCourse.tsx";
+import { useTags } from "../hooks/useTags.ts";
+import { Course, availableLevels } from "../types/course";
+import { Tag } from "../types/tags.ts";
 
 function _StepperNav({
   onPrev,
@@ -20,9 +22,8 @@ function _StepperNav({
     <div className="flex flex-row justify-between items-center bg-white p-8 m-2">
       <button
         onClick={onPrev}
-        className={`bg-black ${
-          onPrev !== undefined ? "block" : "hidden"
-        } rounded-lg py-2 px-3 hover:drop-shadow-md flex flex-row justify-center items-center space-x-2 `}
+        className={`bg-black ${onPrev !== undefined ? "block" : "hidden"
+          } rounded-lg py-2 px-3 hover:drop-shadow-md flex flex-row justify-center items-center space-x-2 `}
       >
         <FontAwesomeIcon icon={faAngleLeft} color="white" />
         <p className="text-white font-normal">ก่อนหน้า</p>
@@ -32,9 +33,8 @@ function _StepperNav({
 
       <button
         onClick={readyToNext ? onNext : undefined}
-        className={`${readyToNext ? "bg-black" : "bg-[#C0C0C0]"} ${
-          onNext !== undefined ? "block" : "hidden"
-        } rounded-lg py-2 px-3 hover:drop-shadow-md flex flex-row justify-center items-center space-x-2`}
+        className={`${readyToNext ? "bg-black" : "bg-[#C0C0C0]"} ${onNext !== undefined ? "block" : "hidden"
+          } rounded-lg py-2 px-3 hover:drop-shadow-md flex flex-row justify-center items-center space-x-2`}
       >
         <p className="text-white font-normal">{nextWord ?? "ถัดไป"}</p>
         <FontAwesomeIcon icon={faAngleRight} color="white" />
@@ -52,7 +52,8 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
   const navigate = useNavigate();
   const [step, setStep] = useState<number>(1);
   const [courseName, setCourseName] = useState<string>("");
-  const [courseCategoryId, setCourseCategoryId] = useState<string>("");
+  const { tags: availableTags, isFetching: isFetchingTags } = useTags()
+  const [tag, setTag] = useState<Tag>(availableTags[0])
   const [courseLevel, setCourseLevel] = useState<string>("");
 
   const handleNext = () => {
@@ -70,24 +71,41 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
   const handleSubmit = () => {
     const newCourse: Course = { ...courseContext.course };
     newCourse.name = courseName;
-    newCourse.categoryId = courseCategoryId;
+    newCourse.tag = tag;
     newCourse.level = courseLevel;
     courseContext.setCourse(newCourse);
     onSubmit();
   };
+  useEffect(() => {
+    if (availableTags.length > 0) {
+      setTag(availableTags[0])
+    }
+  }, [availableTags])
 
   const checkInputOk = () => {
     if (step === 1) {
       return courseName.length > 0 && courseName.length <= 60;
-    } else if (step === 2) {
-      return courseCategoryId !== "";
-    } else if (step === 3) {
+    } else if (step == 2) {
+      return true;
+    }
+    else if (step === 3) {
       return courseLevel !== "";
     } else {
       return false;
     }
   };
-
+  const tagIDToName = (tagID: string) => {
+    console.log(tagID);
+    for (const tag of availableTags) {
+      if (tag.tagID === tagID) {
+        return tag.name;
+      }
+    }
+    throw new Error("Tag not found");
+  }
+  if (isFetchingTags) {
+    return <div>Loading...</div>
+  }
   if (step == 1) {
     const maxLength = 60;
     return (
@@ -133,16 +151,16 @@ function CourseCreateStepper({ onSubmit }: CourseCreateStepperProps) {
             หากคุณไม่แน่ใจว่าหมวดหมู่ถูกต้องหรือไม่ คุณสามารถเปลี่ยนได้ในภายหลัง
           </p>
           <select
-            value={courseCategoryId}
-            onChange={(e) => setCourseCategoryId(e.target.value)}
+            value={tag.tagID}
+            onChange={(e) => setTag({ name: tagIDToName(e.target.value), tagID: e.target.value })}
             className="mt-[29px] mx-auto w-2/3 max-w-[585px] h-[45px] px-4"
           >
             <option value="" disabled selected>
               เลือกประเภท
             </option>
-            {availableCategories.map((category) => {
+            {availableTags.map((tag) => {
               return (
-                <option value={category.categoryId}>{category.name}</option>
+                <option value={tag.tagID}>{tag.name}</option>
               );
             })}
           </select>

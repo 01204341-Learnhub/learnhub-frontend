@@ -5,7 +5,7 @@ import {
 } from "../types/progress";
 import { GetStudentCourseProgressResponse } from "../types/response";
 
-const baseURL = "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function getStudentCourseProgress(studentID: string, courseID: string) {
   const url = `${baseURL}/users/students/${studentID}/course_progress/${courseID}`;

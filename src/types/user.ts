@@ -2,6 +2,7 @@ type LearnhubUser = {
   userType: "student" | "teacher" | "admin";
   userID: string;
   username: string;
+  fullname: string;
   email: string;
   profilePicture: string;
 };

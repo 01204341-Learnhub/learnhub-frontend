@@ -8,4 +8,11 @@ type ListTeacherCourseResponse = {
   }[];
 };
 
-export type { ListTeacherCourseResponse };
+type ListTagsResponse = {
+  tags: {
+    tag_id: string;
+    tag_name: string;
+  }[];
+};
+
+export type { ListTagsResponse, ListTeacherCourseResponse };

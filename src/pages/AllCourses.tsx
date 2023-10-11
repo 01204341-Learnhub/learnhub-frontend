@@ -19,8 +19,8 @@ export default function AllCloures() {
                                 courseName={course.name}
                                 instructorName={course.instructor.name}
                                 percentCompleted={100}
-                                regisDate={""} voter={1000} price={course.price} tag={"ยอดนิยม"}
-                                lvl={"พื้นฐาน"} />
+                                regisDate={""} voter={1000} price={course.price} tag={course.tags[0].name}
+                                lvl={"HARDCODE"} />
                         </Link>
                     )
                 })}

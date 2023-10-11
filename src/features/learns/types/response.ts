@@ -100,6 +100,61 @@ type GetStudentCourseQuizReportResponse = {
   }[];
 };
 
+type GetStudentDashboardResponse = {
+  classes:
+  {
+    class_info: {
+      class_name: string,
+      class_id: string
+    },
+    teacher: {
+      teacher_id: string,
+      teacher_name: string,
+      profile_pic: string
+    },
+    schedules: 
+      {
+        start: number,
+        end: number
+      }[]
+  }[]
+  ,
+  assignments:
+  {
+    assignment_name: string,
+    assignment_id: string,
+    class_info: {
+      class_name: string,
+      class_id: string
+    },
+    due_date: number,
+    status: "open" | "closed",
+    submission: {
+      submission_status: "check" | "uncheck" | "unsubmit",
+      submission_date: number
+    }
+  }[]
+  ,
+  announcements:
+  {
+    announcement_id: string,
+    course_info: {
+      course_id: string,
+      course_name: string
+    },
+    teacher: {
+      teacher_id: string,
+      teacher_name: string,
+      profile_pic: string
+    },
+    name: string,
+    last_edit: number,
+    text: string
+  }[]
+
+}
+
+
 type ListCourseAnnouncementResponse = {
   announcements: {
     announcement_id: string;
@@ -137,4 +192,5 @@ export type {
   ListCourseLessonsResponse,
   ListEnrolledCoursesResponse,
   ListCourseAnnouncementResponse
+  GetStudentDashboardResponse
 };

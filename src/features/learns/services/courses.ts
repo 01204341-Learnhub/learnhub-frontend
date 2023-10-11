@@ -1,13 +1,8 @@
 import axios from "axios";
-import { CourseChapter, CourseLesson, EnrolledCourse } from "../types/course";
-import {
-  ListEnrolledCoursesResponse,
-  ListCourseChaptersResponse,
-  ListCourseLessonsResponse,
-  GetCourseLessonResponse
-} from "../types/response";
+import { EnrolledCourse } from "../types/course";
+import { ListEnrolledCoursesResponse } from "../types/response";
 
-const baseURL = "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function listEnrolledCourses(
   studentID: string
@@ -33,103 +28,4 @@ async function listEnrolledCourses(
   return enrolledCourses;
 }
 
-async function fetchChapters(courseID: string): Promise<CourseChapter[]> {
-  const courseChapters: CourseChapter[] = [];
-
-  try {
-    const response = await axios.get<ListCourseChaptersResponse>(
-      `${baseURL}/programs/courses/${courseID}/chapters/`
-    );
-    const courseChapterData = response.data.chapters;
-    courseChapterData.map((chapter) => {
-      courseChapters.push({
-        chapterID: chapter.chapter_id,
-        chapterNum: chapter.chapter_num,
-        name: chapter.name,
-        courseID: courseID,
-        chapterLength: chapter.chapter_length,
-        lessonCount: chapter.lesson_count,
-        description: "",
-      });
-    });
-    return courseChapters;
-  } catch (err) {
-    console.log(err);
-  } 
-  const mockChapters: CourseChapter[] = [
-    {
-      chapterID: "1",
-      courseID: courseID,
-      chapterNum: 1,
-      name: "Chapter 1",
-      chapterLength: 10,
-      lessonCount: 10,
-      description:
-        "This is a chapter 2 lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum.",
-    },
-    {
-      chapterID: "2",
-      courseID: courseID,
-      chapterNum: 2,
-      name: "Chapter 2",
-      chapterLength: 10,
-      lessonCount: 10,
-      description: "This is a chapter 2",
-    },
-  ];
-  return mockChapters;
-}
-
-async function fetchLessons(courseID: string, chapterID: string) {
-  const lessons: CourseLesson[] = [];
-
-  try {
-    const responseLessons = await axios.get<ListCourseLessonsResponse>(
-      `http://localhost:8000/programs/courses/${courseID}/chapters/${chapterID}/lessons`
-    );
-    const lessonsData = responseLessons.data.lessons;
-    lessonsData.map((lesson) => {
-      lessons.push({
-        lessonID: lesson.lesson_id,
-        chapterID: chapterID,
-        courseID: courseID,
-        lessonNum: lesson.lesson_num,
-        lessonLength: lesson.lesson_length,
-        lessonType: lesson.lesson_type,
-        name: lesson.name,
-        src: "",
-      });
-    });
-    return lessons;
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-async function fetchLesson(
-  courseID: string,
-  chapterID: string,
-  lessonID: string
-) {
-  try {
-    const responseLesson = await axios.get<GetCourseLessonResponse>(
-      `http://localhost:8000/programs/courses/${courseID}/chapters/${chapterID}/lessons/${lessonID}`
-    );
-    const lessonData = responseLesson.data;
-    const lesson: CourseLesson = {
-      courseID: courseID,
-      chapterID: chapterID,
-      lessonID: lessonData.lesson_id,
-      lessonNum: lessonData.lesson_num,
-      lessonType: lessonData.lesson_type,
-      src: lessonData.src,
-      name: lessonData.name,
-      lessonLength: lessonData.lesson_length,
-    };
-    return lesson;
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-export { fetchChapters, fetchLesson, fetchLessons, listEnrolledCourses };
+export { listEnrolledCourses };

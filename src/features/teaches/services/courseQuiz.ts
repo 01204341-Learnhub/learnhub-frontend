@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CourseQuiz } from "../types/courseQuiz";
 
-const baseURL = "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function createCourseQuiz(quiz: CourseQuiz): Promise<string> {
   const url = `${baseURL}/quizzes`;

@@ -213,7 +213,7 @@ function ClassHomeworkDetailFileUploader({
           <p className="text-white text-[18px] font-[500]">
             {thread.homeworkSubmissionStatus === "not-submitted"
               ? "ส่งงาน"
-              : "ถอนการส่งงาน"}
+              : "ยกเลิกการส่งงาน"}
           </p>
         </button>
         <div

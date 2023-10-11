@@ -22,7 +22,7 @@ function ClassThreadReplyEntry({ reply }: ClassThreadReplyEntryProps) {
             {toDateTimeStringOmitDateOnSameDay(reply.dateTime)}
           </p>
         </div>
-        <p className="text-[#707070] text-[16px] font-medium w-[75%] break-words">
+        <p className="text-[#707070] text-[15px] font-medium w-[75%] break-words">
           {reply.text}
         </p>
       </div>

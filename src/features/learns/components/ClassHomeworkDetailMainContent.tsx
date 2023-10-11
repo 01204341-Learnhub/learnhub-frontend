@@ -56,7 +56,7 @@ function ClassHomeworkDetailMainContent({
         }
       >
         <div className="mt-4 pb-4 border-b-2">
-          <p className="text-[#404040] text-[16px] font-medium mx-3 w-[95%] break-words">
+          <p className="text-[#404040] text-[15px] font-medium mx-3 w-[95%] break-words">
             {thread.text}
           </p>
           <div className={thread.attachments.length > 0 ? "block" : "hidden"}>

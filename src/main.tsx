@@ -33,7 +33,6 @@ import TeachingCourses from "./pages/teachers/TeachingCourses";
 import TeachingHomeworks from "./pages/teachers/TeachingHomeworks";
 import store from "./store";
 
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Provider store={store}>

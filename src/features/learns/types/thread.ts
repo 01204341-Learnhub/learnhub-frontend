@@ -52,6 +52,7 @@ function generateMockUser(
     userType: typ,
     userID: userId,
     username: `User ${userId}`,
+    fullname: `User ${userId} fullname`,
     email: `${userId}@gmail.com`,
     profilePicture: `https://robohash.org/${userId}`,
   };
@@ -150,6 +151,6 @@ function generateMockThread(
   };
 }
 
-export type { Thread, Class, Attachment, Reply, HomeworkSubmissionFile };
+export type { Attachment, Class, HomeworkSubmissionFile, Reply, Thread };
 
-export { generateMockUser, generateMockThread };
+export { generateMockThread, generateMockUser };

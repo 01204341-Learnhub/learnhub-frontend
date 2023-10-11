@@ -191,6 +191,6 @@ export type {
   ListCourseChaptersResponse,
   ListCourseLessonsResponse,
   ListEnrolledCoursesResponse,
-  ListCourseAnnouncementResponse
+  ListCourseAnnouncementResponse,
   GetStudentDashboardResponse
 };

@@ -1,17 +1,18 @@
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch} from "react-redux"
-import { removeItem, clearItem, } from "../slices/basketSlice"
-import { deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
+import { removeItem } from "../slices/basketSlice"
+import { deleteBasketItem } from '../features/stores/services/purchase'
 import { useUser } from '../hooks/useUser'
-import Swal from 'sweetalert2'
 import { useBasket } from '../features/stores/hooks/useBasket'
+import { useNavigate } from 'react-router-dom'
 
 
 function Basket() {
     const { user } = useUser()
     const basket = useBasket()
     const dispatcher = useDispatch()
+    const navigate = useNavigate()
    
     async function handleDeleteBusketItems(itemID: string) {
         dispatcher(removeItem(itemID))
@@ -20,22 +21,7 @@ function Basket() {
     }
 
     const handlePayment = async () => {
-        const transction = await purchaseCourse(user.userID, "1111111111111");
-        if (transction) {
-            Swal.fire({
-                title: "ชำระเงินสำเร็จ",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "green"
-            })
-            dispatcher(clearItem())
-        } else {
-            Swal.fire({
-                title: 'error',
-                icon: 'error'
-            })
-        }
-
+        { navigate({ pathname: '/baskets/payment' }, { replace: true }) }
     }
 
     return (

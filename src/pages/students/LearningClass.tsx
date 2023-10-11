@@ -1,4 +1,3 @@
-import { createContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import { LearnhubUser } from "../../types/user";
 import { generateMockUser } from "../../features/learns/types/thread";
@@ -6,6 +5,7 @@ import useClass from "../../features/learns/hooks/useClass";
 import { Class } from "../../features/learns/types/classes";
 import ClassAnnouncementThread from "../../features/learns/components/ClassAnnouncementThread";
 import ClassHomeworkThread from "../../features/learns/components/ClassHomeworkThread";
+import { useState } from "react";
 
 interface _TabSwitcherProps {
   currentTab: "main" | "homeworks" | "people";
@@ -44,28 +44,31 @@ function _TabSwitcher({ currentTab, onTabChange }: _TabSwitcherProps) {
 }
 
 interface _MainTabProps {
+  user: LearnhubUser;
   cls: Class;
 }
 
-function _MainTab({ cls }: _MainTabProps) {
+function _MainTab({ user, cls }: _MainTabProps) {
   return (
     <div className="flex w-full justify-center">
-      <div className="flex flex-col w-full min-w-[600px] max-w-[1000px] space-y-5 items-center">
+      <div className="flex flex-col w-full min-w-[600px] max-w-[950px] space-y-5 items-center">
         <h1 className="text-black text-[32px] font-bold self-start">
           {cls.name}
         </h1>
         <img
           src={cls.thumbnailUrl}
           alt={`https://picsum.photos/seed/${cls.classId}/1920/1080`}
-          className="w-full h-[315px] object-cover"
+          className="w-full h-[315px] object-cover border-[1px] border-[#a0a0a080] rounded-[10px]"
         />
-        <div className="flex flex-col w-[85%] space-y-3">
+        <div className="flex flex-col w-full space-y-3">
           {cls.simpleThreads.map((simpleThread) => {
             if (simpleThread.typ === "announcement") {
               return (
                 <ClassAnnouncementThread
                   key={simpleThread.threadId}
+                  user={user}
                   simpleThread={simpleThread}
+                  classId={cls.classId}
                 />
               );
             }
@@ -109,8 +112,6 @@ type PathParams = {
   classId: string;
 };
 
-const UserContext = createContext<LearnhubUser | undefined>(undefined);
-
 function LearningClass() {
   const { classId } = useParams<PathParams>();
   const [currentTab, setCurrentTab] = useState<"main" | "homeworks" | "people">(
@@ -122,7 +123,7 @@ function LearningClass() {
   return (
     <div className="bg-[#F6F6F6] w-full h-full">
       {user && cls && (
-        <UserContext.Provider value={user}>
+        <>
           <_TabSwitcher
             currentTab={currentTab}
             onTabChange={(tab) => setCurrentTab(tab)}
@@ -130,7 +131,7 @@ function LearningClass() {
           <div className="p-5 w-full">
             {(() => {
               if (currentTab === "main") {
-                return <_MainTab cls={cls} />;
+                return <_MainTab user={user} cls={cls} />;
               }
               if (currentTab === "homeworks") {
                 return <_HomeworksTab cls={cls} />;
@@ -139,10 +140,10 @@ function LearningClass() {
                 return <_PeopleTab cls={cls} />;
               }
               alert("Invalid tab, redirecting to main tab");
-              return <_MainTab cls={cls} />;
+              return <_MainTab user={user} cls={cls} />;
             })()}
           </div>
-        </UserContext.Provider>
+        </>
       )}
     </div>
   );

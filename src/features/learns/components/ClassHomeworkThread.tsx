@@ -19,7 +19,7 @@ function ClassHomeworkThread({
   const navigate = useNavigate();
   return (
     <div
-      className="bg-white border-[1px] border-[#a0a0a080] rounded-[10px] p-3 w-full cursor-pointer hover:drop-shadow-md"
+      className="bg-white border-[1px] border-[#a0a0a080] rounded-[10px] p-5 w-full cursor-pointer hover:drop-shadow-md"
       onClick={() =>
         navigate(`/learn/classes/${classId}/homeworks/${simpleThread.threadId}`)
       }

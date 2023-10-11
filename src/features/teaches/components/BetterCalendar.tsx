@@ -64,7 +64,7 @@ function BetterCalendar({ onDateSelect, targetDates }: BetterCalendarProps) {
   };
 
   return (
-    <div className="p-6 w-full h-full flex items-center justify-center shadow-xl">
+    <div className="p-6 w-full h-full flex items-center justify-center shadow-xl bg-white">
       <div className="w-[400px] h-[280px]">
         <div className="flex items-center justify-between">
           <p className="font-semibold text-xl">

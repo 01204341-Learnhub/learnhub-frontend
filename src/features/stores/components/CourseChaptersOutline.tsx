@@ -1,15 +1,17 @@
+import {
+  faAngleDown,
+  faAngleUp,
+  faCirclePlay,
+  faClipboardList,
+  faFileLines,
+  faFolder,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Lesson } from "../types/lesson";
-import { Chapter } from "../types/chapter";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCirclePlay,
-  faFileLines,
-  faClipboardList,
-  faFolder,
-  faAngleUp,
-  faAngleDown,
-} from "@fortawesome/free-solid-svg-icons";
+
+import { fetchLessons } from "../services/courses";
+import { CourseChapterOutline } from "../types/course";
 
 interface LessonEntryProps {
   lesson: Lesson;
@@ -18,18 +20,18 @@ interface LessonEntryProps {
 function LessonEntry(props: LessonEntryProps) {
   return (
     <div className="flex flex-row justify-left space-x-3">
-      {props.lesson.lessonType === "video" && (
+      {props.lesson.lessonType === "video" ? (
         <FontAwesomeIcon icon={faCirclePlay} color="#808080" />
-      )}
-      {props.lesson.lessonType === "doc" && (
+      ) : null}
+      {props.lesson.lessonType === "doc" ? (
         <FontAwesomeIcon icon={faFileLines} size="lg" color="#808080" />
-      )}
-      {props.lesson.lessonType === "quiz" && (
+      ) : null}
+      {props.lesson.lessonType === "quiz" ? (
         <FontAwesomeIcon icon={faClipboardList} size="lg" color="#808080" />
-      )}
-      {props.lesson.lessonType === "files" && (
+      ) : null}
+      {props.lesson.lessonType === "files" ? (
         <FontAwesomeIcon icon={faFolder} color="#808080" />
-      )}
+      ) : null}
       <div className="text-[#808080] font-normal text-[13px]">
         {props.lesson.name}
       </div>
@@ -52,31 +54,19 @@ function LessonEntry(props: LessonEntryProps) {
 }
 
 interface ChapterEntryProps {
-  chapter: Chapter;
+  chapter: CourseChapterOutline;
+  courseID: string
 }
 
 function ChapterEntry(props: ChapterEntryProps) {
   const [isExpanded, setIsExpanded] = React.useState(false);
-  function handleExpand() {
+  const [lessons, setLessons] = React.useState<Lesson[]>([]);
+  async function handleExpand() {
+    const lessonsData = await fetchLessons(props.courseID, props.chapter.chapterID);
     setIsExpanded(!isExpanded);
+    setLessons(lessonsData);
   }
 
-  // TODO: Get lessons from backend.
-  const lessons: Lesson[] = [];
-  const lessonTypes = ["video", "doc", "quiz", "files"];
-  for (let i = 0; i < 4; i++) {
-    const lesson: Lesson = {
-      id: `${i}`,
-      courseId: props.chapter.courseId,
-      chapterId: props.chapter.id,
-      name: `Lesson ${i}`,
-      description: `This is lesson ${i}`,
-      lessonNum: i,
-      lessonType: lessonTypes[i % 4],
-      lessonLength: 1500 * (i + 1),
-    };
-    lessons.push(lesson);
-  }
 
   return (
     <>
@@ -92,7 +82,7 @@ function ChapterEntry(props: ChapterEntryProps) {
           />
         </div>
       </button>
-      {isExpanded && (
+      {isExpanded ? (
         <div className="bg-[#d9d9d980] w-full">
           <div className="m-4 flex flex-col justify-start space-y-3">
             {lessons.map((lesson) => (
@@ -100,21 +90,22 @@ function ChapterEntry(props: ChapterEntryProps) {
             ))}
           </div>
         </div>
-      )}
+      ) : null}
     </>
   );
 }
 
 interface CourseChaptersOutlineProps {
-  chapters: Chapter[];
+  chapters: CourseChapterOutline[];
+  courseID: string
 }
 
 function CourseChaptersOutline(props: CourseChaptersOutlineProps) {
   return (
-    <div className="w-[600px] bg-[#eaeaea66]">
+    <div className="w-[600px] bg-[#eaeaea66] py-0.5">
       <div className="m-5 flex flex-col justify-start space-y-4">
         {props.chapters.map((chapter) => (
-          <ChapterEntry key={chapter.id} chapter={chapter} />
+          <ChapterEntry key={chapter.chapterID} chapter={chapter} courseID={props.courseID} />
         ))}
       </div>
     </div>
@@ -122,30 +113,3 @@ function CourseChaptersOutline(props: CourseChaptersOutlineProps) {
 }
 
 export default CourseChaptersOutline;
-
-function CourseChaptersOutlineTest() {
-  // TODO: In real caller, get chapters from backend.
-  const chapters: Chapter[] = [];
-  for (let i = 0; i < 10; i++) {
-    const chapter: Chapter = {
-      id: `${i}`,
-      courseId: "0",
-      name: `Chapter ${i}`,
-      description: `This is chapter ${i}`,
-      chapterNum: i,
-      lessonCount: 4,
-      chapterLength: 10000,
-    };
-    chapters.push(chapter);
-  }
-
-  return (
-    <div className="bg-white min-h-screen min-w-screen">
-      <div className="flex flex-row justify-center">
-        <CourseChaptersOutline chapters={chapters} />
-      </div>
-    </div>
-  );
-}
-
-export { CourseChaptersOutlineTest };

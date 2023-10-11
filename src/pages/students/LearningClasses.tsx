@@ -1,6 +1,166 @@
+import React, { useEffect } from 'react'
+import ClassCard from '../../features/learns/components/ClassCard'
+import ClassTeachNow from '../../features/learns/components/ClassTeachNow'
+import { listEnrolledClass } from '../../features/learns/services/classes'
+import { EnrolledClass } from '../../features/learns/types/classes'
+
+interface ClassTeachNowProp {
+    ThumbnailUrl: string;
+    TitleName: string;
+    Minute: number; 
+}
+
+
+type ClassCardProps = {
+  classThumbnailUrl: string;
+  className: string;
+  instructorName: string;
+  percentCompleted: number;
+  completionDate: Date;
+}
+// mockdata TeachNow
+const mockClassTeachNow: ClassTeachNowProp = {
+    ThumbnailUrl: "https://miro.medium.com/v2/resize:fit:1200/1*m0H6-tUbW6grMlezlb52yw.png",
+    TitleName: "คณิตศาสตร์",
+    Minute: 30
+}
+
+
 function LearningClasses() {
+
+    const [isSelectProgcess, setIsSelectProgcess] = React.useState(true)
+    const [isSelectCompleted, setIsSelectCompleted] = React.useState(false)
+    const [classesProcessCard, setClassesProcessCard] = React.useState<ClassCardProps[]>([])
+    const [classesCompletedCard, setClassesCompletedCard] = React.useState<ClassCardProps[]>([])
+
+    useEffect(() => {
+        async function fetchListEnrolledClasses() {
+            const enrolledClasses : EnrolledClass[] = await listEnrolledClass("1")
+
+
+            const classesProcess = enrolledClasses.filter((enrolledClass: EnrolledClass) => enrolledClass.status === "started")
+            const classesProcessCard : ClassCardProps[] = classesProcess.map((enrolledClass: EnrolledClass) => {
+                return {
+                    classThumbnailUrl: enrolledClass.imageClassUrl,
+                    className: enrolledClass.name,
+                    instructorName: enrolledClass.teacher.name,
+                    percentCompleted: 40,
+                    completionDate: enrolledClass.registrationEndDate
+                }
+            })
+            setClassesProcessCard(classesProcessCard)   
+
+            const classesCompleted = enrolledClasses.filter((enrolledClass: EnrolledClass) => enrolledClass.status === "finished")
+            const classesCompletedCard : ClassCardProps[] = classesCompleted.map((enrolledClass: EnrolledClass) => {
+                return {
+                    classThumbnailUrl: enrolledClass.imageClassUrl,
+                    className: enrolledClass.name,
+                    instructorName: enrolledClass.teacher.name,
+                    percentCompleted: 100,
+                    completionDate: enrolledClass.registrationEndDate
+                }
+            })
+            setClassesCompletedCard(classesCompletedCard)
+            
+        }
+        fetchListEnrolledClasses()
+    }, [])
+
+
+    const onChangeSelectProcess = () => {
+        setIsSelectProgcess(true)
+        setIsSelectCompleted(false)
+    }
+
+    const onChangeSelectCompleted = () => {
+        setIsSelectCompleted(true)
+        setIsSelectProgcess(false)
+    }
+
+    const selected = 'text-lg font-semibold border-b-8 border-black mx-4 pb-2 px-2'
+    const notSelected = 'text-lg text-[#808080] font-medium border-b-8 border-transparent mx-4 px-2 pb-2'
+    const selectedProcess = isSelectProgcess ? selected : notSelected
+    const selectedCompleted = isSelectCompleted ? selected : notSelected
+
+
+
+    const renderClassInProcess = () => {
+        return (
+            <>
+                {classesProcessCard.map((classCard, index) => {
+                    return (
+                        <div key={index} className='px-4 py-3'>
+                            <ClassCard {...classCard} />
+                        </div>
+                    )
+                })}
+            </>
+        )
+    }
+
+    const renderClassInCompleted = () => {
+        return (
+            <>
+                {classesCompletedCard.map((classCard, index) => {
+                    return (
+                        <div key={index} className='px-4 py-3'>
+                            <ClassCard {...classCard} />
+                        </div>
+                    )
+                })}
+            </>
+        )
+    }
+
     return (
-        <div>LearningClasses</div>
+        <div className=''>
+            <header className='flex items-center px-12 h-40 pb-6'>
+                <span className='text-3xl font-bold'>คลาสเรียนของฉัน</span>
+                <div className='flex w-64 h-8 mx-4 items-center'>
+                    <div className='flex basis-3/4 items-center bg-white drop-shadow-lg w-full h-full'>
+                        <input
+                            placeholder='ค้นหาคลาสเรียน'
+                            className='outline-none w-full h-full px-4 text-sm'
+                            name='search'
+                            id='search' 
+                            type="text" />
+                    </div>
+                    <button
+                        type='button' 
+                        className='basis-1/4 bg-black drop-shadow-lg w-full h-full'
+                        >
+                            <span className='text-white font-bold text-sm'>ค้นหา</span>
+                    </button>
+                </div>
+            </header>
+            <article className='flex flex-col'>
+                <section className='flex flex-col items-center pt-4 px-12 bg-[#d9d9d9] h-[360px]'>
+                    <h1 className='text-2xl font-semibold self-start pb-8'>คลาสเรียนที่กำลังสอน</h1>
+                    <div className='flex items-center justify-center  w-[90%]'>
+                        <ClassTeachNow {...mockClassTeachNow} />
+                    </div>
+                </section>
+
+                <h1 className='text-2xl font-semibold pb-8 pt-4 px-12'>เลือกความคืบหน้า</h1>
+
+                <nav className='flex px-12'>
+                    <button
+                        type='button'
+                        onClick={onChangeSelectProcess} 
+                        className={selectedProcess}>กำลังดำเนินการ</button>
+                    <button 
+                        type='button'
+                        onClick={onChangeSelectCompleted}
+                        className={selectedCompleted}>เสร็จสิ้นแล้ว</button>
+                </nav>
+                <hr className='border-2'/>
+                <h1 className='px-12 pt-12 text-xl font-semibold'>คลาสเรียนที่กำลังดำเนิน</h1>
+                <section className='flex flex-wrap px-4 pt-8 pb-12'>
+                    { isSelectProgcess && renderClassInProcess()}
+                    { isSelectCompleted && renderClassInCompleted()}
+                </section>
+            </article>
+        </div>
     )
 }
 

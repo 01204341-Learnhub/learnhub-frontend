@@ -2,8 +2,9 @@ import axios from "axios";
 import { CourseChapter, CourseLesson, EnrolledCourse } from "../types/course";
 import {
   ListEnrolledCoursesResponse,
-  ResponseLessonId,
-  ResponseLessons,
+  ListCourseChaptersResponse,
+  ListCourseLessonsResponse,
+  GetCourseLessonResponse
 } from "../types/response";
 
 const baseURL = "http://localhost:8000";
@@ -36,8 +37,8 @@ async function fetchChapters(courseID: string): Promise<CourseChapter[]> {
   const courseChapters: CourseChapter[] = [];
 
   try {
-    const response = await axios.get<ResponseCourseChapters>(
-      `http://localhost:8000/programs/courses/${courseID}/chapters/`
+    const response = await axios.get<ListCourseChaptersResponse>(
+      `${baseURL}/programs/courses/${courseID}/chapters/`
     );
     const courseChapterData = response.data.chapters;
     courseChapterData.map((chapter) => {
@@ -51,12 +52,10 @@ async function fetchChapters(courseID: string): Promise<CourseChapter[]> {
         description: "",
       });
     });
+    return courseChapters;
   } catch (err) {
     console.log(err);
-  } finally {
-    return courseChapters;
-  }
-
+  } 
   const mockChapters: CourseChapter[] = [
     {
       chapterID: "1",
@@ -85,7 +84,7 @@ async function fetchLessons(courseID: string, chapterID: string) {
   const lessons: CourseLesson[] = [];
 
   try {
-    const responseLessons = await axios.get<ResponseLessons>(
+    const responseLessons = await axios.get<ListCourseLessonsResponse>(
       `http://localhost:8000/programs/courses/${courseID}/chapters/${chapterID}/lessons`
     );
     const lessonsData = responseLessons.data.lessons;
@@ -101,11 +100,9 @@ async function fetchLessons(courseID: string, chapterID: string) {
         src: "",
       });
     });
+    return lessons;
   } catch (err) {
     console.log(err);
-  } finally {
-    console.log(lessons);
-    return lessons;
   }
 }
 
@@ -115,7 +112,7 @@ async function fetchLesson(
   lessonID: string
 ) {
   try {
-    const responseLesson = await axios.get<ResponseLessonId>(
+    const responseLesson = await axios.get<GetCourseLessonResponse>(
       `http://localhost:8000/programs/courses/${courseID}/chapters/${chapterID}/lessons/${lessonID}`
     );
     const lessonData = responseLesson.data;
@@ -130,7 +127,9 @@ async function fetchLesson(
       lessonLength: lessonData.lesson_length,
     };
     return lesson;
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 export { fetchChapters, fetchLesson, fetchLessons, listEnrolledCourses };

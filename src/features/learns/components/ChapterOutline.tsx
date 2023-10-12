@@ -41,16 +41,16 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
     }
     return (
         <>
-            <div className="flex flex-col items-center">
+            <div className="w-[720px]">
                 <div className="flex bg-[#ECF3F9] w-full justify-between" onClick={() => handleShow()}>
 
-                    <div className="flex flex-col items-start flex-1 pl-6 py-4">
-                        <h1 className="text-xl font-semibold">บทที่ : {chapter.name}</h1>
+                    <div className="flex flex-col items-start flex-1 pl-6 py-2">
+                        <h1 className="text-base font-semibold">บทที่ : {chapter.name}</h1>
                         <div className="py-1">
-                            <span className='text-base text-[#606060] pr-4'>{1}/{chapter.lessonCount}</span>
+                            <span className='text- text-[#202020] font-medium text-sm pr-4'>{1}/{chapter.lessonCount}</span>
                             <FontAwesomeIcon icon={faClock} color="#606060" className="pr-4" />
-                            <span className='text-base text-[#606060]'>
-                                {chapter.chapterLength / 3600 >= 1 ? chapter.chapterLength / 3600 + "ชั่วโมง" + ((chapter.chapterLength % 3600 > 0) ? chapter.chapterLength % 3600 + "นาที" : "") : chapter.chapterLength / 60 + "นาที"}
+                            <span className='text-sm text-[#404040]'>
+                                {chapter.chapterLength / 3600 >= 1 ? chapter.chapterLength / 3600 + " ชั่วโมง" + ((chapter.chapterLength % 3600 > 0) ? chapter.chapterLength % 3600 + " นาที" : "") : chapter.chapterLength / 60 + " นาที"}
                             </span>
                         </div>
                     </div>
@@ -65,9 +65,9 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
                     </div>
 
                 </div>
-                <hr className="w-full text-[#b0b0b0] border-t-4 py-0.5" />
+                <hr className="w-full text-[#b0b0b0] border-t-2 py-0.5" />
                 {show && lessons.map((lesson) => (
-                    <div key={lesson.lessonID} className="w-full">
+                    <div key={lesson.lessonID} className="w-full sm:text-sm">
                         <LessonSlot lesson={lesson} finished={checkIfFinished(lesson.lessonID)} onSelectLesson={onSelectLesson}
                             isFocused={currentLesson?.lessonID == lesson.lessonID}
                             onFinishedChange={(f) => {

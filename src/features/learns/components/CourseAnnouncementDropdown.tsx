@@ -56,7 +56,7 @@ const CourseAnnouncementDropdown = (
 
   return (
     <div className="w-[720px]">
-      <div className="cursor-pointer w-full bg-[#ECF3F9] border-[1px] border-t-[#b0b0b0] py-4" onClick={toggleExpansion}>
+      <div className="cursor-pointer w-full bg-[#ECF3F9] border-b-[2px] border-b-[#b0b0b080] py-4" onClick={toggleExpansion}>
         <div className="flex items-center justify-between">
           <h3 className=" flex-grow ml-[25px] font-me">
             {courseAnnouncement.name}
@@ -106,7 +106,7 @@ const CourseAnnouncementDropdown = (
                 <a
                   href={attachment.src}
                   key={index}
-                  className="flex items-center justify-center border border-[#a0a0a0]-50 mx-[25px] mt-[10px] h-20 w-11/12"
+                  className="flex items-center justify-center border border-[#a0a0a0]-5 mx-[25px] mt-[10px] h-20 w-11/12"
                 >
                   <div className=" w-1/5 h-full border border-[#a0a0a0]-50 flex items-center justify-center">
                       { attachment.attachmentType == "image" ? (

@@ -29,7 +29,7 @@ function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onS
         })
     }
     return (
-        <div>
+        <div className="w-full">
             {chapters.map((chapter, index) => (
                 <ChapterOutline chapter={chapter} lessonsProgress={_getChapterProgress(chapter.chapterID)} onSelectLesson={onSelectLesson} key={index}
                     onUpdateProgress={onUpdateProgress} currentLesson={currentLesson} />
@@ -46,10 +46,10 @@ interface _LessonDisplayProp {
 
 function _LessonDisplay({ lesson, progress, onLessonEnd }: _LessonDisplayProp) {
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
-    if (!lesson) return (<div>Not found</div>)
+    if (!lesson) return (<div className="text-lg font-bold text-[#505050]">คลิ๊กบทเรียนด้านล่างเพื่อ เริ่มเรียนกันเถอะ</div>)
     if (lesson.lessonType == 'video') {
         return (
-            <div>
+            <div className="">
                 <VideoPlayer url={lesson.src} />
             </div>
         )
@@ -104,21 +104,21 @@ function LearnCourse() {
         updateLessonProgress(currentProgress).then(() => { forceUpdate() })
     }
     return (
-        <div className="bg-[#eeeeee80] h-full pb-20">
+        <div className="px-24">
             <div className="flex pt-8 pl-14 pb-14">
                 <h1 className="text-black font-bold text-4xl">คอร์สเรียน</h1>
                 <h1 className="text-gray-600 font-semibold text-3xl my-auto ml-4"></h1>
             </div>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center w-full h-80">
                 <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} onLessonEnd={onLessonEnd} />
             </div>
-            <div className="flex flex-col items-center mx-20 mt-20">
+            <div className="flex flex-col items-start mx-20 mt-20 h-full">
 
                 {(() => {
                     if (currentLesson == undefined) return (<></>)
                     const currentChapter = getChapter(currentLesson.chapterID)
                     return (
-                        <div className="self-start">
+                        <div className="self-start h-10">
                             <h1 className="text-black font-bold text-2xl pb-4">คำอธิบาย (ของ ch) บทที่ {currentChapter.chapterNumber}: {currentChapter.name}</h1>
                             <p className="font-medium text-lg" >{currentChapter.description}</p>
                         </div>
@@ -126,15 +126,15 @@ function LearnCourse() {
                 })()}
                 <div className="flex mt-20 mb-10 self-start">
                     <button onClick={() => { setOutlineViewMode("contents") }}>
-                        <h1 className="text-2xl font-bold">เนื้อหาคอร์สเรียน</h1>
-                        <div className={`bg-black ${outlineViewMode == "contents" ? "h-3" : "h-3 bg-transparent"}`}></div>
+                        <h1 className="text-xl font-bold">เนื้อหาคอร์สเรียน</h1>
+                        <div className={`bg-black ${outlineViewMode == "contents" ? "h-2 mt-1" : "h-2 mt-1 bg-transparent"}`}></div>
                     </button>
                     <button className="ml-10" onClick={() => { setOutlineViewMode("announcements") }}>
-                        <h1 className="text-2xl font-bold">ประกาศจากคอร์สเรียน</h1>
-                        <div className={`bg-black ${outlineViewMode == "announcements" ? "h-3" : "h-3 bg-transparent"}`}></div>
+                        <h1 className="text-xl font-bold">ประกาศจากคอร์สเรียน</h1>
+                        <div className={`bg-black ${outlineViewMode == "announcements" ? "h-2 mt-1" : "h-2 mt-1 bg-transparent"}`}></div>
                     </button>
                 </div>
-                <div className="bg-white w-full px-20 pt-12 pb-8 ">
+                <div className="bg-white px-10 pt-12 pb-8">
                     {(() => {
                         if (outlineViewMode == 'contents') {
                             return (

@@ -1,15 +1,17 @@
 import { useDispatch} from "react-redux"
-import { clearItem } from "../slices/basketSlice"
+import { clearItem, } from "../slices/basketSlice"
 import { purchaseCourse } from '../features/stores/services/purchase'
 import { useUser } from '../hooks/useUser'
 import Swal from 'sweetalert2'
 import { useBasket } from '../features/stores/hooks/useBasket'
+import { useNavigate } from "react-router-dom"
 
 function BasketPayment() {
     const { user } = useUser()
     const basket = useBasket()
     const dispatcher = useDispatch()
     const sumPriceDiv=document.getElementById("sumPriceDiv")
+    const navigate = useNavigate()
 
     const handlePayment = async () => {
         const transction = await purchaseCourse(user.userID, "1111111111111");
@@ -27,6 +29,8 @@ function BasketPayment() {
                 icon: 'error'
             })
         }
+
+        { navigate({ pathname: '/learn/courses' }, { replace: true }) }
     }
 
     let sum=0;
@@ -40,8 +44,8 @@ function BasketPayment() {
 
    
     return (
-        <div className=" flex flex-row bg-[#EEEEEE80]">
-            <div className=" flex flex-col w-[60%] mt-[3%] mb-[3%] bg-white">
+        <div className=" flex flex-row bg-[#e0dfdf80]">
+            <div className=" flex flex-col w-[60%] mt-[3%] mb-[3%] bg-[#FFFFFF] shadow-lg">
                 <div className=" ml-[5%] mr-[10%] ">
                     <div className=" font-extrabold text-4xl mt-[5%]">
                         ชำระเงิน
@@ -50,7 +54,7 @@ function BasketPayment() {
                         วิธีการชำระเงิน
                     </div>
                 
-                    <div className=" flex flex-row space-x-10 mt-[3%] items-center bg-[#F0F0F0] p-4">
+                    <div className=" flex flex-row space-x-10 mt-[3%] items-center bg-[#c8c7c780] p-4">
                         <input id="debit-checkbox" type="radio" name="group1" className="w-8 h-8" />
                         <label className="ml-2 text-xl font-semibold text-gray-900 dark:text-gray-300">บัตรเครดิต/เดบิต</label>
                     </div>
@@ -76,7 +80,7 @@ function BasketPayment() {
                         </div>
                     </div>
 
-                    <div className=" flex flex-row space-x-10 mt-[4%] items-center bg-[#F0F0F0] p-4">                            
+                    <div className=" flex flex-row space-x-10 mt-[4%] items-center bg-[#c8c7c780] p-4">                            
                         <input id="debit-checkbox" type="radio" name="group1" className="w-8 h-8 p" />
                         <label className="ml-2 text-xl font-semibold text-gray-900 dark:text-gray-300">PayPal</label>
                     </div>

@@ -1,6 +1,7 @@
 import { ClassContext } from "../../../pages/teachers/CreateClass.tsx";
 import React, { useContext, useRef } from "react";
 import { availableCategories } from "../types/class.ts";
+import { uploadFile } from "../../../services/uploader/file.ts";
 
 function _Name() {
   const classContext = useContext(ClassContext);
@@ -70,12 +71,14 @@ function _Thumbnail() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // TODO: Upload to online storage and get url back
-        onUpdateThumbnailUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      uploadFile(file)
+        .then((src) => {
+          onUpdateThumbnailUrl(src);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Upload failed");
+        });
     }
   };
   const onUpdateThumbnailUrl = (thumbnailUrl: string) => {

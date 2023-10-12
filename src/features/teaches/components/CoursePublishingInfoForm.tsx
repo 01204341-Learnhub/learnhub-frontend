@@ -2,6 +2,7 @@ import React, { useContext, useRef } from "react";
 import { CourseContext } from "../../../pages/teachers/CreateCourse.tsx";
 import { useTags } from "../hooks/useTags.ts";
 import { Tag } from "../types/tags.ts";
+import { uploadFile } from "../../../services/uploader/file.ts";
 
 function _Name() {
   const courseContext = useContext(CourseContext);
@@ -71,12 +72,14 @@ function _Thumbnail() {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // TODO: Upload to online storage and get url back
-        onUpdateThumbnailUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      uploadFile(file)
+        .then((src) => {
+          onUpdateThumbnailUrl(src);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Upload failed");
+        });
     }
   };
   const onUpdateThumbnailUrl = (thumbnailUrl: string) => {
@@ -159,7 +162,7 @@ function _Price() {
 
 function _Category() {
   const courseContext = useContext(CourseContext);
-  const { tags: availableTags } = useTags()
+  const { tags: availableTags } = useTags();
   const onUpdateTag = (tag: Tag) => {
     const updatedCourse = { ...courseContext.course };
     updatedCourse.tag = tag;
@@ -172,7 +175,7 @@ function _Category() {
       }
     }
     throw new Error("Tag not found");
-  }
+  };
   return (
     <div className="flex flex-col justify-start items-start space-y-3 w-full">
       <h2 className="text-black text-[18px] font-semibold">กำหนดหมวดหมู่</h2>
@@ -182,7 +185,10 @@ function _Category() {
       <select
         value={courseContext.course.tag.tagID}
         onChange={(e) => {
-          onUpdateTag({ tagID: e.target.value, name: tagIDtoName(e.target.value) });
+          onUpdateTag({
+            tagID: e.target.value,
+            name: tagIDtoName(e.target.value),
+          });
         }}
         className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
       >

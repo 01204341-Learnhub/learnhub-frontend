@@ -1,12 +1,8 @@
 import React from "react";
 import { Attachment } from "../types/thread";
-import { getFileTypeFromSrc } from "../../../utils/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCirclePlay,
-  faDownload,
-  faFileLines,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCirclePlay, faFileLines } from "@fortawesome/free-solid-svg-icons";
+import { getFileNameFromSrc } from "../../../utils/functions";
 
 interface ClassThreadAttachmentProps {
   attachment: Attachment;
@@ -35,18 +31,10 @@ function ClassThreadAttachment({ attachment }: ClassThreadAttachmentProps) {
                 <FontAwesomeIcon icon={faCirclePlay} size="2x" />
               </div>
             );
-          }
-          if (attachment.typ === "doc") {
+          } else {
             return (
               <div className="flex justify-center items-center">
                 <FontAwesomeIcon icon={faFileLines} size="2x" />
-              </div>
-            );
-          }
-          if (attachment.typ === "file") {
-            return (
-              <div className="flex justify-center items-center">
-                <FontAwesomeIcon icon={faDownload} size="2x" />
               </div>
             );
           }
@@ -54,10 +42,10 @@ function ClassThreadAttachment({ attachment }: ClassThreadAttachmentProps) {
       </div>
       <div className="w-[70%]">
         <p className="text-[#707070] group-hover:text-black text-[16px] font-semibold truncate">
-          {attachment.src}
+          {getFileNameFromSrc(attachment.src)}
         </p>
         <p className="text-[#808080] text-[16px] font-normal">
-          {getFileTypeFromSrc(attachment.src)}
+          {attachment.typ}
         </p>
       </div>
     </div>

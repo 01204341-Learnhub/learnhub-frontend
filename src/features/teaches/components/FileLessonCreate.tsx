@@ -51,7 +51,7 @@ function FileLessonCreate({
   };
 
   return (
-    <div>
+    <div className="w-full">
       <div className="ml-[70px] mt-[20px] flex items-center">
         <h1 className="text-black text-[24px] font-bold">
           บทที่ {chapterNumber} :{" "}

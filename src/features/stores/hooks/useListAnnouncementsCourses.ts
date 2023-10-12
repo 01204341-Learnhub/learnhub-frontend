@@ -10,7 +10,6 @@ function useAnnouncementsCourses(courseID: string) {
   
   const fetchAnnouncementsCourses = async () => {
     const announcementsData = await listAnnouncements(courseID);
-    //setAnnouncements(announcementsData);
     return announcementsData;
   };
   useEffect(() => {
@@ -20,7 +19,6 @@ function useAnnouncementsCourses(courseID: string) {
       setIsFetching(false);
     });
   }, [courseID]);
-
   return { announcements, isFetching };
 }
 

@@ -31,12 +31,23 @@ const CourseAnnouncementDropdown = (
 
   function formatDate(timestamp: number): string {
     const date = new Date(timestamp * 1000);
-    return date.toLocaleDateString("th-TH", {
+    const today = new Date();
+    const isToday = date.getDate() === today.getDate() &&
+                    date.getMonth() === today.getMonth() &&
+                    date.getFullYear() === today.getFullYear();
+    if (isToday) {
+      return "วันนี้ " + date.toLocaleTimeString("th-TH", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } else {
+      return date.toLocaleDateString("th-TH", {
         year: "numeric",
         month: "short",
         day: "numeric",
         weekday: "short",
       });
+    }
   }
 
   const toggleExpansion = () => {
@@ -47,11 +58,11 @@ const CourseAnnouncementDropdown = (
     <div className="w-[720px]">
       <div className="cursor-pointer w-full bg-[#ECF3F9] border-[1px] border-t-[#b0b0b0] py-4" onClick={toggleExpansion}>
         <div className="flex items-center justify-between">
-          <h3 className=" flex-grow ml-[25px] font-semibold">
+          <h3 className=" flex-grow ml-[25px] font-me">
             {courseAnnouncement.name}
           </h3>
           <p className=" text-sm ">
-            วัน {formatDate(courseAnnouncement.lastEdit)}{" "}
+            {formatDate(courseAnnouncement.lastEdit)}{" "}
           </p>
           {isExpanded ? (
             <FontAwesomeIcon
@@ -85,24 +96,31 @@ const CourseAnnouncementDropdown = (
                 </p>
               </div>
             </div>
-            <div className="mx-[95px]">
+            <div className="mx-12 my-3">
               <h3 className="font-bold text-lg">{courseAnnouncement.name}</h3>
               <p className="text-base">{courseAnnouncement.text}</p>
             </div>
 
             {courseAnnouncement.attachments.map((attachment, index) => (
               <div className="flex items-center justify-center mx-2">
-                <div
+                <a
+                  href={attachment.src}
                   key={index}
                   className="flex items-center justify-center border border-[#a0a0a0]-50 mx-[25px] mt-[10px] h-20 w-11/12"
                 >
                   <div className=" w-1/5 h-full border border-[#a0a0a0]-50 flex items-center justify-center">
-                    <FontAwesomeIcon
-                      icon={faFile}
-                      color="#555555"
-                      size="2xl"
-                      className=""
-                    />
+                      { attachment.attachmentType == "image" ? (
+                        <img src={attachment.src} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <div>
+                          <FontAwesomeIcon
+                          icon={faFile}
+                          color="#555555"
+                          size="2xl"
+                          className=""
+                        />
+                        </div>
+                      )}
                   </div>
                   <p className="w-4/5 font-semibold text-xs mx-6 text-[#808080] truncate">
                     {attachment.src}
@@ -113,7 +131,7 @@ const CourseAnnouncementDropdown = (
                     size="2xl"
                     className=" mr-8 "
                   />
-                </div>
+                </a>
               </div>
             ))}
           </div>

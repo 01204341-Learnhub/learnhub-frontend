@@ -3,9 +3,9 @@ import { GetCourseAnnouncementResponse, ListCourseAnnouncementResponse } from ".
 import { CourseAnnouncement } from "../types/courseAnnouncements";
 
 
-const baseURL = "http://localhost:8000";
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
-async function addAnnouncement(courseID: string, name: string, text: string, attachmentList: {attachmentType: string ,src: string}[]) : Promise<string | boolean> {
+async function addAnnouncement(courseID: string, name: string, text: string, attachmentList: {attachmentType: string ,src: string}[]) : Promise<string> {
     const url = `${baseURL}/programs/courses/${courseID}/announcements`;
     const body = {
         name,
@@ -17,11 +17,10 @@ async function addAnnouncement(courseID: string, name: string, text: string, att
     };
     try {
         const res = await axios.post<{ announcement_id: string }>(url, body);
-        console.log("Announcement added");
         return res.data.announcement_id;
     } catch (error) {
         console.error("Error adding announcement:", error);
-        return false;
+        return "";
     }
 }
 
@@ -48,18 +47,19 @@ export async function listAnnouncements(courseID : string) {
 async function getAnnouncement(courseID : string, announcementID : string) {
     const url = `${baseURL}/programs/courses/${courseID}/announcements/${announcementID}`;
     const res = await axios.get<GetCourseAnnouncementResponse>(url);
+    const responseData = res.data;
     if (res.status == 200) {
         return {
-            announcementID: res.data.announcement_id,
+            announcementID: responseData.announcement_id,
             teacher: {
-                teacherID: res.data.teacher.teacher_id,
-                teacherName: res.data.teacher.teacher_name,
-                profilePic: res.data.teacher.profile_pic,
+                teacherID: responseData.teacher.teacher_id,
+                teacherName: responseData.teacher.teacher_name,
+                profilePic: responseData.teacher.profile_pic,
                 },
-            name: res.data.name,
-            lastEdit: res.data.last_edit,
-            text: res.data.text,
-            attachments: res.data.attachments.map((attachment) => ({
+            name: responseData.name,
+            lastEdit: responseData.last_edit,
+            text: responseData.text,
+            attachments: responseData.attachments.map((attachment) => ({
                 attachmentType: attachment.attachment_type,
                 src: attachment.src,
             })),

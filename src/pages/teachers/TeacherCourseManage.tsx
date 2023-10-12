@@ -1,28 +1,49 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CourseAnnouncementDropdown from "../../features/learns/components/CourseAnnouncementDropdown";
-import { addAnnouncement } from "../../features/stores/services/courseAnnouncements";
+import {
+  addAnnouncement,
+  getAnnouncement,
+} from "../../features/stores/services/courseAnnouncements";
 import Swal from "sweetalert2";
 import { uploadFile } from "../../services/uploader/file";
 import { uploadImageFile } from "../../services/uploader/image";
 import { useAnnouncementsCourses } from "../../features/stores/hooks/useListAnnouncementsCourses";
-
-
+import { getFileTypeFromSrc } from "../../utils/functions";
+import { useCourseDetail } from "../../features/stores/hooks/useCourseDetail";
+import { CourseAnnouncement } from "../../features/stores/types/courseAnnouncements";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 function TeacherCourseManage() {
   const { id } = useParams();
-  //const [isAddNewPost, setIsAddNewPost] = useState<boolean>(false);
-  const {announcements, isFetching} = useAnnouncementsCourses(id);
+  const { courseDetail, isFetching: isFetchingCourseDetail } =
+    useCourseDetail(id);
+  const { announcements, isFetching } = useAnnouncementsCourses(id);
+  const [announcementsData, setAnnouncementData] = useState<
+    CourseAnnouncement[]
+  >([]);
   const [isClickAdd, setIsClickAdd] = useState<boolean>(false);
   const [nameAnc, setNameAnc] = useState<string>("");
   const [textAnc, setTextAnc] = useState<string>("");
   const [isClickAddLink, setIsClickAddLink] = useState<boolean>(false);
   const [linkAttach, setLinkAttach] = useState<string>("");
-  const [attachments, setAttachments] = useState<{
-    attachmentType: string;
-    src: string;
-  }[]>([]);
 
+  const [attachments, setAttachments] = useState<
+    {
+      attachmentType: string;
+      src: string;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    async function fetchAnnouncements() {
+      if (!isFetching) {
+        setAnnouncementData(announcements);
+      }
+    }
+    fetchAnnouncements();
+  }, [isFetching, announcements]);
 
   const changeTextAnc = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextAnc(e.target.value);
@@ -40,11 +61,20 @@ function TeacherCourseManage() {
     setIsClickAddLink(false);
   };
 
+  const handleClickPublish = () => {
+    const attachmentType = getFileTypeFromSrc(linkAttach);
+    setAttachments([
+      ...attachments,
+      { attachmentType: attachmentType, src: linkAttach },
+    ]);
+    setIsClickAddLink(false);
+  };
+
   const handleAttachmentLinkChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setLinkAttach(event.target.value);
-    setAttachments([...attachments, { attachmentType: "file", src: linkAttach }]);
+    const newLinkAttach = event.target.value;
+    setLinkAttach(newLinkAttach);
   };
 
   const handleAttachmentChange = async (
@@ -52,7 +82,6 @@ function TeacherCourseManage() {
   ) => {
     const fileList = event.target.files;
     if (fileList && fileList.length == 1) {
-
       let url = "";
       const isImage = fileList[0].type.includes("image");
       if (isImage) {
@@ -61,14 +90,12 @@ function TeacherCourseManage() {
         url = await uploadFile(fileList[0]);
       }
       setAttachments([...attachments, { attachmentType: "file", src: url }]);
-      //setIsAddNewPost(true);
-
     } else {
-        alert("กรุณาเลือกไฟล์เพียง 1 ไฟล์");
+      alert("กรุณาเลือกไฟล์เพียง 1 ไฟล์");
     }
   };
 
-  const addNewAnnouncement = async () => {
+  const addNewAnnouncement = async (): Promise<string> => {
     if (nameAnc == "" || textAnc == "") {
       Swal.fire({
         icon: "error",
@@ -76,18 +103,20 @@ function TeacherCourseManage() {
         showConfirmButton: false,
         timer: 1500,
       });
-      return;
+      return "";
     }
-    
+
     addAnnouncement(id!, nameAnc, textAnc, attachments)
-      .then((announcementId) => {
-        console.log(announcementId);
+      .then(async (announcementId) => {
         Swal.fire({
           icon: "success",
           title: "สร้างประกาศสำเร็จ",
           showConfirmButton: false,
           timer: 1500,
         });
+        const addNewAnnouncement = await getAnnouncement(id!, announcementId);
+        setAnnouncementData([...announcementsData, addNewAnnouncement]);
+        return announcementId;
       })
       .catch((err) => {
         Swal.fire({
@@ -96,6 +125,7 @@ function TeacherCourseManage() {
           showConfirmButton: false,
           timer: 1500,
         });
+        return "-1";
       });
     setIsClickAdd(false);
   };
@@ -148,9 +178,10 @@ function TeacherCourseManage() {
                   <>
                     {attachments.map((attach, index) => {
                       return (
-                        <div
-                          key={index} 
-                          className="w-full mt-4 h-16 border-2 flex">
+                        <a
+                          key={index}
+                          className="w-full mt-4 h-16 border-2 flex"
+                        >
                           <div className="w-1/5 border-r-2">
                             <img
                               src={attach.src}
@@ -158,12 +189,14 @@ function TeacherCourseManage() {
                               className=" object-cover w-full h-full"
                             />
                           </div>
-                          <div className="w-4/5 flex items-center pl-4">
-                            <h1 className="text-xs text-[#606060]">
-                              {attach.src}
-                            </h1>
+                          <div className="w-4/5 h-full flex flex-col items-center justify-center mx-2 overflow-hidden">
+                            <a href={attach.src}>
+                              <h1 className="text-xs text-[#606060] truncate">
+                                {attach.src}
+                              </h1>
+                            </a>
                           </div>
-                        </div>
+                        </a>
                       );
                     })}
                   </>
@@ -172,7 +205,7 @@ function TeacherCourseManage() {
               <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse justify-between items-center sm:px-6">
                 <div className="flex flex-row-reverse">
                   <button
-                    onClick={addNewAnnouncement}
+                    onClick={handlePublish}
                     type="button"
                     className="inline-flex mx-2 w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto"
                   >
@@ -228,7 +261,7 @@ function TeacherCourseManage() {
                               ยกเลิก
                             </button>
                             <button
-                              onClick={handleCancleAddLink}
+                              onClick={handleClickPublish}
                               type="button"
                               className="text-sm font-bold mx-2 mt-4"
                             >
@@ -252,61 +285,143 @@ function TeacherCourseManage() {
     setIsClickAdd(true);
   };
 
+  const handlePublish = async () => {
+    addNewAnnouncement();
+  };
+
   const handleCloseModal = () => {
-    console.log("close modal");
     setIsClickAdd(false);
+    setNameAnc("");
+    setTextAnc("");
+    setAttachments([]);
   };
 
   const renderAnnouncements = () => {
     if (isFetching) {
-        return <div>loading...</div>
+      return <div>loading...</div>;
     }
     return (
       <>
-        {announcements.map((announcement, index) => (
+        {announcementsData.map((announcement, index) => (
           <div key={index}>
-            <CourseAnnouncementDropdown {...announcement} />
+            <CourseAnnouncementDropdown
+              teacher={{
+                teacherID: announcement.teacher.teacherID,
+                teacherName: announcement.teacher.teacherName,
+                profilePic: announcement.teacher.profilePic,
+              }}
+              {...announcement}
+            />
           </div>
         ))}
       </>
     );
   };
+  if (isFetchingCourseDetail || isFetching) {
+    return <div>loading...</div>;
+  } else {
+    return (
+      <div className="w-full pb-12 px-4 mx-8">
+        <div className="flex items-center py-4">
+          <h1 className="font-bold text-2xl">คอร์สเรียนของฉัน</h1>
+          <h2 className="rounded-full font-semibold px-2 py-1 bg-[#FF9B9B] ml-5">
+            course
+          </h2>
+        </div>
+        <h1 className="font-semibold text-xl py-4 my-4 text-[#404040]">
+          {courseDetail.name}
+        </h1>
+        <main className="flex w-full h-full">
+          <>
+            <section className="basis-1/3 flex flex-col items-start">
+              <div className="w-72 h-40 bg-black flex flex-col items-center justify-center">
+                <img
+                  src={courseDetail.thumnailUrl}
+                  alt=""
+                  className="object-cover w-72 h-40"
+                />
+              </div>
+              <div className="flex flex-col justify-start justify-items-center w-72 h-40 bg-white drop-shadow-lg pl-4 pr-5 py-4">
+                <div className="flex justify-between items-center">
+                  <h1 className="text-sm font-semibold pb-1">คะแนนที่ได้</h1>
+                  <div>
+                    {[1, 2, 3, 4, 5].map((index) => (
+                      <FontAwesomeIcon
+                        icon={faStar}
+                        key={index}
+                        className={`w-4 h-4 px-0.5 ${
+                          index <= courseDetail.rating
+                            ? "text-black"
+                            : "text-gray-300"
+                        }`}
+                        aria-hidden="true"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <h2 className="text-sm font-semibold">
+                    จำนวนผู้เรียนที่เรียน
+                  </h2>
+                  <span>{courseDetail.studentCount}</span>
+                </div>
 
-  return (
-    <div className="w-full bg-purple-100">
-      <div className="flex m-6 items-center py-4">
-        <h1 className="font-bold text-2xl">คอร์สเรียนของฉัน</h1>
-        <h2 className="rounded-full font-semibold px-2 py-1 bg-[#FF9B9B] ml-5">
-          course
-        </h2>
+                <div className="flex h-full items-end">
+                  <div className="flex overflow-hidden">
+                    {courseDetail.tags.length < 3
+                      ? courseDetail.tags.map((tag) => {
+                          return (
+                            <>
+                              <div
+                                className="bg-[#FF8989] h-7 w-14 mr-2 font-semibold text-black text-xs flex items-center basis-[64px] shrink-0 grow-0 justify-center"
+                                key={tag.tagID}
+                              >
+                                <span>{tag.name}</span>
+                              </div>
+                            </>
+                          );
+                        })
+                      : courseDetail.tags.map((tag, index) => {
+                          if (index > 3) {
+                            return (
+                              <>
+                                <div
+                                  className="bg-[#FF8989] h-7 w-14 mr-2 font-semibold text-black text-xs flex items-center basis-[64px] shrink-0 grow-0 justify-center"
+                                  key={tag.tagID}
+                                >
+                                  <span>{tag.name}</span>
+                                </div>
+                              </>
+                            );
+                          } else {
+                            return null;
+                          }
+                        })}
+                  </div>
+                </div>
+              </div>
+            </section>
+          </>
+
+          <section className="flex flex-col items-start basis-2/3">
+            <div className="flex w-[720px] pt-4 pb-2 justify-between">
+              <h1 className="text-lg font-semibold">
+                โพสต์ที่ประกาศในคอร์สนี้
+              </h1>
+              <button
+                onClick={handleAddAnnouncement}
+                className="px-2 py-1 ml-5"
+              >
+                + สร้างโพสต์
+              </button>
+            </div>
+            {isClickAdd && AddAnnouncementModal()}
+            <div>{renderAnnouncements()}</div>
+          </section>
+        </main>
       </div>
-      <h1 className="font-semibold text-xl m-6 py-4">Course Name Resirdute</h1>
-      <main className="flex w-full h-full">
-        <section className="basis-1/3 bg-emerald-100 flex flex-col items-center">
-          <div className="w-72 h-40 bg-black flex flex-col items-center justify-center">
-            <p className="text-white text-center">Image</p>
-            <img src="" alt="" className=" object-cover" />
-          </div>
-          <div className="w-72 h-40 bg-white drop-shadow-lg"></div>
-        </section>
-        <section className="flex flex-col items-center basis-2/3">
-          <div className="flex w-[720px] pt-4 pb-2 justify-between">
-            <h1 className="text-lg font-semibold">โพสต์ที่ประกาศในคอร์สนี้</h1>
-            <button
-              onClick={handleAddAnnouncement}
-              className="font-semibold px-2 py-1 ml-5"
-            >
-              + สร้างโพสต์
-            </button>
-          </div>
-          {isClickAdd && AddAnnouncementModal()}
-          <div>
-            {renderAnnouncements()}
-          </div>
-        </section>
-      </main>
-    </div>
-  );
+    );
+  }
 }
 
 export default TeacherCourseManage;

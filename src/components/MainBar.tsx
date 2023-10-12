@@ -4,8 +4,8 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
-import booklogo from '../assets/Images/bookLogo.png'
-import namelogo from '../assets/Images/textNameLogo.png'
+import booklogo from '../assets/images/bookLogo.png'
+import namelogo from '../assets/images/textNameLogo.png'
 import BasketItemSlot from '../features/stores/components/BasketItemSlot'
 import { useBasket } from '../features/stores/hooks/useBasket'
 import { fetchBasketItems } from '../features/stores/services/purchase'
@@ -78,7 +78,7 @@ function MainBar() {
             <div className='flex flex-row items-center w-2/12' onClick={() => { navigate("/home") }}>
                 <img src={namelogo} alt="namelogo" />
             </div>
-            { user && user.userType ==='teacher' ? <div className='w-2/4 py-2 px-2'/> : ( 
+            {user && user.userType === 'teacher' ? <div className='w-2/4 py-2 px-2' /> : (
                 <div className='bg-gray-300 flex rounded-full w-2/4 py-2 px-2'>
                     <FontAwesomeIcon icon={faMagnifyingGlass} color='black' size='xl' className='mr-4 ml-4' />
                     <input
@@ -88,14 +88,14 @@ function MainBar() {
                 </div>
             )}
             <div className='w-2/12 grid grid-cols-4 my-2'>
-                { user && user.userType==='teacher' ? null : (
+                {user && user.userType === 'teacher' ? null : (
                     <div className=' col-span-3 grid grid-cols-3'>
                         <button>
                             <Link to={"/learn/overview"}>
                                 <FontAwesomeIcon icon={faBook} size='xl' />
                             </Link>
                         </button>
-                        
+
                         <button onClick={() => toggleDropdown('mypindropdown')}>
                             <FontAwesomeIcon icon={faHeart} size='xl' color={openDropdown === 'mypindropdown' ? '#FF2171' : 'none'} />
 
@@ -120,7 +120,7 @@ function MainBar() {
                                 <div
                                     className='overflow-y-auto max-h-[450px] min-h-0'
                                     style={{ display: openDropdown === 'mycartdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
-                                    
+
                                 >
                                     <div className="px-8 py-3">
                                         {basketItems.map((item) => (

@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { Thread } from "../types/thread";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
-import PeopleSvg from "../../../assets/Images/people.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
+import PeopleSvg from "../../../assets/images/people.svg";
+import { LearnhubUser } from "../../../types/user";
 import { toDateTimeStringOmitDateOnSameDay } from "../../../utils/functions";
+import { Thread } from "../types/thread";
 import ClassThreadAttachment from "./ClassThreadAttachment";
 import ClassThreadReplyEntry from "./ClassThreadReplyEntry";
 import ClassThreadReplyInputBar from "./ClassThreadReplyInputBar";
-import { LearnhubUser } from "../../../types/user";
 
 interface ClassHomeworkDetailMainContentProps {
   user: LearnhubUser;
@@ -35,7 +35,7 @@ function ClassHomeworkDetailMainContent({
           <div className="flex justify-between items-start w-full mt-1">
             <p className="text-[#404040] text-[14px] font-semibold">
               {thread.homeworkSubmissionStatus === "submitted-and-graded" &&
-              thread.homeworkGotScore !== undefined
+                thread.homeworkGotScore !== undefined
                 ? `${thread.homeworkGotScore}/`
                 : ""}
               {thread.homeworkFullScore} คะแนน

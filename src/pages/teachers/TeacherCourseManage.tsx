@@ -9,7 +9,7 @@ import Swal from "sweetalert2";
 import { uploadFile } from "../../services/uploader/file";
 import { uploadImageFile } from "../../services/uploader/image";
 import { useAnnouncementsCourses } from "../../features/stores/hooks/useListAnnouncementsCourses";
-import { getFileTypeFromSrc } from "../../utils/functions";
+import { getFileNameFromSrc } from "../../utils/functions";
 import { useCourseDetail } from "../../features/stores/hooks/useCourseDetail";
 import { CourseAnnouncement } from "../../features/stores/types/courseAnnouncements";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -62,7 +62,7 @@ function TeacherCourseManage() {
   };
 
   const handleClickPublish = () => {
-    const attachmentType = getFileTypeFromSrc(linkAttach);
+    const attachmentType = getFileNameFromSrc(linkAttach);
     setAttachments([
       ...attachments,
       { attachmentType: attachmentType, src: linkAttach },

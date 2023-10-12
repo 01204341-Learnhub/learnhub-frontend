@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import Swal from 'sweetalert2'
 import booklogo from '../assets/images/bookLogo.png'
 import namelogo from '../assets/images/textNameLogo.png'
 import BasketItemSlot from '../features/stores/components/BasketItemSlot'
@@ -54,22 +53,6 @@ function MainBar() {
             navigate('/', { replace: true })
         })
     }
-    if (!user) {
-        Swal.fire({
-            title: 'คุณยังไม่ได้เข้าสู่ระบบ',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'เข้าสู่ระบบ',
-            cancelButtonText: 'สมัครบัญชี',
-        }).then((reslt) => {
-            if (reslt.isConfirmed) {
-                navigate('/login', { replace: true })
-            } else if (reslt.dismiss === Swal.DismissReason.cancel) {
-                navigate('/register', { replace: true })
-            }
-        })
-    }
-
     return (
         <nav style={{ height: '100px', zIndex: 1000 }} className='fixed bg-white border-b-2 flex w-screen items-center py-5'>
             <div className=' flex flex-row items-center justify-center w-1/12'>

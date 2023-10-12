@@ -30,7 +30,6 @@ function BasketPayment() {
             })
         }
 
-        
         { navigate({ pathname: '/learn/courses' }, { replace: true }) }
     }
 

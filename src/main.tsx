@@ -20,16 +20,19 @@ import Register from "./pages/Register";
 import TeacherProfile from "./pages/TeacherProfile";
 import LearnCourse from "./pages/students/LearnCourse";
 import LearningClasses from "./pages/students/LearningClasses";
+import LearningClass from "./pages/students/LearningClass";
 import LearningHomeworkDetail from "./pages/students/LearningHomeworkDetail";
 import LearningHomeworks from "./pages/students/LearningHomeworks";
 import LearningOverview from "./pages/students/LearningOverview";
 import LearningSchedule from "./pages/students/LearningSchedule";
 import SelectCourse from "./pages/students/SelectCourse";
+import CreateClass from "./pages/teachers/CreateClass";
+import CreateCourse from "./pages/teachers/CreateCourse";
+import TeacherOverview from "./pages/teachers/TeacherOverview";
 import TeachingClasses from "./pages/teachers/TeachingClasses";
 import TeachingCourses from "./pages/teachers/TeachingCourses";
 import TeachingHomeworks from "./pages/teachers/TeachingHomeworks";
 import store from "./store";
-import LearningClass from "./pages/students/LearningClass";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -67,14 +70,19 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/learn/homework" element={<LearningHomeworks />} />
               <Route path="/learn/schedule" element={<LearningSchedule />} />
             </Route>
-            <Route element={<TeacherNavbarLayout />}>
-              <Route path="/teach/courses" element={<TeachingCourses />} />
-              <Route path="/teach/classes" element={<TeachingClasses />} />
-              <Route
-                path="/teach/classes/assignment/:assignmentID"
-                element={<TeachingClasses />}
-              />
-              <Route path="/teach/homework" element={<TeachingHomeworks />} />
+            <Route element={<ProtectedRoute />}>
+              <Route element={<TeacherNavbarLayout />}>
+                <Route path="/teach/courses" element={<TeachingCourses />} />
+                <Route path="/teach/classes" element={<TeachingClasses />} />
+                <Route
+                  path="/teach/classes/assignment/:assignmentID"
+                  element={<TeachingClasses />}
+                />
+                <Route path="/teach/homework" element={<TeachingHomeworks />} />
+                <Route path="/teach/overview" element={<TeacherOverview />} />
+                <Route path="/teach/create/course" element={<CreateCourse />} />
+                <Route path="/teach/create/class" element={<CreateClass />} />
+              </Route>
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

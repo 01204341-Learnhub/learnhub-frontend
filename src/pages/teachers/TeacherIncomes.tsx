@@ -19,19 +19,22 @@ function TeacherIncomes(){
         <div className="flex-cols h-full px-8 py-1">
             <div className="flex relative items-center w-full h-[200px]
             px-20 my-6 bg-[#f0f0f0]">
-                <div className="absolute flex flex-cols 
-                left-[75%] top-[10%]">
+                <div className="absolute w-[270px] h-[72px] flex flex-cols left-[72%]">
                     <button 
-                    className="bg-red-500 px-3 py-1 rounded-l-2xl justify-center"
+                    className={`h-full w-[50%] px-3 py-1 rounded-l-2xl justify-center font-bold text-xl
+                    ${!isShowMonth? 'bg-[#d9d9d9] shadow-inner text-[#606060]' :
+                    'bg-white drop-shadow-xl'}`}
                     onClick={() => setIsShowMonth(true)}
                     >
-                        แสดงในเดือน
+                        ในเดือนนี้
                     </button>
                     <button 
-                    className="bg-green-500 px-3 py-1 rounded-r-2xl justify-center"
+                    className={`h-full w-[50%] px-3 py-1 rounded-r-2xl justify-center font-bold text-xl
+                    ${isShowMonth? 'bg-[#d9d9d9] shadow-inner text-[#606060]' :
+                    'bg-white drop-shadow-xl'}`}
                     onClick={() => setIsShowMonth(false)}
                     >
-                        แสดงทุกการซื้อ
+                        ทั้งหมด
                     </button>
                 </div>
                 <div className="flex flex-rows items-end">
@@ -108,7 +111,7 @@ function _TransactionBox(props : _TransactionBoxProps) {
             <div className="flex w-[25%] h-full text-xl text-black items-center">
                 {props.buyer.studentName}
             </div>
-            <div className="flex w-[12%] h-full text-3xl text-black bg-[#ade792] justify-center items-center">
+            <div className="flex w-[12%] h-full text-2xl text-black bg-[#ade792] justify-center items-center">
                 +{props.price}
             </div>
         </div>

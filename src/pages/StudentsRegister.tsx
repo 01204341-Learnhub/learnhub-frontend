@@ -2,8 +2,8 @@ import { faEnvelope, faUnlockKeyhole, faUser } from "@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import regStudentFormImage from "../../src/assets/images/regStudentForm.png";
 import { createStudentWithEmail } from "../services/auth/createUser";
-import regStudentFormImage from "../../src/assets/Images/regStudentForm.png"
 
 function StudentsRegister() {
     const navigate = useNavigate();
@@ -41,7 +41,7 @@ function StudentsRegister() {
         if (password !== confirmpassword) {
             alert("Password and Confirm Password not match");
             return
-        } else if(firstname.trim().includes(' ') || lastname.trim().includes(' ')){
+        } else if (firstname.trim().includes(' ') || lastname.trim().includes(' ')) {
             alert("Firstname or Lastname contains whitespace");
             return
         }
@@ -58,22 +58,22 @@ function StudentsRegister() {
     return (
         <div className=" bg-gray-300 h-screen">
             <div className="grid grid-cols-2">
-        <div className=" h-screen">
-          <img
-            src={regStudentFormImage}
-            alt="smolRobotImage"
-            className=" z-0 w-full h-full relative object-cover"
-            overflow-hidden={true}
-          ></img>
-          <button
-            onClick={() => {
-              navigate("/register", { replace: true });
-            }}
-            className="absolute top-6 text-[24px] text-slate-700 ml-[2%]"
-          >
-            Back
-          </button>
-        </div>
+                <div className=" h-screen">
+                    <img
+                        src={regStudentFormImage}
+                        alt="smolRobotImage"
+                        className=" z-0 w-full h-full relative object-cover"
+                        overflow-hidden={true}
+                    ></img>
+                    <button
+                        onClick={() => {
+                            navigate("/register", { replace: true });
+                        }}
+                        className="absolute top-6 text-[24px] text-slate-700 ml-[2%]"
+                    >
+                        Back
+                    </button>
+                </div>
 
                 <div className="bg-white h-screen flex flex-col justify-center items-center">
                     <div className="">

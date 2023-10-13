@@ -2,8 +2,8 @@ import { faEnvelope, faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import bookLogo from "../../src/assets/Images/bookLogo.png";
-import textNameLogo from "../../src/assets/Images/textNameLogo.png";
+import bookLogo from "../../src/assets/images/bookLogo.png";
+import textNameLogo from "../../src/assets/images/textNameLogo.png";
 import { signInWithEmail } from "../services/auth/signIn";
 
 
@@ -58,7 +58,7 @@ export default function Login() {
                     </div>
 
                     <div className="flex flex-col items-center shadow-xl bg-white w-[600px] px-8 pt-8 pb-12 rounded-3xl">
-                        
+
                         <h1 className="text-center text-[40px] font-bold">เข้าสู่ระบบ</h1>
                         <div className=" flex flex-row justify-center space-x-10 mt-4">
                             <div className=" text-center text-[24px] font-bold">

@@ -8,7 +8,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTeacherWithEmail } from "../services/auth/createUser";
 
-import smolRobotImage from "../../src/assets/Images/smolRobot.jpeg";
+import smolRobotImage from "../../src/assets/images/smolRobot.jpeg";
 
 function TeacherRegister() {
   const navigate = useNavigate();

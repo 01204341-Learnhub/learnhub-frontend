@@ -81,7 +81,7 @@ function TeacherRegister() {
             onClick={() => {
               navigate("/register", { replace: true });
             }}
-            className="absolute top-6 text-[24px] text-slate-700 ml-[2%]"
+            className="absolute top-6 text-[30px] text-slate-700 ml-[2%]"
           >
             Back
           </button>

@@ -11,8 +11,7 @@ import ClassDatesInfoForm from "../../features/teaches/components/ClassDatesInfo
 import ClassGoalsInfoForm from "../../features/teaches/components/ClassGoalsInfoForm.tsx";
 import ClassPublishingInfoForm from "../../features/teaches/components/ClassPublishingInfoForm.tsx";
 import {
-  availableCategories,
-  Class,
+  Class
 } from "../../features/teaches/types/class.ts";
 
 interface _SideNavProps {
@@ -76,15 +75,15 @@ function _SideNav({
       </div>
       <button
         className={`w-fit h-fit p-3 hover:drop-shadow-md ${!readyToPublish || onPublish === undefined
-            ? "bg-gray-200"
-            : "bg-[#D9D9D9]"
+          ? "bg-gray-200"
+          : "bg-[#D9D9D9]"
           }`}
         onClick={onPublish}
       >
         <h1
           className={`font-semibold text-[20px] ${!readyToPublish || onPublish === undefined
-              ? "text-gray-400"
-              : "text-black"
+            ? "text-gray-400"
+            : "text-black"
             }`}
         >
           เผยแพร่คลาส
@@ -124,12 +123,8 @@ function _TopPanel({ cls }: _TopPanelProps) {
           classThumbnailUrl={cls.thumbnailUrl}
           className={cls.name}
           level={cls.level}
+          category="HARDCODE"
           price={cls.price}
-          tag={
-            availableCategories.find(
-              (category) => category.categoryId === cls.categoryId,
-            )?.name
-          }
           instructorName={cls.instructorName}
         />
       </div>

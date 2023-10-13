@@ -1,7 +1,9 @@
 import { LearnhubUser } from "../../../types/user";
 
 type Thread = {
-  cls: Class;
+  classId: string;
+  clsName: string;
+  teacher: LearnhubUser;
   threadId: string;
   name: string; // Title
   typ: "announcement" | "homework";
@@ -20,12 +22,6 @@ type Thread = {
   homeworkLastSubmissionDateTime?: Date; // For homework threads
   homeworkSubmissionFiles?: HomeworkSubmissionFile[]; // For homework threads
   homeworkGotScore?: number; // For homework threads
-};
-
-type Class = {
-  classId: string;
-  name: string;
-  teacher: LearnhubUser;
 };
 
 type Attachment = {
@@ -52,22 +48,41 @@ function generateMockUser(
     userType: typ,
     userID: userId,
     username: `User ${userId}`,
+    fullname: `User ${userId} fullname`,
     email: `${userId}@gmail.com`,
     profilePicture: `https://robohash.org/${userId}`,
   };
 }
 
-function generateMockHomeworkSubmissionFile(typ: string) {
-  if (!["image", "video", "doc", "file"].includes(typ)) {
+function generateMockAttachment(typ: string): Attachment {
+  if (!["image", "video", "file"].includes(typ)) {
+    console.error(new Error(`Invalid attachment type ${typ}`));
+  }
+  const urls = {
+    image:
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Favcirn6x434%00test-image.png?alt=media&token=80167929-e90a-4ff0-a623-d898fe50abc6",
+    video:
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Ffsjqm90y2vk%00test-video.mp4?alt=media&token=a25fb4ef-ec66-4ac2-aaba-8a9f99975284",
+    file: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fe623mdlccss%00test-file.pdf?alt=media&token=7fe9e0dc-93b9-4805-b537-df563fbfc2de",
+  };
+  return {
+    typ: typ,
+    src: urls[typ],
+  };
+}
+
+function generateMockHomeworkSubmissionFile(
+  typ: string
+): HomeworkSubmissionFile {
+  if (!["image", "video", "file"].includes(typ)) {
     console.error(new Error(`Invalid homework submission file type ${typ}`));
   }
   const urls = {
     image:
-      "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg",
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Favcirn6x434%00test-image.png?alt=media&token=80167929-e90a-4ff0-a623-d898fe50abc6",
     video:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    doc: "https://raw.githubusercontent.com/mxstbr/markdown-test-file/master/TEST.md",
-    file: "https://file-examples.com/wp-content/storage/2017/10/file-example_PDF_500_kB.pdf",
+      "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Ffsjqm90y2vk%00test-video.mp4?alt=media&token=a25fb4ef-ec66-4ac2-aaba-8a9f99975284",
+    file: "https://firebasestorage.googleapis.com/v0/b/learn-hub-fbf2c.appspot.com/o/file%2Fe623mdlccss%00test-file.pdf?alt=media&token=7fe9e0dc-93b9-4805-b537-df563fbfc2de",
   };
   return {
     typ: typ,
@@ -82,31 +97,16 @@ function generateMockThread(
 ): Thread {
   const teacher = generateMockUser("teacher", "teacher0");
   return {
-    cls: {
-      classId: classId,
-      name: `Class ${classId}`,
-      teacher: teacher,
-    },
+    classId: classId,
+    clsName: `Class ${classId}`,
+    teacher: teacher,
     threadId: threadId,
     name: `${
       typ == "announcement" ? "Announcement" : "Homework"
     } thread ${threadId}`,
     typ: typ,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
-    attachments: [
-      {
-        typ: "image",
-        src: "https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg",
-      },
-      {
-        typ: "video",
-        src: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-      },
-      {
-        typ: "image",
-        src: "https://images6.alphacoders.com/133/1330235.png",
-      },
-    ],
+    attachments: ["image", "video", "file"].map(generateMockAttachment),
     lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
     replies: [
       {
@@ -142,14 +142,12 @@ function generateMockThread(
     homeworkLastSubmissionDateTime: typ === "homework" ? undefined : undefined,
     homeworkSubmissionFiles:
       typ === "homework"
-        ? ["image", "video", "doc", "file"].map(
-            generateMockHomeworkSubmissionFile
-          )
+        ? ["image", "video", "file"].map(generateMockHomeworkSubmissionFile)
         : undefined,
     homeworkGotScore: typ === "homework" ? undefined : undefined,
   };
 }
 
-export type { Thread, Class, Attachment, Reply, HomeworkSubmissionFile };
+export type { Thread, Attachment, Reply, HomeworkSubmissionFile };
 
-export { generateMockUser, generateMockThread };
+export { generateMockThread, generateMockUser };

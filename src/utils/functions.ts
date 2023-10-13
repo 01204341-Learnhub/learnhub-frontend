@@ -2,17 +2,29 @@ export const capitalizeFirstLetter = (query: string): string => {
   return query.charAt(0).toUpperCase() + query.substring(1);
 };
 
-export function getFileTypeFromSrc(src: string) {
-  const ext = src.split(".").pop();
-  if (["jpg", "jpeg", "png", "gif"].includes(ext)) {
+export function getCustomFileTypeFromFile(file: File) {
+  if (file.type.startsWith("image/")) {
     return "image";
-  } else if (["mp4", "webm"].includes(ext)) {
+  } else if (file.type.startsWith("video/")) {
     return "video";
-  } else if (ext === "md") {
-    return "doc";
   } else {
     return "file";
   }
+}
+
+export function getFileNameFromSrc(src: string) {
+  const startIndex = src.indexOf("%00") + 3;
+  const endIndex = src.indexOf("?", startIndex);
+  if (startIndex === -1) {
+    console.error(
+      new Error("Invalid src, cannot find %00 marking start of file name")
+    );
+    return src;
+  }
+  if (endIndex === -1) {
+    return src.substring(startIndex);
+  }
+  return src.substring(startIndex, endIndex);
 }
 
 export function toDateTimeStringOmitDateOnSameDay(dateTime: Date) {

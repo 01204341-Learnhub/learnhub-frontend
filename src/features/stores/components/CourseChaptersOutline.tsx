@@ -8,7 +8,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Chapter } from "../types/chapter";
 import { Lesson } from "../types/lesson";
 
 import { fetchLessons } from "../services/courses";
@@ -114,30 +113,3 @@ function CourseChaptersOutline(props: CourseChaptersOutlineProps) {
 }
 
 export default CourseChaptersOutline;
-
-function CourseChaptersOutlineTest() {
-  // TODO: In real caller, get chapters from backend.
-  const chapters: Chapter[] = [];
-  for (let i = 0; i < 10; i++) {
-    const chapter: Chapter = {
-      id: `${i}`,
-      courseId: "0",
-      name: `Chapter ${i}`,
-      description: `This is chapter ${i}`,
-      chapterNum: i,
-      lessonCount: 4,
-      chapterLength: 10000,
-    };
-    chapters.push(chapter);
-  }
-
-  return (
-    <div className="bg-white">
-      <div className="">
-        <CourseChaptersOutline chapters={chapters} />
-      </div>
-    </div>
-  );
-}
-
-export { CourseChaptersOutline };

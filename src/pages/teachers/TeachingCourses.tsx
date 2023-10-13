@@ -1,28 +1,16 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CourseCard from "../../features/teaches/components/CourseCard";
 import NewProgramClass from "../../features/teaches/components/NewProgramCard";
-import { listTeachCourse } from "../../features/teaches/services/courses";
-import { CourseInfo } from "../../features/teaches/types/course";
+import { useTeachCourses } from "../../features/teaches/hooks/useTeachCourses";
 
 function TeachingCourses() {
-  const [courses, setCourses] = useState<CourseInfo[]>([]);
+  const { courses, isFetchingCourse } = useTeachCourses()
   const [isFetching, setIsFetching] = useState<boolean>(false);
   const navigate = useNavigate();
-  useEffect(() => {
-    async function fetchCourses() {
-      const fetchedCourses = await listTeachCourse("1");
-      setCourses(fetchedCourses);
-    }
-
-    setIsFetching(true);
-    fetchCourses().then(() => {
-      setIsFetching(false);
-    });
-  }, []);
-
+  if (isFetchingCourse) return <div>loading...</div>;
   function handleNavigate(type: string) {
     navigate(`/teach/create/${type}`);
   }

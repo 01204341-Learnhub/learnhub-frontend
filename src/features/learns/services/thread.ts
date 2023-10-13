@@ -1,11 +1,15 @@
-import { HomeworkSubmissionFile, generateMockThread } from "../types/thread";
+import {
+  HomeworkSubmissionFile,
+  Thread,
+  generateMockThread,
+} from "../types/thread";
 
 async function fetchThread(
   userId: string,
   classId: string,
   threadId: string,
   typ: "announcement" | "homework"
-) {
+): Promise<Thread> {
   console.log(
     `Fetching thread ${threadId} of class ${classId} by user ${userId} with type ${typ}`
   );
@@ -22,7 +26,7 @@ async function addThreadReply(
   classId: string,
   threadId: string,
   text: string
-) {
+): Promise<void> {
   // TODO: Implement this
   console.log(
     `Adding reply to thread ${threadId} in class ${classId} by user ${userId} with text ${text}}`
@@ -35,7 +39,7 @@ async function submitThreadHomework(
   classId: string,
   threadId: string,
   homeworkSubmissionFiles: HomeworkSubmissionFile[]
-) {
+): Promise<void> {
   // TODO: Implement this
   console.log(
     `Submitting homework for thread ${threadId} in class ${classId} by user ${userId} with ${homeworkSubmissionFiles.length} files`
@@ -47,7 +51,7 @@ async function unsubmitThreadHomework(
   userId: string,
   classId: string,
   threadId: string
-) {
+): Promise<void> {
   // TODO: Implement this
   console.log(
     `Unsubmitting homework for thread ${threadId} in class ${classId} by user ${userId}`

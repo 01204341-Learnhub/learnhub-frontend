@@ -7,7 +7,8 @@ import {
   submitThreadHomework,
   unsubmitThreadHomework,
 } from "../services/thread";
-import { getFileTypeFromSrc } from "../../../utils/functions";
+import { getCustomFileTypeFromFile } from "../../../utils/functions";
+import { uploadFile } from "../../../services/uploader/file";
 
 // Prevent unused imports
 addThreadReply;
@@ -64,7 +65,7 @@ function useThread(
     });
   };
 
-  const addHomeworkSubmissionFile = (src: string) => {
+  const addHomeworkSubmissionFile = (file: File) => {
     if (typ !== "homework") {
       console.error(
         new Error("Cannot add homework file to non-homework thread")
@@ -86,21 +87,23 @@ function useThread(
       );
       return;
     }
-    if (thread.homeworkSubmissionFiles.map((file) => file.src).includes(src)) {
-      console.error(new Error("Duplicate file"));
-      alert("Duplicate file");
-      return;
-    }
-    setThread({
-      ...thread,
-      homeworkSubmissionFiles: [
-        ...thread.homeworkSubmissionFiles,
-        {
-          typ: getFileTypeFromSrc(src),
-          src,
-        },
-      ],
-    });
+    uploadFile(file)
+      .then((src) => {
+        setThread({
+          ...thread,
+          homeworkSubmissionFiles: [
+            ...thread.homeworkSubmissionFiles,
+            {
+              typ: getCustomFileTypeFromFile(file),
+              src,
+            },
+          ],
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Failed to upload file");
+      });
   };
 
   const removeHomeworkSubmissionFile = (src: string) => {

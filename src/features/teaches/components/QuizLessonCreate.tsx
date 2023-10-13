@@ -59,9 +59,9 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
                     onChange={(e) => { setQuestion(e.target.value) }} />
             </div>
             <div className="flex pt-2 pb-4">
-                <h1 className="my-auto mx-[40px] font-semibold text-[18px]">คำอธิบายเพิ่มเติม</h1>
-                <input className="mr-[50px] min-w-0 grow input input-bordered"
-                    type="text" placeholder="คำอธิบาย" value={explaination}
+                <h1 className="mx-[40px] font-semibold text-[18px]">คำอธิบายเพิ่มเติม</h1>
+                <textarea className="mx-[40px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
+                    placeholder="คำอธิบาย" value={explaination}
                     onChange={(e) => { setExplaination(e.target.value) }} />
             </div>
             <h1 className="my-auto mx-[40px] font-semibold text-[15px] text-[#808080]">ติ๊กถูกด้านหน้าเพื่อกำหนดตัวเลือกที่ตอบแล้วได้คะแนน</h1>
@@ -128,7 +128,7 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
     function handleLessonNameChange(e: React.ChangeEvent<HTMLInputElement>) {
         setQuiz({ ...quiz, name: e.target.value })
     }
-    function handleLessonDescriptionChange(e: React.ChangeEvent<HTMLInputElement>) {
+    function handleLessonDescriptionChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         setQuiz({ ...quiz, description: e.target.value })
     }
     const onProblemSubmit = (problem: CourseQuizProblemWithoutNumber) => {
@@ -173,11 +173,10 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                         onChange={handleLessonNameChange}
                     />
                 </div>
-                <div className="  flex grow items-center pt-2 pb-4">
-                    <h1 className="my-auto mx-[40px] font-semibold text-[18px]">คำอธิบาย</h1>
-                    <input 
-                        type="text" 
-                        className="mr-[50px] min-w-0  grow input input-bordered"
+                <div className="  flex grow pt-2 pb-4">
+                    <h1 className=" mx-[40px] font-semibold text-[18px]">คำอธิบาย</h1>
+                    <textarea
+                        className="mx-[40px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
                         value={quiz.description} 
                         onChange={handleLessonDescriptionChange} 
                     />

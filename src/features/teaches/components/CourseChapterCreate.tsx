@@ -3,6 +3,7 @@ import {
   faFile,
   faFolderBlank,
   faPlayCircle,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useEffect, useState } from "react";
@@ -69,9 +70,10 @@ function _LessonTypeSelector({ onSelect }: _LessonTypeSelectorProps) {
 interface _LessonPreviewProps {
   lessonName: string;
   lessonType: string;
+  onRemove: () => void
 }
 
-function _LessonPreview({ lessonName, lessonType }: _LessonPreviewProps) {
+function _LessonPreview({ lessonName, lessonType, onRemove }: _LessonPreviewProps) {
   let icon = faFolderBlank;
   switch (lessonType) {
     case "video":
@@ -81,15 +83,20 @@ function _LessonPreview({ lessonName, lessonType }: _LessonPreviewProps) {
       break;
   }
   return (
-    <div className=" my-[10px] w-full bg-white flex p-4">
-      <FontAwesomeIcon
-        icon={icon}
-        color="#505050"
-        size="xl"
-        className="ml-[20px]"
-      />
-      <h1 className="font-bold text-black mx-6">{lessonType}</h1>
-      <h1 className="font-semibold text-[#808080]">{lessonName}</h1>
+    <div className=" my-[10px] w-full bg-white flex p-4 justify-between">
+      <div className="flex">
+        <FontAwesomeIcon
+          icon={icon}
+          color="#505050"
+          size="xl"
+          className="ml-[20px]"
+        />
+        <h1 className="font-bold text-black mx-6">{lessonType}</h1>
+        <h1 className="font-semibold text-[#808080]">{lessonName}</h1>
+      </div>
+      <button onClick={onRemove}>
+        <FontAwesomeIcon icon={faX} />
+      </button>
     </div>
   );
 }
@@ -142,6 +149,16 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
     onSubmit();
     return
   };
+
+  const handleRemoveLesson = (lessonNumber: number) => {
+    const updatedLessons = [...lessons.filter((lesson) => {
+      return lesson.number !== lessonNumber;
+    })]
+    updatedLessons.forEach((lesson, index) => {
+      lesson.number = index + 1
+    })
+    setLessons(updatedLessons)
+  }
 
   const onChapterNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChapterName(e.target.value);
@@ -229,7 +246,9 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
               <_LessonPreview
                 lessonName={lesson.name}
                 lessonType={lesson.type}
+                onRemove={() => { handleRemoveLesson(lesson.number) }}
               />
+              <h1>{lesson.number}</h1>
             </li>
           );
         })}

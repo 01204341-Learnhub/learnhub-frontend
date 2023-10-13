@@ -115,6 +115,10 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
   }, [chapterToEdit, courseContext.course.chapters])
 
   const handleSubmit = () => {
+    if (lessons.length == 0) {
+      alert("กรุณาเพิ่มบทเรียนอย่างน้อย 1 บทเรียน");
+      return;
+    }
     const newChapter: Chapter = {
       chapterId: new Date().getTime().toString(),
       name: chapterName,

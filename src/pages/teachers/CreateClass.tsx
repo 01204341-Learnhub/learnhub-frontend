@@ -4,15 +4,14 @@ import {
   faCircle as faCircleSolid,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ClassCardPreview from "../../features/teaches/components/ClassCardPreview.tsx";
 import ClassDatesInfoForm from "../../features/teaches/components/ClassDatesInfoForm.tsx";
 import ClassGoalsInfoForm from "../../features/teaches/components/ClassGoalsInfoForm.tsx";
 import ClassPublishingInfoForm from "../../features/teaches/components/ClassPublishingInfoForm.tsx";
-import {
-  Class
-} from "../../features/teaches/types/class.ts";
+import { CreatingClass } from "../../features/teaches/types/class.ts";
+import { useUser } from "../../hooks/useUser.ts";
 
 interface _SideNavProps {
   currentTab: string;
@@ -74,17 +73,19 @@ function _SideNav({
         </button>
       </div>
       <button
-        className={`w-fit h-fit p-3 hover:drop-shadow-md ${!readyToPublish || onPublish === undefined
-          ? "bg-gray-200"
-          : "bg-[#D9D9D9]"
-          }`}
+        className={`w-fit h-fit p-3 hover:drop-shadow-md ${
+          !readyToPublish || onPublish === undefined
+            ? "bg-gray-200"
+            : "bg-[#D9D9D9]"
+        }`}
         onClick={onPublish}
       >
         <h1
-          className={`font-semibold text-[20px] ${!readyToPublish || onPublish === undefined
-            ? "text-gray-400"
-            : "text-black"
-            }`}
+          className={`font-semibold text-[20px] ${
+            !readyToPublish || onPublish === undefined
+              ? "text-gray-400"
+              : "text-black"
+          }`}
         >
           เผยแพร่คลาส
         </h1>
@@ -110,63 +111,51 @@ function _TopNav({ onQuit }: _TopNavProps) {
 }
 
 interface _TopPanelProps {
-  cls: Class;
+  cls: CreatingClass;
 }
 
 function _TopPanel({ cls }: _TopPanelProps) {
-  const diff = Math.abs(cls.endDate.getTime() - cls.startDate.getTime());
-  const diffDays = Math.ceil(diff / (1000 * 3600 * 24));
   return (
     <div className="flex justify-start items-stretch space-x-10 w-full">
       <div className="bg-[#D9D9D9] p-6 w-fit h-fit">
         <ClassCardPreview
-          classThumbnailUrl={cls.thumbnailUrl}
+          classThumbnailUrl={cls.pictureUrl}
           className={cls.name}
           level={cls.level}
-          category="HARDCODE"
+          category={cls.tag?.name}
           price={cls.price}
-          instructorName={cls.instructorName}
+          instructorName={cls.teacher.fullname}
         />
       </div>
       <div className="flex flex-col justify-start items-start space-y-3 px-10 py-6 bg-white w-full min-w-fit">
         <div className="flex justify-between items-center w-[450px]">
+          <p className="text-[#808080] text-[20px] font-semibold">Info 1</p>
           <p className="text-[#808080] text-[20px] font-semibold">
-            วันแรกของการเรียน
-          </p>
-          <p className="text-[#808080] text-[20px] font-semibold">
-            {cls.startDate?.toLocaleDateString("th-TH")}
+            {"Goes here"}
           </p>
         </div>
         <div className="flex justify-between items-center w-[450px]">
+          <p className="text-[#808080] text-[20px] font-semibold">Info 2</p>
           <p className="text-[#808080] text-[20px] font-semibold">
-            วันสุดท้ายของการเรียน
-          </p>
-          <p className="text-[#808080] text-[20px] font-semibold">
-            {cls.endDate?.toLocaleDateString("th-TH")}
+            {"Goes here"}
           </p>
         </div>
         <div className="flex justify-between items-center w-[450px]">
+          <p className="text-[#808080] text-[20px] font-semibold">Info 3</p>
           <p className="text-[#808080] text-[20px] font-semibold">
-            ระยะเวลาการเรียน
-          </p>
-          <p className="text-[#808080] text-[20px] font-semibold">
-            {diffDays} วัน
+            {"Goes here"}
           </p>
         </div>
         <div className="flex justify-between items-center w-[450px]">
+          <p className="text-[#808080] text-[20px] font-semibold">Info 4</p>
           <p className="text-[#808080] text-[20px] font-semibold">
-            วันสุดท้ายของการลงทะเบียน
-          </p>
-          <p className="text-[#808080] text-[20px] font-semibold">
-            {cls.lastDateToRegister?.toLocaleDateString("th-TH")}
+            {"Goes here"}
           </p>
         </div>
         <div className="flex justify-between items-center w-[450px]">
+          <p className="text-[#808080] text-[20px] font-semibold">Info 5</p>
           <p className="text-[#808080] text-[20px] font-semibold">
-            จำกัดจำนวนผู้เรียนมากสุด
-          </p>
-          <p className="text-[#808080] text-[20px] font-semibold">
-            {cls.studentLimit} คน
+            {"Goes here"}
           </p>
         </div>
       </div>
@@ -174,53 +163,53 @@ function _TopPanel({ cls }: _TopPanelProps) {
   );
 }
 
-function checkReadyToPublish(cls: Class) {
+function checkReadyToPublish(cls: CreatingClass) {
   return (
-    cls.classId !== "" &&
     cls.name !== "" &&
-    cls.thumbnailUrl !== "" &&
-    cls.categoryId !== "" &&
-    cls.level !== "" &&
-    cls.instructorName !== "" &&
+    cls.pictureUrl !== "" &&
     cls.description !== "" &&
+    cls.maxStudent > 0 &&
+    cls.maxStudent <= 100 &&
+    cls.price >= 0 &&
+    cls.objectives.length > 0 &&
     cls.objectives.every((objective) => objective !== "") &&
     cls.requirement !== "" &&
-    cls.studentLimit !== 0 &&
-    cls.startDate !== null &&
-    cls.endDate !== null &&
-    cls.lastDateToRegister !== null
+    cls.level !== "" &&
+    cls.tag !== undefined &&
+    cls.schedule.length > 0 &&
+    cls.start !== undefined &&
+    cls.registrationEnd !== undefined &&
+    cls.end !== undefined
   );
 }
 
-interface ClassContextType {
-  cls: Class;
-  setCls: (cls: Class) => void;
+interface CreatingClassContextType {
+  cls: CreatingClass;
+  setCls: (cls: CreatingClass) => void;
 }
 
-const ClassContext = React.createContext<ClassContextType | undefined>(
-  undefined,
-);
+const CreatingClassContext = createContext<
+  CreatingClassContextType | undefined
+>(undefined);
 
 function CreateClass() {
   const navigate = useNavigate();
-  const [cls, setCls] = useState<Class>({
-    classId: "1234567890", // TODO: Get an ID, possibly uuid.
+  const { user } = useUser();
+  const [cls, setCls] = useState<CreatingClass>({
     name: "",
-    thumbnailUrl: "https://placehold.co/1920x1080",
-    categoryId: "",
-    level: "",
-    instructorName: "John Doe", // TODO: Get from user profile.
+    pictureUrl: "https://placehold.co/1920x1080",
+    teacher: user,
     description: "",
+    maxStudent: 0,
+    price: 0,
     objectives: ["", "", "", ""],
     requirement: "",
-    price: 0,
-    rating: 0,
-    studentCount: 0,
-    studentLimit: 20, // TODO: Set in somewhere.
-    startDate: new Date("2023-09-15"), // TODO: Set in ClassDatesInfoForm.
-    endDate: new Date("2023-10-22"), // TODO: Set in ClassDatesInfoForm.
-    lastDateToRegister: new Date("2023-09-14"), // TODO: Set in ClassDatesInfoForm.
-    threads: [],
+    level: "",
+    tag: undefined,
+    schedule: [],
+    start: undefined,
+    registrationEnd: undefined,
+    end: undefined,
   });
   const [currentTab, setCurrentTab] = useState<string>("goals");
 
@@ -245,9 +234,9 @@ function CreateClass() {
             onPublish={handlePublishClass}
             readyToPublish={checkReadyToPublish(cls)}
           />
-          <ClassContext.Provider value={{ cls, setCls }}>
+          <CreatingClassContext.Provider value={{ cls: cls, setCls: setCls }}>
             <ClassGoalsInfoForm />
-          </ClassContext.Provider>
+          </CreatingClassContext.Provider>
         </div>
       </div>
     );
@@ -267,9 +256,9 @@ function CreateClass() {
             onPublish={handlePublishClass}
             readyToPublish={checkReadyToPublish(cls)}
           />
-          <ClassContext.Provider value={{ cls, setCls }}>
+          <CreatingClassContext.Provider value={{ cls: cls, setCls: setCls }}>
             <ClassDatesInfoForm />
-          </ClassContext.Provider>
+          </CreatingClassContext.Provider>
         </div>
       </div>
     );
@@ -289,9 +278,9 @@ function CreateClass() {
             onPublish={handlePublishClass}
             readyToPublish={checkReadyToPublish(cls)}
           />
-          <ClassContext.Provider value={{ cls, setCls }}>
+          <CreatingClassContext.Provider value={{ cls: cls, setCls: setCls }}>
             <ClassPublishingInfoForm />
-          </ClassContext.Provider>
+          </CreatingClassContext.Provider>
         </div>
       </div>
     );
@@ -299,4 +288,4 @@ function CreateClass() {
 }
 
 export default CreateClass;
-export { ClassContext };
+export { CreatingClassContext };

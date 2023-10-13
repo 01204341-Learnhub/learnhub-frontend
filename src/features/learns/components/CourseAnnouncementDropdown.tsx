@@ -55,9 +55,9 @@ const CourseAnnouncementDropdown = (
   };
 
   return (
-    <div className="w-full">
+    <div className="w-[800px]">
       <div className="cursor-pointer w-full bg-[#ECF3F9] border-b-[2px] border-b-[#b0b0b080] py-4" onClick={toggleExpansion}>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between w-full">
           <h3 className=" flex-grow ml-[25px] font-me">
             {courseAnnouncement.name}
           </h3>
@@ -83,7 +83,7 @@ const CourseAnnouncementDropdown = (
       </div>
 
       {isExpanded && (
-        <div className="bg-white mb-2 w-full">
+        <div className="bg-white mb-2">
           <div className="px-2 pt-2 pb-8">
             <div className="flex flex-row">
               <div className="w-[55px] h-[55px] m-[20px] bg-black rounded-full" />

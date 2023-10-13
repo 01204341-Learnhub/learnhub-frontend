@@ -321,19 +321,19 @@ function TeacherCourseManage() {
     return <div>loading...</div>;
   } else {
     return (
-      <div className="w-full pb-12 px-4 mx-8">
-        <div className="flex items-center py-4">
+      <div className="pb-12 px-8">
+        <div className="flex items-center py-4 pl-8">
           <h1 className="font-bold text-2xl">คอร์สเรียนของฉัน</h1>
           <h2 className="rounded-full font-semibold px-2 py-1 bg-[#FF9B9B] ml-5">
             course
           </h2>
         </div>
-        <h1 className="font-semibold text-xl py-4 my-4 text-[#404040]">
+        <h1 className="font-semibold text-xl py-4 my-4 pl-8 text-[#404040]">
           {courseDetail.name}
         </h1>
         <main className="flex w-full h-full">
           <>
-            <section className="basis-1/3 flex flex-col items-start">
+            <section className="basis-1/3 flex flex-col items-start pl-8">
               <div className="w-72 h-40 bg-black flex flex-col items-center justify-center">
                 <img
                   src={courseDetail.thumnailUrl}
@@ -361,7 +361,7 @@ function TeacherCourseManage() {
                 </div>
                 <div className="flex justify-between items-center">
                   <h2 className="text-sm font-semibold">
-                    จำนวนผู้เรียนที่เรียน
+                    จำนวนผู้เรียนที่ซื้อคอร์ส
                   </h2>
                   <span>{courseDetail.studentCount}</span>
                 </div>
@@ -404,13 +404,13 @@ function TeacherCourseManage() {
           </>
 
           <section className="flex flex-col items-start basis-2/3">
-            <div className="flex w-[720px] pt-4 pb-2 justify-between">
+            <div className="flex items-center font-medium w-4/5 pr-4 pt-4 pb-2 justify-between ">
               <h1 className="text-lg font-semibold">
                 โพสต์ที่ประกาศในคอร์สนี้
               </h1>
               <button
                 onClick={handleAddAnnouncement}
-                className="px-2 py-1 ml-5"
+                className="py-1"
               >
                 + สร้างโพสต์
               </button>

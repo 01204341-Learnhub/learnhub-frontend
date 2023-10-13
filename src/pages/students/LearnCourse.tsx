@@ -119,11 +119,11 @@ function LearnCourse() {
     }
     return (
         <div className="">
-            <div className="flex pt-8 pl-14 pb-14 mx-20">
+            <div className="flex pt-8 pl-14 pb-14">
                 <h1 className="text-black font-bold text-4xl">คอร์สเรียน</h1>
                 <h1 className="text-gray-600 font-semibold text-3xl my-auto ml-4"></h1>
             </div>
-            <div className="flex items-center justify-center w-full h-80 mx-20">
+            <div className="flex items-center justify-center w-full h-80">
                 <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} onLessonEnd={onLessonEnd} onUpdateProgress={updateProgress} />
             </div>
             <div className="flex flex-col items-center mt-20 h-full">
@@ -139,7 +139,7 @@ function LearnCourse() {
                     )
                 })()}
                 
-                <div className="flex w-4/5 mt-20 mb-10 mx-20">
+                <div className="flex w-4/5 mt-20 mb-10">
                     <button onClick={() => { setOutlineViewMode("contents") }}>
                         <h1 className="text-xl font-bold">เนื้อหาคอร์สเรียน</h1>
                         <div className={`bg-black ${outlineViewMode == "contents" ? "h-2 mt-1" : "h-2 mt-1 bg-transparent"}`}></div>
@@ -167,10 +167,10 @@ function LearnCourse() {
                                 )
                             }
                             return (
-                                <div className="w-4/5">
+                                <div className="">
                                     
                                     { announcements.length > 0 ? (
-                                         <div className="">
+                                         <div className="w-full">
                                          {announcements.map((announcement) => (
                                              <div key={announcement.announcementID}>
                                                  <CourseAnnouncementDropdown {...announcement} />

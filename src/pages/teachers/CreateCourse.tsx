@@ -303,15 +303,16 @@ function CreateCourse() {
 
   const handlePublishCourse = () => {
     async function publishCourse() {
+      if (!checkReadyToPublish(course)) throw new Error("ยังกรอกข้อมูลไม่ครบ")
       await createCourse(course, teacherID);
     }
     publishCourse().then(() => {
       alert("Course published!");
       navigate("/teach/overview");
-    }).catch(() => {
+    }).catch((err) => {
       Swal.fire({
         title: "เกิดข้อผิดพลาดในการเผยแพร่คอร์ส",
-        text: "กรุณาลองใหม่อีกครั้ง",
+        text: err,
         icon: "error",
         confirmButtonText: "ตกลง",
       })

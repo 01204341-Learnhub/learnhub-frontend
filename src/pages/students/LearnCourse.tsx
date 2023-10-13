@@ -115,7 +115,7 @@ function LearnCourse() {
                 <h1 className="text-black font-bold text-4xl">คอร์สเรียน</h1>
                 <h1 className="text-gray-600 font-semibold text-3xl my-auto ml-4"></h1>
             </div>
-            <div className="flex items-center justify-center">
+            <div className="item-center">
                 <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} onLessonEnd={onLessonEnd} />
             </div>
             <div className="flex flex-col items-center mx-20 mt-20">

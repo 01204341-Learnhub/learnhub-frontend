@@ -20,7 +20,7 @@ function _Preview({ src }: { src: string | undefined }) {
   } else {
     return (
       <div className="mx-[40px] my-[20px]">
-        <h1 className="font-semibold text-[18px]">
+        <h1 className="font-bold text-[18px]">
           Preview
         </h1>
         <VideoPlayer url={src} />
@@ -99,7 +99,7 @@ function VideoLessonCreate({
           {chapterName} / วิดีโอที่ {lessonNumber}
         </h2>
       </div>
-      <div className="ml-[70px] mr-[100px] mt-[30px] flex grow items-center bg-white drop-shadow-xl pt-2 pb-4">
+      <div className="ml-[70px] mr-[100px] mt-[30px] flex grow items-center bg-white drop-shadow-xl pt-4 pb-4">
         <h1 className="my-auto mx-[40px] font-semibold text-[18px]">
           ชื่อวิดีโอ
         </h1>

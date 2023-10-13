@@ -52,16 +52,16 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
     }
     return (
         <div className="flex flex-col ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
-            <div className="flex pt-2 pb-4">
-                <h1 className="my-auto mx-[40px] font-semibold text-[18px]">คำถาม</h1>
-                <input className="mr-[50px] min-w-0 grow input font-bold input-bordered"
+            <div className="flex pt-2 pb-4 font-semibold">
+                <h1 className="my-auto mx-[40px] text-[18px]">คำถาม</h1>
+                <input className="mr-[50px] min-w-0 grow input input-bordered"
                     type="text" placeholder="คำถาม" value={question}
                     onChange={(e) => { setQuestion(e.target.value) }} />
             </div>
-            <div className="flex pt-2 pb-4">
-                <h1 className="mx-[40px] font-semibold text-[18px]">คำอธิบายเพิ่มเติม</h1>
-                <textarea className="mx-[40px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
-                    placeholder="คำอธิบาย" value={explaination}
+            <div className="flex pt-2 pb-4 font-semibold text-[18px]">
+                <h1 className="mx-[40px] ">คำอธิบายเพิ่มเติม</h1>
+                <textarea className="mr-[50px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
+                    placeholder="คำอธิบายเพิ่มเติมที่่ผู้เรียนจะเห็นหลังทำแบบฝึกหัดเสร็จ" value={explaination}
                     onChange={(e) => { setExplaination(e.target.value) }} />
             </div>
             <h1 className="my-auto mx-[40px] font-semibold text-[15px] text-[#808080]">ติ๊กถูกด้านหน้าเพื่อกำหนดตัวเลือกที่ตอบแล้วได้คะแนน</h1>
@@ -176,7 +176,7 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                 <div className="  flex grow pt-2 pb-4">
                     <h1 className=" mx-[40px] font-semibold text-[18px]">คำอธิบาย</h1>
                     <textarea
-                        className="mx-[40px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
+                        className="mr-[50px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
                         value={quiz.description} 
                         onChange={handleLessonDescriptionChange} 
                     />

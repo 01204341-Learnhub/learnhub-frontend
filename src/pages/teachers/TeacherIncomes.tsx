@@ -2,6 +2,7 @@
 
 
 function TeacherIncomes(){
+    const price = 5000
 
     return (
         <div className="flex-cols h-full px-8 py-1">
@@ -12,9 +13,9 @@ function TeacherIncomes(){
                         ยอดเงินรวมที่ได้รับ
                     </div>
                     <div className="w-20 "></div>
-                    <div className="text-6xl font-bold text-black">
-                        5000
-                    </div>
+                    <h1 className="text-6xl font-bold text-black ordinal">
+                        {price.toLocaleString()}
+                    </h1>
                     <div className="w-5 "></div>
                     <div className="text-3xl font-bold text-black">
                         บาท

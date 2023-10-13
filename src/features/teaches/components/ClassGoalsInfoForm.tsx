@@ -22,6 +22,7 @@ function _Objectives() {
         {creatingClassContext.cls.objectives.map((objective, index) => {
           return (
             <input
+              key={index}
               className="border-2 border-[#C0C0C0] py-2 px-3 w-full"
               type="text"
               value={creatingClassContext.cls.objectives[index]}
@@ -89,12 +90,14 @@ function _Level() {
         }}
         className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
       >
-        <option value="" disabled selected>
+        <option value="" disabled>
           เลือกระดับ
         </option>
-        {availableLevels.map((level) => {
-          return <option value={level}>{level}</option>;
-        })}
+        {availableLevels.map((level, index) => (
+          <option key={index} value={level}>
+            {level}
+          </option>
+        ))}
       </select>
     </div>
   );

@@ -186,17 +186,23 @@ function _Tag() {
         โปรดเลือกหมวดหมู่สำหรับคลาสเรียนของคุณ
       </p>
       <select
-        value={creatingClassContext.cls.tag?.tagID}
+        value={
+          creatingClassContext.cls.tag ? creatingClassContext.cls.tag.tagID : ""
+        }
         onChange={(e) => {
           handleUpdateTag(e.target.value);
         }}
         className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
       >
-        <option value="" disabled selected>
+        <option value="" disabled>
           เลือกหมวดหมู่
         </option>
         {availableTags.map((tag) => {
-          return <option value={tag.tagID}>{tag.name}</option>;
+          return (
+            <option key={tag.tagID} value={tag.tagID}>
+              {tag.name}
+            </option>
+          );
         })}
       </select>
     </div>
@@ -230,12 +236,18 @@ function _MaxStudent() {
         }}
         className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
       >
-        <option value={0} disabled selected>
+        <option value={0} disabled>
           0
         </option>
-        {[10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100].map((maxStudent) => {
-          return <option value={maxStudent}>{maxStudent}</option>;
-        })}
+        {[10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100].map(
+          (maxStudent, index) => {
+            return (
+              <option key={index} value={maxStudent}>
+                {maxStudent}
+              </option>
+            );
+          }
+        )}
       </select>
       <p className="text-[#606060] text-[14px] font-semibold">
         แนะนำว่าไม่ควรเกิน 40 คน ถ้าคุณมีชั้นเรียนมากกว่า 1

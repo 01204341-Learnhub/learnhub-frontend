@@ -41,8 +41,8 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
     }
     return (
         <>
-            <div className="w-[720px]">
-                <div className="flex bg-[#ECF3F9] w-full justify-between" onClick={() => handleShow()}>
+            <div className="w-4/5">
+                <div className="flex bg-[#ECF3F9] border-t-[2px] w-full justify-between" onClick={() => handleShow()}>
 
                     <div className="flex flex-col items-start flex-1 pl-6 py-2">
                         <h1 className="text-base font-semibold">บทที่ : {chapter.name}</h1>

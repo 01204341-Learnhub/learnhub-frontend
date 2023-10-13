@@ -55,7 +55,7 @@ const CourseAnnouncementDropdown = (
   };
 
   return (
-    <div className="w-[720px]">
+    <div className="w-full">
       <div className="cursor-pointer w-full bg-[#ECF3F9] border-b-[2px] border-b-[#b0b0b080] py-4" onClick={toggleExpansion}>
         <div className="flex items-center justify-between">
           <h3 className=" flex-grow ml-[25px] font-me">

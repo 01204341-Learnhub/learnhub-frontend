@@ -30,7 +30,7 @@ function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onS
         })
     }
     return (
-        <div className="w-full">
+        <div className="w-full flex flex-col items-center">
             {chapters.map((chapter, index) => (
                 <ChapterOutline chapter={chapter} lessonsProgress={_getChapterProgress(chapter.chapterID)} onSelectLesson={onSelectLesson} key={index}
                     onUpdateProgress={onUpdateProgress} currentLesson={currentLesson} />
@@ -58,7 +58,7 @@ function _LessonDisplay({ lesson, progress, onLessonEnd, onUpdateProgress }: _Le
     } else if (lesson.lessonType == "quiz") {
         if (progress.finished) {
             return (
-                <div className=" overflow-scroll w-full h-96">
+                <div className=" overflow-scroll w-f">
                     <CourseMultipleChoiceQuizReport quizID={lesson.src} />
                 </div>
             )
@@ -118,27 +118,28 @@ function LearnCourse() {
         })
     }
     return (
-        <div className="px-24">
-            <div className="flex pt-8 pl-14 pb-14">
+        <div className="">
+            <div className="flex pt-8 pl-14 pb-14 mx-20">
                 <h1 className="text-black font-bold text-4xl">คอร์สเรียน</h1>
                 <h1 className="text-gray-600 font-semibold text-3xl my-auto ml-4"></h1>
             </div>
-            <div className="flex items-center justify-center w-full h-80">
+            <div className="flex items-center justify-center w-full h-80 mx-20">
                 <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} onLessonEnd={onLessonEnd} onUpdateProgress={updateProgress} />
             </div>
-            <div className="flex flex-col items-start mx-20 mt-20 h-full">
+            <div className="flex flex-col items-center mt-20 h-full">
 
                 {(() => {
                     if (currentLesson == undefined) return (<></>)
                     const currentChapter = getChapter(currentLesson.chapterID)
                     return (
-                        <div className="self-start h-10">
-                            <h1 className="text-black font-bold text-2xl pb-4">คำอธิบาย (ของ ch) บทที่ {currentChapter.chapterNumber}: {currentChapter.name}</h1>
+                        <div className="w-4/5">
+                            <h1 className="text-black font-bold text-xl pb-4">บทที่ {currentChapter.chapterNumber}: {currentChapter.name}</h1>
                             <p className="font-medium text-lg" >{currentChapter.description}</p>
                         </div>
                     )
                 })()}
-                <div className="flex mt-20 mb-10 self-start">
+                
+                <div className="flex w-4/5 mt-20 mb-10 mx-20">
                     <button onClick={() => { setOutlineViewMode("contents") }}>
                         <h1 className="text-xl font-bold">เนื้อหาคอร์สเรียน</h1>
                         <div className={`bg-black ${outlineViewMode == "contents" ? "h-2 mt-1" : "h-2 mt-1 bg-transparent"}`}></div>
@@ -148,7 +149,7 @@ function LearnCourse() {
                         <div className={`bg-black ${outlineViewMode == "announcements" ? "h-2 mt-1" : "h-2 mt-1 bg-transparent"}`}></div>
                     </button>
                 </div>
-                <div className="bg-white px-10 pt-12 pb-8">
+                <div className="bg-white flex justify-center w-4/5 pt-8 pb-8">
                     {(() => {
                         if (outlineViewMode == 'contents') {
                             return (
@@ -166,12 +167,21 @@ function LearnCourse() {
                                 )
                             }
                             return (
-                                <div className="">
-                                    {announcements.map((announcement) => (
-                                        <div key={announcement.announcementID}>
-                                            <CourseAnnouncementDropdown {...announcement} />
+                                <div className="w-4/5">
+                                    
+                                    { announcements.length > 0 ? (
+                                         <div className="">
+                                         {announcements.map((announcement) => (
+                                             <div key={announcement.announcementID}>
+                                                 <CourseAnnouncementDropdown {...announcement} />
+                                             </div>
+                                         ))}
+                                     </div>
+                                    ) : (
+                                        <div className="w-full flex items-center justify-center">
+                                            <div className="text-xl font-semibold text-[#505050]">ยังไม่มีประกาศในคอร์สเรียนขณะนี้</div>
                                         </div>
-                                    ))}
+                                    ) }
                                 </div>
                             )
                         }

@@ -20,7 +20,7 @@ export default function AllCloures() {
                                 instructorName={course.instructor.name}
                                 percentCompleted={100}
                                 regisDate={""} voter={1000} price={course.price} tag={course.tags[0].name}
-                                lvl={"HARDCODE"} />
+                                lvl={courses[0].difficultyLevel} />
                         </Link>
                     )
                 })}

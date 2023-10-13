@@ -14,6 +14,7 @@ type Course = {
   };
   tags: Tag[];
   rating: number;
+  difficultyLevel: string;
   reviewerCount: number;
   price: number;
 };

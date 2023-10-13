@@ -19,6 +19,7 @@ type ListCoursesResponse = {
     }[];
     rating: number;
     review_count: number;
+    difficulty_level: string;
     price: number;
   }[];
 };

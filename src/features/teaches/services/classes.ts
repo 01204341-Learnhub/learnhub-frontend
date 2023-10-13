@@ -1,4 +1,6 @@
-import { ClassInfo } from "../types/class.ts";
+import axios from "axios";
+import { ClassInfo, CreatingClass } from "../types/class.ts";
+const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function listTeacherClasses(teacherID: string) {
   const mock: ClassInfo[] = [
@@ -54,4 +56,34 @@ async function listTeacherClasses(teacherID: string) {
   return mock;
 }
 
-export { listTeacherClasses };
+async function publishClass(
+  teacherID: string,
+  cls: CreatingClass
+): Promise<string> {
+  const url = `${baseURL}/programs/classes`;
+  const body = {
+    name: cls.name,
+    class_pic: cls.pictureUrl,
+    teacher_id: teacherID,
+    max_student: cls.maxStudent,
+    price: cls.price,
+    description: cls.description,
+    class_objective: cls.objectives,
+    class_requirement: cls.requirement,
+    difficulty_level: "HARDCODE-PUBLISH-CLASS",
+    tag_ids: [cls.tag.tagID],
+    schedules: cls.schedule.map((s) => ({
+      start: parseInt((s.start.getTime() / 1000).toFixed(0)),
+      end: parseInt((s.end.getTime() / 1000).toFixed(0)),
+    })),
+    registration_ended_date: parseInt(
+      (cls.registrationEnd?.getTime() ?? 0 / 1000).toFixed(0)
+    ),
+    open_date: parseInt((cls.start?.getTime() ?? 0 / 1000).toFixed(0)),
+    class_ended_date: parseInt((cls.end?.getTime() ?? 0 / 1000).toFixed(0)),
+  };
+  const res = await axios.post<{ class_id: string }>(url, body);
+  return res.data.class_id;
+}
+
+export { listTeacherClasses, publishClass };

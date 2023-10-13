@@ -6,7 +6,7 @@ import {
   faPlayCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { CourseContext } from "../../../pages/teachers/CreateCourse.tsx";
 import { Chapter, Lesson } from "../types/course";
 import FileLessonCreate from "./FileLessonCreate";
@@ -107,30 +107,46 @@ function _LessonPreview({ lessonName, lessonType }: _LessonPreviewProps) {
 interface CourseChapterCreateProps {
   onSubmit: () => void;
   onCancel: () => void;
+  chapterToEdit?: number;
 }
 
-function CourseChapterCreate({ onSubmit, onCancel }: CourseChapterCreateProps) {
+function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapterCreateProps) {
   const courseContext = useContext(CourseContext);
+  const [chapterNumber, setChapterNumber] = useState<number>(0);
   const [chapterName, setChapterName] = useState<string>("");
   const [chapterDescription, setChapterDescription] = useState<string>("");
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [mode, setMode] = useState("main");
-
-  const chapterNumber = courseContext.course.chapters.length + 1;
+  useEffect(() => {
+    setChapterNumber(chapterToEdit ?? courseContext.course.chapters.length + 1)
+    setChapterName(courseContext.course.chapters[chapterToEdit - 1]?.name ?? "")
+    setChapterDescription(courseContext.course.chapters[chapterToEdit - 1]?.description ?? "")
+    setLessons(courseContext.course.chapters[chapterToEdit - 1]?.lessons ?? [])
+  }, [chapterToEdit, courseContext.course.chapters])
 
   const handleSubmit = () => {
     const newChapter: Chapter = {
-      chapterId: "1234567890",
+      chapterId: new Date().getTime().toString(),
       name: chapterName,
       number: chapterNumber,
       description: chapterDescription,
       lessons: lessons,
     };
+    if (chapterToEdit) {
+      const updatedCourse = { ...courseContext.course }
+      const idx = updatedCourse.chapters.findIndex(chapter => chapter.number === chapterToEdit)
+      if (idx == -1) throw new Error("chapter not found")
+      updatedCourse.chapters[idx] = newChapter
+      courseContext.setCourse(updatedCourse)
+      onSubmit();
+      return
+    }
     const updatedChapters = [...courseContext.course.chapters, newChapter];
     const updatedCourse = { ...courseContext.course };
     updatedCourse.chapters = updatedChapters;
     courseContext.setCourse(updatedCourse);
     onSubmit();
+    return
   };
 
   const onChapterNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

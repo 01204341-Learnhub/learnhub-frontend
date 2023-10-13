@@ -19,9 +19,10 @@ import {
 } from "../../features/teaches/types/course";
 import { useUser } from "../../hooks/useUser.ts";
 
+type AvailableTab = "content" | "goals" | "publishing" | "add-chapter" | "edit-chapter";
 interface _SideNavProps {
   currentTab: string;
-  onChangeTab: (tab: string) => void;
+  onChangeTab: (tab: AvailableTab) => void;
   onPublish?: () => void;
   readyToPublish: boolean;
 }
@@ -263,6 +264,7 @@ interface CourseContextType {
   setCourse: (course: Course) => void;
 }
 
+
 const CourseContext = React.createContext<CourseContextType | undefined>(
   undefined,
 );
@@ -271,6 +273,7 @@ function CreateCourse() {
   const navigate = useNavigate();
   const { user } = useUser();
   const teacherID = user.userID;
+  const [chapterToEdit, setChapterToEdit] = useState(-1)
   const [course, setCourse] = useState<Course>({
     courseId: "1234567890", // TODO: Get an ID, possibly uuid.
     name: "",
@@ -289,7 +292,7 @@ function CreateCourse() {
     studentCount: 0,
     chapters: [],
   });
-  const [currentTab, setCurrentTab] = useState<string>("content");
+  const [currentTab, setCurrentTab] = useState<AvailableTab>("content");
   const [initializedCourse, setInitializedCourse] = useState<boolean>(false);
 
   const handleInitializeCourse = () => {
@@ -298,7 +301,6 @@ function CreateCourse() {
   };
 
   const handlePublishCourse = () => {
-    // TODO: Send the course to the server.
     async function publishCourse() {
       await createCourse(course, teacherID);
     }
@@ -348,8 +350,13 @@ function CreateCourse() {
             readyToPublish={checkReadyToPublish(course)}
           />
           <div className="flex flex-col justify-start space-y-5 w-full h-fit p-8 bg-white">
-            {course.chapters.map((chapter) => (
-              <CourseChapterInfo chapter={chapter} />
+            {course.chapters.map((chapter, idx) => (
+              <div key={idx}>
+                <CourseChapterInfo chapter={chapter} onEdit={() => {
+                  setChapterToEdit(chapter.number)
+                  setCurrentTab("edit-chapter")
+                }} />
+              </div>
             ))}
             <button
               className="bg-[#D9D9D9] p-3 w-fit h-fit hover:drop-shadow-md"
@@ -429,7 +436,29 @@ function CreateCourse() {
         </CourseContext.Provider>
       </div>
     );
+  } else if (currentTab == "edit-chapter") {
+    return (
+      <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
+        <_TopNav
+          onQuit={() => {
+            navigate("/teach/overview");
+          }}
+        />
+        <CourseContext.Provider value={{ course, setCourse }}>
+          <CourseChapterCreate
+            onSubmit={() => {
+              setCurrentTab("content");
+            }}
+            onCancel={() => {
+              setCurrentTab("content");
+            }}
+            chapterToEdit={chapterToEdit}
+          />
+        </CourseContext.Provider>
+      </div>
+    );
   }
+
 }
 
 export default CreateCourse;

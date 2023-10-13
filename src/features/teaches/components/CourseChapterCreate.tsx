@@ -1,7 +1,6 @@
 import {
   faClipboardList,
   faFile,
-  faFileLines,
   faFolderBlank,
   faPlayCircle,
 } from "@fortawesome/free-solid-svg-icons";
@@ -38,15 +37,6 @@ function _LessonTypeSelector({ onSelect }: _LessonTypeSelectorProps) {
             >
               <FontAwesomeIcon icon={faPlayCircle} color="#505050" size="xl" />
               <h1 className="ml-5">วิดีโอ</h1>
-            </button>
-            <button
-              className="flex my-2 p-2 hover:bg-gray-200 w-full"
-              onSelect={() => {
-                onSelect("doc");
-              }}
-            >
-              <FontAwesomeIcon icon={faFileLines} color="#505050" size="xl" />
-              <h1 className="ml-5">เอกสาร</h1>
             </button>
             <button className="flex my-2 p-2 hover:bg-gray-200 w-full"
               onClick={() => { onSelect("quiz") }}>

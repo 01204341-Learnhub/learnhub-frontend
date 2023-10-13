@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { CreatingClassContext } from "../../../pages/teachers/CreateClass";
 import BetterCalendar from "./BetterCalendar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock } from "@fortawesome/free-solid-svg-icons";
+import { faClock, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 function _isSameDay(date1: Date, date2: Date) {
   return (
@@ -71,7 +71,9 @@ function _RegistrationEnd() {
 function _Schedule() {
   const creatingClassContext = useContext(CreatingClassContext);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+  const [selectedDates, setSelectedDates] = useState<Date[]>(
+    creatingClassContext.cls.schedule.map((session) => session.start)
+  );
   const [startHour, setStartHour] = useState<number | undefined>(undefined);
   const [startMinute, setStartMinute] = useState<number | undefined>(undefined);
   const [endHour, setEndHour] = useState<number | undefined>(undefined);
@@ -131,6 +133,58 @@ function _Schedule() {
             onDateSelect={handleSelectDate}
             targetDates={selectedDates}
           />
+        </div>
+        <div className="flex space-x-4 items-start w-full">
+          <p className="text-black text-[16px] font-semibold min-w-fit">
+            วันและเวลาที่คุณเลือก:
+          </p>
+          <div className="flex flex-col space-y-2 w-full">
+            {creatingClassContext.cls.schedule.map((session, index) => (
+              <div
+                key={index}
+                className="flex justify-start items-center space-x-3 p-2 bg-[#F5F5F5] border-[#808080] border-[1px] w-[85%]"
+              >
+                <p className="text-black text-[16px] font-medium">
+                  {session.start.toLocaleDateString("th-TH", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+                <FontAwesomeIcon icon={faClock} color="black" />
+                <p className="text-black text-[16px] font-medium">
+                  {session.start.toLocaleTimeString("th-TH", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                  {" - "}
+                  {session.end.toLocaleTimeString("th-TH", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+                <div className="flex-1"></div>
+                <button
+                  onClick={() => {
+                    setSelectedDates(
+                      selectedDates.filter(
+                        (date) => !_isSameDay(date, session.start)
+                      )
+                    );
+                    const updatedClass = { ...creatingClassContext.cls };
+                    updatedClass.schedule = updatedClass.schedule.filter(
+                      (s) => s !== session
+                    );
+                    creatingClassContext.setCls(updatedClass);
+                  }}
+                  className="rounded-full min-w-[30px] min-h-[30px] bg-[#E5E5E5] hover:opacity-80 hover:bg-[#C4C4C4] hover:drop-shadow-md"
+                >
+                  <FontAwesomeIcon icon={faTimes} color="black" />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       <dialog id="select-session-time-dialog" className="modal">
@@ -228,6 +282,9 @@ function _Schedule() {
                     ),
                     end: new Date(selectedDate.setHours(endHour, endMinute)),
                   });
+                  updatedClass.schedule.sort((a, b) =>
+                    a.start.getTime() < b.start.getTime() ? -1 : 1
+                  );
                   creatingClassContext.setCls(updatedClass);
                 }}
               >

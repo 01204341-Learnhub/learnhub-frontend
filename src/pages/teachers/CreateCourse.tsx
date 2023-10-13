@@ -6,6 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import CourseCardPreview from "../../features/teaches/components/CourseCardPreview";
 import CourseChapterCreate from "../../features/teaches/components/CourseChapterCreate";
 import CourseChapterInfo from "../../features/teaches/components/CourseChapterInfo";
@@ -307,8 +308,13 @@ function CreateCourse() {
     publishCourse().then(() => {
       alert("Course published!");
       navigate("/teach/overview");
-    }).catch((err) => {
-      alert("Error: " + err);
+    }).catch(() => {
+      Swal.fire({
+        title: "เกิดข้อผิดพลาดในการเผยแพร่คอร์ส",
+        text: "กรุณาลองใหม่อีกครั้ง",
+        icon: "error",
+        confirmButtonText: "ตกลง",
+      })
     })
 
   };

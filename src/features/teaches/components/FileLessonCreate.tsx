@@ -29,7 +29,7 @@ function FileLessonCreate({
     setLessonName(e.target.value);
   };
   const onLessonDescriptionChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setLessonDescription(e.target.value);
   };
@@ -72,13 +72,12 @@ function FileLessonCreate({
             onChange={onLessonNameChange}
           />
         </div>
-        <div className="  flex grow items-center pt-2 pb-4">
-          <h1 className="my-auto mx-[40px] font-semibold text-[18px]">
+        <div className="  flex pt-2 pb-4">
+          <h1 className="mx-[40px] font-semibold text-[18px]">
             คำอธิบาย
           </h1>
-          <input
-            type="text"
-            className="mr-[50px] min-w-0  grow input input-bordered"
+          <textarea
+            className="mr-[50px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
             value={lessonDescription}
             onChange={onLessonDescriptionChange}
           />
@@ -106,7 +105,7 @@ function FileLessonCreate({
                 <FontAwesomeIcon
                   icon={faX}
                   color="#606060"
-                  className=" mx-[40px] my-[20px]"
+                  className=" mx-[40px] my-auto"
                   onClick={() => onRemoveFile(index)}
                 />
               </div>

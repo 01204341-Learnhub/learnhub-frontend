@@ -48,7 +48,7 @@ interface _LessonDisplayProp {
 
 function _LessonDisplay({ lesson, progress, onLessonEnd, onUpdateProgress }: _LessonDisplayProp) {
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
-    if (!lesson) return (<div>Not found</ div>)
+    if (!lesson) return (<div className="font-semibold sm:text-lg text-[#606060]">คลิ๊กเลือกบทเรียนด้านล่าง เพื่อเริ่มเรียนกันเถอะ</ div>)
     if (lesson.lessonType == 'video') {
         return (
             <div>
@@ -58,16 +58,20 @@ function _LessonDisplay({ lesson, progress, onLessonEnd, onUpdateProgress }: _Le
     } else if (lesson.lessonType == "quiz") {
         if (progress.finished) {
             return (
-                <CourseMultipleChoiceQuizReport quizID={lesson.src} />
+                <div className=" overflow-scroll w-full h-96">
+                    <CourseMultipleChoiceQuizReport quizID={lesson.src} />
+                </div>
             )
         } else {
             return (
-                <CourseMultipleChoiceQuiz lesson={lesson} progress={progress}
-                    onDone={() => {
-                        progress.finished = true
-                        forceUpdate()
-                        onLessonEnd()
-                    }} />
+                <div className=" overflow-hidden">
+                    <CourseMultipleChoiceQuiz lesson={lesson} progress={progress}
+                        onDone={() => {
+                            progress.finished = true
+                            forceUpdate()
+                            onLessonEnd()
+                        }} />
+                </div>
             )
         }
     }

@@ -20,7 +20,7 @@ function Basket() {
     }
 
     const handlePayment = async () => {
-        const transction = await purchaseCourse(user.userID, "1111111111111");
+        const transction = await purchaseCourse(user.userID, user.userID);
         if (transction) {
             Swal.fire({
                 title: "ชำระเงินสำเร็จ",

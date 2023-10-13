@@ -6,7 +6,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import booklogo from '../assets/images/bookLogo.png'
 import namelogo from '../assets/images/textNameLogo.png'
 import BasketItemSlot from '../features/stores/components/BasketItemSlot'
-import { useBasket } from '../features/stores/hooks/useBasket'
 import { fetchBasketItems } from '../features/stores/services/purchase'
 import { useUser } from '../hooks/useUser'
 import { signOut } from '../services/auth/signOut'
@@ -15,13 +14,12 @@ import { clearUser } from '../slices/userSlice'
 import { RootState } from '../store'
 
 function MainBar() {
-    const basket = useBasket()
-    const basketItems = basket.items
+    const basket = useSelector((state: RootState) => state.basket)
+    const basketItems = basket.basket.items
     const { user } = useUser()
     const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
     const dispatcher = useDispatch()
     const [openDropdown, setOpenDropdown] = useState(null)
-    //const basketItems = useSelector((state: RootState) => state.basket.basket.items)
     const navigate = useNavigate()
     const toggleDropdown = (dropdownName) => {
         if (openDropdown === dropdownName) {
@@ -33,7 +31,7 @@ function MainBar() {
 
     const handleClickBasket = () => {
         async function fetchBasket() {
-            console.log(isFetchOnce)
+            //console.log(isFetchOnce)
             if (!isFetchOnce) {
                 const BasketItems = await fetchBasketItems(user.userID)
                 dispatcher(setStatusFetchOnce(true))
@@ -46,7 +44,7 @@ function MainBar() {
         fetchBasket()
         toggleDropdown('mycartdropdown')
     }
-
+    
     const handleSignOut = () => {
         signOut().then(() => {
             dispatcher(clearUser())

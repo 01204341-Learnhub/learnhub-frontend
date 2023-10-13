@@ -35,7 +35,8 @@ function CourseDetailPage() {
                 </div>
                 <div className="flex flex-col items-center pb-4">
                     <ProgramCoverWithInstructorProfile programCoverUrl={thumnailUrl}
-                        instructor={{ profileUrl: instructor.avatarUrl, name: instructor.name, jobTitle: instructor.name }}
+                        instructor={{ profileUrl: instructor.avatarUrl, name: instructor.name, jobTitle: instructor.name , teacherID:instructor.instructorID
+                        }}
                         reviewCount={reviewerCount}
                         rating={rating} />
 

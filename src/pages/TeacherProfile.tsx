@@ -1,20 +1,19 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import TeacherProfileCard from "../features/profiles/components/TeacherProfileCard.tsx";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
-import { useTeachClasses } from "../features/teaches/hooks/useTeachClasses.ts";
-import { useTeachCourses } from "../features/teaches/hooks/useTeachCourses.ts";
+import { useInstructor } from "../features/stores/hooks/useInstructor..ts";
 
 
 
 
 function TeacherProfile() {
+    const { id } = useParams<{ id: string }>()
     const [displayedCourses, setDisplayedCourses] = useState<number>(4)
     const [displayedClasses, setDisplayedClasses] = useState<number>(4)
-    const { courses, isFetchingCourse } = useTeachCourses()
-    const { classes, isFetchingClasses } = useTeachClasses()
+    const { instructor, isFetching } = useInstructor(id)
 
-    if (isFetchingCourse || isFetchingClasses) {
+    if (isFetching) {
         return (
             <div>
                 LOADING...
@@ -25,22 +24,23 @@ function TeacherProfile() {
     const renderProgramCourse = () => {
         return (
             <>
-                {courses.slice(0, displayedCourses).map((program, index) => {
+                {instructor.courses.slice(0, displayedCourses).map((program, index) => {
                     return (
-                        <Link to={`/detail/course/${program.courseID}`} key={index} className="my-4 px-6">
-                            <ProgramSlot
-                                key={index}
-                                courseThumbnailUrl={program.thumbnailUrl}
-                                courseName={program.name}
-                                instructorName={"FULLNAME OF TEACHER"}
-                                percentCompleted={100}
-                                regisDate={""}
-                                voter={program.rating}
-                                price={-99999}
-                                tag={"HARDCODE TAG"}
-                                lvl={"HARDCODE LEVEL"}
-                            />
-                        </Link>
+                        <div className="flex mr-10 my-5 pl-[10%]">
+                            <img src={program.thumbnailUrl} className="h-[100px] w-[100px] bg-black ml-[10px]"></img>
+                            <div className="h-[100px] w-[250px] bg-red-50">
+                                <div>
+                                    <div className="mx-5 mt-4 mb-2">
+                                        {program.name}
+                                    </div>
+                                    <div className="mx-5">
+                                        <Link to={`/detail/course/${program.courseID}`} key={index} className="my-4">
+                                            รายละเอียด
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     )
                 })}
             </>
@@ -50,13 +50,13 @@ function TeacherProfile() {
     const renderProgramClass = () => {
         return (
             <>
-                {classes.slice(0, displayedClasses).map((program, index) => {
+                {instructor.classes.slice(0, displayedClasses).map((program, index) => {
                     return (
                         <Link to={`/detail/class/${program.classID}`} key={index} className="my-4 px-6" >
                             <ProgramSlot key={index} courseThumbnailUrl={program.classThumbnailUrl}
                                 courseName={program.className}
-                                instructorName={"HARDCODE INSTRUCTOR"}
-                                percentCompleted={100}
+                                instructorName={program.className}
+                                percentCompleted={program.percentCompleted}
                                 regisDate={"2030303"} voter={0} price={3000} tag={"HARDCODE TAG"}
                                 lvl={"พื้นฐาน"} />
                         </Link>
@@ -66,16 +66,34 @@ function TeacherProfile() {
         )
     }
 
-    const loadMoreCourses = () => { setDisplayedCourses(displayedCourses + 4) }
-    const loadMoreClasses = () => { setDisplayedClasses(displayedClasses + 4) }
-
+    const loadMoreCourses = () => {
+        setDisplayedCourses((p) => {
+            if (p > 4) {
+                return 4
+            }
+            else {
+                return p + 4
+            }
+        })
+    }
+    const loadMoreClasses = () => {
+        setDisplayedClasses((p) => {
+            if (p > 4) {
+                return 4
+            }
+            else {
+                return p + 4
+            }
+        }
+        )
+    }
     return (
         <div className=" bg-[#F0F0F0] h-full w-full flex flex-row">
             <div className=" h-full bg-white ">
                 <TeacherProfileCard
-                    email={"HARDCODE EMAIL"}
-                    profile_pic={"HARDCODE PROFILE PIC"}
-                    fullname={"HARDCODE FULLNAME"}
+                    email={instructor.email}
+                    profile_pic={instructor.profilePic}
+                    fullname={instructor.fullName}
                     rating={-1}
                     students={-1}
                     classes={-1}
@@ -88,7 +106,7 @@ function TeacherProfile() {
                     <div className="pl-5 mt-5 pt-8 grid grid-cols-4">
                         {renderProgramCourse()}
                     </div>
-                    {(4 > 4 && 3 > 1) ? (
+                    {(instructor.courses.length > 4 && 3 > 1) ? (
                         <button
                             className="p-4 rounded-xl bg-[#505050] text-lg text-white font-bold shadow-xl"
                             onClick={loadMoreCourses}
@@ -104,7 +122,7 @@ function TeacherProfile() {
                     <div className="pl-3 mt-5 pt-8 grid grid-cols-4">
                         {renderProgramClass()}
                     </div>
-                    {(5 > 4 && 4 > displayedClasses) ? (
+                    {(instructor.classes.length > 4 && 4 > displayedClasses) ? (
                         <button
                             className="p-4 rounded-xl bg-[#505050] text-lg text-white font-bold shadow-xl"
                             onClick={loadMoreClasses}

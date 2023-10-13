@@ -1,12 +1,13 @@
 import { useReducer, useState } from "react"
 import { useParams } from "react-router-dom"
-import VideoPlayer from "../../components/VideoPlayer"
 import ChapterOutline from "../../features/learns/components/ChapterOutline"
 import CourseAnnouncementDropdown from "../../features/learns/components/CourseAnnouncementDropdown"
 import CourseMultipleChoiceQuiz from "../../features/learns/components/CourseMultipleChoiceQuiz"
 import CourseMultipleChoiceQuizReport from "../../features/learns/components/CourseMultipleChoiceQuizReport"
+import VideoLessonPlayer from "../../features/learns/components/VideoLessonPlayer"
 import { useCourseChapters } from "../../features/learns/hooks/useCourseChapters"
 import { useStudentCourseProgress } from "../../features/learns/hooks/useStudentCourseProgress"
+import { updateStudentCourseLessonProgress } from "../../features/learns/services/progress"
 import { CourseChapter } from "../../features/learns/types/courseChapters"
 import { CourseLesson } from "../../features/learns/types/lessons"
 import { StudentCourseLessonProgress, StudentCourseProgress } from "../../features/learns/types/progress"
@@ -41,16 +42,18 @@ function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onS
 interface _LessonDisplayProp {
     lesson: CourseLesson | undefined,
     progress: StudentCourseLessonProgress | undefined
-    onLessonEnd: () => void
+    onLessonEnd: () => void,
+    onUpdateProgress: (progress: StudentCourseLessonProgress) => void
 }
 
-function _LessonDisplay({ lesson, progress, onLessonEnd }: _LessonDisplayProp) {
+function _LessonDisplay({ lesson, progress, onLessonEnd, onUpdateProgress }: _LessonDisplayProp) {
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
+    const { user } = useUser()
     if (!lesson) return (<div>Not found</div>)
     if (lesson.lessonType == 'video') {
         return (
             <div>
-                <VideoPlayer url={lesson.src} />
+                <VideoLessonPlayer url={lesson.src} onProgressUpdate={onUpdateProgress} lessonProgress={progress} />
             </div>
         )
     } else if (lesson.lessonType == "quiz") {
@@ -109,6 +112,14 @@ function LearnCourse() {
         currentProgress.finished = true
         updateLessonProgress(currentProgress).then(() => { forceUpdate() })
     }
+    function updateProgress(lessonProgress: StudentCourseLessonProgress) {
+        const idx = progress.lessons.findIndex((lp) => lp.lessonID == lessonProgress.lessonID)
+        if (idx == -1) throw new Error("Lesson not found")
+        progress.lessons[idx] = lessonProgress
+        updateStudentCourseLessonProgress(user.userID, courseID, lessonProgress).then(() => {
+            forceUpdate()
+        })
+    }
     return (
         <div className="bg-[#eeeeee80] h-full pb-20">
             <div className="flex pt-8 pl-14 pb-14">
@@ -116,7 +127,8 @@ function LearnCourse() {
                 <h1 className="text-gray-600 font-semibold text-3xl my-auto ml-4"></h1>
             </div>
             <div className="flex items-center justify-center">
-                <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} onLessonEnd={onLessonEnd} />
+                <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} onLessonEnd={onLessonEnd}
+                    onUpdateProgress={updateProgress} />
             </div>
             <div className="flex flex-col items-center mx-20 mt-20">
 

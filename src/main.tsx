@@ -21,6 +21,7 @@ import Register from "./pages/Register";
 import TeacherProfile from "./pages/TeacherProfile";
 import LearnCourse from "./pages/students/LearnCourse";
 import LearningClasses from "./pages/students/LearningClasses";
+import LearningClass from "./pages/students/LearningClass";
 import LearningHomeworkDetail from "./pages/students/LearningHomeworkDetail";
 import LearningHomeworks from "./pages/students/LearningHomeworks";
 import LearningOverview from "./pages/students/LearningOverview";
@@ -61,6 +62,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               />
               <Route path="/learn/classes" element={<LearningClasses />} />
               <Route
+                path="/learn/classes/:classId"
+                element={<LearningClass />}
+              />
+              <Route
                 path="/learn/classes/:classId/homeworks/:homeworkId"
                 element={<LearningHomeworkDetail />}
               />
@@ -71,6 +76,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route element={<TeacherNavbarLayout />}>
                 <Route path="/teach/courses" element={<TeachingCourses />} />
                 <Route path="/teach/classes" element={<TeachingClasses />} />
+                <Route
+                  path="/teach/classes/assignment/:assignmentID"
+                  element={<TeachingClasses />}
+                />
                 <Route path="/teach/homework" element={<TeachingHomeworks />} />
                 <Route path="/teach/overview" element={<TeacherOverview />} />
                 <Route path="/teach/create/course" element={<CreateCourse />} />

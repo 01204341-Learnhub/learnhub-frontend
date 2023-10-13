@@ -5,6 +5,8 @@ type Work = {
   dueDate?: Date;
   score: number;
   topic: string;
+  send: number;
+  nosend: number;
 };
 
 export type { Work };

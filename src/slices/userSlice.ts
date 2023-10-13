@@ -10,6 +10,7 @@ export const userSlice = createSlice({
     changeProfilePicture: (state, action) => {
       const newProfilePic = action.payload as string;
       state.user.profilePicture = newProfilePic;
+      localStorage.setItem("learnhubUser", JSON.stringify(state.user));
     },
     clearUser: (state) => {
       state.user = undefined;

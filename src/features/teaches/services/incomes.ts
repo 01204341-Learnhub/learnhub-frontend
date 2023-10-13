@@ -18,6 +18,7 @@ async function listTeacherIncomes(teacherID: string): Promise<Income[]> {
                 studentName: income.buyer.student_name,
             },
             price: income.price,
+            purchaseTime: new Date(income.purchase_time * 1000),
         }
     })
     return incomes

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState } from "react"
 import { useTeachIncomes } from "../../features/teaches/hooks/useIncomes"
 
 
 
 function TeacherIncomes(){
     const {incomes, isFetchingsIncomes} = useTeachIncomes()
+    const [isShowMonth, setIsShowMonth] = useState<boolean>(false)
 
     function _getTotalPrice(){
         let total_price = 0
@@ -16,8 +17,23 @@ function TeacherIncomes(){
 
     return (
         <div className="flex-cols h-full px-8 py-1">
-            <div className="flex items-center w-full h-[25%]
+            <div className="flex relative items-center w-full h-[25%]
             px-20 my-6 bg-[#f0f0f0]">
+                <div className="absolute flex flex-cols 
+                left-[75%] top-[10%]">
+                    <button 
+                    className="bg-red-500 px-3 py-1 rounded-l-2xl justify-center"
+                    onClick={() => setIsShowMonth(true)}
+                    >
+                        แสดงในเดือน
+                    </button>
+                    <button 
+                    className="bg-green-500 px-3 py-1 rounded-r-2xl justify-center"
+                    onClick={() => setIsShowMonth(false)}
+                    >
+                        แสดงทุกการซื้อ
+                    </button>
+                </div>
                 <div className="flex flex-rows items-end">
                     <div className="text-2xl text-black">
                         ยอดเงินรวมที่ได้รับ
@@ -35,7 +51,7 @@ function TeacherIncomes(){
             </div>
             <div className="w-full h-full">
                 <ol>
-                    {incomes.map((income, index) => {
+                    {incomes.filter((income) => (isShowMonth  && _isDateWithinNextMonth(income.purchaseTime)) || !isShowMonth).map((income, index) => {
                         return <li key={index}>
                             <_TransactionBox 
                             type={income.type}
@@ -99,5 +115,17 @@ function _TransactionBox(props : _TransactionBoxProps) {
     )
 }
 
+function _isDateWithinNextMonth(date : Date): boolean {
+
+    console.log(`purchase date: ${date}`)
+    // Calculate the date one month from now
+    const lastMonthDate = new Date()
+    lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+    console.log(`last month date: ${lastMonthDate}`)
+  
+    // Compare if the input date is greater than or equal to the current date
+    // and less than the date one month from now
+    return date >= lastMonthDate;
+  }
 
 export default TeacherIncomes

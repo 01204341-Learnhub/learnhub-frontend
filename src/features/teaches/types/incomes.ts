@@ -8,6 +8,7 @@ type Income = {
         studentName: string
     }
     price: number
+    purchaseTime: Date
 }
 
 export type {Income}

@@ -26,6 +26,7 @@ type ListTeacherIncomesResponse = {
       student_name: string
     }
     price: number
+    purchase_time: number
   }[]
 }
 

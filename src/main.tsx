@@ -46,7 +46,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="/home" element={<Home />} />
-            <Route path="/teacherprofile" element={<TeacherProfile />} />
+            <Route path="/teacherprofile/:id" element={<TeacherProfile />} />
             <Route path="/baskets" element={<Basket />} />
             <Route path="/baskets/payment" element={<BasketPayment />} />
             <Route path="/home/courses" element={<AllCourses />}></Route>

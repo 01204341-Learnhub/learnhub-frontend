@@ -2,6 +2,7 @@ import axios from "axios";
 import { ClassInfo, CreatingClass } from "../types/class.ts";
 const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function listTeacherClasses(teacherID: string) {
   const mock: ClassInfo[] = [
     {
@@ -56,15 +57,12 @@ async function listTeacherClasses(teacherID: string) {
   return mock;
 }
 
-async function publishClass(
-  teacherID: string,
-  cls: CreatingClass
-): Promise<string> {
+async function publishClass(cls: CreatingClass): Promise<string> {
   const url = `${baseURL}/programs/classes`;
   const body = {
     name: cls.name,
     class_pic: cls.pictureUrl,
-    teacher_id: teacherID,
+    teacher_id: cls.teacher.userID,
     max_student: cls.maxStudent,
     price: cls.price,
     description: cls.description,

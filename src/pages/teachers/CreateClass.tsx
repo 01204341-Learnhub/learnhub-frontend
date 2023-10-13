@@ -12,6 +12,7 @@ import ClassGoalsInfoForm from "../../features/teaches/components/ClassGoalsInfo
 import ClassPublishingInfoForm from "../../features/teaches/components/ClassPublishingInfoForm.tsx";
 import { CreatingClass } from "../../features/teaches/types/class.ts";
 import { useUser } from "../../hooks/useUser.ts";
+import { publishClass } from "../../features/teaches/services/classes.ts";
 
 interface _SideNavProps {
   currentTab: string;
@@ -129,33 +130,49 @@ function _TopPanel({ cls }: _TopPanelProps) {
       </div>
       <div className="flex flex-col justify-start items-start space-y-3 px-10 py-6 bg-white w-full min-w-fit">
         <div className="flex justify-between items-center w-[450px]">
-          <p className="text-[#808080] text-[20px] font-semibold">Info 1</p>
           <p className="text-[#808080] text-[20px] font-semibold">
-            {"Goes here"}
+            วันสิ้นสุดการลงทะเบียน
+          </p>
+          <p className="text-[#808080] text-[20px] font-semibold">
+            {cls.registrationEnd === undefined
+              ? "ยังไม่ได้กำหนด"
+              : cls.registrationEnd.toLocaleDateString("th-TH")}
           </p>
         </div>
         <div className="flex justify-between items-center w-[450px]">
-          <p className="text-[#808080] text-[20px] font-semibold">Info 2</p>
           <p className="text-[#808080] text-[20px] font-semibold">
-            {"Goes here"}
+            จำนวนครั้งการเรียน
+          </p>
+          <p className="text-[#808080] text-[20px] font-semibold">
+            {cls.schedule.length} ครั้ง
           </p>
         </div>
         <div className="flex justify-between items-center w-[450px]">
-          <p className="text-[#808080] text-[20px] font-semibold">Info 3</p>
           <p className="text-[#808080] text-[20px] font-semibold">
-            {"Goes here"}
+            วันแรกของการเรียน
+          </p>
+          <p className="text-[#808080] text-[20px] font-semibold">
+            {cls.start === undefined
+              ? "ยังไม่ได้กำหนด"
+              : cls.start.toLocaleDateString("th-TH")}
           </p>
         </div>
         <div className="flex justify-between items-center w-[450px]">
-          <p className="text-[#808080] text-[20px] font-semibold">Info 4</p>
           <p className="text-[#808080] text-[20px] font-semibold">
-            {"Goes here"}
+            วันสุดท้ายของการเรียน
+          </p>
+          <p className="text-[#808080] text-[20px] font-semibold">
+            {cls.start === undefined
+              ? "ยังไม่ได้กำหนด"
+              : cls.end.toLocaleDateString("th-TH")}
           </p>
         </div>
         <div className="flex justify-between items-center w-[450px]">
-          <p className="text-[#808080] text-[20px] font-semibold">Info 5</p>
           <p className="text-[#808080] text-[20px] font-semibold">
-            {"Goes here"}
+            จำนวนผู้เรียนสูงสุด
+          </p>
+          <p className="text-[#808080] text-[20px] font-semibold">
+            {cls.maxStudent} คน
           </p>
         </div>
       </div>
@@ -215,7 +232,17 @@ function CreateClass() {
 
   const handlePublishClass = () => {
     // TODO: Send the class to the server.
-    console.log(cls);
+    console.log(JSON.stringify(cls, null, 2));
+    publishClass(cls)
+      .then((classId) => {
+        alert("เผยแพร่คลาสสำเร็จ");
+        console.log(classId);
+        // navigate("/teach/overview");
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("เผยแพร่คลาสไม่สำเร็จ");
+      });
   };
 
   if (currentTab == "goals") {

@@ -14,9 +14,17 @@ function _isSameDay(date1: Date, date2: Date) {
 
 function _RegistrationEnd() {
   const creatingClassContext = useContext(CreatingClassContext);
-  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+  const [selectedDates, setSelectedDates] = useState<Date[]>(
+    creatingClassContext.cls.registrationEnd !== undefined
+      ? [creatingClassContext.cls.registrationEnd]
+      : []
+  );
 
   const handleSelectDate = (date: Date) => {
+    if (date.getTime() < new Date().setHours(0, 0, 0, 0)) {
+      alert("ไม่สามารถเลือกวันในอดีตได้");
+      return;
+    }
     if (
       selectedDates.some((selectedDates) => _isSameDay(selectedDates, date))
     ) {
@@ -27,7 +35,7 @@ function _RegistrationEnd() {
     } else {
       setSelectedDates([date]);
       const updatedClass = { ...creatingClassContext.cls };
-      updatedClass.registrationEnd = new Date(date.setHours(23, 59, 0, 0));
+      updatedClass.registrationEnd = new Date(date.setHours(23, 59));
       creatingClassContext.setCls(updatedClass);
     }
   };
@@ -80,8 +88,16 @@ function _Schedule() {
   const [endMinute, setEndMinute] = useState<number | undefined>(undefined);
 
   const handleSelectDate = (date: Date) => {
+    if (creatingClassContext.cls.registrationEnd === undefined) {
+      alert("โปรดกำหนดวันสิ้นสุดการลงทะเบียนของคลาสก่อน");
+      return;
+    }
     if (date.getTime() < new Date().setHours(0, 0, 0, 0)) {
       alert("ไม่สามารถเลือกวันในอดีตได้");
+      return;
+    }
+    if (date.getTime() < creatingClassContext.cls.registrationEnd.getTime()) {
+      alert("ไม่สามารถเลือกวันที่อยู่ในช่วงลงทะเบียนได้");
       return;
     }
     if (selectedDates.some((selectedDate) => _isSameDay(selectedDate, date))) {
@@ -199,7 +215,6 @@ function _Schedule() {
               <select
                 className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setStartHour(parseInt(e.target.value));
                 }}
                 value={startHour}
@@ -216,7 +231,6 @@ function _Schedule() {
               <select
                 className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setStartMinute(parseInt(e.target.value));
                 }}
                 value={startMinute}
@@ -236,7 +250,6 @@ function _Schedule() {
               <select
                 className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setEndHour(parseInt(e.target.value));
                 }}
                 value={endHour}
@@ -253,7 +266,6 @@ function _Schedule() {
               <select
                 className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
                 onChange={(e) => {
-                  console.log(e.target.value);
                   setEndMinute(parseInt(e.target.value));
                 }}
                 value={endMinute}
@@ -285,6 +297,9 @@ function _Schedule() {
                   updatedClass.schedule.sort((a, b) =>
                     a.start.getTime() < b.start.getTime() ? -1 : 1
                   );
+                  updatedClass.start = updatedClass.schedule[0].start;
+                  updatedClass.end =
+                    updatedClass.schedule[updatedClass.schedule.length - 1].end;
                   creatingClassContext.setCls(updatedClass);
                 }}
               >

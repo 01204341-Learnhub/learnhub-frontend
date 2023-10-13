@@ -96,7 +96,6 @@ interface LessonSlotProp {
 
 
 function LessonSlot({ lesson, finished, onSelectLesson, onFinishedChange, isFocused }: LessonSlotProp) {
-    const [_, forceUpdate] = useReducer((x) => x + 1, 0)
     const handleClick = () => {
         if (onSelectLesson) onSelectLesson(lesson)
     }
@@ -104,7 +103,7 @@ function LessonSlot({ lesson, finished, onSelectLesson, onFinishedChange, isFocu
         onFinishedChange(e.target.checked)
     }
     return (
-        <div className={`flex ${isFocused ? "bg-[#E3F6F5] drop-shadow-lg" : ""} w-full`}>
+        <div className={`flex ${isFocused ? "bg-[#E3F6F5] drop-shadow-lg" : ""} w-full hover:bg-slate-200`}>
             <div className="flex justify-between items-center pb-1.5 w-11/12"
                 onClick={handleClick}>
                 <div className="flex">

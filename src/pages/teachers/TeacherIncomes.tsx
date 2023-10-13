@@ -9,7 +9,7 @@ function TeacherIncomes(){
 
     function _getTotalPrice(){
         let total_price = 0
-        incomes.forEach(_income => total_price += _income.price)
+        incomes.filter((income) => (isShowMonth  && _isDateWithinNextMonth(income.purchaseTime)) || !isShowMonth).forEach(_income => total_price += _income.price)
         return total_price
     }
 
@@ -17,7 +17,7 @@ function TeacherIncomes(){
 
     return (
         <div className="flex-cols h-full px-8 py-1">
-            <div className="flex relative items-center w-full h-[25%]
+            <div className="flex relative items-center w-full h-[200px]
             px-20 my-6 bg-[#f0f0f0]">
                 <div className="absolute flex flex-cols 
                 left-[75%] top-[10%]">

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import TeacherProfileCard from "../features/profiles/components/TeacherProfileCard.tsx";
-import ProgramSlot from "../features/stores/components/ProgramSlot";
 import { useInstructor } from "../features/stores/hooks/useInstructor..ts";
 
 
@@ -20,17 +19,27 @@ function TeacherProfile() {
             </div>
         );
     }
+    function countStudent():number{
+        let sumStudents = 0
+        for (let i = 0; i < instructor.classes.length; i++) {
+            sumStudents += instructor.classes[i].studentCount;
+          }
+        for (let i = 0; i < instructor.courses.length; i++) {
+            sumStudents += instructor.courses[i].studentCount;
+          }
+        return sumStudents
+    }
 
     const renderProgramCourse = () => {
         return (
             <>
                 {instructor.courses.slice(0, displayedCourses).map((program, index) => {
                     return (
-                        <div className="flex mr-10 my-5 pl-[10%]">
-                            <img src={program.thumbnailUrl} className="h-[100px] w-[100px] bg-black ml-[10px]"></img>
-                            <div className="h-[100px] w-[250px] bg-red-50">
+                        <div className="flex mr-10 my-5 pl-[10%] overflow-hidden">
+                            <img src={program.thumbnailUrl} className="h-[100px] w-[100px] bg-black ml-[10px] rounded-l-lg"></img>
+                            <div className="h-[100px] w-[250px] bg-white border-r border-y border-gray-300 rounded-r-lg">
                                 <div>
-                                    <div className="mx-5 mt-4 mb-2">
+                                    <div className="mx-5 mt-4 mb-2 font-bold">
                                         {program.name}
                                     </div>
                                     <div className="mx-5">
@@ -50,16 +59,23 @@ function TeacherProfile() {
     const renderProgramClass = () => {
         return (
             <>
-                {instructor.classes.slice(0, displayedClasses).map((program, index) => {
+                {instructor.classes.slice(0, displayedCourses).map((program, index) => {
                     return (
-                        <Link to={`/detail/class/${program.classID}`} key={index} className="my-4 px-6" >
-                            <ProgramSlot key={index} courseThumbnailUrl={program.classThumbnailUrl}
-                                courseName={program.className}
-                                instructorName={program.className}
-                                percentCompleted={program.percentCompleted}
-                                regisDate={"2030303"} voter={0} price={3000} tag={"HARDCODE TAG"}
-                                lvl={"พื้นฐาน"} />
-                        </Link>
+                        <div className="flex mr-10 my-5 pl-[10%] overflow-hidden">
+                            <img src={program.classThumbnailUrl} className="h-[100px] w-[100px] bg-black ml-[10px] rounded-l-lg"></img>
+                            <div className="h-[100px] w-[250px] bg-white border-r border-y border-gray-300 rounded-r-lg">
+                                <div>
+                                    <div className="mx-5 mt-4 mb-2 font-bold">
+                                        {program.className}
+                                    </div>
+                                    <div className="mx-5">
+                                        <Link to={`/detail/course/${program.classID}`} key={index} className="my-4">
+                                            รายละเอียด
+                                        </Link>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     )
                 })}
             </>
@@ -94,10 +110,9 @@ function TeacherProfile() {
                     email={instructor.email}
                     profile_pic={instructor.profilePic}
                     fullname={instructor.fullName}
-                    rating={-1}
-                    students={-1}
-                    classes={-1}
-                    courses={-1}
+                    students={countStudent()}
+                    classes={instructor.classes.length}
+                    courses={instructor.courses.length}
                 />
             </div>
             <div>

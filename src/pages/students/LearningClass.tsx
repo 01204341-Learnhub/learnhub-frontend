@@ -7,6 +7,7 @@ import ClassAnnouncementThread from "../../features/learns/components/ClassAnnou
 import ClassHomeworkThread from "../../features/learns/components/ClassHomeworkThread";
 import { useState } from "react";
 import ClassHomeworkListEntry from "../../features/learns/components/ClassHomeworkListEntry.tsx";
+import ClassPeopleListEntry from "../../features/learns/components/ClassPeopleListEntry.tsx";
 
 interface _TabSwitcherProps {
   currentTab: "main" | "homeworks" | "people";
@@ -108,24 +109,29 @@ function _HomeworksTab({ cls }: _HomeworksTabProps) {
     ),
   );
   return (
-    <div className="flex flex-col bg-white p-5 space-y-5">
-      {topics.map((tp) => (
-        <div>
-          <h1 className="text-black text-[32px] font-bold p-5 mb-2 border-b-[5px]">
-            {tp ?? "ไม่มีหัวข้อ"}
-          </h1>
-          <div className="flex flex-col space-y-2">
-            {cls.simpleThreads
-              .filter(
-                (st) => st.typ === "homework" && st.homeworkTopicName === tp,
-              )
-              .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime())
-              .map((st) => (
-                <ClassHomeworkListEntry simpleThread={st} />
-              ))}
+    <div className="flex w-full justify-center">
+      <div className="flex flex-col bg-white w-full min-w-[600px] max-w-[950px] p-5 space-y-5 ">
+        {topics.map((tp) => (
+          <div>
+            <h1 className="text-black text-[32px] font-bold p-5 mb-2 border-b-[5px]">
+              {tp ?? "ไม่มีหัวข้อ"}
+            </h1>
+            <div className="flex flex-col space-y-2">
+              {cls.simpleThreads
+                .filter(
+                  (st) => st.typ === "homework" && st.homeworkTopicName === tp,
+                )
+                .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime())
+                .map((st) => (
+                  <ClassHomeworkListEntry
+                    classId={cls.classId}
+                    simpleThread={st}
+                  />
+                ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -135,8 +141,26 @@ interface _PeopleTabProps {
 }
 
 function _PeopleTab({ cls }: _PeopleTabProps) {
-  cls;
-  return <div>people</div>;
+  return (
+    <div className="flex w-full justify-center">
+      <div className="flex flex-col w-full min-w-[600px] max-w-[950px] p-5 space-y-10 ">
+        <div>
+          <h1 className="text-black text-[32px] font-bold mb-4">ผู้สอน</h1>
+          <ClassPeopleListEntry user={cls.teacher} />
+        </div>
+        <div>
+          <h1 className="text-black text-[32px] font-bold mb-4">ผู้เรียน</h1>
+          <div className="flex flex-col space-y-2">
+            {cls.students
+              .sort((a, b) => a.fullname.localeCompare(b.fullname))
+              .map((st) => (
+                <ClassPeopleListEntry user={st} />
+              ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 type PathParams = {

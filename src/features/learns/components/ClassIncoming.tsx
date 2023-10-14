@@ -5,9 +5,7 @@ import { faClock } from "@fortawesome/free-solid-svg-icons";
 
 interface ClassIncomingProps {
     titleName: string;
-    dayOfWeek: string;
-    day: number;
-    month: string;
+    date: string;
     start: string;
     end: string;
     instrName: string;
@@ -26,7 +24,7 @@ export default function ClassIncoming (props: ClassIncomingProps) {
                 </div>
                 <div className=" absolute left-3 top-16 flex space-x-3 px-2 pt-2">
                     <FontAwesomeIcon icon={faCalendarDays} size="xl"></FontAwesomeIcon>
-                    <div className="text-[#8f8f8f] font-bold">วัน{props.dayOfWeek}ที่ {props.day} {props.month}</div>
+                    <div className="text-[#8f8f8f] font-bold">{props.date}</div>
                     <div className=" font-extrabold text-[15px]"> | </div>
                     <FontAwesomeIcon icon={faClock} size="xl"></FontAwesomeIcon>
                     <div className="text-[#8f8f8f] font-bold">{props.start} - {props.end}</div>

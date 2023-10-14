@@ -10,7 +10,6 @@ import TeacherNavbarLayout from "./layouts/TeacherNavbarLayout";
 import AllClasses from "./pages/AllClasses";
 import AllCourses from "./pages/AllCourses";
 import Basket from "./pages/Basket";
-import BasketPayment from "./pages/ฺBasketPayment";
 import ClassDetail from "./pages/ClassDetail";
 import CourseDetailPage from "./pages/CourseDetail";
 import Home from "./pages/Home";
@@ -20,8 +19,8 @@ import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import TeacherProfile from "./pages/TeacherProfile";
 import LearnCourse from "./pages/students/LearnCourse";
-import LearningClasses from "./pages/students/LearningClasses";
 import LearningClass from "./pages/students/LearningClass";
+import LearningClasses from "./pages/students/LearningClasses";
 import LearningHomeworkDetail from "./pages/students/LearningHomeworkDetail";
 import LearningHomeworks from "./pages/students/LearningHomeworks";
 import LearningOverview from "./pages/students/LearningOverview";
@@ -29,11 +28,13 @@ import LearningSchedule from "./pages/students/LearningSchedule";
 import SelectCourse from "./pages/students/SelectCourse";
 import CreateClass from "./pages/teachers/CreateClass";
 import CreateCourse from "./pages/teachers/CreateCourse";
-import TeacherOverview from "./pages/teachers/TeacherOverview";
+import SelectTeachingClass from "./pages/teachers/SelectTeachingClass";
 import TeacherIncomes from "./pages/teachers/TeacherIncomes";
+import TeacherOverview from "./pages/teachers/TeacherOverview";
 import TeachingClasses from "./pages/teachers/TeachingClasses";
 import TeachingCourses from "./pages/teachers/TeachingCourses";
 import TeachingHomeworks from "./pages/teachers/TeachingHomeworks";
+import BasketPayment from "./pages/ฺBasketPayment";
 import store from "./store";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -76,7 +77,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             <Route element={<ProtectedRoute />}>
               <Route element={<TeacherNavbarLayout />}>
                 <Route path="/teach/courses" element={<TeachingCourses />} />
-                <Route path="/teach/classes" element={<TeachingClasses />} />
+                <Route path="/teach/classes" element={<SelectTeachingClass />} />
+                <Route path="/teach/classes/:classID" element={<TeachingClasses />} />
                 <Route
                   path="/teach/classes/assignment/:assignmentID"
                   element={<TeachingClasses />}
@@ -85,7 +87,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <Route path="/teach/overview" element={<TeacherOverview />} />
                 <Route path="/teach/create/course" element={<CreateCourse />} />
                 <Route path="/teach/create/class" element={<CreateClass />} />
-                <Route path="/teach/incomes" element={< TeacherIncomes/>} />
+                <Route path="/teach/incomes" element={< TeacherIncomes />} />
               </Route>
             </Route>
           </Route>

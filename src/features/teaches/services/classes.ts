@@ -1,57 +1,22 @@
+import axios from "axios";
 import { ClassInfo } from "../types/class.ts";
+import { ListTeacherClassesResponse } from "../types/responses.ts";
 
-async function listTeacherClasses(teacherID: string) {
-  const mock: ClassInfo[] = [
-    {
-      classID: "1",
-      className: "Course 1",
-      classThumbnailUrl: "https://picsum.photos/200",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-    {
-      classID: "2",
-      className: "Course 2",
-      classThumbnailUrl: "https://picsum.photos/300",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-    {
-      classID: "3",
-      className: "Course 3",
-      classThumbnailUrl: "https://picsum.photos/300",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-    {
-      classID: "4",
-      className: "Course 4",
-      classThumbnailUrl: "https://picsum.photos/400",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-    {
-      classID: "5",
-      className: "Course 5",
-      classThumbnailUrl: "https://picsum.photos/500",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-    {
-      classID: "6",
-      className: "Course 6",
-      classThumbnailUrl: "https://picsum.photos/600",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-  ];
-  return mock;
+const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+async function listTeacherClasses(teacherID: string): Promise<ClassInfo[]> {
+  const url = `${baseURL}/users/teachers/${teacherID}/classes`;
+  const res = await axios.get<ListTeacherClassesResponse>(url);
+  const classes: ClassInfo[] = res.data.classes.map((c) => {
+    return {
+      classID: c.class_id,
+      className: c.name,
+      classThumbnailUrl: c.class_pic,
+      percentCompleted: 999,
+      studentCount: c.student_count,
+      studentLimit: c.max_student,
+    };
+  });
+  return classes;
 }
 
 export { listTeacherClasses };

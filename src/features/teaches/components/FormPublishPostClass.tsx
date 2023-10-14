@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { getFileNameFromSrc } from "../../../utils/functions";
 import { uploadImageFile } from "../../../services/uploader/image";
+import Swal from "sweetalert2";
 
 export function FormPublishPostClass(props: { profileTeacher: string }) {
   const { profileTeacher } = props;
@@ -22,12 +23,16 @@ export function FormPublishPostClass(props: { profileTeacher: string }) {
     }[]
   >([]);
 
-  function getFileNameFromUrl(url: string): string {
-    const parsedUrl = new URL(url);
-    const pathname = parsedUrl.pathname;
-    const lastSlashIndex = pathname.lastIndexOf("/");
-    const fileName = pathname.substring(lastSlashIndex + 1);
-    return fileName;
+  function getFileType(file: File): string {
+    const imageTypes = ["image/jpeg", "image/png", "image/gif"];
+    const videoTypes = ["video/mp4", "video/avi", "video/quicktime", "video/x-ms-wmv"];
+    if (imageTypes.includes(file.type)) {
+      return "image";
+    } else if (videoTypes.includes(file.type)) {
+      return "video";
+    } else {
+      return "file";
+    }
   }
 
   const handleClickCreatePost = () => {
@@ -36,12 +41,6 @@ export function FormPublishPostClass(props: { profileTeacher: string }) {
 
   const addNewPost = () => {
     alert("add new post");
-  };
-
-  const handdleUploadFile = (e: React.ChangeEvent<HTMLInputElement>) => {};
-
-  const handleClickUploadFile = () => {
-    setIsClickUploadLink(!isClickUploadLink);
   };
 
   const handleClickUploadLink = () => {
@@ -53,16 +52,34 @@ export function FormPublishPostClass(props: { profileTeacher: string }) {
     setUpLoadLink(link);
   };
 
-  const handelUploadFileChange = async (
+const handelUploadFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+) => {
     const fileList = e.target.files;
     const firstFile = fileList[0];
     let url = "";
+    Swal.fire({
+        title: "กำลังอัพโหลดไฟล์",
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+    });
+
     url = await uploadImageFile(firstFile);
     const file = fileList[0];
-    setAttachments([...attachments, { attachmentType: file.type, src: url }]);
-  };
+    setAttachments([
+        ...attachments,
+        { attachmentType: getFileType(file), src: url },
+    ]);
+    Swal.close();
+    Swal.fire({
+        icon: "success",
+        title: "อัพโหลดไฟล์สำเร็จ",
+        showConfirmButton: false,
+        timer: 1500,
+    })
+};
 
   const addNewAttachment = () => {
     const linkType = getFileNameFromSrc(upLoadLink);
@@ -78,12 +95,14 @@ export function FormPublishPostClass(props: { profileTeacher: string }) {
     const newAttachments = attachments.filter((attachment, i) => i !== index);
     newAttachments.slice(index, 1);
     setAttachments(newAttachments);
+    Swal.fire({
+        icon: "success",
+        title: "ลบไฟล์สำเร็จ",
+        showConfirmButton: false,
+        timer: 1500,
+    })
   };
 
-  const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = e.target.files;
-    alert(fileList);
-  };
 
   const classNameButtonOk = textDetailForm
     ? "btn w-24 text-sm mx-2"
@@ -108,14 +127,34 @@ export function FormPublishPostClass(props: { profileTeacher: string }) {
     );
   };
 
+  const renderPreview = (typeFile : string, src: string) => {
+    if (typeFile === "image") {
+        return (
+            <div className="w-1/5 flex items-center justify-center h-full border-r-2">
+                <img src={src} alt="" className="w-full h-full object-cover" />
+            </div>
+        )
+    } else if (typeFile === "video") {
+        return (
+            <div className="w-1/5 flex items-center justify-center h-full border-r-2">
+                <video src={src} className="w-full h-full object-cover" />
+            </div>
+        )
+    } else if (typeFile === "file") {
+        return (
+            <div className="w-1/5 flex items-center justify-center h-full border-r-2">
+                <img src="https://img.icons8.com/ios/50/000000/file.png" alt="" className="w-full h-full object-scale-down" />
+            </div>
+        )
+    }
+  }
+
   const renderAttachments = () => {
     return attachments.map((argument, index) => {
       return (
-        <div className="flex w-full items-center justify-center">
+        <div key={index} className="flex w-full items-center justify-center">
             <div className="flex w-4/5 bg-white h-24 mb-2 items-center justify-center border-2">
-            <div className="w-1/5 flex items-center justify-center h-full border-r-2">
-                <p className="font-bold text-xs">preview</p>
-            </div>
+            {renderPreview(argument.attachmentType, argument.src)}
             <div className="w-4/5 flex flex-col justify-center items-start ml-8 h-full overflow-hidden mx-8">
                 <p className="text-sm w-full text-start semibold truncate">
                 {argument.src}

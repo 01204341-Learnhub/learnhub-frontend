@@ -1,6 +1,6 @@
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Lesson } from "../types/course";
 import { CourseQuiz, CourseQuizProblem } from "../types/courseQuiz";
 
@@ -107,6 +107,7 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
 }
 
 interface QuizLessonCreateProps {
+    defaultLesson?: Lesson;
     chapterNumber: number;
     chapterName: string;
     lessonNumber: number;
@@ -114,7 +115,7 @@ interface QuizLessonCreateProps {
     onCancel: () => void;
 }
 
-function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, onSubmit }: QuizLessonCreateProps) {
+function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, onSubmit, defaultLesson }: QuizLessonCreateProps) {
     const [quiz, setQuiz] = useState<CourseQuiz>({
         // TODO: remove hardcode
         name: "",
@@ -150,6 +151,11 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
         }
         onSubmit(lesson)
     }
+    useEffect(() => {
+        if (defaultLesson) {
+            setQuiz(JSON.parse(defaultLesson.quiz))
+        }
+    }, [defaultLesson])
     return (
         <div className="w-full">
             <div className="ml-[70px] mt-[20px] flex items-center">
@@ -160,8 +166,8 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                     {chapterName} / สร้างแบบฝึกหัด
                 </h2>
             </div>
-            
-            
+
+
 
             <div className="ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
                 <div className="  flex grow items-center pt-2 pb-4">
@@ -177,13 +183,13 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                     <h1 className=" mx-[40px] font-semibold text-[18px]">คำอธิบาย</h1>
                     <textarea
                         className="mr-[50px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
-                        value={quiz.description} 
-                        onChange={handleLessonDescriptionChange} 
+                        value={quiz.description}
+                        onChange={handleLessonDescriptionChange}
                     />
                 </div>
                 <div className="  flex grow items-center pt-2 pb-4">
                     <h1 className="my-auto mx-[40px] font-semibold text-[18px]">เวลาที่ใช้ (วินาที)</h1>
-                    <input 
+                    <input
                         type="text"
                         className="mr-[50px] min-w-0  grow input input-bordered"
                     />
@@ -209,13 +215,13 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                             }
                         })}
                         <hr />
-                        <h1 className=" mx-[40px] py-[10px] font-semibold text-[18px] text-[#3a3a3a]">คำอธิบาย : 
+                        <h1 className=" mx-[40px] py-[10px] font-semibold text-[18px] text-[#3a3a3a]">คำอธิบาย :
                             <span className=" font-medium">{" "}{problem.explaination}</span>
                         </h1>
                     </div>
                 )
             })}
-            
+
             {isAdding ? <_ProblemCreate onSubmit={onProblemSubmit} /> : <></>}
             <div>
                 <button className="btn ml-[70px] my-5 bg-[#d9d9d9]"
@@ -226,10 +232,10 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
             </div>
             <div className="flex mt-[40px] justify-end mr-[100px] w-full">
                 <button className="btn bg-black text-white" onClick={handleSubmit}>
-                บันทึก
+                    บันทึก
                 </button>
                 <button className="btn ml-7 mr-[100px]" onClick={onCancel}>
-                ยกเลิก
+                    ยกเลิก
                 </button>
             </div>
         </div>

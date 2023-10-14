@@ -245,6 +245,12 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
         lessonNumber={lessons.length + 1} onCancel={() => { setMode("main") }}
         onSubmit={handleAddLesson} />
     )
+  } if (mode == "edit-quiz") {
+    return (
+      <QuizLessonCreate chapterName={chapterName} chapterNumber={chapterNumber}
+        lessonNumber={lessonToBeEdit!.number} onCancel={() => { setMode("main") }}
+        onSubmit={handleEditLesson} defaultLesson={lessonToBeEdit!} />
+    )
   }
   return (
     <div className="w-full h-screen">

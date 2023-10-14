@@ -21,7 +21,7 @@ function ClassAnnouncementThread({
     user,
     classId,
     threadId,
-    "announcement",
+    "announcement"
   );
   return (
     <div className="bg-white border-[1px] border-[#a0a0a080] rounded-[10px] w-full">
@@ -67,9 +67,11 @@ function ClassAnnouncementThread({
             </div>
             <div className={thread.replies.length > 0 ? "block" : "hidden"}>
               <div className="flex flex-col w-full space-y-5 mx-3 mb-7 mt-3">
-                {thread.replies.map((reply, index) => (
-                  <ClassThreadReplyEntry key={index} reply={reply} />
-                ))}
+                {thread.replies
+                  .sort((a, b) => a.dateTime.getTime() - b.dateTime.getTime())
+                  .map((reply, index) => (
+                    <ClassThreadReplyEntry key={index} reply={reply} />
+                  ))}
               </div>
             </div>
             <div className="w-[95%]">

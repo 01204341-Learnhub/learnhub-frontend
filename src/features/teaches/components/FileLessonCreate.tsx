@@ -56,6 +56,7 @@ function FileLessonCreate({
   useEffect(() => {
     if (defaultLesson) {
       setLessonName(defaultLesson.name)
+      setFiles([new File([], defaultLesson.fileUrl!)])
     }
   }, [defaultLesson])
 

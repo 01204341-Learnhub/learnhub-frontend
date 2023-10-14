@@ -52,7 +52,7 @@ function _LessonTypeSelector({ onSelect }: _LessonTypeSelectorProps) {
             <button
               className="flex my-2 p-2 hover:bg-gray-200 w-full"
               onClick={() => {
-                onSelect("file");
+                onSelect("files");
               }}
             >
               <FontAwesomeIcon icon={faFile} color="#505050" size="xl" />
@@ -114,7 +114,7 @@ interface CourseChapterCreateProps {
   chapterToEdit?: number;
 }
 
-type CourseChapterCreateMode = "main" | "add-video" | "add-file" | "add-quiz" | "edit-video" | "edit-file" | "edit-quiz"
+type CourseChapterCreateMode = "main" | "add-video" | "add-files" | "add-quiz" | "edit-video" | "edit-files" | "edit-quiz"
 
 function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapterCreateProps) {
   const courseContext = useContext(CourseContext);
@@ -182,6 +182,7 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
     setMode(`add-${lessonType}` as CourseChapterCreateMode);
   };
   const handleEdditingLesson = (lessonType: string, lesson: Lesson) => {
+    console.log(lesson);
     setLessonToBeEdit(lesson)
     setMode(`edit-${lessonType}` as CourseChapterCreateMode);
   }
@@ -226,7 +227,7 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
       />
     )
   }
-  if (mode == "add-file") {
+  if (mode == "add-files") {
     return (
       <FileLessonCreate
         chapterNumber={chapterNumber}
@@ -238,6 +239,21 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
         }}
       />
     );
+  }
+  if (mode == "edit-files") {
+    return (
+      <FileLessonCreate
+        defaultLesson={lessonToBeEdit!}
+        chapterNumber={chapterNumber}
+        chapterName={lessonToBeEdit!.name}
+        lessonNumber={lessonToBeEdit!.number}
+        onSubmit={handleEditLesson}
+        onCancel={() => {
+          setMode("main");
+          setLessonToBeEdit(undefined)
+        }}
+      />
+    )
   }
   if (mode == "add-quiz") {
     return (

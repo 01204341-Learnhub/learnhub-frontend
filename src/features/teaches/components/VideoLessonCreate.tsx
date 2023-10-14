@@ -1,6 +1,6 @@
 import { faPaperclip, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import VideoPlayer from "../../../components/VideoPlayer";
 import { uploadFile } from "../../../services/uploader/file";
 import { Lesson } from "../types/course";
@@ -30,6 +30,7 @@ function _Preview({ src }: { src: string | undefined }) {
 }
 
 interface VideoLessonCreateProps {
+  defaultLesson?: Lesson;
   chapterNumber: number;
   chapterName: string;
   lessonNumber: number;
@@ -39,6 +40,7 @@ interface VideoLessonCreateProps {
 
 function VideoLessonCreate({
   chapterName,
+  defaultLesson,
   chapterNumber,
   lessonNumber,
   onSubmit,
@@ -50,6 +52,12 @@ function VideoLessonCreate({
   };
   const [fileSrc, setFileSrc] = useState<File | undefined>(undefined);
   const [urlSrc, setUrlSrc] = useState<string>("");
+  useEffect(() => {
+    if (defaultLesson != undefined) {
+      setLessonName(defaultLesson.name);
+      setUrlSrc(defaultLesson.videoUrl!);
+    }
+  }, [defaultLesson])
   const handleSubmit = () => {
     if (lessonName === "") {
       alert("กรุณาใส่ชื่อบทเรียน");

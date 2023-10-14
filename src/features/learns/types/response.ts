@@ -14,6 +14,22 @@ type ListEnrolledCoursesResponse = {
   }[];
 };
 
+type ListEnrolledClassesResponse = {
+  classes: {
+    class_id: string;
+    name: string;
+    class_pic: string;
+    progress: number;
+
+    class_ended_date: number;
+    teacher: {
+      teacher_id: string;
+      teacher_name: string;
+      profile_pic: string;
+    };
+  }[];
+};
+
 type GetQuizResponse = {
   name: string;
   description: string;
@@ -101,96 +117,87 @@ type GetStudentCourseQuizReportResponse = {
 };
 
 type GetStudentDashboardResponse = {
-  classes:
-  {
+  classes: {
     class_info: {
-      class_name: string,
-      class_id: string
-    },
+      class_name: string;
+      class_id: string;
+    };
     teacher: {
-      teacher_id: string,
-      teacher_name: string,
-      profile_pic: string
-    },
-    schedules: 
-      {
-        start: number,
-        end: number
-      }[]
-  }[]
-  ,
-  assignments:
-  {
-    assignment_name: string,
-    assignment_id: string,
+      teacher_id: string;
+      teacher_name: string;
+      profile_pic: string;
+    };
+    schedules: {
+      start: number;
+      end: number;
+    }[];
+  }[];
+  assignments: {
+    assignment_name: string;
+    assignment_id: string;
     class_info: {
-      class_name: string,
-      class_id: string
-    },
-    due_date: number,
-    status: "open" | "closed",
+      class_name: string;
+      class_id: string;
+    };
+    due_date: number;
+    status: "open" | "closed";
     submission: {
-      submission_status: "check" | "uncheck" | "unsubmit",
-      submission_date: number
-    }
-  }[]
-  ,
-  announcements:
-  {
-    announcement_id: string,
+      submission_status: "check" | "uncheck" | "unsubmit";
+      submission_date: number;
+    };
+  }[];
+  announcements: {
+    announcement_id: string;
     course_info: {
-      course_id: string,
-      course_name: string
-    },
+      course_id: string;
+      course_name: string;
+    };
     teacher: {
-      teacher_id: string,
-      teacher_name: string,
-      profile_pic: string
-    },
-    name: string,
-    last_edit: number,
-    text: string
-  }[]
-
-}
-
+      teacher_id: string;
+      teacher_name: string;
+      profile_pic: string;
+    };
+    name: string;
+    last_edit: number;
+    text: string;
+  }[];
+};
 
 type ListCourseAnnouncementResponse = {
   announcements: {
     announcement_id: string;
     last_edit: number;
     name: string;
-  }[]
-}
+  }[];
+};
 
 type GetCourseAnnouncementResponse = {
-  "announcement_id": string,
-  "teacher": {
-    "teacher_id": string,
-    "teacher_name": string,
-    "profile_pic": string
-  },
-  "name": string,
-  "last_edit": number,
-  "text": string,
-  "attachments": 
-    {
-      "attachment_type": string,
-      "src": string
-    }[]
-  
-}
+  announcement_id: string;
+  teacher: {
+    teacher_id: string;
+    teacher_name: string;
+    profile_pic: string;
+  };
+  name: string;
+  last_edit: number;
+  text: string;
+  attachments: {
+    attachment_type: string;
+    src: string;
+  }[];
+};
 
 export type {
+  GetCourseAnnouncementResponse,
   GetCourseChapterResponse,
   GetCourseLessonResponse,
   GetQuizResponse,
   GetStudentCourseProgressResponse,
   GetStudentCourseQuizReportResponse,
-  GetCourseAnnouncementResponse,
+  GetStudentDashboardResponse,
+  ListCourseAnnouncementResponse,
   ListCourseChaptersResponse,
   ListCourseLessonsResponse,
+  ListEnrolledClassesResponse,
   ListEnrolledCoursesResponse,
-  ListCourseAnnouncementResponse,
-  GetStudentDashboardResponse
 };

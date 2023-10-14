@@ -1,34 +1,30 @@
+import axios from "axios";
 import { Class, EnrolledClass, generateMockClass } from "../types/classes";
+import { ListEnrolledClassesResponse } from "../types/response";
+
+const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 async function listEnrolledClass(studentID: string): Promise<EnrolledClass[]> {
   studentID;
-  const mock = (i: string, status: string) => {
-    const m = {
-      id: i,
-      name: "Mahasachan",
-      imageClassUrl: "https://www.mindphp.com/images/knowledge/122560/vue.jpg",
+  const url = `${baseURL}/users/students/${studentID}/classes`;
+  const res = await axios.get<ListEnrolledClassesResponse>(url);
+  const enrolled: EnrolledClass[] = res.data.classes.map((c) => {
+    return {
+      id: c.class_id,
+      imageClassUrl: c.class_pic,
+      name: c.name,
+      price: 0,
+      tags: [{ id: "HARDCODED", name: "HARDCODED" }],
+      status: "HARDCODE",
       teacher: {
-        id: i,
-        name: "Baramee putty",
+        id: c.teacher.teacher_id,
+        name: c.teacher.teacher_name,
+        imageProfileUrl: c.teacher.profile_pic,
       },
-      status: status,
-      tags: [
-        {
-          id: i,
-          name: "Deep Learning",
-        },
-      ],
-      registrationEndDate: new Date(2022, 12, 8),
-      price: 1990,
+      registrationEndDate: new Date(c.class_ended_date),
     };
-    return m;
-  };
-  return [
-    mock("1", "finished"),
-    mock("2", "started"),
-    mock("3", "started"),
-    mock("4", "stared"),
-  ];
+  });
+  return enrolled;
 }
 
 async function fetchClass(classId: string): Promise<Class> {
@@ -39,4 +35,4 @@ async function fetchClass(classId: string): Promise<Class> {
   return generateMockClass(classId);
 }
 
-export { listEnrolledClass, fetchClass };
+export { fetchClass, listEnrolledClass };

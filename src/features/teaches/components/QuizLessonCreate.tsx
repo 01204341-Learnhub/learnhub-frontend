@@ -196,6 +196,16 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
         setQuiz({ ...quiz, problems: newProblems })
         setAddMode("none")
     }
+    const onProblemDelete = (problemNumber: number) => {
+        // delete problem and renumbering
+        const newProblems = quiz.problems.filter((p) => p.problemNumber !== problemNumber)
+        newProblems.forEach((p, index) => {
+            if (p.problemNumber > problemNumber) {
+                p.problemNumber = index + 1
+            }
+        })
+        setQuiz({ ...quiz, problems: newProblems })
+    }
     const handleSubmit = () => {
         if (quiz.name === "" || quiz.description === "") {
             alert("ต้องกรอกชื่อและคำอธิบาย")
@@ -266,7 +276,8 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                                 }}>
                                     <FontAwesomeIcon icon={faEdit} size='lg' />
                                 </button>
-                                <button className="mr-5">
+                                <button className="mr-5"
+                                    onClick={() => { onProblemDelete(problem.problemNumber) }}>
                                     <FontAwesomeIcon icon={faX} size='lg' />
                                 </button>
                             </div>

@@ -7,6 +7,7 @@ import {
   faDownload,
   faEdit,
   faFileLines,
+  faX,
   IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -40,10 +41,11 @@ function _LessonEntry({ lesson }: _LessonEntryProps) {
 
 interface CourseChapterInfoProps {
   chapter: Chapter;
-  onEdit: () => void
+  onEdit: () => void;
+  onRemove: () => void
 }
 
-function CourseChapterInfo({ chapter, onEdit }: CourseChapterInfoProps) {
+function CourseChapterInfo({ chapter, onEdit, onRemove }: CourseChapterInfoProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const handleExpandClick = () => {
     setIsExpanded(!isExpanded);
@@ -63,9 +65,14 @@ function CourseChapterInfo({ chapter, onEdit }: CourseChapterInfoProps) {
                 {chapter.name}
               </p>
             </div>
-            <button className="hover:bg-slate-100" onClick={onEdit}>
-              <FontAwesomeIcon icon={faEdit} />
-            </button>
+            <div>
+              <button className="hover:bg-slate-100 mr-5" onClick={onEdit}>
+                <FontAwesomeIcon icon={faEdit} />
+              </button>
+              <button className="hover:bg-slate-100" onClick={onRemove}>
+                <FontAwesomeIcon icon={faX} />
+              </button>
+            </div>
           </div>
           <div className="flex justify-start items-start space-x-6">
             <div className="flex flex-col min-w-fit">
@@ -95,7 +102,9 @@ function CourseChapterInfo({ chapter, onEdit }: CourseChapterInfoProps) {
       {isExpanded && (
         <div className="bg-[#F1F1F1] w-full min-h-fit p-5">
           {chapter.lessons.map((lesson) => (
-            <_LessonEntry lesson={lesson} />
+            <div key={lesson.number}>
+              <_LessonEntry lesson={lesson} />
+            </div>
           ))}
         </div>
       )}

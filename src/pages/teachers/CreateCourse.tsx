@@ -250,7 +250,7 @@ function checkReadyToPublish(course: Course) {
           return lesson.doc !== null;
         } else if (lesson.type === "quiz") {
           return lesson.quiz !== null;
-        } else if (lesson.type === "file") {
+        } else if (lesson.type === "files") {
           return lesson.fileUrl !== null && lesson.fileUrl !== "";
         } else {
           return false;
@@ -300,6 +300,18 @@ function CreateCourse() {
     setInitializedCourse(true);
     setCurrentTab("content");
   };
+
+  const handleRemoveChapter = (chapterNumber: number) => {
+    // remove chapter from course and renumber the rest of the chapters
+    const newCourse = { ...course };
+    newCourse.chapters = newCourse.chapters.filter((chapter) => chapter.number !== chapterNumber)
+    newCourse.chapters.forEach((chapter, idx) => {
+      if (chapter.number > chapterNumber) {
+        newCourse.chapters[idx].number -= 1;
+      }
+    })
+    setCourse(newCourse)
+  }
 
   const handlePublishCourse = () => {
     async function publishCourse() {
@@ -362,7 +374,8 @@ function CreateCourse() {
                 <CourseChapterInfo chapter={chapter} onEdit={() => {
                   setChapterToEdit(chapter.number)
                   setCurrentTab("edit-chapter")
-                }} />
+                }}
+                  onRemove={() => { handleRemoveChapter(chapter.number) }} />
               </div>
             ))}
             <button

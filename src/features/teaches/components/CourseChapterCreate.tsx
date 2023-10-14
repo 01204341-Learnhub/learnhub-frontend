@@ -185,7 +185,6 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
     setMode(`add-${lessonType}` as CourseChapterCreateMode);
   };
   const handleEdditingLesson = (lessonType: string, lesson: Lesson) => {
-    console.log(lesson);
     setLessonToBeEdit(lesson)
     setMode(`edit-${lessonType}` as CourseChapterCreateMode);
   }

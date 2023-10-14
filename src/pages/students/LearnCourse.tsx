@@ -138,7 +138,7 @@ function LearnCourse() {
                         </div>
                     )
                 })()}
-                
+
                 <div className="flex w-4/5 mt-20 mb-10">
                     <button onClick={() => { setOutlineViewMode("contents") }}>
                         <h1 className="text-xl font-bold">เนื้อหาคอร์สเรียน</h1>
@@ -168,20 +168,20 @@ function LearnCourse() {
                             }
                             return (
                                 <div className="">
-                                    
-                                    { announcements.length > 0 ? (
-                                         <div className="w-full flex flex-col-reverse">
-                                         {announcements.map((announcement) => (
-                                             <div key={announcement.announcementID}>
-                                                 <CourseAnnouncementDropdown {...announcement} />
-                                             </div>
-                                         ))}
-                                     </div>
+
+                                    {announcements.length > 0 ? (
+                                        <div className="w-full flex flex-col-reverse">
+                                            {announcements.map((announcement) => (
+                                                <div key={announcement.announcementID}>
+                                                    <CourseAnnouncementDropdown {...announcement} />
+                                                </div>
+                                            ))}
+                                        </div>
                                     ) : (
                                         <div className="w-full flex items-center justify-center">
                                             <div className="text-xl font-semibold text-[#505050]">ยังไม่มีประกาศในคอร์สเรียนขณะนี้</div>
                                         </div>
-                                    ) }
+                                    )}
                                 </div>
                             )
                         }

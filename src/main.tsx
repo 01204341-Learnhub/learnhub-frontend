@@ -10,6 +10,7 @@ import TeacherNavbarLayout from "./layouts/TeacherNavbarLayout";
 import AllClasses from "./pages/AllClasses";
 import AllCourses from "./pages/AllCourses";
 import Basket from "./pages/Basket";
+import BasketPayment from "./pages/ฺBasketPayment";
 import ClassDetail from "./pages/ClassDetail";
 import CourseDetailPage from "./pages/CourseDetail";
 import Home from "./pages/Home";
@@ -29,6 +30,7 @@ import SelectCourse from "./pages/students/SelectCourse";
 import CreateClass from "./pages/teachers/CreateClass";
 import CreateCourse from "./pages/teachers/CreateCourse";
 import TeacherOverview from "./pages/teachers/TeacherOverview";
+import TeacherIncomes from "./pages/teachers/TeacherIncomes";
 import TeachingClasses from "./pages/teachers/TeachingClasses";
 import TeachingCourses from "./pages/teachers/TeachingCourses";
 import TeachingHomeworks from "./pages/teachers/TeachingHomeworks";
@@ -47,8 +49,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/profile" element={<Profile />} />
             </Route>
             <Route path="/home" element={<Home />} />
-            <Route path="/teacherprofile" element={<TeacherProfile />} />
+            <Route path="/teacherprofile/:id" element={<TeacherProfile />} />
             <Route path="/baskets" element={<Basket />} />
+            <Route path="/baskets/payment" element={<BasketPayment />} />
             <Route path="/home/courses" element={<AllCourses />}></Route>
             <Route path="/home/classes" element={<AllClasses />}></Route>
             <Route path="/detail/course/:id" element={<CourseDetailPage />} />
@@ -85,6 +88,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <Route path="/teach/course/:id" element={<TeacherCourseManage />} />
                 <Route path="/teach/create/course" element={<CreateCourse />} />
                 <Route path="/teach/create/class" element={<CreateClass />} />
+                <Route path="/teach/incomes" element={< TeacherIncomes/>} />
               </Route>
             </Route>
           </Route>

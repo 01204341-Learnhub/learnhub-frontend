@@ -214,7 +214,17 @@ type ResponseBasket = {
   basket: BasketData[];
 };
 
+type ResponseTeacherInfo = {
+  uid:string,
+  teacher_id:string,
+  username:string,
+  fullname:string,
+  email:string,
+  profile_pic:string
+}
+
 export type {
+  ResponseTeacherInfo,
   GetClassResponse,
   GetCourseDetailResponse,
   ListClassesResponse,

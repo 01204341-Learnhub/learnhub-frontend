@@ -1,18 +1,19 @@
 import { faCartShopping } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useDispatch} from "react-redux"
-import { removeItem, clearItem, } from "../slices/basketSlice"
-import { deleteBasketItem, purchaseCourse } from '../features/stores/services/purchase'
-import { useUser } from '../hooks/useUser'
-import Swal from 'sweetalert2'
+import { useDispatch } from "react-redux"
+import { useNavigate } from 'react-router-dom'
 import { useBasket } from '../features/stores/hooks/useBasket'
+import { deleteBasketItem } from '../features/stores/services/purchase'
+import { useUser } from '../hooks/useUser'
+import { removeItem } from "../slices/basketSlice"
 
 
 function Basket() {
     const { user } = useUser()
     const basket = useBasket()
     const dispatcher = useDispatch()
-   
+    const navigate = useNavigate()
+
     async function handleDeleteBusketItems(itemID: string) {
         dispatcher(removeItem(itemID))
         const isDelete = await deleteBasketItem(user.userID, itemID)
@@ -20,22 +21,7 @@ function Basket() {
     }
 
     const handlePayment = async () => {
-        const transction = await purchaseCourse(user.userID, user.userID);
-        if (transction) {
-            Swal.fire({
-                title: "ชำระเงินสำเร็จ",
-                text: "",
-                icon: "success",
-                confirmButtonColor: "green"
-            })
-            dispatcher(clearItem())
-        } else {
-            Swal.fire({
-                title: 'error',
-                icon: 'error'
-            })
-        }
-
+        { navigate({ pathname: '/baskets/payment' }, { replace: true }) }
     }
 
     return (
@@ -44,7 +30,7 @@ function Basket() {
                 <h1 className="font-semibold text-[32px] pl-6">รถเข็นสินค้า
                     <FontAwesomeIcon className='ml-4' icon={faCartShopping} />
                 </h1>
-                
+
                 {basket.items.map((item) => (
                     <div className="flex flex-row border-1 w-[650px] h-[145px] items-center shadow-sm " key={item.itemID}>
                         <img className="mx-[30px] object-cover w-[144px] h-[90px] " src={item.thumbnailURL} />
@@ -62,11 +48,11 @@ function Basket() {
                         </div>
                         <div className=" mr-[25px] items-end flex flex-col">
                             <h1 className="mb-[15px] font-bold text-[20px] grow ">{item.price} บาท</h1>
-                            <button 
+                            <button
                                 className=" bg-red-500 w-20 font-bold py-[6px] text-[16px] text-white hover:bg-red-600 hover:text-white"
                                 onClick={() => {
                                     handleDeleteBusketItems(item.itemID)
-                            }}>ลบออก</button>
+                                }}>ลบออก</button>
                         </div>
                     </div>
                 ))}
@@ -76,8 +62,8 @@ function Basket() {
                 <h1 className="border-1 font-bold text-[40px] pb-4">{basket.items.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
                 <button
                     onClick={handlePayment}
-                    type='button' 
-                    className=" px-[55px] py-[15px] bg-[#d9d9d9] font-bold text-[20px] bg-blue-400 text-gray-100 hover:bg-blue-300">
+                    type='button'
+                    className=" px-[55px] py-[15px] font-bold text-[20px] bg-blue-400 text-gray-100 hover:bg-blue-300">
                     ชำระเงิน
                 </button>
             </div>

@@ -11,7 +11,7 @@ interface WorkCreateProps {
 }
 
 function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
-    const [work, setWork] = useState<Work>({ name: '', description: '', attachments: [], score: 0, topic: '' })
+    const [work, setWork] = useState<Work>({ name: '', description: '', attachments: [], score: 0, topic: '', send: 0, nosend: 0 })
     const [dropdowndete, setdropdowndete] = useState<boolean>(false)
 
     const onWorkNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

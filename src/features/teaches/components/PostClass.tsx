@@ -11,6 +11,7 @@ interface PostClassProps {
 }
 
 export default function PostClass(props: PostClassProps) {
+    
     return (
         <div className=" w-[765px] h-[450px] bg-white shadow-2xl flex flex-col">
             <input type="text" className=" w-[700px] h-[230px] ml-[32px] mt-[32px] bg-[#D9D9D9]"></input>

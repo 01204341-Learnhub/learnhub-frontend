@@ -5,6 +5,7 @@ import WorkCreate from "../../features/teaches/components/WorkCreate";
 import { Work } from "../../features/teaches/types/classWork";
 // import Workreview from "../../features/teaches/components/reviewwork"
 import PostClass from "../../features/teaches/components/PostClass";
+import { FormPublishPostClass } from "../../features/teaches/components/FormPublishPostClass";
 
 type View = "main" | "works" | "members" | "create-work";
 
@@ -26,15 +27,15 @@ interface ViewSlectorProps {
 }
 function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
   return (
-    <div className="flex">
+    <div className="flex text-lg font-medium">
       <div
         className="m-5"
         onClick={() => {
           setView("main");
         }}
       >
-        <h1>หน้าหลักในชั้นเรียน</h1>
-        <div className={`bg-black ${currentView == "main" ? "h-3" : ""}`}></div>
+        <h1 className={currentView == "main" ? "text-[#000]" : "text-[#808080]"}>หน้าหลักในชั้นเรียน</h1>
+        <div className={`bg-black ${currentView == "main" ? "h-2" : ""}`}></div>
       </div>
       <div
         className="m-5"
@@ -42,9 +43,9 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
           setView("works");
         }}
       >
-        <h1>งานในชั้นเรียน</h1>
+        <h1 className={currentView == "works" ? "text-[#000]" : "text-[#808080]"}>งานในชั้นเรียน</h1>
         <div
-          className={`bg-black ${currentView == "works" ? "h-3" : ""}`}
+          className={`bg-black ${currentView == "works" ? "h-2" : ""}`}
         ></div>
       </div>
       <div
@@ -53,9 +54,9 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
           setView("members");
         }}
       >
-        <h1>คนในชั้นเรียน</h1>
+        <h1 className={currentView == "members" ? "text-[#000]" : "text-[#808080]"}>คนในชั้นเรียน</h1>
         <div
-          className={`bg-black ${currentView == "members" ? "h-3" : ""}`}
+          className={`bg-black ${currentView == "members" ? "h-2" : ""}`}
         ></div>
       </div>
     </div>
@@ -65,7 +66,7 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
 function _WorkSlot({ work }: { work: Work }) {
   const [isOpen, setISOpen] = useState(false);
   return (
-    <div>
+    <div className="w-full">
       <button
         className="bg-white flex m-3 items-center w-full"
         onClick={() => setISOpen(!isOpen)}
@@ -78,9 +79,9 @@ function _WorkSlot({ work }: { work: Work }) {
         </div>
       </button>
       {isOpen && (
-        <div>
-          <div className="bg-white flex items-center border-2 px-5 py-5 h-fit">
-            <p className="w-8/12 h-fit break-all">{work.description}</p>
+        <div className="">
+          <div className="flex items-center border-2 px-5 py-5 h-fit">
+            <p className="w-8/12 border-4 h-fit break-all">{work.description}</p>
             <div className="w-2/12 items-end">
               <p className="w-full text-xl text-gray-600 font-bold ml-5">
                 {work.send}
@@ -95,9 +96,11 @@ function _WorkSlot({ work }: { work: Work }) {
             </div>
           </div>
           <div className="bg-white flex  items-center border-2 py-5 px-5">
-            <a href="" className="text-blue-600 w-10/12">
+            <button
+                type="button"
+                className="text-blue-600 w-10/12">
               ดูวิธีการ
-            </a>
+            </button>
             <div className="w-2/12 items-end">
               <button className="bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 border border-blue-700 rounded">
                 ตรวจงาน
@@ -222,7 +225,6 @@ function TeachingClasses() {
     return (
       <div className="h-full">
         <_ViewSelector currentView={view} setView={setView} />
-        <hr />
         <div className="mx-7 mt-8">
           <div className="flex">
             <h1 className="text-2xl font-bold text-black">
@@ -244,25 +246,11 @@ function TeachingClasses() {
 
 
         <div className=" mt-[2%] flex flex-col space-y-[2%]">
-          <button id="teacherNotAnnoucement" className=" bg-white shadow-lg h-[10%] w-[50%] ml-[25%] flex flex-row p-4 items-center space-x-[5%]">
-            <div className="w-[8%] h-[8%] rounded-full overflow-hidden">
-              <img src={classInfo.teacherThumbnail} alt="teacher thumbnail" className=" aspect-square" />
-            </div>
-            <div className=" text-gray-600">
-              ประกาศบางสิ่งในชั้นเรียน
-            </div>
+          <button id="teacherNotAnnoucement" className="flex justify-center items-center">
+              <FormPublishPostClass profileTeacher="https://optimise2.assets-servd.host/maniacal-finch/production/animals/southern-rock-hopper-penguin-01-01.jpg?w=1200&auto=compress%2Cformat&fit=crop&dm=1660831481&s=9a929ad4ca101687860476bb97d562c1"/>
           </button>
 
-          <div className=" ml-[25%]">
-            <PostClass fileName="jittat" fileType="PDF" imageURL="https://optimise2.assets-servd.host/maniacal-finch/production/animals/southern-rock-hopper-penguin-01-01.jpg?w=1200&auto=compress%2Cformat&fit=crop&dm=1660831481&s=9a929ad4ca101687860476bb97d562c1" />
-          </div>
-
-        
-        
-
           
-
-
         </div>
       </div>
     );
@@ -273,7 +261,6 @@ function TeachingClasses() {
     return (
       <div className="h-full">
         <_ViewSelector currentView={view} setView={setView} />
-        <hr />
         <_ClassWorks
           onCreateClassWork={() => {
             setView("create-work");
@@ -286,7 +273,6 @@ function TeachingClasses() {
     return (
       <div className="h-full">
         <_ViewSelector currentView={view} setView={setView} />
-        <hr />
       </div>
     );
   } else if (view == "create-work") {

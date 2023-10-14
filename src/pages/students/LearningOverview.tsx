@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import Calendar from "../../features/learns/components/Calendar"
 import ClassHomeworkIncoming from "../../features/learns/components/ClassHomeworkIncoming"
 import ClassIncoming from "../../features/learns/components/ClassIncoming"
@@ -85,18 +86,20 @@ function LearningOverview() {
 
                         {dashboard.announcements.map(({ announcementID, courseInfo, teacher, lastEdit }) => {
                             return (
-                                <li key={announcementID} className={`flex justify-center mt-2`}>
-                                    <div className="flex justify-center py-2 bg-gray-100 hover:bg-gray-300 rounded-xl">
-                                        <div className="py-2 h-16 w-16  rounded-full mx-4">
-                                            <img src={teacher.profilePic} className=" h-16 w-16 rounded-full" />
+                                <Link to={`/learn/courses/${courseInfo.courseID}`}>
+                                    <li key={announcementID} className={`flex justify-center mt-2`}>
+                                        <div className="flex justify-center py-2 bg-gray-100 hover:bg-gray-300 rounded-xl">
+                                            <div className="py-2 h-16 w-16  rounded-full mx-4">
+                                                <img src={teacher.profilePic} className=" h-16 w-16 rounded-full" />
+                                            </div>
+                                            <div className="flex flex-col w-[280px]">
+                                                <span className="text-lg truncate">{teacher.teacherName}</span>
+                                                <span className="text-base">โพสต์ประกาศ  {convertTimestampToDate(lastEdit).toLocaleDateString()}</span>
+                                                <h1 className="font-semibold truncate text-lg">{courseInfo.courseName}</h1>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col w-[280px]">
-                                            <span className="text-lg truncate">{teacher.teacherName}</span>
-                                            <span className="text-base">โพสต์ประกาศ  {convertTimestampToDate(lastEdit).toLocaleDateString()}</span>
-                                            <h1 className="font-semibold truncate text-lg">{courseInfo.courseName}</h1>
-                                        </div>
-                                    </div>
-                                </li>
+                                    </li>
+                                </Link>
                             )
                         })}
                     </div>

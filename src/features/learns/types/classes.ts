@@ -36,6 +36,7 @@ type SimpleThread = {
   typ: "announcement" | "homework";
   name: string;
   lastEdit: Date;
+  homeworkTopicName?: string; // For homework threads
 };
 
 function generateMockClass(classId: string): Class {
@@ -45,7 +46,7 @@ function generateMockClass(classId: string): Class {
     thumbnailUrl: `https://picsum.photos/seed/${classId}/1920/1080`,
     teacher: generateMockUser("teacher", "teacher0"),
     students: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) =>
-      generateMockUser("student", `student${i}`)
+      generateMockUser("student", `student${i}`),
     ),
     simpleThreads: [
       {
@@ -59,6 +60,7 @@ function generateMockClass(classId: string): Class {
         typ: "homework",
         name: "Homework 0",
         lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 3),
+        homeworkTopicName: "Topic 0",
       },
       {
         threadId: "announcement1",
@@ -71,6 +73,7 @@ function generateMockClass(classId: string): Class {
         typ: "homework",
         name: "Homework 1",
         lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
+        homeworkTopicName: "Topic 1",
       },
     ],
   };

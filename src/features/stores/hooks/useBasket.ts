@@ -20,7 +20,7 @@ function useBasket() {
 
   useEffect(() => {
     async function fetchBasket() {
-      if (!isFetchOnce && user && user.userID) {
+      if (!isFetchOnce && user && user.userID && user.userType === "student") {
         try {
           const BasketItems = await fetchBasketItems(user.userID);
           dispatcher(setStatusFetchOnce(true));
@@ -38,7 +38,7 @@ function useBasket() {
 
     // Call fetchBasket when the component mounts
     fetchBasket();
-  }, [dispatcher, isFetchOnce, user]);
+  }, [isFetchOnce, dispatcher, user]);
   return basket;
 }
 

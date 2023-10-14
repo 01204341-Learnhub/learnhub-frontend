@@ -1,14 +1,15 @@
-import { ClassContext } from "../../../pages/teachers/CreateClass.tsx";
-import React, { useContext, useRef } from "react";
-import { availableCategories } from "../types/class.ts";
+import { CreatingClassContext } from "../../../pages/teachers/CreateClass.tsx";
+import React, { useContext, useEffect, useRef } from "react";
+import { Tag } from "../types/tags.ts";
 import { uploadFile } from "../../../services/uploader/file.ts";
+import { listTags } from "../services/tags.ts";
 
 function _Name() {
-  const classContext = useContext(ClassContext);
-  const onUpdateName = (name: string) => {
-    const updatedClass = { ...classContext.cls };
+  const creatingClassContext = useContext(CreatingClassContext);
+  const handleUpdateName = (name: string) => {
+    const updatedClass = { ...creatingClassContext.cls };
     updatedClass.name = name;
-    classContext.setCls(updatedClass);
+    creatingClassContext.setCls(updatedClass);
   };
   return (
     <div className="flex flex-col justify-start items-start space-y-3 w-full">
@@ -19,9 +20,9 @@ function _Name() {
         className="border-2 border-[#C0C0C0] py-2 px-3 w-[90%]"
         type="text"
         placeholder="ชื่อคลาสเรียน"
-        value={classContext.cls.name}
+        value={creatingClassContext.cls.name}
         onChange={(e) => {
-          onUpdateName(e.target.value);
+          handleUpdateName(e.target.value);
         }}
       />
       <p className="text-[#606060] text-[14px] font-semibold w-[90%]">
@@ -33,11 +34,11 @@ function _Name() {
 }
 
 function _Description() {
-  const classContext = useContext(ClassContext);
-  const onUpdateDescription = (description: string) => {
-    const updatedClass = { ...classContext.cls };
+  const creatingClassContext = useContext(CreatingClassContext);
+  const handleUpdateDescription = (description: string) => {
+    const updatedClass = { ...creatingClassContext.cls };
     updatedClass.description = description;
-    classContext.setCls(updatedClass);
+    creatingClassContext.setCls(updatedClass);
   };
   return (
     <div className="flex flex-col justify-start items-start space-y-3 w-full">
@@ -47,10 +48,10 @@ function _Description() {
       <textarea
         className="border-2 border-[#C0C0C0] py-2 px-3 w-[90%]"
         placeholder="คำอธิบายคลาสเรียน"
-        value={classContext.cls.description}
+        value={creatingClassContext.cls.description}
         rows={8}
         onChange={(e) => {
-          onUpdateDescription(e.target.value);
+          handleUpdateDescription(e.target.value);
         }}
       />
       <div className="flex flex-row justify-between items-center w-[90%]">
@@ -58,33 +59,33 @@ function _Description() {
           คำอธิบายควรยาวอย่างน้อย 200 คำ
         </p>
         <p className="text-[#606060] text-[16px] font-semibold">
-          {classContext.cls.description.length}
+          {creatingClassContext.cls.description.length}
         </p>
       </div>
     </div>
   );
 }
 
-function _Thumbnail() {
-  const classContext = useContext(ClassContext);
+function _Picture() {
+  const creatingClassContext = useContext(CreatingClassContext);
+  const handleUpdatePictureUrl = (src: string) => {
+    const updatedClass = { ...creatingClassContext.cls };
+    updatedClass.pictureUrl = src;
+    creatingClassContext.setCls(updatedClass);
+  };
   const fileRef = useRef<HTMLInputElement>(null);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const file = e.target.files[0];
       uploadFile(file)
         .then((src) => {
-          onUpdateThumbnailUrl(src);
+          handleUpdatePictureUrl(src);
         })
         .catch((err) => {
           console.log(err);
           alert("Upload failed");
         });
     }
-  };
-  const onUpdateThumbnailUrl = (thumbnailUrl: string) => {
-    const updatedClass = { ...classContext.cls };
-    updatedClass.thumbnailUrl = thumbnailUrl;
-    classContext.setCls(updatedClass);
   };
   return (
     <div className="flex flex-col justify-start items-start space-y-3 w-full">
@@ -95,8 +96,8 @@ function _Thumbnail() {
         <div className="flex-shrink-0 bg-gray-200 w-[300px] h-[169px]">
           <img
             className="w-[300px] h-[169px] object-cover"
-            src={classContext.cls.thumbnailUrl}
-            alt="thumbnail"
+            src={creatingClassContext.cls.pictureUrl}
+            alt="Picture"
           />
         </div>
         <div className="flex flex-col justify-start items-start space-y-3 w-full">
@@ -105,9 +106,9 @@ function _Thumbnail() {
               className="border-2 border-[#C0C0C0] py-2 px-3 w-3/5"
               type="text"
               placeholder="ใส่ URL ของภาพ หรืออัพโหลด"
-              value={classContext.cls.thumbnailUrl}
+              value={creatingClassContext.cls.pictureUrl}
               onChange={(e) => {
-                onUpdateThumbnailUrl(e.target.value);
+                handleUpdatePictureUrl(e.target.value);
               }}
             />
             <input
@@ -122,7 +123,9 @@ function _Thumbnail() {
                 fileRef.current?.click();
               }}
             >
-              {classContext.cls.thumbnailUrl === "" ? "อัพโหลด" : "เปลี่ยน"}
+              {creatingClassContext.cls.pictureUrl === ""
+                ? "อัพโหลด"
+                : "เปลี่ยน"}
             </button>
           </div>
         </div>
@@ -132,11 +135,11 @@ function _Thumbnail() {
 }
 
 function _Price() {
-  const classContext = useContext(ClassContext);
-  const onUpdatePrice = (price: number) => {
-    const updatedClass = { ...classContext.cls };
+  const creatingClassContext = useContext(CreatingClassContext);
+  const handleUpdatePrice = (price: number) => {
+    const updatedClass = { ...creatingClassContext.cls };
     updatedClass.price = price;
-    classContext.setCls(updatedClass);
+    creatingClassContext.setCls(updatedClass);
   };
   return (
     <div className="flex flex-col justify-start items-start space-y-3 w-full">
@@ -148,23 +151,33 @@ function _Price() {
       <input
         className="border-2 border-[#C0C0C0] py-2 px-3 w-1/10"
         type="number"
-        min="0"
+        min={0}
         placeholder="ราคา"
-        value={classContext.cls.price}
+        value={creatingClassContext.cls.price}
         onChange={(e) => {
-          onUpdatePrice(parseInt(e.target.value));
+          handleUpdatePrice(parseInt(e.target.value));
         }}
       />
     </div>
   );
 }
 
-function _Category() {
-  const classContext = useContext(ClassContext);
-  const onUpdateCategoryId = (categoryId: string) => {
-    const updatedClass = { ...classContext.cls };
-    updatedClass.categoryId = categoryId;
-    classContext.setCls(updatedClass);
+function _Tag() {
+  const creatingClassContext = useContext(CreatingClassContext);
+  const [availableTags, setAvailableTags] = React.useState<Tag[]>([]);
+  useEffect(() => {
+    listTags()
+      .then((tags) => {
+        setAvailableTags(tags);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  const handleUpdateTag = (tagId: string) => {
+    const updatedClass = { ...creatingClassContext.cls };
+    updatedClass.tag = availableTags.find((tag) => tag.tagID === tagId);
+    creatingClassContext.setCls(updatedClass);
   };
   return (
     <div className="flex flex-col justify-start items-start space-y-3 w-full">
@@ -173,19 +186,72 @@ function _Category() {
         โปรดเลือกหมวดหมู่สำหรับคลาสเรียนของคุณ
       </p>
       <select
-        value={classContext.cls.categoryId}
+        value={
+          creatingClassContext.cls.tag ? creatingClassContext.cls.tag.tagID : ""
+        }
         onChange={(e) => {
-          onUpdateCategoryId(e.target.value);
+          handleUpdateTag(e.target.value);
         }}
         className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
       >
-        <option value="" disabled selected>
+        <option value="" disabled>
           เลือกหมวดหมู่
         </option>
-        {availableCategories.map((category) => {
-          return <option value={category.categoryId}>{category.name}</option>;
+        {availableTags.map((tag) => {
+          return (
+            <option key={tag.tagID} value={tag.tagID}>
+              {tag.name}
+            </option>
+          );
         })}
       </select>
+    </div>
+  );
+}
+
+function _MaxStudent() {
+  const creatingClassContext = useContext(CreatingClassContext);
+  const handleUpdateMaxStudent = (maxStudent: number) => {
+    const updatedClass = { ...creatingClassContext.cls };
+    updatedClass.maxStudent = maxStudent;
+    creatingClassContext.setCls(updatedClass);
+  };
+  return (
+    <div className="flex flex-col justify-start items-start space-y-3 w-full">
+      <h2 className="text-black text-[18px] font-semibold">
+        จำกัดจำนวนผู้เรียน
+      </h2>
+      <p className="text-black text-[16px]">
+        โปรดระบุจำนวนจำกัดของผู้เรียนที่สามารถลงทะเบียนเรียนในชั้นเรียนของคุณ
+        เพื่อที่คุณจะได้สามารถจัดการกับชั้นเรียนของคุณได้อย่างมีประสิทธิภาพ
+      </p>
+      <p className="text-black text-[14px] font-bold">
+        *การกำหนดจำนวนผู้เรียนในชั้นเรียน
+        อาจส่งผลต่อข้อมูลการตัดสินใจของผู้เรียนได้
+      </p>
+      <select
+        value={creatingClassContext.cls.maxStudent}
+        onChange={(e) => {
+          handleUpdateMaxStudent(parseInt(e.target.value));
+        }}
+        className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
+      >
+        <option value={0} disabled>
+          0
+        </option>
+        {[10, 15, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100].map(
+          (maxStudent, index) => {
+            return (
+              <option key={index} value={maxStudent}>
+                {maxStudent}
+              </option>
+            );
+          }
+        )}
+      </select>
+      <p className="text-[#606060] text-[14px] font-semibold">
+        แนะนำว่าไม่ควรเกิน 40 คน ถ้าคุณมีชั้นเรียนมากกว่า 1
+      </p>
     </div>
   );
 }
@@ -208,9 +274,10 @@ function ClassPublishingInfoForm() {
       </div>
       <_Name />
       <_Description />
-      <_Thumbnail />
+      <_Picture />
       <_Price />
-      <_Category />
+      <_Tag />
+      <_MaxStudent />
     </div>
   );
 }

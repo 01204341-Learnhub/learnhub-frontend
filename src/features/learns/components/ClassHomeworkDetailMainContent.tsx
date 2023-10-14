@@ -9,7 +9,6 @@ import ClassThreadAttachment from "./ClassThreadAttachment";
 import ClassThreadReplyEntry from "./ClassThreadReplyEntry";
 import ClassThreadReplyInputBar from "./ClassThreadReplyInputBar";
 
-
 interface ClassHomeworkDetailMainContentProps {
   user: LearnhubUser;
   thread: Thread;
@@ -22,7 +21,7 @@ function ClassHomeworkDetailMainContent({
   onAddReply,
 }: ClassHomeworkDetailMainContentProps) {
   const [showRepliesAndTextBox, setShowRepliesAndTextBox] = useState<boolean>(
-    thread.replies.length === 0 ? false : true
+    thread.replies.length !== 0,
   );
 
   return (
@@ -36,14 +35,14 @@ function ClassHomeworkDetailMainContent({
           <div className="flex justify-between items-start w-full mt-1">
             <p className="text-[#404040] text-[14px] font-semibold">
               {thread.homeworkSubmissionStatus === "submitted-and-graded" &&
-                thread.homeworkGotScore !== undefined
+              thread.homeworkGotScore !== undefined
                 ? `${thread.homeworkGotScore}/`
                 : ""}
               {thread.homeworkFullScore} คะแนน
             </p>
             <p className="text-[#404040] text-[14px] font-semibold">
               {`กำหนดส่ง ${toDateTimeStringOmitDateOnSameDay(
-                thread.homeworkDueDateTime
+                thread.homeworkDueDateTime,
               )}`}
             </p>
           </div>

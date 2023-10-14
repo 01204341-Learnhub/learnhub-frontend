@@ -7,14 +7,14 @@ import { useNavigate } from "react-router-dom";
 
 interface ClassHomeworkThreadProps {
   teacher: LearnhubUser;
-  simpleThread: SimpleThread;
   classId: string;
+  simpleThread: SimpleThread;
 }
 
 function ClassHomeworkThread({
   teacher,
-  simpleThread,
   classId,
+  simpleThread,
 }: ClassHomeworkThreadProps) {
   const navigate = useNavigate();
   return (
@@ -29,7 +29,7 @@ function ClassHomeworkThread({
           <FontAwesomeIcon icon={faClipboardList} size="xl" />
         </div>
         <div className="flex flex-col space-y-1">
-          <p className="text-black text-[16px] font-[500]">{`${teacher.username} โพสต์งานใหม่แล้ว: ${simpleThread.name}`}</p>
+          <p className="text-black text-[16px] font-[500]">{`${teacher.fullname} โพสต์งานใหม่แล้ว: ${simpleThread.name}`}</p>
           <p className="text-[#A0A0A0] text-[14px] font-[500]">
             {toDateTimeStringOmitDateOnSameDay(simpleThread.lastEdit)}
           </p>

@@ -9,20 +9,20 @@ import PeopleSvg from "../../../assets/images/people.svg";
 
 interface ClassAnnouncementThreadProps {
   user: LearnhubUser;
-  simpleThread: SimpleThread;
   classId: string;
+  simpleThread: SimpleThread;
 }
 
 function ClassAnnouncementThread({
   user,
-  simpleThread,
   classId,
+  simpleThread,
 }: ClassAnnouncementThreadProps) {
   const { thread, addReply } = useThread(
     user,
     classId,
     simpleThread.threadId,
-    "announcement"
+    "announcement",
   );
   return (
     <div className="bg-white border-[1px] border-[#a0a0a080] rounded-[10px] w-full">

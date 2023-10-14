@@ -67,8 +67,8 @@ function _MainTab({ user, cls }: _MainTabProps) {
                 <ClassAnnouncementThread
                   key={simpleThread.threadId}
                   user={user}
-                  simpleThread={simpleThread}
                   classId={cls.classId}
+                  simpleThread={simpleThread}
                 />
               );
             }
@@ -77,8 +77,8 @@ function _MainTab({ user, cls }: _MainTabProps) {
                 <ClassHomeworkThread
                   key={simpleThread.threadId}
                   teacher={cls.teacher}
-                  simpleThread={simpleThread}
                   classId={cls.classId}
+                  simpleThread={simpleThread}
                 />
               );
             }
@@ -115,7 +115,7 @@ type PathParams = {
 function LearningClass() {
   const { classId } = useParams<PathParams>();
   const [currentTab, setCurrentTab] = useState<"main" | "homeworks" | "people">(
-    "main"
+    "main",
   );
   // TODO: use useUser hook
   const user = generateMockUser("student", "student0");
@@ -148,4 +148,5 @@ function LearningClass() {
     </div>
   );
 }
+
 export default LearningClass;

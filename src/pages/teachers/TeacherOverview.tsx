@@ -5,6 +5,7 @@ import CourseCard from "../../features/teaches/components/CourseCard";
 import NewProgramClass from "../../features/teaches/components/NewProgramCard";
 import { useTeachCourses } from "../../features/teaches/hooks/useTeachCourses";
 import { useTeachClasses } from "../../features/teaches/hooks/useTeachClasses";
+import { Link } from "react-router-dom";
 
 function TeacherOverview() {
 
@@ -62,14 +63,16 @@ function TeacherOverview() {
             thumbnailUrl: courseThumbnailUrl,
             studentCount,
           }) => (
-            <li key={courseID}>
-              <CourseCard
-                courseName={courseName}
-                courseThumbnailUrl={courseThumbnailUrl}
-                courseRating={courseRating}
-                studentCount={studentCount}
-              />
-            </li>
+            <Link to={`/teach/course/${courseID}`}>
+                <li key={courseID}>
+                  <CourseCard
+                    courseName={courseName}
+                    courseThumbnailUrl={courseThumbnailUrl}
+                    courseRating={courseRating}
+                    studentCount={studentCount}
+                  />
+                </li>
+              </Link>
           ),
         )}
       </ul>

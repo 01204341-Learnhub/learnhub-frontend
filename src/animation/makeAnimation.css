@@ -1,0 +1,68 @@
+@keyframes animate-leg-left {
+  0% {
+    transform: translateX(-10px);
+  }
+  60% {
+    transform: translateX(80px);
+  }
+  100% {
+    transform: translate(-10px); 
+  }
+}
+
+@keyframes animate-leg-right {
+  0% {
+    transform: translateX(20px);
+  }
+   
+  /* 25% {
+    transform: translateX(-80px);
+  } */
+  50% {
+    transform: translateX(-70px);
+
+  /* } 75% {
+    transform: translateX(80px);
+  } */
+    }
+  100% { 
+    transform: translateX(20px);
+  }
+}
+
+.animate-leg-left {
+  animation-name: animate-leg-left;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.animate-leg-right {
+  animation-name: animate-leg-right;
+  animation-delay: 10ms;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+
+.paper-up {
+    animation-name: paper-up;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+
+  @keyframes paper-up {
+    0% {
+      transform: translateY(20px);
+    }
+     
+    50% {
+      transform: translateY(10px);
+  
+      }
+    100% { 
+      transform: translateY(20px);
+    }
+  }

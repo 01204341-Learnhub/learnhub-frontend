@@ -3,23 +3,30 @@ import { getCourseDetail } from "../services/courses";
 import { CourseDetail } from "../types/course";
 
 function useCourseDetail(courseID: string) {
-  const [courseDetail, setCourseDetail] = useState<CourseDetail | null>(null);
-  const [isFetching, setIsFetching] = useState(false);
+  const [courseDetail, setCourseDetail] = useState<CourseDetail>(null);
+  const [isFetching, setIsFetching] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     async function fetchCourseDetail(courseID: string) {
       try {
         const fetchedCourseDetail = await getCourseDetail(courseID);
         setCourseDetail(fetchedCourseDetail);
+        setIsFetching(false);
       } catch (err) {
-        console.log(err);
+        console.log("Error fetching course detail:");
+        
+        setError(err.message);
+        setCourseDetail(null);
+        setIsFetching(false);
       }
     }
-    setIsFetching(true);
-    fetchCourseDetail(courseID).then(() => {
-      setIsFetching(false);
-    });
+    fetchCourseDetail(courseID);
+    console.log(courseDetail);
+    
   }, [courseID]);
-  return { courseDetail, isFetching };
+
+  return { courseDetail, isFetching, error};
 }
 
 export { useCourseDetail };

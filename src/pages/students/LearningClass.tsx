@@ -68,7 +68,7 @@ function _MainTab({ user, cls }: _MainTabProps) {
                   key={simpleThread.threadId}
                   user={user}
                   classId={cls.classId}
-                  simpleThread={simpleThread}
+                  threadId={simpleThread.threadId}
                 />
               );
             }
@@ -76,7 +76,7 @@ function _MainTab({ user, cls }: _MainTabProps) {
               return (
                 <ClassHomeworkThread
                   key={simpleThread.threadId}
-                  teacher={cls.teacher}
+                  teacherFullName={cls.teacher.fullname}
                   classId={cls.classId}
                   simpleThread={simpleThread}
                 />

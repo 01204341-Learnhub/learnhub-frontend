@@ -1,5 +1,4 @@
 import useThread from "../hooks/useThread";
-import { SimpleThread } from "../types/classes";
 import { LearnhubUser } from "../../../types/user";
 import { toDateTimeStringOmitDateOnSameDay } from "../../../utils/functions";
 import ClassThreadAttachment from "./ClassThreadAttachment";
@@ -10,18 +9,18 @@ import PeopleSvg from "../../../assets/images/people.svg";
 interface ClassAnnouncementThreadProps {
   user: LearnhubUser;
   classId: string;
-  simpleThread: SimpleThread;
+  threadId: string;
 }
 
 function ClassAnnouncementThread({
   user,
   classId,
-  simpleThread,
+  threadId,
 }: ClassAnnouncementThreadProps) {
   const { thread, addReply } = useThread(
     user,
     classId,
-    simpleThread.threadId,
+    threadId,
     "announcement",
   );
   return (

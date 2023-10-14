@@ -1,5 +1,6 @@
 import {
   faClipboardList,
+  faEdit,
   faFile,
   faFolderBlank,
   faPlayCircle,
@@ -71,9 +72,10 @@ interface _LessonPreviewProps {
   lessonName: string;
   lessonType: string;
   onRemove: () => void
+  onEdit: () => void
 }
 
-function _LessonPreview({ lessonName, lessonType, onRemove }: _LessonPreviewProps) {
+function _LessonPreview({ lessonName, lessonType, onRemove, onEdit }: _LessonPreviewProps) {
   let icon = faFolderBlank;
   switch (lessonType) {
     case "video":
@@ -94,9 +96,14 @@ function _LessonPreview({ lessonName, lessonType, onRemove }: _LessonPreviewProp
         <h1 className="font-bold text-black mx-6">{lessonType}</h1>
         <h1 className="font-semibold text-[#808080]">{lessonName}</h1>
       </div>
-      <button onClick={onRemove}>
-        <FontAwesomeIcon icon={faX} />
-      </button>
+      <div>
+        <button className="mr-5" onClick={onEdit}>
+          <FontAwesomeIcon icon={faEdit} />
+        </button>
+        <button onClick={onRemove}>
+          <FontAwesomeIcon icon={faX} />
+        </button>
+      </div>
     </div>
   );
 }
@@ -107,13 +114,16 @@ interface CourseChapterCreateProps {
   chapterToEdit?: number;
 }
 
+type CourseChapterCreateMode = "main" | "add-video" | "add-file" | "add-quiz" | "edit-video" | "edit-file" | "edit-quiz"
+
 function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapterCreateProps) {
   const courseContext = useContext(CourseContext);
   const [chapterNumber, setChapterNumber] = useState<number>(0);
   const [chapterName, setChapterName] = useState<string>("");
   const [chapterDescription, setChapterDescription] = useState<string>("");
   const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [mode, setMode] = useState("main");
+  const [mode, setMode] = useState<CourseChapterCreateMode>("main");
+  const [lessonToBeEdit, setLessonToBeEdit] = useState<Lesson>()
   useEffect(() => {
     setChapterNumber(chapterToEdit ?? courseContext.course.chapters.length + 1)
     setChapterName(courseContext.course.chapters[chapterToEdit - 1]?.name ?? "")
@@ -169,12 +179,24 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
     setChapterDescription(e.target.value);
   };
   const handleAddingLesson = (lessonType: string) => {
-    setMode(`add-${lessonType}`);
+    setMode(`add-${lessonType}` as CourseChapterCreateMode);
   };
+  const handleEdditingLesson = (lessonType: string, lesson: Lesson) => {
+    setLessonToBeEdit(lesson)
+    setMode(`edit-${lessonType}` as CourseChapterCreateMode);
+  }
   const handleAddLesson = (lesson: Lesson) => {
     setLessons([...lessons, lesson]);
     setMode("main");
   };
+  const handleEditLesson = (lesson: Lesson) => {
+    const updatedLessons = [...lessons]
+    const idx = updatedLessons.findIndex(lesson => lesson.number === lesson.number)
+    if (idx == -1) throw new Error("lesson not found")
+    updatedLessons[idx] = lesson
+    setLessons(updatedLessons)
+    setMode("main")
+  }
 
   if (mode == "add-video") {
     return (
@@ -188,6 +210,21 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
         }}
       />
     );
+  }
+  if (mode == "edit-video") {
+    return (
+      <VideoLessonCreate
+        defaultLesson={lessonToBeEdit!}
+        chapterNumber={chapterNumber}
+        chapterName={lessonToBeEdit!.name}
+        lessonNumber={lessonToBeEdit!.number}
+        onSubmit={handleEditLesson}
+        onCancel={() => {
+          setMode("main");
+          setLessonToBeEdit(undefined)
+        }}
+      />
+    )
   }
   if (mode == "add-file") {
     return (
@@ -247,6 +284,7 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
                 lessonName={lesson.name}
                 lessonType={lesson.type}
                 onRemove={() => { handleRemoveLesson(lesson.number) }}
+                onEdit={() => { handleEdditingLesson(lesson.type, lesson) }}
               />
             </li>
           );

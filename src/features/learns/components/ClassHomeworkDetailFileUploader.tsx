@@ -2,14 +2,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { HomeworkSubmissionFile, Thread } from "../types/thread";
 import {
   faCirclePlay,
-  faDownload,
   faFileLines,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import {
-  getFileTypeFromSrc,
+  getFileNameFromSrc,
   toDateTimeStringOmitDateOnSameDay,
 } from "../../../utils/functions";
+import { useRef } from "react";
 
 interface _FileEntryProps {
   homeworkStatus: "open" | "closed";
@@ -58,18 +58,10 @@ function _FileEntry({
                 <FontAwesomeIcon icon={faCirclePlay} size="2x" />
               </div>
             );
-          }
-          if (homeworkSubmissionFile.typ === "doc") {
+          } else {
             return (
               <div className="flex justify-center items-center">
                 <FontAwesomeIcon icon={faFileLines} size="2x" />
-              </div>
-            );
-          }
-          if (homeworkSubmissionFile.typ === "file") {
-            return (
-              <div className="flex justify-center items-center">
-                <FontAwesomeIcon icon={faDownload} size="2x" />
               </div>
             );
           }
@@ -77,10 +69,10 @@ function _FileEntry({
       </div>
       <div className="w-1/2">
         <p className="text-[#707070] group-hover:text-black text-[16px] font-semibold truncate">
-          {homeworkSubmissionFile.src}
+          {getFileNameFromSrc(homeworkSubmissionFile.src)}
         </p>
         <p className="text-[#808080] text-[16px] font-normal">
-          {getFileTypeFromSrc(homeworkSubmissionFile.src)}
+          {homeworkSubmissionFile.typ}
         </p>
       </div>
       <div
@@ -102,30 +94,28 @@ function _FileEntry({
     </div>
   );
 }
-interface FileUploaderProps {
+interface ClassHomeworkDetailFileUploaderProps {
   thread: Thread;
-  onAddHomeworkSubmissionFile: (src: string) => void;
+  onAddHomeworkSubmissionFile: (file: File) => void;
   onRemoveHomeworkSubmissionFile: (src: string) => void;
   onSubmitHomework: () => void;
   onUnsubmitHomework: () => void;
 }
 
-function FileUploader({
+function ClassHomeworkDetailFileUploader({
   thread,
   onAddHomeworkSubmissionFile,
   onRemoveHomeworkSubmissionFile,
   onSubmitHomework,
   onUnsubmitHomework,
-}: FileUploaderProps) {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleHomeworkSubmissionFileUpload = (
+}: ClassHomeworkDetailFileUploaderProps) {
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleAddHomeworkSubmissionFile = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    // TODO: Upload file to Firebase Storage
     const file = e.target.files?.item(0);
-    if (file) {
-      onAddHomeworkSubmissionFile(URL.createObjectURL(file));
-    }
+    onAddHomeworkSubmissionFile(file!);
   };
 
   return (
@@ -190,7 +180,18 @@ function FileUploader({
               : "hidden"
           }
         >
-          <button className="h-[40px] w-full bg-white rounded-[6px] border-[1px] border-[#DADCE0] hover:drop-shadow-md">
+          <input
+            type="file"
+            ref={fileRef}
+            onChange={handleAddHomeworkSubmissionFile}
+            className="hidden"
+          />
+          <button
+            className="h-[40px] w-full bg-white rounded-[6px] border-[1px] border-[#DADCE0] hover:drop-shadow-md"
+            onClick={() => {
+              fileRef.current?.click();
+            }}
+          >
             <p className="text-[#606060] text-[18px] font-[500]">เพิ่มไฟล์</p>
           </button>
         </div>
@@ -212,7 +213,7 @@ function FileUploader({
           <p className="text-white text-[18px] font-[500]">
             {thread.homeworkSubmissionStatus === "not-submitted"
               ? "ส่งงาน"
-              : "ถอนการส่งงาน"}
+              : "ยกเลิกการส่งงาน"}
           </p>
         </button>
         <div
@@ -227,4 +228,4 @@ function FileUploader({
   );
 }
 
-export default FileUploader;
+export default ClassHomeworkDetailFileUploader;

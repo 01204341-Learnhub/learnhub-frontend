@@ -19,8 +19,8 @@ function _Preview({ src }: { src: string | undefined }) {
     );
   } else {
     return (
-      <div>
-        <h1 className=" mx-[40px] mt-[20px] font-semibold text-[18px]">
+      <div className="mx-[40px] my-[20px]">
+        <h1 className="font-bold text-[18px]">
           Preview
         </h1>
         <VideoPlayer url={src} />
@@ -90,7 +90,7 @@ function VideoLessonCreate({
     }
   };
   return (
-    <div className=" h-screen">
+    <div className=" w-full h-screen">
       <div className="ml-[70px] mt-[20px] flex items-center">
         <h1 className="text-black text-[24px] font-bold">
           บทที่ {chapterNumber} :{" "}
@@ -99,7 +99,7 @@ function VideoLessonCreate({
           {chapterName} / วิดีโอที่ {lessonNumber}
         </h2>
       </div>
-      <div className="ml-[70px] mr-[100px] mt-[30px] flex grow items-center bg-white drop-shadow-xl pt-2 pb-4">
+      <div className="ml-[70px] mr-[100px] mt-[30px] flex grow items-center bg-white drop-shadow-xl pt-4 pb-4">
         <h1 className="my-auto mx-[40px] font-semibold text-[18px]">
           ชื่อวิดีโอ
         </h1>

@@ -1,7 +1,6 @@
 import {
   faClipboardList,
   faFile,
-  faFileLines,
   faFolderBlank,
   faPlayCircle,
 } from "@fortawesome/free-solid-svg-icons";
@@ -38,15 +37,6 @@ function _LessonTypeSelector({ onSelect }: _LessonTypeSelectorProps) {
             >
               <FontAwesomeIcon icon={faPlayCircle} color="#505050" size="xl" />
               <h1 className="ml-5">วิดีโอ</h1>
-            </button>
-            <button
-              className="flex my-2 p-2 hover:bg-gray-200 w-full"
-              onSelect={() => {
-                onSelect("doc");
-              }}
-            >
-              <FontAwesomeIcon icon={faFileLines} color="#505050" size="xl" />
-              <h1 className="ml-5">เอกสาร</h1>
             </button>
             <button className="flex my-2 p-2 hover:bg-gray-200 w-full"
               onClick={() => { onSelect("quiz") }}>
@@ -137,7 +127,7 @@ function CourseChapterCreate({ onSubmit, onCancel }: CourseChapterCreateProps) {
     setChapterName(e.target.value);
   };
   const onChapterDescriptionChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setChapterDescription(e.target.value);
   };
@@ -162,7 +152,7 @@ function CourseChapterCreate({ onSubmit, onCancel }: CourseChapterCreateProps) {
       />
     );
   }
-  if (mode == "add-files") {
+  if (mode == "add-file") {
     return (
       <FileLessonCreate
         chapterNumber={chapterNumber}
@@ -188,26 +178,25 @@ function CourseChapterCreate({ onSubmit, onCancel }: CourseChapterCreateProps) {
         บทที่ {chapterNumber}
       </h1>
       <div className="ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
-        <div className=" flex grow items-center pt-2 pb-4">
+        <div className=" grid items-center pt-2">
           <h1 className="my-[20px] mx-[40px] font-semibold text-[18px]">
             ชื่อบทเรียน
           </h1>
           <input
             type="text"
             placeholder="ชื่อบทเรียน"
-            className="mr-[50px] min-w-0 grow input input-bordered"
+            className="mx-[40px] min-w-0 grow input input-bordered"
             value={chapterName}
             onChange={onChapterNameChange}
           />
         </div>
-        <div className="  flex grow items-center pt-2 pb-4">
-          <h1 className="my-[20px] mx-[40px] font-semibold text-[18px]">
+        <div className=" grid items-center pt-2 pb-4 text-[18px]">
+          <h1 className="my-[20px] mx-[40px] font-semibold ">
             คำอธิบาย
           </h1>
-          <input
-            type="text"
-            placeholder="  ผู้เรียนสามารถทำอะไรได้บ้างหลังจากจบส่วนนี้"
-            className="mr-[50px] min-w-0 grow input input-bordered my-4"
+          <textarea
+            placeholder="ผู้เรียนสามารถทำอะไรได้บ้างหลังจากจบส่วนนี้"
+            className="  mx-[40px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
             value={chapterDescription}
             onChange={onChapterDescriptionChange}
           />

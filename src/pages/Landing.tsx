@@ -1,9 +1,9 @@
 import { Link, Navigate, useNavigate } from "react-router-dom"
-import ImageLogo from "../assets/Images/bookLogo.png"
-import ImageElephant from "../assets/Images/elephantLogo.png"
-import ClassIcon from "../assets/Images/landingClassicIcon.png"
-import CouseIcon from "../assets/Images/landingCourseIcon.png"
-import ImageLogoText from "../assets/Images/textNameLogo.png"
+import ImageLogo from "../assets/images/bookLogo.png"
+import ImageElephant from "../assets/images/elephantLogo.png"
+import ClassIcon from "../assets/images/landingClassicIcon.png"
+import CouseIcon from "../assets/images/landingCourseIcon.png"
+import ImageLogoText from "../assets/images/textNameLogo.png"
 import { useUser } from "../hooks/useUser"
 
 

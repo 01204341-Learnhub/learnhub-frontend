@@ -10,9 +10,9 @@ import ClassCardPreview from "../../features/teaches/components/ClassCardPreview
 import ClassDatesInfoForm from "../../features/teaches/components/ClassDatesInfoForm.tsx";
 import ClassGoalsInfoForm from "../../features/teaches/components/ClassGoalsInfoForm.tsx";
 import ClassPublishingInfoForm from "../../features/teaches/components/ClassPublishingInfoForm.tsx";
+import { publishClass } from "../../features/teaches/services/classes.ts";
 import { CreatingClass } from "../../features/teaches/types/class.ts";
 import { useUser } from "../../hooks/useUser.ts";
-import { publishClass } from "../../features/teaches/services/classes.ts";
 
 interface _SideNavProps {
   currentTab: string;
@@ -74,19 +74,17 @@ function _SideNav({
         </button>
       </div>
       <button
-        className={`w-fit h-fit p-3 hover:drop-shadow-md ${
-          !readyToPublish || onPublish === undefined
-            ? "bg-gray-200"
-            : "bg-[#D9D9D9]"
-        }`}
+        className={`w-fit h-fit p-3 hover:drop-shadow-md ${!readyToPublish || onPublish === undefined
+          ? "bg-gray-200"
+          : "bg-[#D9D9D9]"
+          }`}
         onClick={onPublish}
       >
         <h1
-          className={`font-semibold text-[20px] ${
-            !readyToPublish || onPublish === undefined
-              ? "text-gray-400"
-              : "text-black"
-          }`}
+          className={`font-semibold text-[20px] ${!readyToPublish || onPublish === undefined
+            ? "text-gray-400"
+            : "text-black"
+            }`}
         >
           เผยแพร่คลาส
         </h1>
@@ -181,23 +179,17 @@ function _TopPanel({ cls }: _TopPanelProps) {
 }
 
 function checkReadyToPublish(cls: CreatingClass) {
-  return (
-    cls.name !== "" &&
-    cls.pictureUrl !== "" &&
-    cls.description !== "" &&
-    cls.maxStudent > 0 &&
-    cls.maxStudent <= 100 &&
-    cls.price >= 0 &&
-    cls.objectives.length > 0 &&
-    cls.objectives.every((objective) => objective !== "") &&
-    cls.requirement !== "" &&
-    cls.level !== "" &&
-    cls.tag !== undefined &&
-    cls.schedule.length > 0 &&
-    cls.start !== undefined &&
-    cls.registrationEnd !== undefined &&
-    cls.end !== undefined
-  );
+  if (cls.name === "" || cls.pictureUrl === "" || cls.description === "") return false;
+  if (cls.maxStudent <= 0 || cls.maxStudent > 100) return false;
+  if (cls.price < 0) return false;
+  if (cls.objectives.length !== 4) return false;
+  if (cls.objectives.some((objective) => objective === "")) return false;
+  if (cls.requirement === "") return false;
+  if (cls.level === "") return false;
+  if (cls.tag === undefined) return false;
+  if (cls.schedule.length === 0) return false;
+  if (cls.registrationEnd === undefined) return false;
+  return true;
 }
 
 interface CreatingClassContextType {
@@ -231,7 +223,10 @@ function CreateClass() {
   const [currentTab, setCurrentTab] = useState<string>("goals");
 
   const handlePublishClass = () => {
-    // TODO: Send the class to the server.
+    if (!checkReadyToPublish(cls)) {
+      alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+      return;
+    }
     console.log(JSON.stringify(cls, null, 2));
     publishClass(cls)
       .then((classId) => {

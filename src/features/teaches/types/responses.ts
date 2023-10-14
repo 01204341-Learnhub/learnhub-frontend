@@ -17,17 +17,39 @@ type ListTagsResponse = {
 
 type ListTeacherIncomesResponse = {
   incomes: {
-    type: string
-    program_id: string
-    program_pic: string
-    name: string
+    type: string;
+    program_id: string;
+    program_pic: string;
+    name: string;
     buyer: {
-      student_id: string
-      student_name: string
-    }
-    price: number
-    purchase_time: number
-  }[]
-}
+      student_id: string;
+      student_name: string;
+    };
+    price: number;
+    purchase_time: number;
+  }[];
+};
 
-export type { ListTagsResponse, ListTeacherCourseResponse, ListTeacherIncomesResponse };
+type ListTeacherClassesResponse = {
+  classes: {
+    class_id: string;
+    name: string;
+    class_pic: string;
+    status: string;
+    registration_ended_date: number;
+    class_end_date: number;
+    student_count: number;
+    max_student: number;
+    schedules: {
+      start: number;
+      end: number;
+    }[];
+  }[];
+};
+
+export type {
+  ListTagsResponse,
+  ListTeacherClassesResponse,
+  ListTeacherCourseResponse,
+  ListTeacherIncomesResponse,
+};

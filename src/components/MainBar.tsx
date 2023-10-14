@@ -3,11 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import Swal from 'sweetalert2'
 import booklogo from '../assets/images/bookLogo.png'
 import namelogo from '../assets/images/textNameLogo.png'
 import BasketItemSlot from '../features/stores/components/BasketItemSlot'
-import { useBasket } from '../features/stores/hooks/useBasket'
 import { fetchBasketItems } from '../features/stores/services/purchase'
 import { useUser } from '../hooks/useUser'
 import { signOut } from '../services/auth/signOut'
@@ -16,13 +14,12 @@ import { clearUser } from '../slices/userSlice'
 import { RootState } from '../store'
 
 function MainBar() {
-    const basket = useBasket()
-    const basketItems = basket.items
+    const basket = useSelector((state: RootState) => state.basket)
+    const basketItems = basket.basket.items
     const { user } = useUser()
     const isFetchOnce = useSelector((state: RootState) => state.basket.isFetchOnce)
     const dispatcher = useDispatch()
     const [openDropdown, setOpenDropdown] = useState(null)
-    //const basketItems = useSelector((state: RootState) => state.basket.basket.items)
     const navigate = useNavigate()
     const toggleDropdown = (dropdownName) => {
         if (openDropdown === dropdownName) {
@@ -34,7 +31,7 @@ function MainBar() {
 
     const handleClickBasket = () => {
         async function fetchBasket() {
-            console.log(isFetchOnce)
+            //console.log(isFetchOnce)
             if (!isFetchOnce) {
                 const BasketItems = await fetchBasketItems(user.userID)
                 dispatcher(setStatusFetchOnce(true))
@@ -47,29 +44,13 @@ function MainBar() {
         fetchBasket()
         toggleDropdown('mycartdropdown')
     }
-
+    
     const handleSignOut = () => {
         signOut().then(() => {
             dispatcher(clearUser())
             navigate('/', { replace: true })
         })
     }
-    if (!user) {
-        Swal.fire({
-            title: 'คุณยังไม่ได้เข้าสู่ระบบ',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'เข้าสู่ระบบ',
-            cancelButtonText: 'สมัครบัญชี',
-        }).then((reslt) => {
-            if (reslt.isConfirmed) {
-                navigate('/login', { replace: true })
-            } else if (reslt.dismiss === Swal.DismissReason.cancel) {
-                navigate('/register', { replace: true })
-            }
-        })
-    }
-
     return (
         <nav style={{ height: '100px', zIndex: 1000 }} className='fixed bg-white border-b-2 flex w-screen items-center py-5'>
             <div className=' flex flex-row items-center justify-center w-1/12'>
@@ -138,7 +119,6 @@ function MainBar() {
                         </button>
                     </div>
                 )}
-
                 <button className=' col-start-4' onClick={() => toggleDropdown('mynotidropdown')}>
                     <FontAwesomeIcon icon={faBell} size='xl' color={openDropdown === 'mynotidropdown' ? '#F1C93B' : 'none'} />
 
@@ -178,7 +158,7 @@ function MainBar() {
                                     </div>
                                     <ul className="py-2" aria-labelledby="user-menu-button">
                                         <li>
-                                            <Link to={"/home"}>
+                                            <Link to={user.userType == "student" ? "/home" : "/teach/overview"}>
                                                 <p className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">หน้าแรก</p>
                                             </Link>
                                         </li>

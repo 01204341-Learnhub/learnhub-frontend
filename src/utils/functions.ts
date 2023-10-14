@@ -50,3 +50,4 @@ export function toDateTimeStringOmitDateOnSameDay(dateTime: Date) {
   }
   return dateTime.toLocaleString("th-TH", format);
 }
+

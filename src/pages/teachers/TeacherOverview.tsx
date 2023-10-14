@@ -1,10 +1,10 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Calendar from "../../features/learns/components/Calendar";
 import ClassCard from "../../features/teaches/components/ClassCard";
 import CourseCard from "../../features/teaches/components/CourseCard";
 import NewProgramClass from "../../features/teaches/components/NewProgramCard";
-import { useTeachCourses } from "../../features/teaches/hooks/useTeachCourses";
 import { useTeachClasses } from "../../features/teaches/hooks/useTeachClasses";
+import { useTeachCourses } from "../../features/teaches/hooks/useTeachCourses";
 
 function TeacherOverview() {
 
@@ -63,12 +63,14 @@ function TeacherOverview() {
             studentCount,
           }) => (
             <li key={courseID}>
-              <CourseCard
-                courseName={courseName}
-                courseThumbnailUrl={courseThumbnailUrl}
-                courseRating={courseRating}
-                studentCount={studentCount}
-              />
+              <Link to={`/teach/course/${courseID}`}>
+                <CourseCard
+                  courseName={courseName}
+                  courseThumbnailUrl={courseThumbnailUrl}
+                  courseRating={courseRating}
+                  studentCount={studentCount}
+                />
+              </Link>
             </li>
           ),
         )}

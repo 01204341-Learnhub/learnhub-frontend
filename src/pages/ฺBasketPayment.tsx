@@ -1,26 +1,30 @@
-import { useDispatch} from "react-redux"
-import { clearItem } from "../slices/basketSlice"
-import { purchaseCourse } from '../features/stores/services/purchase'
-import { useUser } from '../hooks/useUser'
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import { useBasket } from '../features/stores/hooks/useBasket'
+import { purchaseCourse } from '../features/stores/services/purchase'
+import { useUser } from '../hooks/useUser'
+import { clearItem } from "../slices/basketSlice"
 
 function BasketPayment() {
     const { user } = useUser()
     const basket = useBasket()
     const dispatcher = useDispatch()
-    const sumPriceDiv=document.getElementById("sumPriceDiv")
+    const navigate = useNavigate()
+    const sumPriceDiv = document.getElementById("sumPriceDiv")
 
     const handlePayment = async () => {
         const transction = await purchaseCourse(user.userID, "1111111111111");
         if (transction) {
             Swal.fire({
                 title: "ชำระเงินสำเร็จ",
-                text: "",
+                text: "ขอบคุณสำหรับการซื้อ",
                 icon: "success",
                 confirmButtonColor: "green"
+            }).then(() => {
+                dispatcher(clearItem())
+                navigate("/")
             })
-            dispatcher(clearItem())
         } else {
             Swal.fire({
                 title: 'error',
@@ -29,8 +33,8 @@ function BasketPayment() {
         }
     }
 
-    let sum=0;
-    for (let i=0; i<basket.items.length; i++) {
+    let sum = 0;
+    for (let i = 0; i < basket.items.length; i++) {
         sum += basket.items[i].price
     }
 
@@ -38,7 +42,7 @@ function BasketPayment() {
         sumPriceDiv.innerText = `${sum.toString()} บาท`
     }
 
-   
+
     return (
         <div className=" flex flex-row bg-[#EEEEEE80]">
             <div className=" flex flex-col w-[60%] mt-[3%] mb-[3%] bg-white">
@@ -49,7 +53,7 @@ function BasketPayment() {
                     <div className=" font-extrabold text-3xl mt-[5%]">
                         วิธีการชำระเงิน
                     </div>
-                
+
                     <div className=" flex flex-row space-x-10 mt-[3%] items-center bg-[#F0F0F0] p-4">
                         <input id="debit-checkbox" type="radio" name="group1" className="w-8 h-8" />
                         <label className="ml-2 text-xl font-semibold text-gray-900 dark:text-gray-300">บัตรเครดิต/เดบิต</label>
@@ -58,29 +62,29 @@ function BasketPayment() {
                     <div className=" flex flex-col bg-white border border-gray-300">
                         <div className=" ml-[5%]">
                             <p className=" mt-[2%] mb-[1%] font-bold text-lg">ชื่อบนบัตร</p>
-                            <input type="text" placeholder="ชื่อบนบัตร" className="w-[60%] p-2 border border-gray-300 mb-[2%]"/>
+                            <input type="text" placeholder="ชื่อบนบัตร" className="w-[60%] p-2 border border-gray-300 mb-[2%]" />
 
                             <p className=" mt-[1%] mb-[1%] font-bold text-lg">หมายเลขบัตร</p>
-                            <input type="text" placeholder="หมายเลขบัตร" className="w-[60%] p-2 border border-gray-300 mb-[2%]"/>
+                            <input type="text" placeholder="หมายเลขบัตร" className="w-[60%] p-2 border border-gray-300 mb-[2%]" />
 
                             <div className=" flex flex-row space-x-[10%] w-[60%] mb-[2%]">
                                 <div className=" flex flex-col">
                                     <p className=" mt-[1%] mb-[1%] font-bold text-lg">วันหมดอายุ</p>
-                                    <input type="text" placeholder="วันหมดอายุ" className=" p-2 border border-gray-300"/>
+                                    <input type="text" placeholder="วันหมดอายุ" className=" p-2 border border-gray-300" />
                                 </div>
                                 <div className=" flex flex-col">
                                     <p className=" mt-[1%] mb-[1%] font-bold text-lg">CVC/CVV</p>
-                                    <input type="text" placeholder="CVC/CVV" className=" p-2 border border-gray-300 mb-[5%]"/>
+                                    <input type="text" placeholder="CVC/CVV" className=" p-2 border border-gray-300 mb-[5%]" />
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className=" flex flex-row space-x-10 mt-[4%] items-center bg-[#F0F0F0] p-4">                            
+                    <div className=" flex flex-row space-x-10 mt-[4%] items-center bg-[#F0F0F0] p-4">
                         <input id="debit-checkbox" type="radio" name="group1" className="w-8 h-8 p" />
                         <label className="ml-2 text-xl font-semibold text-gray-900 dark:text-gray-300">PayPal</label>
                     </div>
-                    
+
 
                     <div className=" font-extrabold text-3xl mt-[6%]">
                         รายละเอียดคำสั่งซื้อ
@@ -111,12 +115,12 @@ function BasketPayment() {
 
                 <hr className=" border-[#C0C0C0] mt-[4%] mb-[5%] ml-[5%] mr-[10%]" />
             </div>
-            
+
             <div className=" flex flex-col w-[40%] ml-[5%] mt-[4%]">
                 <div className="font-extrabold text-4xl mt-[3%] ml-[5%]">
                     สรุป
                 </div>
-                
+
                 <div className=" flex flex-row mt-[5%] space-x-[10%] ml-[5%]">
                     <p className="font-extrabold text-3xl">
                         ราคารวมทั้งสิ้น
@@ -127,12 +131,12 @@ function BasketPayment() {
                 </div>
 
                 <hr className=" border-[#C0C0C0] mt-[4%] mb-[3%] w-[70%]" />
-                
+
                 <button
-                        onClick={handlePayment}
-                        type='button'
-                        className=" w-[50%] h-[5%] ml-[10%] p-2 font-bold text-[20px] mt-[4%] bg-[#D9D9D9] text-black hover:bg-blue-300">
-                        ชำระเงินให้เสร็จสิ้น
+                    onClick={handlePayment}
+                    type='button'
+                    className=" w-[50%] h-[5%] ml-[10%] p-2 font-bold text-[20px] mt-[4%] bg-[#D9D9D9] text-black hover:bg-blue-300">
+                    ชำระเงินให้เสร็จสิ้น
                 </button>
             </div>
         </div>

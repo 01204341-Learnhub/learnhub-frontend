@@ -1,6 +1,8 @@
+import { LoadingSpash } from "../../components/LoadingSpash"
+
 function LearningSchedule() {
     return (
-        <div>LearningSchedule</div>
+        <LoadingSpash />
     )
 }
 

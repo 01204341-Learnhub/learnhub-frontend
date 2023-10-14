@@ -3,6 +3,7 @@ import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
 import { useAllClasses } from "../features/stores/hooks/useAllClasses";
 import { useAllCourses } from "../features/stores/hooks/useAllCourses";
+import { LoadingSpash } from "../components/LoadingSpash";
 
 
 export default function Home() {
@@ -11,7 +12,12 @@ export default function Home() {
     const { classes, isFetching: isFetchingClasses } = useAllClasses()
 
     if (isFetchingCourses || isFetchingClasses) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>
+        return  (
+
+            <div className="flex justify-center items-center h-screen">
+                <LoadingSpash></LoadingSpash>
+            </div>
+        )
     }
 
     function poppularCourseSlotProp() {

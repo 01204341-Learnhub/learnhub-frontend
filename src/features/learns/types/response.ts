@@ -155,14 +155,42 @@ type GetStudentDashboardResponse = {
 }
 
 
+type ListCourseAnnouncementResponse = {
+  announcements: {
+    announcement_id: string;
+    last_edit: number;
+    name: string;
+  }[]
+}
+
+type GetCourseAnnouncementResponse = {
+  "announcement_id": string,
+  "teacher": {
+    "teacher_id": string,
+    "teacher_name": string,
+    "profile_pic": string
+  },
+  "name": string,
+  "last_edit": number,
+  "text": string,
+  "attachments": 
+    {
+      "attachment_type": string,
+      "src": string
+    }[]
+  
+}
+
 export type {
   GetCourseChapterResponse,
   GetCourseLessonResponse,
   GetQuizResponse,
   GetStudentCourseProgressResponse,
   GetStudentCourseQuizReportResponse,
+  GetCourseAnnouncementResponse,
   ListCourseChaptersResponse,
   ListCourseLessonsResponse,
   ListEnrolledCoursesResponse,
+  ListCourseAnnouncementResponse,
   GetStudentDashboardResponse
 };

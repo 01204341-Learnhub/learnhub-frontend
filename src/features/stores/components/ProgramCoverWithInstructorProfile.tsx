@@ -1,9 +1,12 @@
+import { Link } from "react-router-dom";
+
 interface ProgramCoverWithInstructorProfileProps {
     programCoverUrl: string;
     instructor: {
         profileUrl: string;
         name: string;
         jobTitle: string;
+        teacherID:string;
     }
     reviewCount: number;
     rating: number;
@@ -18,14 +21,16 @@ export default function ProgramCoverWithInstructorProfile({ instructor, programC
                     className="w-[1000px] h-[400px] object-cover rounded-xl"
                     alt="Program cover"
                 />
-                <img
+                <Link to={`/teacherprofile/${instructor.teacherID}`}>
+                    <img
                     className="border-white border-8 w-28 h-28 absolute bottom-[-60px] left-9 rounded-lg"
                     src={instructor.profileUrl}
                     width={80}
                     height={100}
                     alt="Instructor profile"
                     style={{ objectFit: "cover" }}
-                />
+                    />
+                </Link>
             </div>
             <div className=" flex flex-col ml-[160px] mr-[20px] mt-2">
                 <div></div>

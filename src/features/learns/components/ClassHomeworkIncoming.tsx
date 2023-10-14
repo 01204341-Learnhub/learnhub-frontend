@@ -5,7 +5,6 @@ interface ClassHomeworkIncomingProps {
     deadlineDayOfWeek: string;
     deadlineTime: string;
     status: string;
-    color: string;
 }
 
 export default function ClassHomeworkIncoming (props: ClassHomeworkIncomingProps) { 
@@ -16,7 +15,7 @@ export default function ClassHomeworkIncoming (props: ClassHomeworkIncomingProps
                 <p className=" font-bold text-lg truncate">{props.homeworkName}</p>
                 <div className="flex items-center justify-between">
                     <p className="text-[14px] text-[#404040] truncate">{props.titleName}</p>
-                    <p className="text-[14px] text-[#404040] truncate">ถึงวัน{props.deadlineDayOfWeek} {props.deadlineTime} น.</p>
+                    <p className="text-[14px] text-[#404040] truncate">ถึง {props.deadlineTime} {props.deadlineDayOfWeek}</p>
                 </div>
                 <div className="self-end py-1 text-sm font-bold marker: text-red-600">{props.status}</div>
             </div>

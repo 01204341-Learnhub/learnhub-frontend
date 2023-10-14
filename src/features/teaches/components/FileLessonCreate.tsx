@@ -1,4 +1,4 @@
-import { faX, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faUpload, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Lesson } from "../types/course";
@@ -40,6 +40,17 @@ function FileLessonCreate({
     }
   };
   const handleSubmit = () => {
+    if (lessonName == "") {
+      alert("กรุณาใส่ชื่อบทเรียน");
+      return;
+    }
+    else if (files.length == 0) {
+      alert("กรุณาเลือกไฟล์");
+      return;
+    } else if (lessonDescription == "") {
+      alert("กรุณาใส่คำอธิบาย");
+      return;
+    }
     const lesson: Lesson = {
       lessonId: "1234567890",
       name: lessonName,
@@ -84,16 +95,6 @@ function FileLessonCreate({
         </div>
       </div>
 
-      {/* <div className="bg-white">
-                <div className="flex">
-                    <h1>หัวข้อ</h1>
-                    <input type="text" className="input" value={lessonName} onChange={onLessonNameChange} />
-                </div>
-                <div>
-                    <h1>คำอธิบาย</h1>
-                    <input type="text" className="input" value={lessonDescription} onChange={onLessonDescriptionChange} />
-                </div>
-            </div> */}
       <div className="ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
         <ol>
           {files.map((file, index) => (

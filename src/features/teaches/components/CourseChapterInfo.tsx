@@ -25,7 +25,7 @@ function _LessonEntry({ lesson }: _LessonEntryProps) {
     icon = faFileLines;
   } else if (lesson.type === "quiz") {
     icon = faClipboardList;
-  } else if (lesson.type === "file") {
+  } else if (lesson.type === "files") {
     icon = faDownload;
   } else {
     icon = faCircleQuestion;

@@ -81,6 +81,9 @@ function _LessonPreview({ lessonName, lessonType, onRemove, onEdit }: _LessonPre
     case "video":
       icon = faPlayCircle;
       break;
+    case "quiz":
+      icon = faClipboardList;
+      break;
     default:
       break;
   }
@@ -191,11 +194,12 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
     setMode("main");
   };
   const handleEditLesson = (lesson: Lesson) => {
-    const updatedLessons = [...lessons]
-    const idx = updatedLessons.findIndex(lesson => lesson.number === lesson.number)
-    if (idx == -1) throw new Error("lesson not found")
-    updatedLessons[idx] = lesson
-    setLessons(updatedLessons)
+    setLessons((p) => {
+      return (p.map((l) => {
+        if (l.number == lesson.number) return lesson
+        return l
+      }))
+    })
     setMode("main")
   }
 

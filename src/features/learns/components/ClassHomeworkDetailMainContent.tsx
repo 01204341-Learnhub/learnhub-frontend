@@ -80,7 +80,7 @@ function ClassHomeworkDetailMainContent({
       </div>
       <div className={showRepliesAndTextBox ? "block" : "hidden"}>
         <div className="flex items-center space-x-5 mx-3 mt-4">
-          <img src={PeopleSvg} width={23} />
+          <img src={PeopleSvg} width={23} alt="people icon" />
           <h3 className="text-[#808080] text-[18px] font-bold">
             ความคิดเห็นสำหรับงานนี้
           </h3>

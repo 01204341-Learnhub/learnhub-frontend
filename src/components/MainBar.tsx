@@ -138,7 +138,6 @@ function MainBar() {
                         </button>
                     </div>
                 )}
-
                 <button className=' col-start-4' onClick={() => toggleDropdown('mynotidropdown')}>
                     <FontAwesomeIcon icon={faBell} size='xl' color={openDropdown === 'mynotidropdown' ? '#F1C93B' : 'none'} />
 
@@ -178,7 +177,7 @@ function MainBar() {
                                     </div>
                                     <ul className="py-2" aria-labelledby="user-menu-button">
                                         <li>
-                                            <Link to={"/home"}>
+                                            <Link to={user.userType == "student" ? "/home" : "/teach/overview"}>
                                                 <p className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">หน้าแรก</p>
                                             </Link>
                                         </li>

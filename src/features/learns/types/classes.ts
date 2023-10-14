@@ -75,6 +75,26 @@ function generateMockClass(classId: string): Class {
         lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
         homeworkTopicName: "Topic 1",
       },
+      {
+        threadId: "announcement2",
+        typ: "announcement",
+        name: "Announcement 2",
+        lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 7),
+      },
+      {
+        threadId: "homework2",
+        typ: "homework",
+        name: "Homework 2",
+        lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 10),
+        homeworkTopicName: "Topic 0",
+      },
+      {
+        threadId: "homework3",
+        typ: "homework",
+        name: "Homework 3",
+        lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 14),
+        homeworkTopicName: "Topic 1",
+      },
     ],
   };
 }

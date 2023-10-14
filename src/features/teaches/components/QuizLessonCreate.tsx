@@ -67,7 +67,7 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
             <h1 className="my-auto mx-[40px] font-semibold text-[15px] text-[#808080]">ติ๊กถูกด้านหน้าเพื่อกำหนดตัวเลือกที่ตอบแล้วได้คะแนน</h1>
             {Object.entries(choices).map(([key, value], index) => {
                 if (index >= numChoice) {
-                    return <></>
+                    return (null)
                 }
                 return (
                     <div className="mx-[55px]"
@@ -201,13 +201,13 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                         <div className="py-2 bg-[#d0d0d0]">
                             <h1 className="my-auto mx-[40px] font-semibold text-[18px]">คำถามที่ {problem.problemNumber} {problem.question}</h1>
                         </div>
-                        {Object.entries(problem.choices).map(([key, value]) => {
+                        {Object.entries(problem.choices).map(([key, value], index) => {
                             if (value === "") {
-                                return <></>
+                                return (null)
                             }
                             else {
                                 return (
-                                    <div className="mx-[55px] my-2 flex items-center">
+                                    <div className="mx-[55px] my-2 flex items-center" key={`${key}-${value}-${index}`}>
                                         <div className={`mr-5 rounded-full w-4 h-4 border-2 border-[#646464] ${problem.correctAnswers[key] ? "bg-green-400" : "bg-slate-200"}`}></div>
                                         <h1 className=" font-semibold text-[16px] text-[#3a3a3a]">{value}</h1>
                                     </div>

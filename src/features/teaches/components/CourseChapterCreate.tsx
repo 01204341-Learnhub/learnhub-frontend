@@ -248,7 +248,6 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
                 lessonType={lesson.type}
                 onRemove={() => { handleRemoveLesson(lesson.number) }}
               />
-              <h1>{lesson.number}</h1>
             </li>
           );
         })}

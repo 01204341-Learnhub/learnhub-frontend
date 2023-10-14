@@ -1,4 +1,4 @@
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Lesson } from "../types/course";
@@ -50,6 +50,17 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
         }
         onSubmit(problem)
     }
+    const handleRemoveChoice = () => {
+        Object.keys(choices).forEach((key, index) => {
+            if (index >= numChoice - 1) {
+                setChoices((p) => {
+                    return { ...p, [key]: "" }
+                })
+            }
+        })
+        setNumChoice((p) => p - 1)
+    }
+
     return (
         <div className="flex flex-col ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
             <div className="flex pt-2 pb-4 font-semibold">
@@ -89,15 +100,23 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
                     </div>
                 )
             })}
-            {numChoice <= 5 ?
-                <button className="mx-14 mb-4 px-2 py-1 flex flex-row items-center"
-                    onClick={() => {
-                        setNumChoice((p) => p + 1)
-                    }}>
-                    <FontAwesomeIcon icon={faPlusCircle} size='lg' />
-                    <h1 className="ml-5">เพิ่มตัวเลือก</h1>
-                </button> : <></>
-            }
+            <div className="flex">
+                {numChoice <= 5 ?
+                    <button className="mx-14 mb-4 px-2 py-1 flex flex-row items-center bg-gray-100"
+                        onClick={() => {
+                            setNumChoice((p) => p + 1)
+                        }}>
+                        <FontAwesomeIcon icon={faPlusCircle} size='lg' />
+                        <h1 className="ml-5">เพิ่มตัวเลือก</h1>
+                    </button> : <></>
+                } {numChoice > 1 ?
+                    <button className="mx-14 mb-4 px-2 py-1 flex flex-row items-center bg-gray-100"
+                        onClick={handleRemoveChoice}>
+                        <FontAwesomeIcon icon={faX} size='lg' />
+                        <h1 className="ml-5">ลบตัวเลือก</h1>
+                    </button> : <></>
+                }
+            </div>
             <button className="btn bg-[#d9d9d9]"
                 onClick={handleSubmit}>
                 <h1>ตกลง</h1>

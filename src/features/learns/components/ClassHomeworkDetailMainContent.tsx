@@ -9,6 +9,7 @@ import ClassThreadAttachment from "./ClassThreadAttachment";
 import ClassThreadReplyEntry from "./ClassThreadReplyEntry";
 import ClassThreadReplyInputBar from "./ClassThreadReplyInputBar";
 
+
 interface ClassHomeworkDetailMainContentProps {
   user: LearnhubUser;
   thread: Thread;

@@ -1,4 +1,4 @@
-import { faPlusCircle, faX } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPlusCircle, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Lesson } from "../types/course";
@@ -7,10 +7,12 @@ import { CourseQuiz, CourseQuizProblem } from "../types/courseQuiz";
 type CourseQuizProblemWithoutNumber = Omit<CourseQuizProblem, "problemNumber">
 
 interface _ProblemCreateProps {
-    onSubmit: (problem: CourseQuizProblemWithoutNumber) => void;
+    problemToBeEdit?: CourseQuizProblem;
+    onSubmit?: (problem: CourseQuizProblemWithoutNumber) => void;
+    onEdit?: (problem: CourseQuizProblem) => void;
 }
 
-function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
+function _ProblemCreate({ onSubmit, problemToBeEdit, onEdit }: _ProblemCreateProps) {
     const [question, setQuestion] = useState<string>("")
     const [numChoice, setNumChoice] = useState<number>(1)
     const [explaination, setExplaination] = useState<string>("")
@@ -31,6 +33,9 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
         choiceF: false,
     })
     const handleSubmit = () => {
+        if (!onSubmit && !onEdit) {
+            throw new Error("onSubmit and onEdit is undefined")
+        }
         if (question === "" || explaination === "") {
             alert("ต้องกรอกคำถามและคำอธิบาย")
             return
@@ -48,7 +53,15 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
             correctAnswers: correctAnswer,
             explaination: explaination,
         }
-        onSubmit(problem)
+        if (onSubmit) {
+            onSubmit(problem)
+        } else if (onEdit) {
+            if (!problemToBeEdit) {
+                throw new Error("problemToBeEdit is undefined")
+            }
+            const newProblem: CourseQuizProblem = { problemNumber: problemToBeEdit.problemNumber, ...problem }
+            onEdit(newProblem)
+        }
     }
     const handleRemoveChoice = () => {
         Object.keys(choices).forEach((key, index) => {
@@ -60,6 +73,20 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
         })
         setNumChoice((p) => p - 1)
     }
+    useEffect(() => {
+        if (problemToBeEdit) {
+            setQuestion(problemToBeEdit.question)
+            setExplaination(problemToBeEdit.explaination)
+            setChoices(problemToBeEdit.choices)
+            setCorrectAnswer(problemToBeEdit.correctAnswers)
+            for (let i = 0; i < Object.keys(problemToBeEdit.choices).length; i++) {
+                if (problemToBeEdit.choices[Object.keys(problemToBeEdit.choices)[i]] === "") {
+                    setNumChoice(i)
+                    break
+                }
+            }
+        }
+    }, [problemToBeEdit])
 
     return (
         <div className="flex flex-col ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
@@ -134,6 +161,8 @@ interface QuizLessonCreateProps {
     onCancel: () => void;
 }
 
+type AddProblemMode = "none" | "adding" | "editing"
+
 function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, onSubmit, defaultLesson }: QuizLessonCreateProps) {
     const [quiz, setQuiz] = useState<CourseQuiz>({
         // TODO: remove hardcode
@@ -144,7 +173,8 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
         problems: [],
 
     })
-    const [isAdding, setIsAdding] = useState<boolean>(false)
+    const [addMode, setAddMode] = useState<AddProblemMode>("none")
+    const [problemToBeEdit, setProblemToBeEdit] = useState<CourseQuizProblem>()
     function handleLessonNameChange(e: React.ChangeEvent<HTMLInputElement>) {
         setQuiz({ ...quiz, name: e.target.value })
     }
@@ -154,7 +184,17 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
     const onProblemSubmit = (problem: CourseQuizProblemWithoutNumber) => {
         const newProblem: CourseQuizProblem = { problemNumber: quiz.problems.length + 1, ...problem }
         setQuiz({ ...quiz, problems: [...quiz.problems, newProblem] })
-        setIsAdding(false)
+        setAddMode("none")
+    }
+    const onProblemEdit = (problem: CourseQuizProblem) => {
+        const newProblems = quiz.problems.map((p) => {
+            if (p.problemNumber === problem.problemNumber) {
+                return problem
+            }
+            return p
+        })
+        setQuiz({ ...quiz, problems: newProblems })
+        setAddMode("none")
     }
     const handleSubmit = () => {
         if (quiz.name === "" || quiz.description === "") {
@@ -217,8 +257,19 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
             {quiz.problems.map((problem, index) => {
                 return (
                     <div className="ml-[70px] mr-[100px] mt-[30px]  bg-white drop-shadow-xl" key={index}>
-                        <div className="py-2 bg-[#d0d0d0]">
+                        <div className="py-2 bg-[#d0d0d0] flex justify-between">
                             <h1 className="my-auto mx-[40px] font-semibold text-[18px]">คำถามที่ {problem.problemNumber} {problem.question}</h1>
+                            <div className="flex">
+                                <button className="mr-5" onClick={() => {
+                                    setProblemToBeEdit(problem)
+                                    setAddMode("editing")
+                                }}>
+                                    <FontAwesomeIcon icon={faEdit} size='lg' />
+                                </button>
+                                <button className="mr-5">
+                                    <FontAwesomeIcon icon={faX} size='lg' />
+                                </button>
+                            </div>
                         </div>
                         {Object.entries(problem.choices).map(([key, value], index) => {
                             if (value === "") {
@@ -241,10 +292,14 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                 )
             })}
 
-            {isAdding ? <_ProblemCreate onSubmit={onProblemSubmit} /> : <></>}
+            {addMode != "none" ?
+                addMode === "adding" ?
+                    <_ProblemCreate onSubmit={onProblemSubmit} />
+                    : <_ProblemCreate onEdit={onProblemEdit} problemToBeEdit={problemToBeEdit} />
+                : <></>}
             <div>
                 <button className="btn ml-[70px] my-5 bg-[#d9d9d9]"
-                    onClick={() => setIsAdding(true)}>
+                    onClick={() => setAddMode("adding")}>
                     <FontAwesomeIcon icon={faPlusCircle} size='xl' />
                     <h1>เพิ่มคำถาม</h1>
                 </button>

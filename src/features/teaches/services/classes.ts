@@ -68,17 +68,15 @@ async function publishClass(cls: CreatingClass): Promise<string> {
     description: cls.description,
     class_objective: cls.objectives,
     class_requirement: cls.requirement,
-    difficulty_level: "HARDCODE-PUBLISH-CLASS",
+    difficulty_level: cls.level,
     tag_ids: [cls.tag.tagID],
     schedules: cls.schedule.map((s) => ({
-      start: parseInt((s.start.getTime() / 1000).toFixed(0)),
-      end: parseInt((s.end.getTime() / 1000).toFixed(0)),
+      start: Math.floor(s.start.getTime() / 1000),
+      end: Math.floor(s.end.getTime() / 1000),
     })),
-    registration_ended_date: parseInt(
-      (cls.registrationEnd?.getTime() ?? 0 / 1000).toFixed(0)
-    ),
-    open_date: parseInt((cls.start?.getTime() ?? 0 / 1000).toFixed(0)),
-    class_ended_date: parseInt((cls.end?.getTime() ?? 0 / 1000).toFixed(0)),
+    registration_ended_date: Math.floor(cls.registrationEnd!.getTime() / 1000),
+    open_date: Math.floor(cls.start!.getTime() / 1000),
+    class_ended_date: Math.floor(cls.end!.getTime() / 1000),
   };
   const res = await axios.post<{ class_id: string }>(url, body);
   return res.data.class_id;

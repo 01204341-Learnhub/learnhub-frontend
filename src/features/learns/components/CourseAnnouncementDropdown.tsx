@@ -86,7 +86,9 @@ const CourseAnnouncementDropdown = (
         <div className="bg-white mb-2">
           <div className="px-2 pt-2 pb-8">
             <div className="flex flex-row">
-              <div className="w-[55px] h-[55px] m-[20px] bg-black rounded-full" />
+              <div className="w-[55px] h-[55px] m-[20px] bg-black rounded-full">
+                <img src={courseAnnouncement.teacher.profilePic} alt=""  className="w-[55px] h-[55px] rounded-full"/>
+              </div>
               <div className="my-[20px]">
                 <h3 className="font-semibold text-[#404040]">
                   {courseAnnouncement.teacher.teacherName}
@@ -109,7 +111,7 @@ const CourseAnnouncementDropdown = (
                   className="flex items-center justify-center border border-[#a0a0a0]-5 mx-[25px] mt-[10px] h-20 w-11/12"
                 >
                   <div className=" w-1/5 h-full border border-[#a0a0a0]-50 flex items-center justify-center">
-                      { attachment.attachmentType == "image" ? (
+                      { attachment.src ?  attachment.attachmentType == "image" ? (
                         <img src={attachment.src} alt="" className="w-full h-full object-cover" />
                       ) : (
                         <div>
@@ -119,6 +121,10 @@ const CourseAnnouncementDropdown = (
                           size="2xl"
                           className=""
                         />
+                        </div>
+                      ) : (
+                        <div>
+                          loading...
                         </div>
                       )}
                   </div>

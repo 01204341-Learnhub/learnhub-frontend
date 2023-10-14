@@ -170,7 +170,7 @@ function LearnCourse() {
                                 <div className="">
                                     
                                     { announcements.length > 0 ? (
-                                         <div className="w-full">
+                                         <div className="w-full flex flex-col-reverse">
                                          {announcements.map((announcement) => (
                                              <div key={announcement.announcementID}>
                                                  <CourseAnnouncementDropdown {...announcement} />

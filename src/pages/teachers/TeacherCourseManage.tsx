@@ -303,7 +303,7 @@ function TeacherCourseManage() {
     return (
       <>
         {announcementsData.map((announcement, index) => (
-          <div key={index}>
+          <div key={index} className="">
             <CourseAnnouncementDropdown
               teacher={{
                 teacherID: announcement.teacher.teacherID,
@@ -416,7 +416,7 @@ function TeacherCourseManage() {
               </button>
             </div>
             {isClickAdd && AddAnnouncementModal()}
-            <div>{renderAnnouncements()}</div>
+            <div className="flex flex-col-reverse">{renderAnnouncements()}</div>
           </section>
         </main>
       </div>

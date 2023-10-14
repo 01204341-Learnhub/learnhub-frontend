@@ -1,8 +1,8 @@
+import { faClock, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
 import { CreatingClassContext } from "../../../pages/teachers/CreateClass";
 import BetterCalendar from "./BetterCalendar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClock, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 function _isSameDay(date1: Date, date2: Date) {
   return (
@@ -122,13 +122,12 @@ function _Schedule() {
   };
 
   const inputIsCompleteAndValid = () => {
-    return (
-      startHour <= endHour &&
-      (startHour < endHour || startMinute < endMinute) &&
-      new Date(selectedDate.setHours(endHour, endMinute)).getTime() -
-        new Date(selectedDate.setHours(startHour, startMinute)).getTime() >=
-        30 * 60 * 1000
-    );
+    if (startHour > endHour) return false;
+    if (startHour === endHour) {
+      if (startMinute >= endMinute) return false;
+      else if ((endMinute - startMinute) < 30) return false;
+    }
+    return true;
   };
 
   return (
@@ -282,9 +281,8 @@ function _Schedule() {
             </div>
             <form method="dialog">
               <button
-                className={`text-[#068FFF] text-[18px] font-semibold ${
-                  inputIsCompleteAndValid() ? "block" : "hidden"
-                }`}
+                className={`text-[#068FFF] text-[18px] font-semibold ${inputIsCompleteAndValid() ? "block" : "hidden"
+                  }`}
                 onClick={() => {
                   setSelectedDates([...selectedDates, selectedDate]);
                   const updatedClass = { ...creatingClassContext.cls };

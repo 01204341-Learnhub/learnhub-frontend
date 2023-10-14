@@ -4,21 +4,27 @@ import { useState } from "react";
 import WorkCreate from "../../features/teaches/components/WorkCreate";
 import { Work } from "../../features/teaches/types/classWork";
 // import Workreview from "../../features/teaches/components/reviewwork"
+import PostClass from "../../features/teaches/components/PostClass";
+
 type View = "main" | "works" | "members" | "create-work";
 
 type ClassInfoPrototype = {
   className: string;
   classThumbnail: string;
+  teacherThumbnail: string;
 };
 
 const fakeURL =
   "https://www.hobbyfanclub.com/web/board/2022/odtjnwftssxcxgmfjaj5191220225035856071.jpg";
 
+const fakeTeacherThumbnail = 
+  "https://scontent.fbkk22-6.fna.fbcdn.net/v/t39.30808-6/305494824_461079576060810_2645334172550963334_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEK3VHA0mex4atLPZYQZ9wnCYsANNdweP0JiwA013B4_UhN0q5hA-NjCs3Tpjd6Y8LAhmihkYTPgFGEhwffWZCN&_nc_ohc=zPEbVJrCs3AAX_tkIkk&_nc_ht=scontent.fbkk22-6.fna&oh=00_AfAdJoFNG5Z91b7iv1loO4Ct0tqbTzyWTFYxj7cz9iVAcg&oe=652EBD83";
+
 interface ViewSlectorProps {
   currentView: View;
   setView: (view: View) => void;
 }
-function _ViewSlector({ currentView, setView }: ViewSlectorProps) {
+function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
   return (
     <div className="flex">
       <div
@@ -206,12 +212,16 @@ function TeachingClasses() {
   const [classInfo, setClassInfo] = useState<ClassInfoPrototype>({
     className: "Mock class name",
     classThumbnail: fakeURL,
+    teacherThumbnail: fakeTeacherThumbnail
   });
   const [works, setWorks] = useState<Work[]>([...mockWorks]);
+
+
+
   if (view == "main") {
     return (
       <div className="h-full">
-        <_ViewSlector currentView={view} setView={setView} />
+        <_ViewSelector currentView={view} setView={setView} />
         <hr />
         <div className="mx-7 mt-8">
           <div className="flex">
@@ -230,12 +240,39 @@ function TeachingClasses() {
             />
           </div>
         </div>
+
+
+
+        <div className=" mt-[2%] flex flex-col space-y-[2%]">
+          <button id="teacherNotAnnoucement" className=" bg-white shadow-lg h-[10%] w-[50%] ml-[25%] flex flex-row p-4 items-center space-x-[5%]">
+            <div className="w-[8%] h-[8%] rounded-full overflow-hidden">
+              <img src={classInfo.teacherThumbnail} alt="teacher thumbnail" className=" aspect-square" />
+            </div>
+            <div className=" text-gray-600">
+              ประกาศบางสิ่งในชั้นเรียน
+            </div>
+          </button>
+
+          <div className=" ml-[25%]">
+            <PostClass fileName="jittat" fileType="PDF" imageURL="https://optimise2.assets-servd.host/maniacal-finch/production/animals/southern-rock-hopper-penguin-01-01.jpg?w=1200&auto=compress%2Cformat&fit=crop&dm=1660831481&s=9a929ad4ca101687860476bb97d562c1" />
+          </div>
+
+        
+        
+
+          
+
+
+        </div>
       </div>
     );
+
+
+
   } else if (view == "works") {
     return (
       <div className="h-full">
-        <_ViewSlector currentView={view} setView={setView} />
+        <_ViewSelector currentView={view} setView={setView} />
         <hr />
         <_ClassWorks
           onCreateClassWork={() => {
@@ -248,7 +285,7 @@ function TeachingClasses() {
   } else if (view == "members") {
     return (
       <div className="h-full">
-        <_ViewSlector currentView={view} setView={setView} />
+        <_ViewSelector currentView={view} setView={setView} />
         <hr />
       </div>
     );

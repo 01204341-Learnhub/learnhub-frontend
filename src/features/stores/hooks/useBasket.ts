@@ -32,7 +32,7 @@ function useBasket() {
     
         // Call fetchBasket when the component mounts
         fetchBasket();
-      }, [isFetchOnce, dispatcher, user]);
+      }, [dispatcher, user]);
     return basket
 }
 

@@ -1,9 +1,13 @@
+import { useState } from "react"
 import { Link } from "react-router-dom"
+import { LoadingSpash } from "../components/LoadingSpash"
 import ProgramSlot from "../features/stores/components/ProgramSlot"
 import { useAllClasses } from "../features/stores/hooks/useAllClasses"
 import { useTags } from "../features/teaches/hooks/useTags.ts"
-import { useState } from "react"
 import { availableLevels } from "../features/teaches/types/class.ts"
+
+
+
 
 export default function AllClasses() {
     const { tags } = useTags()
@@ -11,8 +15,8 @@ export default function AllClasses() {
     const [selectedLvl, setSelectedLvl] = useState(null);
     const { classes, isFetching } = useAllClasses()
     if (isFetching) return (
-        <div>
-            LOADING!!!!
+        <div className="flex h-screen w-screen justify-center items-center ">
+            <LoadingSpash></LoadingSpash>
         </div>
     )
 
@@ -25,7 +29,8 @@ export default function AllClasses() {
                 return false
             }
             return true
-        })}
+        })
+    }
 
     const renderClasses = () => {
         return (
@@ -74,7 +79,7 @@ export default function AllClasses() {
                             {availableLevels.map((lvl) => (
                                 <option value={lvl}>{lvl}</option>
                             ))}
-                            </select>
+                        </select>
                     </div>
                 </section>
                 <section className="flex-[3] flex flex-wrap">

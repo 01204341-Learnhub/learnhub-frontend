@@ -1,106 +1,150 @@
-import { faAngleDown, faAngleUp, faDownload, faFile } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAngleDown,
+  faAngleUp,
+  faDownload,
+  faFile,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from 'react';
-
+import { useState } from "react";
 
 
 interface CourseAnnouncementDropdownProps {
-    topic: string,
-    postDate: string
-    content: string
-    teacherName: string
-    teacherProfile: string
+  announcementID: string;
+  teacher: {
+    teacherID: string;
+    teacherName: string;
+    profilePic: string;
+  };
+  name: string;
+  lastEdit: number;
+  text: string;
+  attachments: {
+    attachmentType: string;
+    src: string;
+  }[];
 }
 
-const CourseAnnouncementDropdown = ({ topic, postDate, content, teacherName, teacherProfile }: CourseAnnouncementDropdownProps) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+const CourseAnnouncementDropdown = (
+  courseAnnouncement: CourseAnnouncementDropdownProps
+) => {
+  const [isExpanded, setIsExpanded] = useState(false);
 
-
-    const year = parseInt(postDate.slice(4), 10) + 2000; // Convert YY to 20YY
-    const month = parseInt(postDate.slice(0, 2), 10) - 1; // Month is 0-based (0-11)
-    const day = parseInt(postDate.slice(2, 4), 10);
-
-    const daysOfWeek = ['อา.', 'จ.', 'อ.', 'พ.', 'พฤ.', 'ศ.', 'ส.'];
-    const date = new Date(year, month, day);
-    const dayOfWeek = daysOfWeek[date.getDay()];
-
-    function intToThaiMonth(month: number) {
-        const thaiMonth = [
-            "ม.ค.", "ก.พ.", "มี.ค.",
-            "เม.ย.", "พ.ค.", "มิ.ย.",
-            "ก.ค.", "ส.ค.", "ก.ย.",
-            "ต.ค.", "พ.ย.", "ธ.ค."
-        ]
-
-        if (month >= 1 && month <= 12) {
-            return thaiMonth[month - 1]
-        } else {
-            return "invalid month";
-        }
+  function formatDate(timestamp: number): string {
+    const date = new Date(timestamp * 1000);
+    const today = new Date();
+    const isToday = date.getDate() === today.getDate() &&
+                    date.getMonth() === today.getMonth() &&
+                    date.getFullYear() === today.getFullYear();
+    if (isToday) {
+      return "วันนี้ " + date.toLocaleTimeString("th-TH", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } else {
+      return date.toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        weekday: "short",
+      });
     }
+  }
 
-    const toggleExpansion = () => {
-        setIsExpanded(!isExpanded);
-    };
+  const toggleExpansion = () => {
+    setIsExpanded(!isExpanded);
+  };
 
-    const mockFiles = [
-        { id: 1, name: 'SampleFile1.pdf' },
-        { id: 2, name: 'SampleFile2.docx' },
-    ];
+  return (
+    <div className="w-[800px]">
+      <div className="cursor-pointer w-full bg-[#ECF3F9] border-b-[2px] border-b-[#b0b0b080] py-4" onClick={toggleExpansion}>
+        <div className="flex items-center justify-between w-full">
+          <h3 className=" flex-grow ml-[25px] font-me">
+            {courseAnnouncement.name}
+          </h3>
+          <p className=" text-sm ">
+            {formatDate(courseAnnouncement.lastEdit)}{" "}
+          </p>
+          {isExpanded ? (
+            <FontAwesomeIcon
+              icon={faAngleUp}
+              color="black"
+              size="xl"
+              className=" mr-5 ml-4"
+            />
+          ) : (
+            <FontAwesomeIcon
+              icon={faAngleDown}
+              color="black"
+              size="xl"
+              className=" mr-5 ml-4"
+            />
+          )}
+        </div>
+      </div>
 
-    return (
-        <div className="border-2 border-t-[#919191] bg-[#ECF3F9] w-[770px] py-4 m-4">
-            <div
-                className="cursor-pointer w-full "
-                onClick={toggleExpansion}
-            >
-                <div className="flex items-center justify-between">
-
-                    <h3 className=" flex-grow ml-[25px] text-lg font-bold">{topic}</h3>
-                    <p className=" mr- text-sm text-gray-500">วัน {dayOfWeek} {day} {intToThaiMonth(month)} </p>
-                    {isExpanded ? (
-                        <FontAwesomeIcon icon={faAngleUp} color='black' size='xl' className=' mr-5 ml-4' />
-                    ) : (
-                        <FontAwesomeIcon icon={faAngleDown} color='black' size='xl' className=' mr-5 ml-4' />
-                    )}
-                </div>
+      {isExpanded && (
+        <div className="bg-white mb-2">
+          <div className="px-2 pt-2 pb-8">
+            <div className="flex flex-row">
+              <div className="w-[55px] h-[55px] m-[20px] bg-black rounded-full">
+                <img src={courseAnnouncement.teacher.profilePic} alt=""  className="w-[55px] h-[55px] rounded-full"/>
+              </div>
+              <div className="my-[20px]">
+                <h3 className="font-semibold text-[#404040]">
+                  {courseAnnouncement.teacher.teacherName}
+                </h3>
+                <p className="text-sm text-[#808080]">
+                  โพสประกาศ วัน {formatDate(courseAnnouncement.lastEdit)}
+                </p>
+              </div>
+            </div>
+            <div className="mx-12 my-3">
+              <h3 className="font-bold text-lg">{courseAnnouncement.name}</h3>
+              <p className="text-base">{courseAnnouncement.text}</p>
             </div>
 
-            {isExpanded && (
-                <div className="  bg-white mt-4 w-full">
-                    {/* Content goes here */}
-                    <div>
-                        <div className='flex flex-row'>
-                            <div className='w-[55px] h-[55px] m-[20px] bg-black rounded-full' />
-                            <div className='my-[20px]'>
-                                <h3 className='font-bold text-[18px]'>{teacherName}</h3>
-                                <p className='text-[16px]'>โพสประกาศ วัน {dayOfWeek} {day} {intToThaiMonth(month)}     </p>
-                            </div>
+            {courseAnnouncement.attachments.map((attachment, index) => (
+              <div className="flex items-center justify-center mx-2">
+                <a
+                  href={attachment.src}
+                  key={index}
+                  className="flex items-center justify-center border border-[#a0a0a0]-5 mx-[25px] mt-[10px] h-20 w-11/12"
+                >
+                  <div className=" w-1/5 h-full border border-[#a0a0a0]-50 flex items-center justify-center">
+                      { attachment.src ?  attachment.attachmentType == "image" ? (
+                        <img src={attachment.src} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <div>
+                          <FontAwesomeIcon
+                          icon={faFile}
+                          color="#555555"
+                          size="2xl"
+                          className=""
+                        />
                         </div>
-                        <div className='mx-[95px]'>
-                            <h3 className='font-bold text-[20px]'>{topic}</h3>
-                            <p className="text-black">{content}</p>
+                      ) : (
+                        <div>
+                          loading...
                         </div>
-
-                        {mockFiles.map((file) => (
-                            <a
-                                key={file.id}
-                                href={`/path/to/your/files/${file.name}`} // Set the actual file path
-                                download={file.name}
-                                className='flex flex-row items-center border border-[#a0a0a0]-50 mx-[25px] mt-[10px] h-[90px]'
-                            >
-                                <div className=' w-[90px] h-full border border-[#a0a0a0]-50 flex items-center justify-center'>
-                                    <FontAwesomeIcon icon={faFile} color='#555555' size='2xl' className='' />
-                                </div>
-                                <p className=' flex-grow ml-[20px] font-semibold text-[18px]'>{file.name}</p>
-                                <FontAwesomeIcon icon={faDownload} color='#555555' size='2xl' className=' mr-8 ' />
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            )}
+                      )}
+                  </div>
+                  <p className="w-4/5 font-semibold text-xs mx-6 text-[#808080] truncate">
+                    {attachment.src}
+                  </p>
+                  <FontAwesomeIcon
+                    icon={faDownload}
+                    color="#555555"
+                    size="2xl"
+                    className=" mr-8 "
+                  />
+                </a>
+              </div>
+            ))}
+          </div>
         </div>
-    );
+      )}
+    </div>
+  );
 };
 
 export default CourseAnnouncementDropdown;

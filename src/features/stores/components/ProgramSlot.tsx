@@ -25,20 +25,20 @@ function ProgramSlot(myProgram: ProgramSlotProps) {
             <div className="px-5 h-[150px] flex flex-col">
                 <div className=" font-extrabold text-[16px] mb-2">{myProgram.courseName}</div>
                 <p className="-mt-3 font-bold text-gray-500 text-[14px]">{myProgram.instructorName}</p>
-                {myProgram.percentCompleted!==null && myProgram.voter!==null ? 
-                <div className=" flex items-center grow space-x-1 text-[14px] font-bold">{myProgram.percentCompleted.toFixed(1)}
-                    <div className="pl-1">
-                        {[1, 2, 3, 4, 5].map((index) => (
-                            <FontAwesomeIcon
-                                icon={faStar}
-                                key={index}
-                                className={`w-3 h-3 ${index <= myProgram.percentCompleted ? 'text-black' : 'text-gray-300'}`}
-                                aria-hidden="true"
-                            />))}
+                {myProgram.percentCompleted !== null && myProgram.voter !== null ?
+                    <div className=" flex items-center grow space-x-1 text-[14px] font-bold">{myProgram.percentCompleted.toFixed(1)}
+                        <div className="pl-1">
+                            {[1, 2, 3, 4, 5].map((index) => (
+                                <FontAwesomeIcon
+                                    icon={faStar}
+                                    key={index}
+                                    className={`w-3 h-3 ${index <= myProgram.percentCompleted ? 'text-black' : 'text-gray-300'}`}
+                                    aria-hidden="true"
+                                />))}
+                        </div>
+                        <p className="font-bold text-gray-400">({myProgram.voter})</p>
                     </div>
-                    <p className="font-bold text-gray-400">({myProgram.voter})</p>
-                </div>
-                : <div className="grow"></div>
+                    : <div className="grow"></div>
                 }
                 <div className=" text-[18px] font-bold">{myProgram.price} บาท</div>
                 <div className=" flex justify-between items-center">

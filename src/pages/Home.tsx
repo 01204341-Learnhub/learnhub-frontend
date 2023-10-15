@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { LoadingSpash } from "../components/LoadingSpash";
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
 import { useAllClasses } from "../features/stores/hooks/useAllClasses";
@@ -9,7 +10,12 @@ export default function Home() {
     const { classes, isFetching: isFetchingClasses } = useAllClasses();
 
     if (isFetchingCourses || isFetchingClasses) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+        return (
+
+            <div className="flex justify-center items-center h-screen">
+                <LoadingSpash></LoadingSpash>
+            </div>
+        )
     }
 
     function poppularCourseSlotProp() {
@@ -29,8 +35,8 @@ export default function Home() {
         })
         return coursePopularSlot
     }
-    
-    
+
+
     function classNewSlotProp() {
         const classNewSlot = []
         classes?.forEach((program) => {
@@ -48,7 +54,7 @@ export default function Home() {
         })
         return classNewSlot
     }
-    
+
     const renderProgramsCourse = () => {
         return (
             <>
@@ -71,7 +77,7 @@ export default function Home() {
             </>
         )
     }
-    
+
     const renderProgramClasses = () => {
         return (
             <>
@@ -122,7 +128,7 @@ export default function Home() {
                 <Link to={`/home/classes`}>
                     <div className="flex pb-4 pt-2">
                         <button type="button" className="px-4 py-2 rounded-lg bg-[#404040] hover:bg-[#909090] text-lg text-white font-semibold hover:shadow-lg">
-                        ดูทั้งหมด
+                            ดูทั้งหมด
                         </button>
                     </div>
                 </Link>
@@ -136,7 +142,7 @@ export default function Home() {
                 <Link to={`/home/courses`}>
                     <div className="pb-4 pt-2 ">
                         <button type="button" className="px-4 py-2 rounded-lg bg-[#404040] hover:bg-[#909090] text-lg text-white font-semibold hover:shadow-lg">
-                        ดูทั้งหมด
+                            ดูทั้งหมด
                         </button>
                     </div>
                 </Link>

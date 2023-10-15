@@ -1,9 +1,12 @@
+
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { LoadingSpash } from "../components/LoadingSpash";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
 import { useAllCourses } from "../features/stores/hooks/useAllCourses";
 import { useTags } from "../features/teaches/hooks/useTags.ts";
-import { useState } from "react";
 import { availableLevels } from "../features/teaches/types/course.ts";
+
 
 export default function AllCourses() {
     const { tags } = useTags();
@@ -19,39 +22,39 @@ export default function AllCourses() {
             if (selectedLvl && course.difficultyLevel !== selectedLvl) {
                 return false;
             }
-        return true;
+            return true;
         });
     };
 
     const renderCourse = () => {
         return (
-        <>
-            {filterCourses().map((course, index) => {
-            return (
-                <Link to={`/detail/course/${course.courseID}`} key={index} className="mx-5 my-2">
-                <ProgramSlot
-                    key={index}
-                    courseThumbnailUrl={course.thumbnailUrl}
-                    courseName={course.name}
-                    instructorName={course.instructor.name}
-                    percentCompleted={0}
-                    regisDate={""}
-                    voter={course.reviewerCount}
-                    price={course.price}
-                    tag={course.tags[0].name}
-                    lvl={course.difficultyLevel}
-                />
-                </Link>
-            );
-            })}
-        </>
+            <>
+                {filterCourses().map((course, index) => {
+                    return (
+                        <Link to={`/detail/course/${course.courseID}`} key={index} className="mx-5 my-2">
+                            <ProgramSlot
+                                key={index}
+                                courseThumbnailUrl={course.thumbnailUrl}
+                                courseName={course.name}
+                                instructorName={course.instructor.name}
+                                percentCompleted={0}
+                                regisDate={""}
+                                voter={course.reviewerCount}
+                                price={course.price}
+                                tag={course.tags[0].name}
+                                lvl={course.difficultyLevel}
+                            />
+                        </Link>
+                    );
+                })}
+            </>
         );
     }
 
     if (isFetching) {
         return (
-            <div className="flex">
-                <h1>Loading...</h1>
+            <div className="flex h-screen w-screen justify-center items-center ">
+                <LoadingSpash></LoadingSpash>
             </div>
         );
     }
@@ -72,7 +75,7 @@ export default function AllCourses() {
                             <option value="">{"<"}- หมวดหมู่ทั้งหมด -{">"}</option>
                             {tags.map((tag) => (
                                 <option value={tag.name} key={tag.name}>
-                                {tag.name}
+                                    {tag.name}
                                 </option>
                             ))}
                         </select>
@@ -84,7 +87,7 @@ export default function AllCourses() {
                             <option value="">{"<"}- ระดับทั้งหมด -{">"}</option>
                             {availableLevels.map((lvl) => (
                                 <option value={lvl} key={lvl}>
-                                {lvl}
+                                    {lvl}
                                 </option>
                             ))
                             }

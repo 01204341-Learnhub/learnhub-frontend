@@ -53,6 +53,8 @@ async function getCourseDetail(courseID: string): Promise<CourseDetail> {
   try {
     const response = await axios.get<GetCourseDetailResponse>(url);
     const courseIdData = response.data;
+    console.log(response.status);
+    
     return {
       courseID: courseIdData.course_id,
       name: courseIdData.name,

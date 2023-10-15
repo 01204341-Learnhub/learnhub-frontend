@@ -7,7 +7,6 @@ function useCourseLessons(courseID: string, chapterID: string) {
   const [isFetching, setIsFetching] = useState(false);
   async function fetchLessons(courseID: string, chapterID: string) {
     const fetchedLessons = await listCourseLessons(courseID, chapterID);
-    console.log(fetchedLessons);
     setLessons(fetchedLessons);
   }
   useEffect(() => {

@@ -10,7 +10,6 @@ const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 async function getStudentCourseProgress(studentID: string, courseID: string) {
   const url = `${baseURL}/users/students/${studentID}/course_progress/${courseID}`;
   const res = await axios.get<GetStudentCourseProgressResponse>(url);
-  console.log(res.data);
   const progress: StudentCourseProgress = {
     progress: res.data.progress,
     lessons: res.data.lessons.map((lesson) => {
@@ -37,8 +36,6 @@ async function updateStudentCourseLessonProgress(
     finished: progress.finished,
     lesson_completed: progress.lessonCompleted,
   };
-  console.log(body);
-
   await axios.patch(url, body);
 }
 

@@ -200,10 +200,10 @@ export function FormPublishPostClass({ handleAddPost }: FormPublishPostClassProp
   };
 
   return (
-    <div>
+    <div className="w-full">
       {isActionCreatePost ? (
         <>
-          <div className="flex flex-col items-center w-[720px] bg-white py-4 border-2 rounded-md">
+          <div className="flex flex-col items-center w-full bg-white py-4 border-2 rounded-md">
             <div className="bg-white p-4 w-11/12 mb-4">
               <textarea
                 onChange={(e) => setTextDetailForm(e.target.value)}
@@ -301,7 +301,7 @@ export function FormPublishPostClass({ handleAddPost }: FormPublishPostClassProp
         <button
           onClick={handleClickCreatePost}
           type="button"
-          className="flex w-[720px] items-center bg-[#f4f4f4] border-2 drop-shadow-lg py-4 px-6 rounded-md"
+          className="flex w-full items-center bg-[#f9f9f9] border-[1px] drop-shadow-lg py-4 px-6 rounded-md"
         >
           <div className="w-10 h-10 rounded-full drop-shadow-none shadow-none">
             <img

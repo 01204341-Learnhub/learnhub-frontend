@@ -25,7 +25,7 @@ function ClassThreadReplyInputBar({
   };
 
   return (
-    <div className="flex space-x-5">
+    <div className="flex space-x-5 items-center">
       <img
         src={user.profilePicture}
         className="rounded-full min-w-[40px] max-w-[40px] min-h-[40px] max-h-[40px] bg-[#d9d9d9] mt-1"
@@ -40,11 +40,11 @@ function ClassThreadReplyInputBar({
           setReplyTextInput(textareaRef.current.value);
           adjustTextareaHeight();
         }}
-        className="resize-none border-2 border-[#808080] rounded-[15px] py-2 px-3 w-full"
+        className="resize-none outline-none border-[1px] border-[#808080] rounded-[15px] py-2 px-3 w-full"
         placeholder="เพิ่มความเห็น ..."
       ></textarea>
       <button
-        className="flex flex-col justify-end pb-3 hover:opacity-80"
+        className="flex flex-col justify-end hover:opacity-80"
         onClick={() => {
           if (replyTextInput === "") return;
           onAddReply(replyTextInput);
@@ -54,7 +54,7 @@ function ClassThreadReplyInputBar({
           }
         }}
       >
-        <FontAwesomeIcon icon={faPaperPlane} size="lg" />
+        <FontAwesomeIcon icon={faPaperPlane} size="lg" color="blue" />
       </button>
     </div>
   );

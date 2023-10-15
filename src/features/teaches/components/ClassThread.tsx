@@ -25,7 +25,7 @@ function ClassThread({ user, classId, threadId }: ClassThread) {
               className="min-w-[45px] max-w-[45px] min-h-[45px] max-h-[45px] rounded-full bg-[#d9d9d9]"
             />
             <div className="flex flex-col space-y-1">
-              <p className="text-black text-[16px] font-[500]">
+              <p className="text-black text-[15px] font-[500]">
                 {thread.teacher.fullname}
               </p>
               <p className="text-[#A0A0A0] text-[14px] font-[500]">
@@ -50,9 +50,9 @@ function ClassThread({ user, classId, threadId }: ClassThread) {
             </div>
           </div>
           <div className="border-t-[1px] mt-4 px-5 py-5">
-            <div className="flex items-center space-x-5 mx-2">
+            <div className="flex items-center space-x-5 mx-2 pb-4">
               <img src={PeopleSvg} width={23} alt="people icon" />
-              <h3 className="text-[#808080] text-[18px] font-bold">
+              <h3 className="text-[#808080] text-sm font-bold">
                 {`ความคิดเห็นในชั้นเรียน ${thread.replies.length}`}
               </h3>
             </div>

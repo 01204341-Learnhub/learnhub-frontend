@@ -15,7 +15,7 @@ function ClassThreadReplyEntry({ reply }: ClassThreadReplyEntryProps) {
       />
       <div className="flex flex-col w-full space-y-0.3">
         <div className="flex space-x-3">
-          <p className="text-'[#505050] text-[16px] font-semibold">
+          <p className="text-'[#505050] text-sm font-semibold">
             {reply.user.fullname}
           </p>
           <p className="text-[#707070] text-[14px] font-normal">

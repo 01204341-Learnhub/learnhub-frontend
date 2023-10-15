@@ -72,7 +72,7 @@ function Searchbar(){
                 { isOpen &&results.map((result,index) => {
                     return(
                         <div key={index} className=''>
-                            <Link to={`/detail/class/${result.classID}`}className="bg-white flex border-4"  onClick={()=>setResults([])}>
+                            <Link to={`/detail/class/${result.classID}`}className="bg-white flex border-4"  onClick={()=>setResults2([])}>
                             <img className='justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full' src={result.thumbnailUrl}></img>
                             <div>
                             <p>{result.name}</p>

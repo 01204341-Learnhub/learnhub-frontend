@@ -215,17 +215,23 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
               onClick={() => {
                 setdropdowndete(!dropdowndete);
               }}
-              className="flex justify-end items-center h-12 w-[70%] border-solid border-2 border-gray-400 bg-[#f0f0f0] hover:bg-gray-200 pr-5 rounded-xl"
+              className="flex justify-center items-center h-12 w-[70%] border-solid border-2 bg-[#f0f0f0] hover:bg-gray-200 pr-5 rounded-xl"
             >
-              <div className="mr-1">
+              <div className="text-sm font-medium">
                 {work.dueDate
-                  ? `${work.dueDate.toLocaleTimeString()} ${work.dueDate.toDateString()}`
+                  ? `${work.dueDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} ${work.dueDate.toLocaleDateString("th-TH", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}`
                   : ""}
               </div>
               {dropdowndete ? (
                 <FontAwesomeIcon
                   icon={faCaretDown}
                   size="lg"
+                  className="ml-5"
                   onClick={() => {
                     setdropdowndete(!dropdowndete);
                   }}
@@ -234,6 +240,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                 <FontAwesomeIcon
                   icon={faCaretUp}
                   size="lg"
+                  className="ml-5"
                   onClick={() => {
                     setdropdowndete(!dropdowndete);
                   }}
@@ -249,23 +256,28 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                     กำหนดวัน & เวลา
                   </h1>
                 </div>
-                <div className="w-[90%] h-0.5 bg-gray-200 mb-5 mx-[5%]"></div>
+                <div className="w-[90%] h-0.5 bg-gray-100 mb-5 mx-[5%]"></div>
 
                 {/* <input type="time"  name="time"  className="mx-10  mb-5 input input-bordered bg-[#E0E0E0] hover:bg-gray-200 w-[70%]"/>                                 */}
                 <div className="flex justify-center w-[100%] mb-5  dropdown">
                   <label
                     tabIndex={0}
-                    className="w-[90%] btn  border-solid border-2 border-gray-200 shadow-md over"
+                    className="w-[90%] btn  border-solid border-2 bg-[#f8f8f8]"
                   >
                     <h1>
                       {work.dueDate
-                        ? work.dueDate.toDateString()
+                        ? work.dueDate.toLocaleDateString("th-TH", {
+                            weekday: "short",
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })
                         : "ไม่มีกำหนดส่ง"}
                     </h1>
                   </label>
                   <div
                     tabIndex={0}
-                    className="dropdown-content z-[1] p-2  bg-white "
+                    className="dropdown-content z-[1] p-2  bg-white"
                   >
                     <Calendar
                       targetDate={work.dueDate}
@@ -276,7 +288,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
               </div>
               <div className="flex justify-center w-100% mb-4">
                 <input
-                  className="w-[90%] p-2 m-[5%] rounded-lg border-solid border-2 border-gray-200 shadow-md  bg-gray-100 hover:bg-gray-200"
+                  className="w-[90%] p-2 m-[5%] rounded-lg border-solid border-2 bg-[#f8f8f8] hover:bg-gray-50 outline-none"
                   type="time"
                   value={selectedShowTime}
                   onChange={onWorkTimeChange}

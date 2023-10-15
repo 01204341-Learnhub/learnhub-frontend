@@ -32,18 +32,20 @@ async function fetchThread(
         src: a.src,
       })),
       lastEdit: new Date(classThread.last_edit * 1000),
-      replies: classThread.replies.map((r) => ({
-        user: {
-          userType: r.user.type,
-          userID: r.user.user_id,
-          username: "",
-          fullname: r.user.name,
-          email: "",
-          profilePicture: r.user.profile_pic,
-        },
-        dateTime: new Date(r.reply_date * 1000),
-        text: r.text,
-      })),
+      replies: classThread.replies
+        .map((r) => ({
+          user: {
+            userType: r.user.type,
+            userID: r.user.user_id,
+            username: "",
+            fullname: r.user.name,
+            email: "",
+            profilePicture: r.user.profile_pic,
+          },
+          dateTime: new Date(r.reply_date * 1000),
+          text: r.text,
+        }))
+        .sort((a, b) => a.dateTime.getTime() - b.dateTime.getTime()),
     };
   } else if (typ === "homework") {
     const classAssignment = await getClassAssignment(classId, threadId);
@@ -65,18 +67,20 @@ async function fetchThread(
         src: a.src,
       })),
       lastEdit: new Date(classAssignment.last_edit * 1000),
-      replies: classAssignment.replies.map((r) => ({
-        user: {
-          userType: r.user.type,
-          userID: r.user.user_id,
-          username: "",
-          fullname: r.user.name,
-          email: "",
-          profilePicture: r.user.profile_pic,
-        },
-        dateTime: new Date(r.reply_date * 1000),
-        text: r.text,
-      })),
+      replies: classAssignment.replies
+        .map((r) => ({
+          user: {
+            userType: r.user.type,
+            userID: r.user.user_id,
+            username: "",
+            fullname: r.user.name,
+            email: "",
+            profilePicture: r.user.profile_pic,
+          },
+          dateTime: new Date(r.reply_date * 1000),
+          text: r.text,
+        }))
+        .sort((a, b) => a.dateTime.getTime() - b.dateTime.getTime()),
       homeworkTopicName: classAssignment.group_name,
       homeworkDueDateTime: new Date(classAssignment.due_date * 1000),
       homeworkStatus: classAssignment.status,

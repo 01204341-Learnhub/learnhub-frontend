@@ -15,4 +15,19 @@ type ListTagsResponse = {
   }[];
 };
 
-export type { ListTagsResponse, ListTeacherCourseResponse };
+type ListTeacherIncomesResponse = {
+  incomes: {
+    type: string
+    program_id: string
+    program_pic: string
+    name: string
+    buyer: {
+      student_id: string
+      student_name: string
+    }
+    price: number
+    purchase_time: number
+  }[]
+}
+
+export type { ListTagsResponse, ListTeacherCourseResponse, ListTeacherIncomesResponse };

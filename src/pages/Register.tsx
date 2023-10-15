@@ -1,6 +1,6 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import studentImage from "../../src/assets/Images/regStudent.png";
-import teacherImage from "../../src/assets/Images/regTeacher.png";
+import studentImage from "../../src/assets/images/regStudent.png";
+import teacherImage from "../../src/assets/images/regTeacher.png";
 import StudentsRegister from "./StudentsRegister";
 import TeacherRegister from "./TeacherRegister";
 

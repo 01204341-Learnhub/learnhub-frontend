@@ -1,16 +1,17 @@
 import { useReducer, useState } from "react"
 import { useParams } from "react-router-dom"
-import VideoPlayer from "../../components/VideoPlayer"
 import ChapterOutline from "../../features/learns/components/ChapterOutline"
 import CourseAnnouncementDropdown from "../../features/learns/components/CourseAnnouncementDropdown"
 import CourseMultipleChoiceQuiz from "../../features/learns/components/CourseMultipleChoiceQuiz"
 import CourseMultipleChoiceQuizReport from "../../features/learns/components/CourseMultipleChoiceQuizReport"
+import VideoLessonPlayer from "../../features/learns/components/VideoLessonPlayer"
 import { useCourseChapters } from "../../features/learns/hooks/useCourseChapters"
 import { useStudentCourseProgress } from "../../features/learns/hooks/useStudentCourseProgress"
+import { updateStudentCourseLessonProgress } from "../../features/learns/services/progress"
 import { CourseChapter } from "../../features/learns/types/courseChapters"
 import { CourseLesson } from "../../features/learns/types/lessons"
 import { StudentCourseLessonProgress, StudentCourseProgress } from "../../features/learns/types/progress"
-import { CourseAnnouncement } from "../../features/stores/types/course"
+import { useAnnouncementsCourses } from "../../features/stores/hooks/useListAnnouncementsCourses"
 import { useUser } from "../../hooks/useUser"
 
 interface _CourseContentProp {
@@ -29,7 +30,7 @@ function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onS
         })
     }
     return (
-        <div>
+        <div className="w-full flex flex-col items-center">
             {chapters.map((chapter, index) => (
                 <ChapterOutline chapter={chapter} lessonsProgress={_getChapterProgress(chapter.chapterID)} onSelectLesson={onSelectLesson} key={index}
                     onUpdateProgress={onUpdateProgress} currentLesson={currentLesson} />
@@ -41,31 +42,36 @@ function _CourseContent({ chapters, onUpdateProgress, studentCourseProgress, onS
 interface _LessonDisplayProp {
     lesson: CourseLesson | undefined,
     progress: StudentCourseLessonProgress | undefined
-    onLessonEnd: () => void
+    onLessonEnd: () => void,
+    onUpdateProgress: (progress: StudentCourseLessonProgress) => void
 }
 
-function _LessonDisplay({ lesson, progress, onLessonEnd }: _LessonDisplayProp) {
+function _LessonDisplay({ lesson, progress, onLessonEnd, onUpdateProgress }: _LessonDisplayProp) {
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
-    if (!lesson) return (<div>Not found</div>)
+    if (!lesson) return (<div className="font-semibold sm:text-lg text-[#606060]">คลิ๊กเลือกบทเรียนด้านล่าง เพื่อเริ่มเรียนกันเถอะ</ div>)
     if (lesson.lessonType == 'video') {
         return (
             <div>
-                <VideoPlayer url={lesson.src} />
+                <VideoLessonPlayer url={lesson.src} onProgressUpdate={onUpdateProgress} lessonProgress={progress} />
             </div>
         )
     } else if (lesson.lessonType == "quiz") {
         if (progress.finished) {
             return (
-                <CourseMultipleChoiceQuizReport quizID={lesson.src} />
+                <div className=" overflow-scroll w-f">
+                    <CourseMultipleChoiceQuizReport quizID={lesson.src} />
+                </div>
             )
         } else {
             return (
-                <CourseMultipleChoiceQuiz lesson={lesson} progress={progress}
-                    onDone={() => {
-                        progress.finished = true
-                        forceUpdate()
-                        onLessonEnd()
-                    }} />
+                <div className=" overflow-hidden">
+                    <CourseMultipleChoiceQuiz lesson={lesson} progress={progress}
+                        onDone={() => {
+                            progress.finished = true
+                            forceUpdate()
+                            onLessonEnd()
+                        }} />
+                </div>
             )
         }
     }
@@ -76,32 +82,26 @@ function LearnCourse() {
     const { user } = useUser()
     const { progress, updateLessonProgress } = useStudentCourseProgress(user.userID, courseID)
     const { chapters } = useCourseChapters(courseID)
+    const { announcements, isFetching } = useAnnouncementsCourses(courseID)
     const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>('contents')
     const [currentLesson, setCurrentLesson] = useState<CourseLesson | undefined>(undefined)
-    const [announcements, setAnnouncements] = useState<CourseAnnouncement[]>([])
+    //const [announcements, setAnnouncements] = useState<CourseAnnouncement[]>([])
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
 
-    const announcementAdapter = (announcement: CourseAnnouncement) => {
-        return {
-            topic: announcement.name,
-            postDate: "091223",
-            content: announcement.text,
-            teacherName: "Mister Hardcode",
-            teacherProfile: "https://www.w3schools.com/howto/img_avatar.png"
-        }
-    }
 
     const getChapter = (chapterID: string) => {
         const idx = chapters.findIndex((chapter) => chapter.chapterID == chapterID)
         if (idx == -1) throw new Error("Chapter not found")
         return chapters[idx]
     }
+
     function getCurrentLessonProgress() {
         if (currentLesson == undefined) return undefined
         const idx = progress.lessons.findIndex((lesson) => lesson.lessonID == currentLesson.lessonID)
         if (idx == -1) return undefined
         return progress.lessons[idx]
     }
+
     function onLessonEnd() {
         // set current lesson progress to finished
         if (currentLesson == undefined) return
@@ -109,38 +109,47 @@ function LearnCourse() {
         currentProgress.finished = true
         updateLessonProgress(currentProgress).then(() => { forceUpdate() })
     }
+    function updateProgress(lessonProgress: StudentCourseLessonProgress) {
+        const idx = progress.lessons.findIndex((lp) => lp.lessonID == lessonProgress.lessonID)
+        if (idx == -1) throw new Error("Lesson not found")
+        progress.lessons[idx] = lessonProgress
+        updateStudentCourseLessonProgress(user.userID, courseID, lessonProgress).then(() => {
+            forceUpdate()
+        })
+    }
     return (
-        <div className="bg-[#eeeeee80] h-full pb-20">
+        <div className="">
             <div className="flex pt-8 pl-14 pb-14">
                 <h1 className="text-black font-bold text-4xl">คอร์สเรียน</h1>
                 <h1 className="text-gray-600 font-semibold text-3xl my-auto ml-4"></h1>
             </div>
-            <div className="flex items-center justify-center">
-                <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} onLessonEnd={onLessonEnd} />
+            <div className="flex items-center justify-center w-full h-80">
+                <_LessonDisplay lesson={currentLesson} progress={getCurrentLessonProgress()} onLessonEnd={onLessonEnd} onUpdateProgress={updateProgress} />
             </div>
-            <div className="flex flex-col items-center mx-20 mt-20">
+            <div className="flex flex-col items-center mt-20 h-full">
 
                 {(() => {
                     if (currentLesson == undefined) return (<></>)
                     const currentChapter = getChapter(currentLesson.chapterID)
                     return (
-                        <div className="self-start">
-                            <h1 className="text-black font-bold text-2xl pb-4">คำอธิบาย (ของ ch) บทที่ {currentChapter.chapterNumber}: {currentChapter.name}</h1>
+                        <div className="w-4/5">
+                            <h1 className="text-black font-bold text-xl pb-4">บทที่ {currentChapter.chapterNumber}: {currentChapter.name}</h1>
                             <p className="font-medium text-lg" >{currentChapter.description}</p>
                         </div>
                     )
                 })()}
-                <div className="flex mt-20 mb-10 self-start">
+
+                <div className="flex w-4/5 mt-20 mb-10">
                     <button onClick={() => { setOutlineViewMode("contents") }}>
-                        <h1 className="text-2xl font-bold">เนื้อหาคอร์สเรียน</h1>
-                        <div className={`bg-black ${outlineViewMode == "contents" ? "h-3" : "h-3 bg-transparent"}`}></div>
+                        <h1 className="text-xl font-bold">เนื้อหาคอร์สเรียน</h1>
+                        <div className={`bg-black ${outlineViewMode == "contents" ? "h-2 mt-1" : "h-2 mt-1 bg-transparent"}`}></div>
                     </button>
                     <button className="ml-10" onClick={() => { setOutlineViewMode("announcements") }}>
-                        <h1 className="text-2xl font-bold">ประกาศจากคอร์สเรียน</h1>
-                        <div className={`bg-black ${outlineViewMode == "announcements" ? "h-3" : "h-3 bg-transparent"}`}></div>
+                        <h1 className="text-xl font-bold">ประกาศจากคอร์สเรียน</h1>
+                        <div className={`bg-black ${outlineViewMode == "announcements" ? "h-2 mt-1" : "h-2 mt-1 bg-transparent"}`}></div>
                     </button>
                 </div>
-                <div className="bg-white w-full px-20 pt-12 pb-8 ">
+                <div className="bg-white flex justify-center w-4/5 pt-8 pb-8">
                     {(() => {
                         if (outlineViewMode == 'contents') {
                             return (
@@ -152,13 +161,27 @@ function LearnCourse() {
                             )
                         }
                         else {
+                            if (isFetching) {
+                                return (
+                                    <div>is loading</div>
+                                )
+                            }
                             return (
                                 <div className="">
-                                    {announcements.map((announcement) => (
-                                        <div key={announcement.announcementID}>
-                                            <CourseAnnouncementDropdown {...announcementAdapter(announcement)} />
+
+                                    {announcements.length > 0 ? (
+                                        <div className="w-full flex flex-col-reverse">
+                                            {announcements.map((announcement) => (
+                                                <div key={announcement.announcementID}>
+                                                    <CourseAnnouncementDropdown {...announcement} />
+                                                </div>
+                                            ))}
                                         </div>
-                                    ))}
+                                    ) : (
+                                        <div className="w-full flex items-center justify-center">
+                                            <div className="text-xl font-semibold text-[#505050]">ยังไม่มีประกาศในคอร์สเรียนขณะนี้</div>
+                                        </div>
+                                    )}
                                 </div>
                             )
                         }

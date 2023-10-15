@@ -1,6 +1,8 @@
 import { useUser } from "../../../hooks/useUser"
 import { useCourseQuiz } from "../hooks/useCourseQuiz"
 import { useStudentCourseQuizReport } from "../hooks/useStudentCourseQuizReport"
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 interface CourseMultipleChoiceQuizReportProps {
     quizID: string,
@@ -31,28 +33,27 @@ function CourseMultipleChoiceQuizReport({ quizID }: CourseMultipleChoiceQuizRepo
     }
     else return (
         <div>
-            <div className="flex">
-                <h1>แบบทดสอบที่ 1(hardcode)</h1>
-            </div>
-            <div className="flex">
-                <div className="bg-black">
-                    <h1 className="text-white">คะแนน</h1>
-                </div>
-                <div className="bg-white">
-                    <h1>{report.score}</h1>
+            <div className="flex items-center">
+                <h1 className=" ml-[70px] grow font-bold text-[30px]">แบบทดสอบ : {quiz.name}</h1>
+                <div className="flex mr-[150px] text-[30px]">
+                    <div className="bg-black">
+                        <h1 className="text-white text-[30px] m-2">คะแนน</h1>
+                    </div>
+                    <div className="bg-white ">
+                        <h1 className="m-2">{report.score}</h1>
+                    </div>
                 </div>
             </div>
             {quiz.problems.map((problem, problemIndex) => {
                 return (
                     <div key={problemIndex}>
-                        <div className="bg-white">
-                            <div className="flex">
-                                <div>คำถามที่: {problemIndex + 1}</div>
-                                <div className="mx-5">
-                                    {checkIfProblemCorrect(problemIndex) ? <p>ถูก</p> : <p>ผิด</p>}
+                        <div className="flex flex-col ml-[100px] mr-[150px] mt-[40px] rounded-xl bg-white drop-shadow-xl">
+                            <div className="flex pt-2 pb-4 mt-[20px]">
+                                <div className="my-auto mx-[40px] grow font-semibold text-[18px]">คำถามที่ {problemIndex + 1} : {problem.question}</div>
+                                <div className="mx-5  font-bold text-[22px]">
+                                    {checkIfProblemCorrect(problemIndex) ? <FontAwesomeIcon icon={faCheck} size='xl' color="#ADE792" /> : <FontAwesomeIcon icon={faXmark} size='xl' color="#FF2171" /> }
                                 </div>
                             </div>
-                            <p>{problem.question}</p>
                             {Object.entries(problem.choices).map(([key, value], index) => {
                                 if (value == "") {
                                     return (
@@ -60,18 +61,17 @@ function CourseMultipleChoiceQuizReport({ quizID }: CourseMultipleChoiceQuizRepo
                                     )
                                 }
                                 return (
-                                    <div className="flex" key={index}>
-                                        <input type="checkbox" checked={report.problems[problemIndex].answer[key]} />
-                                        <p>{value}</p>
+                                    <div className="mx-[55px] my-2 flex items-center" key={index}>
+                                        <input className="mr-5 rounded-full w-4 h-4 border-2 border-[#646464]" type="checkbox" checked={report.problems[problemIndex].answer[key]} />
+                                        <p className=" font-semibold text-[16px] text-[#3a3a3a]">{value}</p>
                                         <div className="ml-5">
-                                            {checkIfChoiceCorrect(problemIndex, key) ? <p>ถูก</p> : <p>ผิด</p>}
+                                            {checkIfChoiceCorrect(problemIndex, key) ? <FontAwesomeIcon icon={faCheck} size='xl' color="#ADE792" /> : <FontAwesomeIcon icon={faXmark} size='xl' color="#FF2171" />}
                                         </div>
                                     </div>
                                 )
                             })}
-                        </div>
-                        <div className="bg-white my-3 drop-shadow-lg">
-                            <p>{report.problems[problemIndex].explaination}</p>
+                            <hr />
+                            <p className=" ml-[40px] my-3 pt-2 pb-2 text-[#909090] font-medium text-[16px]">คำอธิบาย : {report.problems[problemIndex].explaination}</p>
                         </div>
                     </div>
                 )

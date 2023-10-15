@@ -1,16 +1,18 @@
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPlusCircle, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Lesson } from "../types/course";
 import { CourseQuiz, CourseQuizProblem } from "../types/courseQuiz";
 
 type CourseQuizProblemWithoutNumber = Omit<CourseQuizProblem, "problemNumber">
 
 interface _ProblemCreateProps {
-    onSubmit: (problem: CourseQuizProblemWithoutNumber) => void;
+    problemToBeEdit?: CourseQuizProblem;
+    onSubmit?: (problem: CourseQuizProblemWithoutNumber) => void;
+    onEdit?: (problem: CourseQuizProblem) => void;
 }
 
-function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
+function _ProblemCreate({ onSubmit, problemToBeEdit, onEdit }: _ProblemCreateProps) {
     const [question, setQuestion] = useState<string>("")
     const [numChoice, setNumChoice] = useState<number>(1)
     const [explaination, setExplaination] = useState<string>("")
@@ -31,6 +33,9 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
         choiceF: false,
     })
     const handleSubmit = () => {
+        if (!onSubmit && !onEdit) {
+            throw new Error("onSubmit and onEdit is undefined")
+        }
         if (question === "" || explaination === "") {
             alert("ต้องกรอกคำถามและคำอธิบาย")
             return
@@ -48,27 +53,72 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
             correctAnswers: correctAnswer,
             explaination: explaination,
         }
-        onSubmit(problem)
+        if (onSubmit) {
+            onSubmit(problem)
+        } else if (onEdit) {
+            if (!problemToBeEdit) {
+                throw new Error("problemToBeEdit is undefined")
+            }
+            const newProblem: CourseQuizProblem = { problemNumber: problemToBeEdit.problemNumber, ...problem }
+            onEdit(newProblem)
+        }
     }
+    const handleRemoveChoice = () => {
+        Object.keys(choices).forEach((key, index) => {
+            if (index >= numChoice - 1) {
+                setChoices((p) => {
+                    return { ...p, [key]: "" }
+                })
+            }
+        })
+        setNumChoice((p) => p - 1)
+    }
+    useEffect(() => {
+        if (problemToBeEdit) {
+            setQuestion(problemToBeEdit.question)
+            setExplaination(problemToBeEdit.explaination)
+            setChoices(problemToBeEdit.choices)
+            setCorrectAnswer(problemToBeEdit.correctAnswers)
+            for (let i = 0; i < Object.keys(problemToBeEdit.choices).length; i++) {
+                if (problemToBeEdit.choices[Object.keys(problemToBeEdit.choices)[i]] === "") {
+                    setNumChoice(i)
+                    break
+                }
+            }
+        }
+    }, [problemToBeEdit])
+
     return (
-        <div className="bg-white">
-            <input type="text" placeholder="คำถาม" value={question}
-                onChange={(e) => { setQuestion(e.target.value) }} />
-            <input type="text" placeholder="คำอธิบาย" value={explaination}
-                onChange={(e) => { setExplaination(e.target.value) }} />
+        <div className="flex flex-col ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
+            <div className="flex pt-2 pb-4 font-semibold">
+                <h1 className="my-auto mx-[40px] text-[18px]">คำถาม</h1>
+                <input className="mr-[50px] min-w-0 grow input input-bordered"
+                    type="text" placeholder="คำถาม" value={question}
+                    onChange={(e) => { setQuestion(e.target.value) }} />
+            </div>
+            <div className="flex pt-2 pb-4 font-semibold text-[18px]">
+                <h1 className="mx-[40px] ">คำอธิบายเพิ่มเติม</h1>
+                <textarea className="mr-[50px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
+                    placeholder="คำอธิบายเพิ่มเติมที่่ผู้เรียนจะเห็นหลังทำแบบฝึกหัดเสร็จ" value={explaination}
+                    onChange={(e) => { setExplaination(e.target.value) }} />
+            </div>
+            <h1 className="my-auto mx-[40px] font-semibold text-[15px] text-[#808080]">ติ๊กถูกด้านหน้าเพื่อกำหนดตัวเลือกที่ตอบแล้วได้คะแนน</h1>
             {Object.entries(choices).map(([key, value], index) => {
                 if (index >= numChoice) {
-                    return <></>
+                    return (null)
                 }
                 return (
-                    <div key={`${key}-${index}`}>
-                        <input type="checkbox" checked={correctAnswer[key]}
+                    <div className="mx-[55px]"
+                        key={`${key}-${index}`}>
+                        <input className="mx-3"
+                            type="checkbox" checked={correctAnswer[key]}
                             onChange={() => {
                                 setCorrectAnswer((p) => {
                                     return { ...p, [key]: !p[key] }
                                 })
                             }} />
-                        <input type="text" placeholder={`ตัวเลือกที่ ${index + 1}`} value={value}
+                        <input className="mr-[50px] my-[10px] h-[25px] min-w-0 grow input input-bordered "
+                            type="text" placeholder={`ตัวเลือกที่ ${index + 1}`} value={value}
                             onChange={(e) => {
                                 setChoices((p) => {
                                     return { ...p, [key]: e.target.value }
@@ -77,16 +127,24 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
                     </div>
                 )
             })}
-            {numChoice <= 5 ?
-                <button className="btn"
-                    onClick={() => {
-                        setNumChoice((p) => p + 1)
-                    }}>
-                    <FontAwesomeIcon icon={faPlusCircle} />
-                    <h1>เพิ่มตัวเลือก</h1>
-                </button> : <></>
-            }
-            <button className="btn"
+            <div className="flex">
+                {numChoice <= 5 ?
+                    <button className="mx-14 mb-4 px-2 py-1 flex flex-row items-center bg-gray-100"
+                        onClick={() => {
+                            setNumChoice((p) => p + 1)
+                        }}>
+                        <FontAwesomeIcon icon={faPlusCircle} size='lg' />
+                        <h1 className="ml-5">เพิ่มตัวเลือก</h1>
+                    </button> : <></>
+                } {numChoice > 1 ?
+                    <button className="mx-14 mb-4 px-2 py-1 flex flex-row items-center bg-gray-100"
+                        onClick={handleRemoveChoice}>
+                        <FontAwesomeIcon icon={faX} size='lg' />
+                        <h1 className="ml-5">ลบตัวเลือก</h1>
+                    </button> : <></>
+                }
+            </div>
+            <button className="btn bg-[#d9d9d9]"
                 onClick={handleSubmit}>
                 <h1>ตกลง</h1>
             </button>
@@ -95,6 +153,7 @@ function _ProblemCreate({ onSubmit }: _ProblemCreateProps) {
 }
 
 interface QuizLessonCreateProps {
+    defaultLesson?: Lesson;
     chapterNumber: number;
     chapterName: string;
     lessonNumber: number;
@@ -102,7 +161,9 @@ interface QuizLessonCreateProps {
     onCancel: () => void;
 }
 
-function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, onSubmit }: QuizLessonCreateProps) {
+type AddProblemMode = "none" | "adding" | "editing"
+
+function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, onSubmit, defaultLesson }: QuizLessonCreateProps) {
     const [quiz, setQuiz] = useState<CourseQuiz>({
         // TODO: remove hardcode
         name: "",
@@ -112,17 +173,38 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
         problems: [],
 
     })
-    const [isAdding, setIsAdding] = useState<boolean>(false)
+    const [addMode, setAddMode] = useState<AddProblemMode>("none")
+    const [problemToBeEdit, setProblemToBeEdit] = useState<CourseQuizProblem>()
     function handleLessonNameChange(e: React.ChangeEvent<HTMLInputElement>) {
         setQuiz({ ...quiz, name: e.target.value })
     }
-    function handleLessonDescriptionChange(e: React.ChangeEvent<HTMLInputElement>) {
+    function handleLessonDescriptionChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         setQuiz({ ...quiz, description: e.target.value })
     }
     const onProblemSubmit = (problem: CourseQuizProblemWithoutNumber) => {
         const newProblem: CourseQuizProblem = { problemNumber: quiz.problems.length + 1, ...problem }
         setQuiz({ ...quiz, problems: [...quiz.problems, newProblem] })
-        setIsAdding(false)
+        setAddMode("none")
+    }
+    const onProblemEdit = (problem: CourseQuizProblem) => {
+        const newProblems = quiz.problems.map((p) => {
+            if (p.problemNumber === problem.problemNumber) {
+                return problem
+            }
+            return p
+        })
+        setQuiz({ ...quiz, problems: newProblems })
+        setAddMode("none")
+    }
+    const onProblemDelete = (problemNumber: number) => {
+        // delete problem and renumbering
+        const newProblems = quiz.problems.filter((p) => p.problemNumber !== problemNumber)
+        newProblems.forEach((p, index) => {
+            if (p.problemNumber > problemNumber) {
+                p.problemNumber = index + 1
+            }
+        })
+        setQuiz({ ...quiz, problems: newProblems })
     }
     const handleSubmit = () => {
         if (quiz.name === "" || quiz.description === "") {
@@ -138,58 +220,109 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
         }
         onSubmit(lesson)
     }
+    useEffect(() => {
+        if (defaultLesson) {
+            setQuiz(JSON.parse(defaultLesson.quiz))
+        }
+    }, [defaultLesson])
     return (
-        <div>
-            <h1>บทที่ {chapterNumber}: {chapterName}/สร้างแบบทดสอบ</h1>
-            <div className="bg-white">
-                <div>
-                    <h1>หัวข้อ</h1>
-                    <input type="text" value={quiz.name} onChange={handleLessonNameChange} />
+        <div className="w-full">
+            <div className="ml-[70px] mt-[20px] flex items-center">
+                <h1 className="text-black text-[24px] font-bold">
+                    บทที่ {chapterNumber} :
+                </h1>
+                <h2 className=" text-[#808080] text-[18px] font-semibold ml-4">
+                    {chapterName} / สร้างแบบฝึกหัด
+                </h2>
+            </div>
+
+
+
+            <div className="ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
+                <div className="  flex grow items-center pt-2 pb-4">
+                    <h1 className="my-auto mx-[40px] font-semibold text-[18px]">หัวข้อ</h1>
+                    <input
+                        type="text"
+                        className="mr-[50px] min-w-0 grow input input-bordered"
+                        value={quiz.name}
+                        onChange={handleLessonNameChange}
+                    />
                 </div>
-                <div>
-                    <h1>คำอธิบาย</h1>
-                    <input type="text" value={quiz.description} onChange={handleLessonDescriptionChange} />
+                <div className="  flex grow pt-2 pb-4">
+                    <h1 className=" mx-[40px] font-semibold text-[18px]">คำอธิบาย</h1>
+                    <textarea
+                        className="mr-[50px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
+                        value={quiz.description}
+                        onChange={handleLessonDescriptionChange}
+                    />
                 </div>
-                <div>
-                    <h1>เวลาที่ใช้ (วินาที)</h1>
-                    <input type="text" />
+                <div className="  flex grow items-center pt-2 pb-4">
+                    <h1 className="my-auto mx-[40px] font-semibold text-[18px]">เวลาที่ใช้ (วินาที)</h1>
+                    <input
+                        type="text"
+                        className="mr-[50px] min-w-0  grow input input-bordered"
+                    />
                 </div>
             </div>
             {quiz.problems.map((problem, index) => {
                 return (
-                    <div className="bg-white my-8" key={index}>
-                        <h1>คำถามที่ {problem.problemNumber} {problem.question}</h1>
-                        {Object.entries(problem.choices).map(([key, value]) => {
+                    <div className="ml-[70px] mr-[100px] mt-[30px]  bg-white drop-shadow-xl" key={index}>
+                        <div className="py-2 bg-[#d0d0d0] flex justify-between">
+                            <h1 className="my-auto mx-[40px] font-semibold text-[18px]">คำถามที่ {problem.problemNumber} {problem.question}</h1>
+                            <div className="flex">
+                                <button className="mr-5" onClick={() => {
+                                    setProblemToBeEdit(problem)
+                                    setAddMode("editing")
+                                }}>
+                                    <FontAwesomeIcon icon={faEdit} size='lg' />
+                                </button>
+                                <button className="mr-5"
+                                    onClick={() => { onProblemDelete(problem.problemNumber) }}>
+                                    <FontAwesomeIcon icon={faX} size='lg' />
+                                </button>
+                            </div>
+                        </div>
+                        {Object.entries(problem.choices).map(([key, value], index) => {
                             if (value === "") {
-                                return <></>
+                                return (null)
                             }
                             else {
                                 return (
-                                    <div className="flex">
-                                        <div className={`rounded-full w-3 h-3 border-2 ${problem.correctAnswers[key] ? "bg-green-300" : "bg-slate-200"}`}></div>
-                                        <h1>{value}</h1>
+                                    <div className="mx-[55px] my-2 flex items-center" key={`${key}-${value}-${index}`}>
+                                        <div className={`mr-5 rounded-full w-4 h-4 border-2 border-[#646464] ${problem.correctAnswers[key] ? "bg-green-400" : "bg-slate-200"}`}></div>
+                                        <h1 className=" font-semibold text-[16px] text-[#3a3a3a]">{value}</h1>
                                     </div>
                                 )
                             }
                         })}
                         <hr />
-                        <h1>คำอธิบาย: {problem.explaination}</h1>
+                        <h1 className=" mx-[40px] py-[10px] font-semibold text-[18px] text-[#3a3a3a]">คำอธิบาย :
+                            <span className=" font-medium">{" "}{problem.explaination}</span>
+                        </h1>
                     </div>
                 )
             })}
+
+            {addMode != "none" ?
+                addMode === "adding" ?
+                    <_ProblemCreate onSubmit={onProblemSubmit} />
+                    : <_ProblemCreate onEdit={onProblemEdit} problemToBeEdit={problemToBeEdit} />
+                : <></>}
             <div>
-                <button className="btn"
-                    onClick={() => setIsAdding(true)}>
-                    <FontAwesomeIcon icon={faPlusCircle} />
+                <button className="btn ml-[70px] my-5 bg-[#d9d9d9]"
+                    onClick={() => setAddMode("adding")}>
+                    <FontAwesomeIcon icon={faPlusCircle} size='xl' />
                     <h1>เพิ่มคำถาม</h1>
                 </button>
-                <button className="btn"
-                    onClick={handleSubmit}>
-                    <FontAwesomeIcon icon={faPlusCircle} />
-                    <h1>เสร็จสิ้น</h1>
+            </div>
+            <div className="flex mt-[40px] justify-end mr-[100px] w-full">
+                <button className="btn bg-black text-white" onClick={handleSubmit}>
+                    บันทึก
+                </button>
+                <button className="btn ml-7 mr-[100px]" onClick={onCancel}>
+                    ยกเลิก
                 </button>
             </div>
-            {isAdding ? <_ProblemCreate onSubmit={onProblemSubmit} /> : <></>}
         </div>
     )
 }

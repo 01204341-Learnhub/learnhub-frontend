@@ -4,7 +4,7 @@ import { StudentDashboard } from "../types/studentDashboard";
 
 function useStudentDashboard(studentID: string) {
     const [dashboard, setDashboard] = useState<StudentDashboard>()
-    const [isFetching, setIsFetching] = useState<boolean>(false)
+    const [isFetching, setIsFetching] = useState<boolean>(true)
     async function fetchedStudentDashboard(studentID: string) {
         const fetchedDashboard = await getStudentDashboard(studentID)
         console.log(JSON.stringify(fetchedDashboard,null,2));

@@ -4,13 +4,16 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ProgramSlot from "./ProgramSlot";
 
-
 interface ProgramCardProps {
     programThumbnailUrl: string;
     programName: string;
     programId: string;
     instructorName: string;
     percentCompleted: number;
+    voter: number;
+    price: number;
+    tag: string;
+    lvl: string;
 
 }
 
@@ -77,9 +80,9 @@ export default function ProgramCarousel({ type, programs, displayCount, carousel
                                 <ProgramSlot courseThumbnailUrl={program.programThumbnailUrl}
                                     courseName={program.programName}
                                     instructorName={program.instructorName}
-                                    percentCompleted={program.percentCompleted}
-                                    regisDate={""} voter={0} price={3000} tag={"ยอดนิยม"}
-                                    lvl={"พื้นฐาน"} />
+                                    percentCompleted={type=== "course"? program.percentCompleted : null}
+                                    regisDate={""} voter={type === "course" ? program.voter : null} price={program.price} tag={program.tag}
+                                    lvl={program.lvl} />
                             </Link>
                         )
                     })}

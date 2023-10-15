@@ -2,7 +2,7 @@ type ClassAssignment = {
   assignmentID: string;
   name: string;
   description: string;
-  attachments: { src: string; name: string }[];
+  attachments: { src: string; attachmentType: string }[];
   dueDate?: Date;
   score: number;
   topic: string;

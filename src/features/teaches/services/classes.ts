@@ -1,6 +1,12 @@
 import axios from "axios";
 import { ClassInfo, CreatingClass } from "../types/class.ts";
-import { ListTeacherClassesResponse } from "../types/responses.ts";
+import { ClassAssignment } from "../types/classWork.ts";
+import {
+  ListClassAssignmentsResponse,
+  ListClassStudentsResponse,
+  ListTeacherClassesResponse,
+} from "../types/responses.ts";
+import { ClassStudent } from "../types/student.ts";
 
 const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 async function listTeacherClasses(teacherID: string): Promise<ClassInfo[]> {
@@ -17,6 +23,17 @@ async function listTeacherClasses(teacherID: string): Promise<ClassInfo[]> {
     };
   });
   return classes;
+}
+
+async function listClassStudents(classID: string) {
+  const url = `${baseURL}/programs/classes/${classID}/students`;
+  const res = await axios.get<ListClassStudentsResponse>(url);
+  const students: ClassStudent[] = res.data.students.map((s) => ({
+    studentID: s.student_id,
+    name: s.name,
+    avatarURL: s.profile_pic,
+  }));
+  return students;
 }
 
 async function publishClass(cls: CreatingClass): Promise<string> {
@@ -44,4 +61,36 @@ async function publishClass(cls: CreatingClass): Promise<string> {
   return res.data.class_id;
 }
 
-export { listTeacherClasses, publishClass };
+async function listClassAssignments(classID: string) {
+  const url = `${baseURL}/programs/classes/${classID}/assignments`;
+  const res = await axios.get<ListClassAssignmentsResponse>(url);
+  const assignments: ClassAssignment[] = [];
+  for (let i = 0; i < res.data.assignments.length; i++) {
+    const getAssignmentUrl = `${baseURL}/programs/classes/${classID}/assignments/${res.data.assignments[i].assignment_id}`;
+    const assignmentRes = await axios.get<{
+      attachments: { attachment_type: string; src: string }[];
+    }>(getAssignmentUrl);
+    const a: ClassAssignment = {
+      assignmentID: res.data.assignments[i].assignment_id,
+      name: res.data.assignments[i].name,
+      description: res.data.assignments[i].text,
+      attachments: assignmentRes.data.attachments.map((a) => ({
+        src: a.src,
+        name: a.attachment_type,
+      })),
+      score: res.data.assignments[i].max_score,
+      topic: res.data.assignments[i].group_name,
+      send: res.data.assignments[i].submission_count.submit_count,
+      nosend: res.data.assignments[i].submission_count.unsubmit_count,
+    };
+    assignments.push(a);
+  }
+  return assignments;
+}
+
+export {
+  listClassAssignments,
+  listClassStudents,
+  listTeacherClasses,
+  publishClass,
+};

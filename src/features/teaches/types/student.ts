@@ -1,9 +1,7 @@
-type Student = {
-    studentId: string;
-    name: string;
-    profilePic: string;
-    
-  };
-  
-  export type { Student };
-  
+type ClassStudent = {
+  studentID: string;
+  name: string;
+  avatarURL: string;
+};
+
+export type { ClassStudent };

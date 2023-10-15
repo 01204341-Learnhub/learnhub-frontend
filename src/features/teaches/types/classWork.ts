@@ -1,4 +1,5 @@
-type Work = {
+type ClassAssignment = {
+  assignmentID: string;
   name: string;
   description: string;
   attachments: { src: string; name: string }[];
@@ -9,4 +10,4 @@ type Work = {
   nosend: number;
 };
 
-export type { Work };
+export type { ClassAssignment };

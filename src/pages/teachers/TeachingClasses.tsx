@@ -2,24 +2,22 @@ import { faClipboardList, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import WorkCreate from "../../features/teaches/components/WorkCreate";
-import { Work } from "../../features/teaches/types/classWork";
-import { Student } from "../../features/teaches/types/student";
+import { ClassAssignment, Work } from "../../features/teaches/types/classWork";
 // import Workreview from "../../features/teaches/components/reviewwork"
-import PostClass from "../../features/teaches/components/PostClass";
+import { useParams } from "react-router-dom";
 import { FormPublishPostClass } from "../../features/teaches/components/FormPublishPostClass";
+import { useClassAssignments } from "../../features/teaches/hooks/useClassAssignments";
+import { useClassInfo } from "../../features/teaches/hooks/useClassInfo";
+import { useClassStudents } from "../../features/teaches/hooks/useClassStudents";
+import { useUser } from "../../hooks/useUser";
 
 type View = "main" | "works" | "members" | "create-work";
 
-type ClassInfoPrototype = {
-  className: string;
-  classThumbnail: string;
-  teacherThumbnail: string;
-};
 
 const fakeURL =
   "https://www.hobbyfanclub.com/web/board/2022/odtjnwftssxcxgmfjaj5191220225035856071.jpg";
 
-const fakeTeacherThumbnail = 
+const fakeTeacherThumbnail =
   "https://scontent.fbkk22-6.fna.fbcdn.net/v/t39.30808-6/305494824_461079576060810_2645334172550963334_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEK3VHA0mex4atLPZYQZ9wnCYsANNdweP0JiwA013B4_UhN0q5hA-NjCs3Tpjd6Y8LAhmihkYTPgFGEhwffWZCN&_nc_ohc=zPEbVJrCs3AAX_tkIkk&_nc_ht=scontent.fbkk22-6.fna&oh=00_AfAdJoFNG5Z91b7iv1loO4Ct0tqbTzyWTFYxj7cz9iVAcg&oe=652EBD83";
 
 interface ViewSlectorProps {
@@ -98,8 +96,8 @@ function _WorkSlot({ work }: { work: Work }) {
           </div>
           <div className="bg-white flex  items-center border-2 py-5 px-5">
             <button
-                type="button"
-                className="text-blue-600 w-10/12">
+              type="button"
+              className="text-blue-600 w-10/12">
               ดูวิธีการ
             </button>
             <div className="w-2/12 items-end">
@@ -113,48 +111,21 @@ function _WorkSlot({ work }: { work: Work }) {
     </div>
   );
 }
-function _studentslot({ student }: { student: student })
-{ 
-  return(
-    <div className="w-3/4 flex bg-white  items-center border-2">
-                    <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
-                            <img src={student.profile_pic} />
-                        </div>
-                    <h1 className="text-xl text-gray-600 font-bold ml-5">{student.name}</h1>
-                        </div>
-  )
-}
 interface _ClassWorksProps {
   onCreateClassWork: () => void;
-  works: Work[];
+  assignments: ClassAssignment[];
 }
-function _Students()
-{
-  const[students,setStudent] = useState<Student[]>([...mockStudents]);
-  return(
-    <div>
-      {students.map((student,index) =>{
-        return(
-          <div key={index}>
-          <_studentslot student={student} />
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
-function _ClassWorks({ onCreateClassWork, works }: _ClassWorksProps) {
+function _ClassWorks({ onCreateClassWork, assignments }: _ClassWorksProps) {
   const getAllTopics = () => {
     const topics: string[] = [];
-    works.forEach((w) => {
+    assignments.forEach((w) => {
       if (!topics.includes(w.topic)) {
         topics.push(w.topic);
       }
     });
     return topics;
   };
-  if (works.length == 0) {
+  if (assignments.length == 0) {
     <div className="h-full w-full">
       <button className="btn m-7" onClick={onCreateClassWork}>
         <FontAwesomeIcon icon={faPlus} size="xl" />
@@ -173,10 +144,10 @@ function _ClassWorks({ onCreateClassWork, works }: _ClassWorksProps) {
           <h1 className="mx-10 text-black font-bold text-3xl my-2">{topic}</h1>
           <hr className="mx-10 h-1.5 bg-gray-300" />
           <div className="my-16">
-            {works
+            {assignments
               .filter((w) => w.topic == topic)
               .map((w) => (
-                <div className="mx-10">
+                <div className="mx-10" key={w.assignmentID}>
                   <_WorkSlot key={w.name} work={w} />
                 </div>
               ))}
@@ -187,82 +158,22 @@ function _ClassWorks({ onCreateClassWork, works }: _ClassWorksProps) {
   );
 }
 
-const mockWorks: Work[] = [
-  {
-    name: "Mock",
-    description:
-      "Moc65d4f9asd4f9as49f84asd9asd1f8as1d4f9as49f84asd9asd1f8as18ad4f9as49f84asd9asd1f8as18ad4f9as49f84asd9asd1f8as18ad4f9as49f84asd9asd1f8as18a8a1fas9d5sdff651as6f1as65fas65dd1ffdksfk",
-    topic: "ไม่ได้กำหนดหัวข้อ",
-    attachments: [],
-    score: 0,
-    send: 10,
-    nosend: 15,
-  },
-  {
-    name: "Mock 3",
-    description: "Mockckdkkfdksfk",
-    topic: "ไม่ได้กำหนดหัวข้อ",
-    attachments: [],
-    score: 0,
-    send: 10,
-    nosend: 15,
-  },
-  {
-    name: "Mock 2",
-    description: "Mockckdkkfdksfk",
-    topic: "ไม่ได้กำหนดหัวข้อ",
-    attachments: [],
-    score: 0,
-    send: 10,
-    nosend: 15,
-  },
-  {
-    name: "Mock 2",
-    description: "Mockckdkkfdksfk",
-    topic: "หัวข้อที่ 1",
-    attachments: [],
-    score: 0,
-    send: 10,
-    nosend: 15,
-  },
-  {
-    name: "Mock 2",
-    description: "Mockckdkkfdksfk",
-    topic: "หัวข้อที่ 2",
-    attachments: [],
-    score: 0,
-    send: 10,
-    nosend: 15,
-  },
-];
-const mockStudents: Student[]=[
-  {
-    studentId: "1234",
-    name: "name1",
-    profilePic: ""
-},
-{
-  studentId: "1235",
-  name: "name2",
-  profilePic: ""
-},
-{
-  studentId: "1236",
-  name: "name3",
-  profilePic: ""
-},
-]
-
 function TeachingClasses() {
   const [view, setView] = useState<View>("main");
-  const [classInfo, setClassInfo] = useState<ClassInfoPrototype>({
-    className: "Mock class name",
-    classThumbnail: fakeURL,
-    teacherThumbnail: fakeTeacherThumbnail
-  });
-  const [works, setWorks] = useState<Work[]>([...mockWorks]);
+  const { classID } = useParams<{ classID: string }>();
+  const { classInfo, isFetching: isFetchingClassInfo } = useClassInfo(classID)
+  const { assignments, isFetching: isFetchingAssignments } = useClassAssignments(classID)
+  const { students } = useClassStudents(classID)
+  const { user } = useUser()
 
+  function handleAddAssignment(assignment: ClassAssignment) {
+    alert(`add assignment ${JSON.stringify(assignment, null, 2)} `);
+    setView("works");
+  }
 
+  if (isFetchingClassInfo || isFetchingAssignments) {
+    return <div> LoADING... </div>
+  }
 
   if (view == "main") {
     return (
@@ -279,21 +190,18 @@ function TeachingClasses() {
           </div>
           <div className="mt-7">
             <img
-              src={classInfo.classThumbnail}
+              src={classInfo.classThumbnailUrl}
               alt="class-cover"
               className="object-cover w-full h-64"
             />
           </div>
         </div>
-
-
-
         <div className=" mt-[2%] flex flex-col space-y-[2%]">
           <button id="teacherNotAnnoucement" className="flex justify-center items-center">
-              <FormPublishPostClass profileTeacher="https://optimise2.assets-servd.host/maniacal-finch/production/animals/southern-rock-hopper-penguin-01-01.jpg?w=1200&auto=compress%2Cformat&fit=crop&dm=1660831481&s=9a929ad4ca101687860476bb97d562c1"/>
+            <FormPublishPostClass profileTeacher="https://optimise2.assets-servd.host/maniacal-finch/production/animals/southern-rock-hopper-penguin-01-01.jpg?w=1200&auto=compress%2Cformat&fit=crop&dm=1660831481&s=9a929ad4ca101687860476bb97d562c1" />
           </button>
 
-          
+
         </div>
       </div>
     );
@@ -308,7 +216,7 @@ function TeachingClasses() {
           onCreateClassWork={() => {
             setView("create-work");
           }}
-          works={works}
+          assignments={assignments}
         />
       </div>
     );
@@ -318,11 +226,27 @@ function TeachingClasses() {
         <_ViewSelector currentView={view} setView={setView} />
         <hr />
         <p className="text-xl text-gray-600 font-bold ml-5 my-5">ผู้สอน</p>
-        <_Students></_Students>
-        
+        <div className="w-3/4 flex bg-white  items-center border-2">
+          <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
+            <img src={user.profilePicture} />
+          </div>
+          <h1 className="text-xl text-gray-600 font-bold ml-5">{user.fullname}</h1>
+        </div>
+
         <p className="text-xl text-gray-600 font-bold ml-5 my-5">ผู้เรียนในคลาส</p>
-        <_Students></_Students>
-    </div>
+        <div>
+          {students.map((student, index) => {
+            return (
+              <div className="w-3/4 flex bg-white  items-center border-2" key={index}>
+                <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
+                  <img src={student.avatarURL} />
+                </div>
+                <h1 className="text-xl text-gray-600 font-bold ml-5">{student.name}</h1>
+              </div>
+            )
+          })}
+        </div>
+      </div>
 
     );
   } else if (view == "create-work") {
@@ -332,10 +256,7 @@ function TeachingClasses() {
         onCancel={() => {
           setView("works");
         }}
-        onSubmit={(w) => {
-          setWorks((p) => [...p, w]);
-          setView("works");
-        }}
+        onSubmit={handleAddAssignment}
       />
     );
   } else if (view == "review-work") {

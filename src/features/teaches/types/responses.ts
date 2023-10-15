@@ -47,7 +47,49 @@ type ListTeacherClassesResponse = {
   }[];
 };
 
+type ListClassStudentsResponse = {
+  students: {
+    student_id: string;
+    name: string;
+    profile_pic: string;
+  }[];
+};
+
+type ListClassAssignmentsResponse = {
+  assignments: {
+    assignment_id: string;
+    name: string;
+    group_name: string;
+    last_edit: number;
+    due_date: number;
+    status: string;
+    max_score: number;
+    submission_count: {
+      submit_count: number;
+      unsubmit_count: number;
+    };
+    text: string;
+  }[];
+};
+
+type GetClassAssignmentResponse = {
+  name: string;
+  group_name: string;
+  last_edit: number;
+  due_date: number;
+  status: string;
+  max_score: number;
+  text: string;
+  attachments: {
+    src: string;
+    name: string;
+  }[];
+};
+
 export type {
+  GetClassAssignmentResponse,
+  ListClassAssignmentsResponse,
+  ListClassStudentsResponse,
   ListTagsResponse,
   ListTeacherClassesResponse,
   ListTeacherCourseResponse,

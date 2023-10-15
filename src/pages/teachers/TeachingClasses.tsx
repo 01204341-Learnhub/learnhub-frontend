@@ -171,6 +171,17 @@ function TeachingClasses() {
     setView("works");
   }
 
+  function getAvaliableTopics(): string[] {
+    // get all topics from assignments
+    const topics: string[] = []
+    assignments.forEach((assignment) => {
+      if (!topics.includes(assignment.topic)) {
+        topics.push(assignment.topic)
+      }
+    })
+    return topics
+  }
+
   if (isFetchingClassInfo || isFetchingAssignments) {
     return <div> LoADING... </div>
   }
@@ -252,7 +263,7 @@ function TeachingClasses() {
   } else if (view == "create-work") {
     return (
       <WorkCreate
-        availableTopics={["ฟัสสี่", "WTF"]}
+        availableTopics={getAvaliableTopics()}
         onCancel={() => {
           setView("works");
         }}

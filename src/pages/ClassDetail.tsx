@@ -1,13 +1,13 @@
 
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
 import { faCalendarDays, faClock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ClassDetailedSummary from "../features/stores/components/ClassDetailedSummary"
-import ProgramCoverWithInstructorProfile from "../features/stores/components/ProgramCoverWithInstructorProfile"
-import { getClasses } from "../features/stores/services/classes"
-import { ClassProgramDetail } from "../features/stores/types/class"
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { LoadingSpash } from "../components/LoadingSpash";
+import ClassDetailedSummary from "../features/stores/components/ClassDetailedSummary";
+import ProgramCoverWithInstructorProfile from "../features/stores/components/ProgramCoverWithInstructorProfile";
+import { getClasses } from "../features/stores/services/classes";
+import { ClassProgramDetail } from "../features/stores/types/class";
 
 function formatTimeFromTimestamp(timestamp: number): string {
     const date = new Date(timestamp * 1000);
@@ -17,17 +17,17 @@ function formatTimeFromTimestamp(timestamp: number): string {
 }
 function formatDateFromTimestamp(timestamp: number): string {
     const date = new Date(timestamp * 1000);
-    const optionDays = { weekday: 'long', locale: 'th-TH' };
+    const optionDays = { weekday: 'long', locale: 'th-TH' } as Intl.DateTimeFormatOptions;
     const dayName = new Intl.DateTimeFormat('th-TH', optionDays).format(date);
     const day = date.getDate();
-    const optionMonts = { month: 'long', locale: 'th-TH' };
+    const optionMonts = { month: 'long', locale: 'th-TH' } as Intl.DateTimeFormatOptions;
     const monthName = new Intl.DateTimeFormat('th-TH', optionMonts).format(date);
     const year = date.getUTCFullYear();
     return `${dayName}ที่ ${day} ${monthName} ${year + 543}`;
 }
 function checkColors(timestamp: number): string {
     const date = new Date(timestamp * 1000);
-    const options = { weekday: 'long' };
+    const options = { weekday: 'long' } as Intl.DateTimeFormatOptions;
     const dayName = date.toLocaleDateString(undefined, options);
     return dayName;
 }

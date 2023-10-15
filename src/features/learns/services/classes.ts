@@ -36,7 +36,7 @@ async function listEnrolledClass(studentID: string): Promise<EnrolledClass[]> {
 }
 
 async function getClassDetail(classID: string) {
-  const url = `${baseURL}/prgrams/classes/${classID}`;
+  const url = `${baseURL}/programs/classes/${classID}`;
   const res = await axios.get<GetClassDetailResponse>(url);
   const classDetail: ClassDetail = {
     classID: res.data.class_id,

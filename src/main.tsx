@@ -87,7 +87,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   element={<TeachingClasses />}
                 />
                 <Route path="/teach/classes/:classID/review/:assignmentID" element={<ReviewWork />} />
-
                 <Route path="/teach/homework" element={<TeachingHomeworks />} />
                 <Route path="/teach/overview" element={<TeacherOverview />} />
                 <Route path="/teach/course/:id" element={<TeacherCourseManage />} />

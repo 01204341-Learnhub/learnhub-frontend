@@ -87,7 +87,7 @@ function MainBar() {
                             </div>
                         </button>
 
-                        <button className=' flex justify-center relative' onClick={handleClickBasket}>
+                        <button className=' flex justify-center items-center relative' onClick={handleClickBasket}>
                             <div className=' flex relative'>
                                 <FontAwesomeIcon icon={faCartShopping} size='xl' color={openDropdown === 'mycartdropdown' ? 'red' : 'none'} />
                                 <div className={itemsInBasket === 0 ? "hidden" : ""}>

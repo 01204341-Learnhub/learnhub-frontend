@@ -141,7 +141,7 @@ function MainBar() {
                                 className="w-[50px] h-[50px] mr-3 justify-self-center"
                                 onClick={() => toggleDropdown('userdropdown')}
                             >
-                                <img src={user.profilePicture} alt="profile" className=' h-full rounded-full' />
+                                <img src={user.profilePicture} alt="profile" className=' h-full rounded-full object-cover' />
 
                                 {/* User dropdown menu */}
                                 <div
@@ -149,7 +149,7 @@ function MainBar() {
                                     className=" absolute w-[320px] h-[550px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
                                 >
                                     <div className="px-8 py-3">
-                                        <img src={user.profilePicture} alt="profile" className=' h-[50px] w-[50px] rounded-full' />
+                                        <img src={user.profilePicture} alt="profile" className=' h-[50px] w-[50px] rounded-full object-cover' />
                                         <div className='flex justify-between items-center'>
                                             <span className="block text-[18px] font-bold text-black text-left">{user.username}</span>
                                             <div className=' bg-[#A1CCD1] rounded-full px-3 py-1 font-bold text-[13px]'>{user.userType}</div>

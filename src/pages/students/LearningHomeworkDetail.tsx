@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { Thread, generateMockUser } from "../../features/learns/types/thread";
+import { Thread } from "../../features/learns/types/thread";
 import useThread from "../../features/learns/hooks/useThread";
 import ClassHomeworkDetailMainContent from "../../features/learns/components/ClassHomeworkDetailMainContent";
 import ClassHomeworkDetailFileUploader from "../../features/learns/components/ClassHomeworkDetailFileUploader";
+import { useUser } from "../../hooks/useUser";
 
 interface _TopNavbarProps {
   thread: Thread;
@@ -41,8 +42,8 @@ type PathParams = {
 
 function LearningHomeworkDetail() {
   const { classId, homeworkId } = useParams<PathParams>();
-  // TODO: use useUser hook
-  const user = generateMockUser("student", "student0");
+  // const user = generateMockUser("student", "student0");
+  const { user } = useUser();
   const {
     thread,
     addReply,

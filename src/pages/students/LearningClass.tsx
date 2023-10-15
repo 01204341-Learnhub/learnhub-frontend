@@ -102,8 +102,8 @@ function _HomeworksTab({ cls }: _HomeworksTabProps) {
     Array.from(
       new Set(
         cls.simpleThreads
-          .filter((st) => st.typ === "homework")
-          .map((st) => st.homeworkTopicName)
+          .filter((simpleThread) => simpleThread.typ === "homework")
+          .map((simpleThread) => simpleThread.homeworkTopicName)
           .sort()
       )
     )
@@ -111,21 +111,24 @@ function _HomeworksTab({ cls }: _HomeworksTabProps) {
   return (
     <div className="flex w-full justify-center">
       <div className="flex flex-col bg-white w-full min-w-[600px] max-w-[950px] p-5 space-y-5 ">
-        {topics.map((tp) => (
-          <div>
+        {topics.map((topic) => (
+          <div key={topic}>
             <h1 className="text-black text-[32px] font-bold p-5 mb-2 border-b-[5px]">
-              {tp ?? "ไม่มีหัวข้อ"}
+              {topic ?? "ไม่มีหัวข้อ"}
             </h1>
             <div className="flex flex-col space-y-2">
               {cls.simpleThreads
                 .filter(
-                  (st) => st.typ === "homework" && st.homeworkTopicName === tp
+                  (simpleThread) =>
+                    simpleThread.typ === "homework" &&
+                    simpleThread.homeworkTopicName === topic
                 )
                 .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime())
-                .map((st) => (
+                .map((simpleThread) => (
                   <ClassHomeworkListEntry
+                    key={simpleThread.threadId}
                     classId={cls.classId}
-                    simpleThread={st}
+                    simpleThread={simpleThread}
                   />
                 ))}
             </div>
@@ -153,8 +156,8 @@ function _PeopleTab({ cls }: _PeopleTabProps) {
           <div className="flex flex-col space-y-2">
             {cls.students
               .sort((a, b) => a.fullname.localeCompare(b.fullname))
-              .map((st) => (
-                <ClassPeopleListEntry user={st} />
+              .map((student) => (
+                <ClassPeopleListEntry key={student.userID} user={student} />
               ))}
           </div>
         </div>

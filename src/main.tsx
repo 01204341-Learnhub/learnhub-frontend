@@ -28,6 +28,7 @@ import LearningSchedule from "./pages/students/LearningSchedule";
 import SelectCourse from "./pages/students/SelectCourse";
 import CreateClass from "./pages/teachers/CreateClass";
 import CreateCourse from "./pages/teachers/CreateCourse";
+import ReviewWork from "./pages/teachers/ReviewWork";
 import SelectTeachingClass from "./pages/teachers/SelectTeachingClass";
 import TeacherCourseManage from './pages/teachers/TeacherCourseManage';
 import TeacherIncomes from "./pages/teachers/TeacherIncomes";
@@ -37,7 +38,6 @@ import TeachingCourses from "./pages/teachers/TeachingCourses";
 import TeachingHomeworks from "./pages/teachers/TeachingHomeworks";
 import BasketPayment from "./pages/ฺBasketPayment";
 import store from "./store";
-import Workreview from "./pages/teachers/reviewwork";
 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -86,7 +86,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   path="/teach/classes/assignment/:assignmentID"
                   element={<TeachingClasses />}
                 />
-                <Route path="/teach/classes/review" element={<Workreview />} />
+                <Route path="/teach/classes/:classID/review/:assignmentID" element={<ReviewWork />} />
 
                 <Route path="/teach/homework" element={<TeachingHomeworks />} />
                 <Route path="/teach/overview" element={<TeacherOverview />} />

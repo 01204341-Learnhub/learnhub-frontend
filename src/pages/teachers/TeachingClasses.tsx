@@ -4,7 +4,7 @@ import { useState } from "react";
 import WorkCreate from "../../features/teaches/components/WorkCreate";
 import { ClassAssignment } from "../../features/teaches/types/classWork";
 // import Workreview from "../../features/teaches/components/reviewwork"
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FormPublishPostClass } from "../../features/teaches/components/FormPublishPostClass";
 import { useClassAssignments } from "../../features/teaches/hooks/useClassAssignments";
 import { useClassInfo } from "../../features/teaches/hooks/useClassInfo";
@@ -56,7 +56,7 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
   );
 }
 
-function _WorkSlot({ work }: { work: ClassAssignment }) {
+function _WorkSlot({ work, classID }: { work: ClassAssignment, classID: string }) {
   const [isOpen, setISOpen] = useState(false);
   return (
     <div className="w-full">
@@ -95,9 +95,9 @@ function _WorkSlot({ work }: { work: ClassAssignment }) {
               ดูวิธีการ
             </button>
             <div className="w-2/12 items-end">
-              <button className="bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+              <Link to={`review/${work.assignmentID}`} className="bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 border border-blue-700 rounded">
                 ตรวจงาน
-              </button>
+              </Link>
             </div>
           </div>
         </div>

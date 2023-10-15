@@ -100,7 +100,7 @@ interface CourseChaptersOutlineProps {
   courseID: string
 }
 
-function CourseChaptersOutline(props: CourseChaptersOutlineProps) {
+function  CourseChaptersOutline(props: CourseChaptersOutlineProps) {
   return (
     <div className="w-[600px] bg-[#eaeaea66] py-0.5">
       <div className="m-5 flex flex-col justify-start space-y-4">

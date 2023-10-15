@@ -4,6 +4,7 @@ import CourseDetailedSummary from "../features/stores/components/CourseDetailedS
 import ProgramCoverWithInstructorProfile from "../features/stores/components/ProgramCoverWithInstructorProfile"
 import { useCourseChaptersOutline } from "../features/stores/hooks/useCourseChaptersOutline"
 import { useCourseDetail } from "../features/stores/hooks/useCourseDetail"
+import { LoadingSpash } from "../components/LoadingSpash"
 
 function CourseDetailPage() {
     const { id } = useParams<{ id: string }>()
@@ -11,8 +12,8 @@ function CourseDetailPage() {
     const courseChaptersOutline = useCourseChaptersOutline(id);
     if (courseChaptersOutline.isFetching || courseDetail.isFetching) {
         return (
-            <div className="flex">
-                <h1>Loading...</h1>
+            <div className="flex h-screen w-screen justify-center items-center">
+                <LoadingSpash></LoadingSpash>
             </div>
         )
     }

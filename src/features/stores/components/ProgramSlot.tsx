@@ -19,12 +19,14 @@ function ProgramSlot(myProgram: ProgramSlotProps) {
     return (
         <div className="bg-white m-2 rounded-[10px] w-[286px] h-[300px] max-w-sm overflow-hidden shadow-lg ">
             <div className=" w-[286px] h-[130px]">
-                <img className="w-full h-full" src={myProgram.courseThumbnailUrl} alt="Larm On Chang" />
+                <img className="w-full h-full  object-cover" src={myProgram.courseThumbnailUrl} alt="Larm On Chang" />
 
             </div>
             <div className="px-5 h-[150px] flex flex-col">
-                <div className=" font-extrabold text-[16px] mb-2">{myProgram.courseName}</div>
-                <p className="-mt-3 font-bold text-gray-500 text-[14px]">{myProgram.instructorName}</p>
+                <div className="h-[50px] overflow-hidden mt-[5px]">
+                    <div className=" font-extrabold text-[16px] mb-2 h-[25px] truncate">{myProgram.courseName}</div>
+                    <p className="-mt-3 font-bold text-gray-500 text-[14px] h-[25px] truncate">{myProgram.instructorName}</p>
+                </div>
                 <div className=" flex items-center space-x-1 text-[14px] font-bold">{myProgram.percentCompleted}
                     {[1, 2, 3, 4, 5].map((index) => (
                         <FontAwesomeIcon

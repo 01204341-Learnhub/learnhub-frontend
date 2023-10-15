@@ -2,7 +2,6 @@ import React from "react";
 import { Attachment } from "../types/thread";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCirclePlay, faFileLines } from "@fortawesome/free-solid-svg-icons";
-import { getFileNameFromSrc } from "../../../utils/functions";
 
 interface ClassThreadAttachmentProps {
   attachment: Attachment;
@@ -42,7 +41,7 @@ function ClassThreadAttachment({ attachment }: ClassThreadAttachmentProps) {
       </div>
       <div className="w-[70%]">
         <p className="text-[#707070] group-hover:text-black text-[16px] font-semibold truncate">
-          {getFileNameFromSrc(attachment.src)}
+          {attachment.src}
         </p>
         <p className="text-[#808080] text-[16px] font-normal">
           {attachment.typ}

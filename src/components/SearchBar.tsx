@@ -25,11 +25,11 @@ function Searchbar(){
     const [results,setResults] = useState([]);
     const [results2,setResults2] = useState([]);
     const fetchData = (value) => {
-        const results = courses.filter((w) => {return value && w && w.name && w.name.toLocaleLowerCase().includes(value)})
+        const results = courses.filter((w) => {return value && w && w.name && w.name.toLocaleLowerCase().includes(value.toLocaleLowerCase())})
         setResults2(results)
     }
     const fetchData2 = (value) => {
-        const results = classes.filter((w) => {return value && w && w.name && w.name.toLocaleLowerCase().includes(value)})
+        const results = classes.filter((w) => {return value && w && w.name && w.name.toLocaleLowerCase().includes(value.toLocaleLowerCase())})
         setResults(results)
     }
     const handleChange = (value) => {

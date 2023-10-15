@@ -74,6 +74,7 @@ function LearningOverview() {
                 }
             })
         })
+        if (teachingClass.className == "") return null
         return teachingClass
     }
     function formatTimeFromTimestamp(timestamp: number): string {
@@ -93,7 +94,7 @@ function LearningOverview() {
                         <div className="text-xl font-bold pb-3 pt-4">คลาสเรียนที่กำลังสอนแล้ว</div>
                         
                         {
-                            teachingClass != undefined &&
+                            teachingClass != null &&
                             <ClassTeachNow
                                 thumbnailUrl={teachingClass.classThumbnail}
                                 titleName={teachingClass.className}
@@ -101,7 +102,7 @@ function LearningOverview() {
                                 />
                         }
                         {
-                            teachingClass == undefined &&
+                            teachingClass == null &&
                             <div className="w-full h-full justify-center align-middle">
                                 <p>
                                     ไม่มีคลาสที่กำลังสอน

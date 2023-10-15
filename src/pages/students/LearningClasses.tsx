@@ -6,16 +6,9 @@ import { EnrolledClass } from '../../features/learns/types/classes';
 import { useUser } from '../../hooks/useUser';
 
 interface ClassTeachNowProp {
-    ThumbnailUrl: string;
-    TitleName: string;
-    Minute: number;
-}
-
-// mockdata TeachNow
-const mockClassTeachNow: ClassTeachNowProp = {
-    ThumbnailUrl: "https://miro.medium.com/v2/resize:fit:1200/1*m0H6-tUbW6grMlezlb52yw.png",
-    TitleName: "คณิตศาสตร์",
-    Minute: 30
+    thumbnailUrl: string;
+    titleName: string;
+    minute: number;
 }
 
 
@@ -27,6 +20,29 @@ function LearningClasses() {
 
     const selected = 'text-lg font-semibold border-b-8 border-black mx-4 pb-2 px-2'
     const notSelected = 'text-lg text-[#808080] font-medium border-b-8 border-transparent mx-4 px-2 pb-2'
+
+    function _getTeachingClass() : ClassTeachNowProp {
+        console.log(enrolledClasses)
+        const teachingClass : ClassTeachNowProp = {
+            titleName : "",
+            thumbnailUrl: "",
+            minute: 0,
+        }
+        enrolledClasses.forEach((cls) => {
+            cls.schedules.forEach((sched) => {
+                if (
+                    new Date(sched.start) <= new Date() && 
+                    new Date(sched.end) >= new Date() 
+                ) {
+                    teachingClass.titleName = cls.name
+                    teachingClass.thumbnailUrl = cls.imageClassUrl
+                    teachingClass.minute = sched.start.getMinutes()
+                }
+            })
+        })
+        if (teachingClass.titleName == "") return null
+        return teachingClass
+    }
 
     const queryValidation = (c: EnrolledClass) => {
         if (progressQuery == 'NOT-START') {
@@ -61,6 +77,8 @@ function LearningClasses() {
         )
     }
 
+    const teachingClass = _getTeachingClass()
+
     return (
         <div className=''>
             <header className='flex items-center px-12 h-40 pb-6'>
@@ -86,7 +104,18 @@ function LearningClasses() {
                 <section className='flex flex-col items-center pt-4 px-12 bg-[#d9d9d9] h-[360px]'>
                     <h1 className='text-2xl font-semibold self-start pb-8'>คลาสเรียนที่กำลังสอน</h1>
                     <div className='flex items-center justify-center  w-[90%]'>
-                        <ClassTeachNow {...mockClassTeachNow} />
+                        {
+                            teachingClass != null &&
+                            <ClassTeachNow {...teachingClass}/>
+                        }
+                        {
+                            teachingClass == null &&
+                            <div className="w-full h-full justify-center align-middle">
+                                <p>
+                                    ไม่มีคลาสที่กำลังสอน
+                                </p>
+                            </div>
+                        }
                     </div>
                 </section>
 

@@ -30,6 +30,12 @@ async function listEnrolledClass(studentID: string): Promise<EnrolledClass[]> {
       },
       registrationEndDate: detail.registrationEndDate,
       endDate: detail.EndDate,
+      schedules: detail.schedules.map((s) => {
+        return {
+          start: s.start,
+          end: s.end,
+        };
+      }),
     });
   }
   return enrolled;
@@ -57,13 +63,13 @@ async function getClassDetail(classID: string) {
     status: res.data.status,
     schedules: res.data.schedules.map((s) => {
       return {
-        start: new Date(s.start),
-        end: new Date(s.end),
+        start: new Date(s.start * 1000),
+        end: new Date(s.end * 1000 ),
       };
     }),
-    registrationEndDate: new Date(res.data.registration_ended_date),
-    openDate: new Date(res.data.open_date),
-    EndDate: new Date(res.data.class_ended_date),
+    registrationEndDate: new Date(res.data.registration_ended_date * 1000),
+    openDate: new Date(res.data.open_date * 1000),
+    EndDate: new Date(res.data.class_ended_date * 1000),
     objectives: res.data.class_objective,
     price: res.data.price,
     difficultyLevel: res.data.difficulty_level,

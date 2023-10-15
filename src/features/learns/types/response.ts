@@ -20,8 +20,11 @@ type ListEnrolledClassesResponse = {
     name: string;
     class_pic: string;
     progress: number;
-
     class_ended_date: number;
+    schedules: {
+      start: number
+      end: number
+    }[];
     teacher: {
       teacher_id: string;
       teacher_name: string;

@@ -4,9 +4,9 @@ import { faClockRotateLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface ClassTeachNowProp {
-    ThumbnailUrl: string;
-    TitleName: string;
-    Minute: number; 
+    thumbnailUrl: string;
+    titleName: string;
+    minute: number; 
 }
 
 export default function ClassTeachNow (props:ClassTeachNowProp) {
@@ -14,14 +14,14 @@ export default function ClassTeachNow (props:ClassTeachNowProp) {
     return (
     <div className="relative w-[720px] h-[240px] border-4">
         <div className="w-full h-full">
-            <img src={props.ThumbnailUrl} alt="Thumbnail Picture" className=" object-cover w-full h-full opacity-20 rounded-xl hover:opacity-30" />
+            <img src={props.thumbnailUrl} alt="Thumbnail Picture" className=" object-cover w-full h-full opacity-20 rounded-xl hover:opacity-30" />
             <div className="absolute flex flex-col items-center w-full h-full top-0">
-                <div className="flex-[1] w-full pl-4 pt-3">
-                    <div className="text-3xl py-2  font-bold self-start mx-4 pr-6 truncate">{props.TitleName} 44444444444444444444444444444444444444444</div>
+                <div className="flex-[1] w-full pl-4 pt-3">``
+                    <div className="text-3xl py-2  font-bold self-start mx-4 pr-6 truncate">{props.titleName}</div>
                     <div className="flex self-start py-2 items-center mx-4">
                         <div className="text-[20px] font-bold px-2 mr-4 bg-[#ADE792] rounded-xl">กำลังสอน</div>
                         <FontAwesomeIcon icon={faClockRotateLeft} size="xl"></FontAwesomeIcon>
-                        <div className=" mx-4 text-[20px] font-bold">เริ่มสอนไปแล้ว {props.Minute} นาที</div>
+                        <div className=" mx-4 text-[20px] font-bold">เริ่มสอนไปแล้ว {props.minute} นาที</div>
                     </div>
                 </div>
                 <div className="self-end py-4 px-3">

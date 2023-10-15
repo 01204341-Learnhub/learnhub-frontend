@@ -5,7 +5,6 @@ import ClassIncoming from "../../features/learns/components/ClassIncoming"
 import ClassTeachNow from "../../features/learns/components/ClassTeachNow"
 import { useStudentDashboard } from "../../features/learns/hooks/useStudentDashboard"
 import { useUser } from "../../hooks/useUser"
-import { StudentDashboard } from "../../features/learns/types/studentDashboard"
 
 function LearningOverview() {
     const { user } = useUser()
@@ -34,6 +33,16 @@ function LearningOverview() {
                 const currentTimestamp = new Date().getTime() / 1000
                 return cls.schedules[0].start >= currentTimestamp && cls.schedules[0].start <= currentTimestamp + 7*24*60*60
             })
+    }
+
+    function getUpcomingAssignments() {
+        return dashboard.assignments.sort((a,b) => {
+            const currentTimestamp = new Date().getTime() / 1000
+            return (a.dueDate - currentTimestamp) - (b.dueDate - currentTimestamp)
+        }).filter((assignment) => {
+            const currentTimestamp = new Date().getTime() / 1000
+            return assignment.dueDate >= currentTimestamp && assignment.dueDate <= currentTimestamp + 7*24*60*60
+        })
     }
     
 
@@ -76,9 +85,9 @@ function LearningOverview() {
                         {
                             teachingClass != undefined &&
                             <ClassTeachNow
-                                ThumbnailUrl={teachingClass.classThumbnail}
-                                TitleName={teachingClass.className}
-                                Minute={teachingClass.classStart.getMinutes()} 
+                                thumbnailUrl={teachingClass.classThumbnail}
+                                titleName={teachingClass.className}
+                                minute={teachingClass.classStart.getMinutes()} 
                                 />
                         }
                         {
@@ -114,8 +123,7 @@ function LearningOverview() {
                     </div>
                     <div className="mt-10">
                         <h1 className="text-2xl pl-4 font-bold">การบ้านในคลาสที่ต้องส่งเร็วๆนี้</h1>
-
-                        {dashboard.assignments.map(({ assignmentName, assignmentID, classInfo, submission, dueDate }) => (
+                        {getUpcomingAssignments().map(({ assignmentName, assignmentID, classInfo, submission, dueDate }) => (
                             <li key={assignmentID} className={`flex justify-center mt-2`}>
                                 <ClassHomeworkIncoming
                                     titleName={assignmentName}

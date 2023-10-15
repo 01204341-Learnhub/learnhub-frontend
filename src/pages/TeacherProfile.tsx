@@ -35,11 +35,11 @@ function TeacherProfile() {
             <>
                 {instructor.courses.slice(0, displayedCourses).map((program, index) => {
                     return (
-                        <div className="flex mr-10 my-5 pl-[10%] overflow-hidden">
-                            <img src={program.thumbnailUrl} className="h-[100px] w-[100px] bg-black ml-[10px] rounded-l-lg"></img>
+                        <div className="flex mr-10 my-5 pl-[10%] ">
+                            <img src={program.thumbnailUrl} className="h-[100px] w-[100px] object-cover bg-black  rounded-l-lg"></img>
                             <div className="h-[100px] w-[250px] bg-white border-r border-y border-gray-300 rounded-r-lg">
                                 <div>
-                                    <div className="mx-5 mt-4 mb-2 font-bold">
+                                    <div className="mx-5 mt-4 mb-2 font-bold truncate">
                                         {program.name}
                                     </div>
                                     <div className="mx-5">

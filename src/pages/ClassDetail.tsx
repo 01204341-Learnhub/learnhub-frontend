@@ -46,10 +46,9 @@ function ClassDetail() {
 
         setisFetching(true);
         fetchClassDetail().then(() => {
-            console.log(classProgram)
             setisFetching(false);
         })
-    }, [id, classProgram]
+    }, [id]
     )
     if (isFetching || classProgram === null) return (
         <div className="w-screen h-screen justify-center items-center">

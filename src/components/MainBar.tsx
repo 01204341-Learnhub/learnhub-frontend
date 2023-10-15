@@ -54,7 +54,7 @@ function MainBar() {
         })
     }
     return (
-        <nav style={{ height: '100px', zIndex: 1000 }} className='fixed bg-white border-b-2 flex w-screen items-center py-5'>
+        <nav style={{ height: '100px', zIndex: 1000 }} className='fixed bg-white border-b-2 flex w-screen  py-5'>
             <div className=' flex flex-row items-center justify-center w-1/12'>
                 <img className=' w-2/5' src={booklogo} alt="booklogo" />
             </div>

@@ -59,6 +59,7 @@ async function listAllClasses(): Promise<ClassProgram[]> {
       openDate: c.open_date,
       classEndedDate: c.class_ended_date,
       price: c.price,
+      difficultyLevel: c.difficulty_level,
     };
   });
   return classes;
@@ -94,7 +95,7 @@ async function getClasses(classID: string) {
     openDate: res.data.open_date,
     classEndedDate: res.data.class_ended_date,
     price: res.data.price,
-    classObjective: [],
+    classObjective: res.data.class_objective,
     classRequirement: res.data.class_requirement,
     difficultyLevel: res.data.difficulty_level,
     meetingCount: res.data.schedules.length,

@@ -44,24 +44,26 @@ function _Question({ problem, submission, onNext, onPrev, isLast }: _QuestionPro
         }
     }
     return (
-        <div className="bg-white">
-            <h1 className="text-2xl font-bold mx-[3%] my-5">คำถามที่ {problem.problemNumber}: </h1>
-            <p className="text-xl  mx-[5%] my-5">{problem.question}</p>
-            {Object.entries(problem.choices).map(([k, v], index) => {
-                if (v == "") return (<></>)
-                else return (
-                    <div key={index} className="flex items-center text-lg font-bold mx-[5%] my-10">
-                        <div className="flex rounded-full justify-center items-center w-5 h-5 bg-gray-400">
-                            <div className="flex rounded-full justify-center items-center w-5 h-5">
-                                <button className={`rounded-full w-4 h-4 ${isSelect(k) ? 'bg-black' : 'bg-white'} border-2 border-black}`}
-                                    onClick={() => { handleSelect(k) }}></button>
+        <div className="flex-col bg-white h-[100%]">
+            <div className="h-[550px]">
+                <h1 className="text-2xl font-bold mx-[3%] py-5 ">คำถามที่ {problem.problemNumber}: </h1>
+                <p className="text-xl  mx-[5%] my-5">{problem.question}</p>
+                {Object.entries(problem.choices).map(([k, v], index) => {
+                    if (v == "") return (<></>)
+                    else return (
+                        <div key={index} className="flex items-center text-lg font-bold mx-[5%] my-10">
+                            <div className="flex rounded-full justify-center items-center w-5 h-5 bg-gray-400">
+                                <div className="flex rounded-full justify-center items-center w-5 h-5">
+                                    <button className={`rounded-full w-4 h-4 ${isSelect(k) ? 'bg-black' : 'bg-white'} border-2 border-black}`}
+                                        onClick={() => { handleSelect(k) }}></button>
+                                </div>
                             </div>
+                            <p className="mx-2">{v}</p>
                         </div>
-                        <p className="mx-2">{v}</p>
-                    </div>
-                )
-            })}
-            <div className="flex justify-end mx-[3%]">
+                    )
+                })}
+            </div>
+            <div className="flex mx-[3%] items-end">
                 <button className={`flex justify-center items-center px-4 h-11 m-2 rounded-md ${onPrev ? "bg-black" : "bg-gray-300"} text-white`
                 } onClick={handlePrev}>
                     <FontAwesomeIcon icon={faChevronLeft} />
@@ -150,7 +152,7 @@ function CourseMultipleChoiceQuiz({ lesson, progress, onDone }: MultipleChoiceQu
     }
     else {
         return (
-            <div className="bg-white border-2 border-black">
+            <div className="bg-white border-2 border-black h-[650px] w-[1000px]">
                 {quiz.problems.map((problem, index) => {
                     if (index == currentQuestion) {
                         return (

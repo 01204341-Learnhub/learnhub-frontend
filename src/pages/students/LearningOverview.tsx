@@ -19,6 +19,22 @@ function LearningOverview() {
     function convertTimestampToDate(timestamp: number): Date {
         return new Date(timestamp * 1000);
     }
+
+    function getUpcomingClasses() {
+        return dashboard.classes.sort((a, b) => {
+            const currentTimestamp = new Date().getTime() / 1000
+            const sorted_a = a.schedules.sort((a,b) => {
+                return (a.start - currentTimestamp )- (b.start - currentTimestamp)
+            })
+            const sorted_b = b.schedules.sort((a,b) => {
+                return (a.start - currentTimestamp )- (b.start - currentTimestamp)
+            })
+            return (sorted_a[0].start-currentTimestamp) - (sorted_b[0].start-currentTimestamp)
+            }).filter((cls) => {
+                const currentTimestamp = new Date().getTime() / 1000
+                return cls.schedules[0].start >= currentTimestamp && cls.schedules[0].start <= currentTimestamp + 7*24*60*60
+            })
+    }
     
 
     function _getTeachingClass() : _TeachingClass {
@@ -83,20 +99,7 @@ function LearningOverview() {
                     <div className="flex flex-col bg-[#f5f5f580]">
                         <div className="text-2xl mt-10 pb-4 font-bold">คลาสเรียนที่ใกล้จะเริ่มสอน</div>
                         <div className="mr-52">
-                            {dashboard.classes.sort((a, b) => {
-                                const currentTimestamp = new Date().getTime() / 1000
-                                const sorted_a = a.schedules.sort((a,b) => {
-                                    
-                                    return (a.start - currentTimestamp )- (b.start - currentTimestamp)
-                                })
-                                const sorted_b = b.schedules.sort((a,b) => {
-                                    return (a.start - currentTimestamp )- (b.start - currentTimestamp)
-                                })
-                                return (sorted_a[0].start-currentTimestamp) - (sorted_b[0].start-currentTimestamp)
-                            }).filter((cls) => {
-                                const currentTimestamp = new Date().getTime() / 1000
-                                return cls.schedules[0].start >= currentTimestamp && cls.schedules[0].start <= currentTimestamp + 7*24*60*60
-                            }).map(({ classInfo, schedules }) => (
+                            {getUpcomingClasses().map(({ classInfo, schedules }) => (
                                 <li key={classInfo.classID} className={`flex justify-center mt-2`}>
                                     <ClassIncoming
                                         titleName={classInfo.className}

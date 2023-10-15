@@ -127,21 +127,21 @@ function MainBar() {
                 color={openDropdown === "wishlistdropdown" ? "#FF2171" : "none"}
               />
               <div
-                className="flex flex-col  absolute w-[320px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
+                className="flex flex-col  absolute w-[400px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
                 style={{
                   display:
                     openDropdown === "wishlistdropdown" ? "block" : "none",
                   top: "90%",
-                  right: "13%",
+                  right: "17%",
                 }}
               >
                 <div
-                  className="overflow-y-auto max-h-[450px] min-h-0"
+                  className="overflow-y-auto  min-h-0"
                   style={{
                     display:
                       openDropdown === "wishlistdropdown" ? "block" : "none",
                     top: "90%",
-                    right: "13%",
+                    right: "17%",
                   }}
                 >
                   <div className="px-8 py-3">

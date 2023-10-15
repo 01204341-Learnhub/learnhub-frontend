@@ -23,7 +23,7 @@ async function listEnrolledClass(studentID: string): Promise<EnrolledClass[]> {
   const enrolled: EnrolledClass[] = [];
   for (let i = 0; i < res.data.classes.length; i++) {
     const c = res.data.classes[i];
-    const detail = await _getClassDetail(c.class_id);
+    const detail = await getClassDetail(c.class_id);
     enrolled.push({
       id: c.class_id,
       imageClassUrl: c.class_pic,
@@ -43,10 +43,10 @@ async function listEnrolledClass(studentID: string): Promise<EnrolledClass[]> {
 }
 
 async function getClass(classID: string): Promise<Class> {
-  const classDetail = await _getClassDetail(classID);
-  const classStudents = await _listClassStudents(classID);
-  const classTeacher = await _getTeacher(classDetail.teacher.teacherID);
-  const simpleThreads = await _listSimpleThreads(classID);
+  const classDetail = await getClassDetail(classID);
+  const classStudents = await listClassStudents(classID);
+  const classTeacher = await getTeacher(classDetail.teacher.teacherID);
+  const simpleThreads = await listSimpleThreads(classID);
   const c: Class = {
     classId: classDetail.classID,
     name: classDetail.name,
@@ -58,7 +58,7 @@ async function getClass(classID: string): Promise<Class> {
   return c;
 }
 
-async function _getClassDetail(classID: string): Promise<ClassDetail> {
+async function getClassDetail(classID: string): Promise<ClassDetail> {
   const url = `${baseURL}/programs/classes/${classID}`;
   const res = await axios.get<GetClassDetailResponse>(url);
   const classDetail: ClassDetail = {
@@ -97,7 +97,7 @@ async function _getClassDetail(classID: string): Promise<ClassDetail> {
   return classDetail;
 }
 
-async function _listClassStudents(classID: string): Promise<LearnhubUser[]> {
+async function listClassStudents(classID: string): Promise<LearnhubUser[]> {
   const url = `${baseURL}/programs/classes/${classID}/students`;
   const res = await axios.get<ListClassStudentsResponse>(url);
   const students: LearnhubUser[] = [];
@@ -119,7 +119,7 @@ async function _listClassStudents(classID: string): Promise<LearnhubUser[]> {
   return students;
 }
 
-async function _getTeacher(teacherID: string): Promise<LearnhubUser> {
+async function getTeacher(teacherID: string): Promise<LearnhubUser> {
   const url = `${baseURL}/users/teachers/${teacherID}`;
   const res = await axios.get<{
     username: string;
@@ -137,10 +137,10 @@ async function _getTeacher(teacherID: string): Promise<LearnhubUser> {
   };
 }
 
-async function _listSimpleThreads(classID: string): Promise<SimpleThread[]> {
+async function listSimpleThreads(classID: string): Promise<SimpleThread[]> {
   const simpleThreads: SimpleThread[] = [];
-  const threads = await _listClassThreads(classID);
-  const assignments = await _listClassAssignments(classID);
+  const threads = await listClassThreads(classID);
+  const assignments = await listClassAssignments(classID);
   threads.threads.forEach((t) => {
     simpleThreads.push({
       threadId: t.thread_id,
@@ -164,7 +164,7 @@ async function _listSimpleThreads(classID: string): Promise<SimpleThread[]> {
   return simpleThreads;
 }
 
-async function _listClassThreads(
+async function listClassThreads(
   classID: string
 ): Promise<ListClassThreadsResponse> {
   const url = `${baseURL}/programs/classes/${classID}/threads`;
@@ -172,7 +172,7 @@ async function _listClassThreads(
   return res.data;
 }
 
-async function _listClassAssignments(
+async function listClassAssignments(
   classID: string
 ): Promise<ListClassAssignmentsResponse> {
   const url = `${baseURL}/programs/classes/${classID}/assignments`;
@@ -180,4 +180,13 @@ async function _listClassAssignments(
   return res.data;
 }
 
-export { getClass, listEnrolledClass };
+export {
+  listEnrolledClass,
+  getClass,
+  getClassDetail,
+  listClassStudents,
+  getTeacher,
+  listSimpleThreads,
+  listClassThreads,
+  listClassAssignments,
+};

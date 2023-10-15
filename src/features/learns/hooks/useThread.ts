@@ -43,26 +43,25 @@ function useThread(
   };
 
   const addReply = (text: string) => {
-    // TODO: Uncomment this and remove manual setThread
-    // addThreadReply(user.userID, classId, threadId, typ, text)
-    //   .then(() => {
-    //     updateThread();
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     alert("Failed to add reply");
-    //   });
-    setThread({
-      ...thread,
-      replies: [
-        ...thread.replies,
-        {
-          user: user,
-          dateTime: new Date(),
-          text: text,
-        },
-      ],
-    });
+    addThreadReply(user.userID, classId, threadId, typ, text)
+      .then(() => {
+        updateThread();
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Failed to add reply");
+      });
+    // setThread({
+    //   ...thread,
+    //   replies: [
+    //     ...thread.replies,
+    //     {
+    //       user: user,
+    //       dateTime: new Date(),
+    //       text: text,
+    //     },
+    //   ],
+    // });
   };
 
   const addHomeworkSubmissionFile = (file: File) => {

@@ -45,6 +45,7 @@ function MainBar() {
         fetchBasket()
         toggleDropdown('mycartdropdown')
     }
+
     async function refresh(){
         if (!isFetchOnce) {
         const BasketItems = await fetchBasketItems(user.userID)
@@ -55,7 +56,7 @@ function MainBar() {
         })}
 
     }
-    
+    refresh()
     const handleSignOut = () => {
         signOut().then(() => {
             dispatcher(clearUser())

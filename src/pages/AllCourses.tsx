@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom"
 import ProgramSlot from "../features/stores/components/ProgramSlot"
 import { useAllCourses } from "../features/stores/hooks/useAllCourses"
+import { LoadingSpash } from "../components/LoadingSpash"
 
 
 
@@ -29,8 +30,8 @@ export default function AllCloures() {
     }
     if (isFetching) {
         return (
-            <div className="flex">
-                <h1>Loading...</h1>
+            <div className="flex h-screen w-screen justify-center items-center ">
+                <LoadingSpash></LoadingSpash>
             </div>
         )
     }

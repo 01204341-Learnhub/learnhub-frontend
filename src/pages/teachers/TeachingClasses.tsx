@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import WorkCreate from "../../features/teaches/components/WorkCreate";
 import { Work } from "../../features/teaches/types/classWork";
+import { Student } from "../../features/teaches/types/student";
 // import Workreview from "../../features/teaches/components/reviewwork"
 import PostClass from "../../features/teaches/components/PostClass";
 import { FormPublishPostClass } from "../../features/teaches/components/FormPublishPostClass";
@@ -112,10 +113,35 @@ function _WorkSlot({ work }: { work: Work }) {
     </div>
   );
 }
-
+function _studentslot({ student }: { student: student })
+{ 
+  return(
+    <div className="w-3/4 flex bg-white  items-center border-2">
+                    <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
+                            <img src={student.profile_pic} />
+                        </div>
+                    <h1 className="text-xl text-gray-600 font-bold ml-5">{student.name}</h1>
+                        </div>
+  )
+}
 interface _ClassWorksProps {
   onCreateClassWork: () => void;
   works: Work[];
+}
+function _Students()
+{
+  const[students,setStudent] = useState<Student[]>([...mockStudents]);
+  return(
+    <div>
+      {students.map((student,index) =>{
+        return(
+          <div key={index}>
+          <_studentslot student={student} />
+          </div>
+        )
+      })}
+    </div>
+  )
 }
 
 function _ClassWorks({ onCreateClassWork, works }: _ClassWorksProps) {
@@ -209,6 +235,23 @@ const mockWorks: Work[] = [
     nosend: 15,
   },
 ];
+const mockStudents: Student[]=[
+  {
+    studentId: "1234",
+    name: "name1",
+    profilePic: ""
+},
+{
+  studentId: "1235",
+  name: "name2",
+  profilePic: ""
+},
+{
+  studentId: "1236",
+  name: "name3",
+  profilePic: ""
+},
+]
 
 function TeachingClasses() {
   const [view, setView] = useState<View>("main");
@@ -271,9 +314,16 @@ function TeachingClasses() {
     );
   } else if (view == "members") {
     return (
-      <div className="h-full">
+      <div className="h-full px-5 py-5">
         <_ViewSelector currentView={view} setView={setView} />
-      </div>
+        <hr />
+        <p className="text-xl text-gray-600 font-bold ml-5 my-5">ผู้สอน</p>
+        <_Students></_Students>
+        
+        <p className="text-xl text-gray-600 font-bold ml-5 my-5">ผู้เรียนในคลาส</p>
+        <_Students></_Students>
+    </div>
+
     );
   } else if (view == "create-work") {
     return (

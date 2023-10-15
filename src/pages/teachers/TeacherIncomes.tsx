@@ -16,10 +16,24 @@ function TeacherIncomes(){
     if (isFetchingsIncomes) return <div>loading...</div>;
 
     return (
-        <div className="flex-cols h-full px-8 py-1">
-            <div className="flex relative items-center w-full h-[200px]
+        <div className="flex-cols px-8 py-1">
+            <div className="flex justify-between relative items-center w-full h-[200px]
             px-20 my-6 bg-[#f0f0f0]">
-                <div className="absolute w-[270px] h-[72px] flex flex-cols left-[72%]">
+                <div className="flex flex-rows w-[50%] justify-between items-end">
+                    <div className="text-2xl text-black">
+                        ยอดเงินรวมที่ได้รับ
+                    </div>
+                    <div className="flex flex-rows items-end w-[50%]">
+                        <h1 className="text-6xl font-bold text-black ordinal">
+                            {_getTotalPrice().toLocaleString()}
+                        </h1>
+                        <div className="w-5"></div>
+                        <div className="text-3xl font-bold text-black">
+                            บาท
+                        </div>
+                    </div>
+                </div>
+                <div className=" w-[270px] h-[72px] flex flex-cols left-[72%]">
                     <button 
                     className={`h-full w-[50%] px-3 py-1 rounded-l-2xl justify-center font-bold text-xl
                     ${!isShowMonth? 'bg-[#d9d9d9] shadow-inner text-[#606060]' :
@@ -36,19 +50,6 @@ function TeacherIncomes(){
                     >
                         ทั้งหมด
                     </button>
-                </div>
-                <div className="flex flex-rows items-end">
-                    <div className="text-2xl text-black">
-                        ยอดเงินรวมที่ได้รับ
-                    </div>
-                    <div className="w-20 "></div>
-                    <h1 className="text-6xl font-bold text-black ordinal">
-                        {_getTotalPrice().toLocaleString()}
-                    </h1>
-                    <div className="w-5 "></div>
-                    <div className="text-3xl font-bold text-black">
-                        บาท
-                    </div>
                 </div>
 
             </div>

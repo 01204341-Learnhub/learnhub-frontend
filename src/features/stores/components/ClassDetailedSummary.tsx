@@ -6,6 +6,10 @@ import { faChartColumn } from "@fortawesome/free-solid-svg-icons"
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons"
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
 import{ useDispatch } from "react-redux"
+import { addBasketItem } from "../services/purchase"
+import Swal from "sweetalert2"
+import { setStatusFetchOnce } from "../../../slices/basketSlice"
+import { useUser } from "../../../hooks/useUser"
 
 
 interface ClassDetailedSummaryProps {
@@ -16,11 +20,31 @@ interface ClassDetailedSummaryProps {
     status : string;
     availablesource : number;
     timeTeaching : number;
+    classesID: string;
   }
 
 function ClassDetailedSummary(myClassDetailedSummary: ClassDetailedSummaryProps){
     const dispatcher = useDispatch()
+    const { user } = useUser()
+    async function handleAddBusketItems() {
+        const basketItmeID = await addBasketItem(myClassDetailedSummary.classesID, "class", user.userID)
+        if (!basketItmeID) {
+            Swal.fire({
+                title: 'ไม่สามารถดำเนินการนี้ได้',
+                text: 'คุณมีคอร์สนี้อยู่แล้ว หรือ คอร์สนี้อยู่ในรถเข็นอยู่แล้ว',
+                icon: 'error'
+            })
 
+        } else {
+            Swal.fire({
+                title: 'เพิ่มไปยังรถเข็นแล้ว',
+                icon: 'success',
+                confirmButtonColor: 'green'
+            })
+            dispatcher(setStatusFetchOnce(false))
+        }
+
+    }
     return (
         <>
         <div className="card w-[508px] h-[414px] bg-base-200 drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[5px] cursor-pointer">        
@@ -101,7 +125,7 @@ function ClassDetailedSummary(myClassDetailedSummary: ClassDetailedSummaryProps)
                     </button>
                 </div>
                 <div className="px-2">
-                    <button className="flex justify-center items-center content-center bg-white shadow-xl hover:shadow-2xl cursor-pointer w-[165px] h-[65px] text-black font-bold text-xl border-2 border-gray-300 rounded-3xl ">
+                    <button onClick={()=>{handleAddBusketItems()}} className="flex justify-center items-center content-center bg-white shadow-xl hover:shadow-2xl cursor-pointer w-[165px] h-[65px] text-black font-bold text-xl border-2 border-gray-300 rounded-3xl ">
                         <FontAwesomeIcon icon={faCartShopping} color="#000000" size="xl"/>
                         <p className="ml-3">
                             ใส่รถเข็น

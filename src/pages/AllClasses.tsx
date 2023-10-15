@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import ProgramSlot from "../features/stores/components/ProgramSlot"
 import { useAllClasses } from "../features/stores/hooks/useAllClasses"
+import { LoadingSpash } from "../components/LoadingSpash"
 
 
 
@@ -9,8 +10,8 @@ export default function AllClasses() {
 
     const { classes, isFetching } = useAllClasses()
     if (isFetching) return (
-        <div>
-            LOADING!!!!
+        <div className="flex h-screen w-screen justify-center items-center ">
+            <LoadingSpash></LoadingSpash>
         </div>
     )
 

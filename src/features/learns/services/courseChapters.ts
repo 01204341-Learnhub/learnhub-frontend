@@ -25,13 +25,19 @@ async function getCourseChapter(
 async function listCourseChapters(courseID: string): Promise<CourseChapter[]> {
   const url = `${baseURL}/programs/courses/${courseID}/chapters`;
   const res = await axios.get<ListCourseChaptersResponse>(url);
+  console.log(res.data)
   const chapters: CourseChapter[] = [];
   for (let i = 0; i < res.data.chapters.length; i++) {
-    const c = await getCourseChapter(courseID, res.data.chapters[i].chapter_id);
+    const chapter_url = `${baseURL}/programs/courses/${courseID}/chapters/${res.data.chapters[i].chapter_id}`;
+    const c = await axios.get<GetCourseChapterResponse>(chapter_url)
     chapters.push({
-      ...c,
-      chapterLength: 0,
-      lessonCount: 0,
+      chapterID: res.data.chapters[i].chapter_id,
+      courseID: courseID,
+      chapterNumber: res.data.chapters[i].chapter_num,
+      name: res.data.chapters[i].name,
+      description: c.data.description,
+      chapterLength: res.data.chapters[i].chapter_length,
+      lessonCount: res.data.chapters[i].lesson_count,
     });
   }
   return chapters;

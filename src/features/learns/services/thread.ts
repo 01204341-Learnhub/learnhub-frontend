@@ -15,9 +15,6 @@ async function fetchThread(
   threadId: string,
   typ: "announcement" | "homework"
 ): Promise<Thread> {
-  console.log(
-    `Fetching ${typ} thread ${threadId} of class ${classId} with user ${userId}`
-  );
   const classDetail = await getClassDetail(classId);
   const teacher = await getTeacher(classDetail.teacher.teacherID);
   if (typ === "announcement") {

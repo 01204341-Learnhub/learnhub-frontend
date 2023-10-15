@@ -20,9 +20,9 @@ function ReviewSubmission({ submission, onMark }: ReviewSubmissionProps) {
     }, [submission.score])
     return (
         <div className="w-8/12 bg-white px-5 py-5 my-5 h-fit" >
-            <div className="flex items-center ">
+            <div className="flex items-center mb-5">
                 <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
-                    <img src={submission.student.profilePicture} />
+                    <img src={submission.student.profilePicture} className='w-full h-full object-cover rounded-full'/>
                 </div>
                 <h1 className="text-gray-600 font-bold ml-5">{submission.student.name}</h1>
                 <h1 className="text-gray-600 font-bold ml-5"></h1>
@@ -37,25 +37,27 @@ function ReviewSubmission({ submission, onMark }: ReviewSubmissionProps) {
                                 if (parseInt(e.target.value) < 0) return
                                 setScore(parseInt(e.target.value))
                             }} />
-                        <p className="bg-black text-white w-20 text-center">คะแนน</p>
-                        <button className="bg-blue-500 border-2 ml-2 text-white" onClick={handleMark}>submit</button>
+                        <div className="flex bg-black text-white w-20 justify-center items-center">คะแนน</div>
+                        <button className="bg-blue-500 border-2 ml-2 w-20  text-white" onClick={handleMark}>submit</button>
                     </div> : null}
             </div>
-            <div className="bg-gray-200 px-10 py-10 h-4/6 w-full">
+            <div className="bg-gray-200 px-10 py-10 h-4/6 w-full rounded-lg">
                 {
                     submission.attachments.map((s, idx) => {
                         return (
-                            <div className=" h-20 bg-white w-full flex" key={idx} >
-                                <div className="w-1/6 h-full justify-center items-center border-2 text-center py-2">
-                                    {s.attachmentType == "image" ? <img src={s.src} /> : (
+                            <div className="flex rounded-xl h-[120px] bg-white w-full " key={idx} >
+                                <div className="flex w-[30%] h-full justify-center items-center border-2 text-center py-2">
+                                    {s.attachmentType == "image" ? <img src={s.src} className='object-cover h-full w-full mx-2'/> : (
                                         <div>
                                             <FontAwesomeIcon icon={faFile} />
                                         </div>
                                     )}
                                 </div>
-                                <a className="w-5/6 border-2 h-full text-center py-2 text-blue-500" target='_blank' href={s.src}>
-                                    {getFileNameFromSrc(s.src)}
-                                </a>
+                                <div className='flex justify-center items-center w-[70%] border-2 h-full text-center py-2'>
+                                    <a className="text-blue-500" target='_blank' href={s.src}>
+                                        {getFileNameFromSrc(s.src)}
+                                    </a>
+                                </div>
                             </div>
                         )
                     })

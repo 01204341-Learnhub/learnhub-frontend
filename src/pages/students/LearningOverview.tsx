@@ -44,6 +44,16 @@ function LearningOverview() {
             return assignment.dueDate >= currentTimestamp && assignment.dueDate <= currentTimestamp + 7*24*60*60
         })
     }
+
+    function getRecentAnnouncements() {
+        return dashboard.announcements.sort((a,b) => {
+            const currentTimestamp = new Date().getTime() / 1000
+            return (currentTimestamp - a.lastEdit) - (currentTimestamp - b.lastEdit)
+        }).filter((announcement) => {
+            const currentTimestamp = new Date().getTime() / 1000
+            return currentTimestamp - announcement.lastEdit <= currentTimestamp + 7*24*60*60
+        })
+    }
     
 
     function _getTeachingClass() : _TeachingClass {
@@ -146,7 +156,7 @@ function LearningOverview() {
                             <span className="px-1 truncate font-semibold text-xl">classname</span>
                         </div>
 
-                        {dashboard.announcements.map(({ announcementID, courseInfo, teacher, lastEdit }) => {
+                        {getRecentAnnouncements().map(({ announcementID, courseInfo, teacher, lastEdit }) => {
                             return (
                                 <Link to={`/learn/courses/${courseInfo.courseID}`}>
                                     <li key={announcementID} className={`flex justify-center mt-2`}>

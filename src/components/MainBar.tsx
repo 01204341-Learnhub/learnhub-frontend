@@ -46,14 +46,15 @@ function MainBar() {
         toggleDropdown('mycartdropdown')
     }
     async function refresh(){
+        if (!isFetchOnce) {
         const BasketItems = await fetchBasketItems(user.userID)
         dispatcher(setStatusFetchOnce(true))
         dispatcher(clearItem())
         BasketItems.items.map((item) => {
           dispatcher(addItem(item))
-        })
+        })}
+
     }
-    
     
     const handleSignOut = () => {
         signOut().then(() => {

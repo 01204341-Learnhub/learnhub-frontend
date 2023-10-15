@@ -8,10 +8,9 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons"
 import{ useDispatch } from "react-redux"
 import { addBasketItem } from "../services/purchase"
 import Swal from "sweetalert2"
-import { setStatusFetchOnce } from "../../../slices/basketSlice"
+import { setStatusFetchOnce,addItem, clearItem } from "../../../slices/basketSlice"
 import { useUser } from "../../../hooks/useUser"
-
-
+import { fetchBasketItems } from "../services/purchase"
 interface ClassDetailedSummaryProps {
     costs: number;
     quantity : number;
@@ -26,6 +25,16 @@ interface ClassDetailedSummaryProps {
 function ClassDetailedSummary(myClassDetailedSummary: ClassDetailedSummaryProps){
     const dispatcher = useDispatch()
     const { user } = useUser()
+    async function refresh(){
+    
+        const BasketItems = await fetchBasketItems(user.userID)
+        dispatcher(setStatusFetchOnce(true))
+        dispatcher(clearItem())
+        BasketItems.items.map((item) => {
+          dispatcher(addItem(item))
+        })
+    
+    }
     async function handleAddBusketItems() {
         const basketItmeID = await addBasketItem(myClassDetailedSummary.classesID, "class", user.userID)
         if (!basketItmeID) {
@@ -43,7 +52,7 @@ function ClassDetailedSummary(myClassDetailedSummary: ClassDetailedSummaryProps)
             })
             dispatcher(setStatusFetchOnce(false))
         }
-
+        refresh()
     }
     return (
         <>
@@ -136,6 +145,7 @@ function ClassDetailedSummary(myClassDetailedSummary: ClassDetailedSummaryProps)
         </div>
         </>
     )
+    
 }
 
 export default ClassDetailedSummary

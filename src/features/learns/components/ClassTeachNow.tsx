@@ -16,7 +16,7 @@ export default function ClassTeachNow (props:ClassTeachNowProp) {
         <div className="w-full h-full">
             <img src={props.thumbnailUrl} alt="Thumbnail Picture" className=" object-cover w-full h-full opacity-20 rounded-xl hover:opacity-30" />
             <div className="absolute flex flex-col items-center w-full h-full top-0">
-                <div className="flex-[1] w-full pl-4 pt-3">``
+                <div className="flex-[1] w-full pl-4 pt-3">
                     <div className="text-3xl py-2  font-bold self-start mx-4 pr-6 truncate">{props.titleName}</div>
                     <div className="flex self-start py-2 items-center mx-4">
                         <div className="text-[20px] font-bold px-2 mr-4 bg-[#ADE792] rounded-xl">กำลังสอน</div>

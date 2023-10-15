@@ -11,7 +11,7 @@ async function fetchThread(
   typ: "announcement" | "homework"
 ): Promise<Thread> {
   console.log(
-    `Fetching thread ${threadId} of class ${classId} by user ${userId} with type ${typ}`
+    `Fetching ${typ} thread ${threadId} of class ${classId} with user ${userId}`
   );
   // Call different API endpoints depending on typ
   // then populate and return a Thread object accordingly.
@@ -25,11 +25,12 @@ async function addThreadReply(
   userId: string,
   classId: string,
   threadId: string,
+  typ: "announcement" | "homework",
   text: string
 ): Promise<void> {
   // TODO: Implement this
   console.log(
-    `Adding reply to thread ${threadId} in class ${classId} by user ${userId} with text ${text}}`
+    `Adding reply to ${typ} thread ${threadId} of class ${classId} with text ${text} from user ${userId} `
   );
   console.log("Reply added");
 }
@@ -42,7 +43,7 @@ async function submitThreadHomework(
 ): Promise<void> {
   // TODO: Implement this
   console.log(
-    `Submitting homework for thread ${threadId} in class ${classId} by user ${userId} with ${homeworkSubmissionFiles.length} files`
+    `Submitting homework to homework thread ${threadId} of class ${classId} with ${homeworkSubmissionFiles.length} files from user ${userId} `
   );
   console.log("Homework submitted");
 }
@@ -54,7 +55,7 @@ async function unsubmitThreadHomework(
 ): Promise<void> {
   // TODO: Implement this
   console.log(
-    `Unsubmitting homework for thread ${threadId} in class ${classId} by user ${userId}`
+    `Unsubmitting homework from homework thread ${threadId} of class ${classId} from user ${userId}`
   );
   console.log("Homework unsubmitted");
 }

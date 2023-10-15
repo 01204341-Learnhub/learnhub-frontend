@@ -44,7 +44,7 @@ function useThread(
 
   const addReply = (text: string) => {
     // TODO: Uncomment this and remove manual setThread
-    // addThreadReply(user.userID, classId, threadId, text)
+    // addThreadReply(user.userID, classId, threadId, typ, text)
     //   .then(() => {
     //     updateThread();
     //   })

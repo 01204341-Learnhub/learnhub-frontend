@@ -4,9 +4,11 @@ import { ClassAssignment } from "../types/classWork.ts";
 import {
   ListClassAssignmentsResponse,
   ListClassStudentsResponse,
+  ListClassThreadsResponse,
   ListTeacherClassesResponse,
 } from "../types/responses.ts";
 import { ClassStudent } from "../types/student.ts";
+import { Thread } from "../types/thread.ts";
 
 const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 async function listTeacherClasses(teacherID: string): Promise<ClassInfo[]> {
@@ -108,9 +110,34 @@ async function createClassAssignment(
   return res.data.assignment_id;
 }
 
+async function listClassThreads(classID: string): Promise<Thread[]> {
+  const url = `${baseURL}/programs/classes/${classID}/threads`;
+  const res = await axios.get<ListClassThreadsResponse>(url);
+  return res.data.threads
+    .map((thread) => ({
+      classId: classID,
+      threadId: thread.thread_id,
+      name: thread.name,
+      teacher: {
+        userID: thread.teacher.teacher_id,
+        userType: "teacher",
+        username: thread.teacher.teacher_name,
+        fullname: thread.teacher.teacher_name,
+        email: "",
+        profilePicture: thread.teacher.profile_pic,
+      },
+      text: "",
+      attachments: [],
+      lastEdit: new Date(thread.last_edit * 1000),
+      replies: [],
+    }))
+    .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime()) as Thread[];
+}
+
 export {
   createClassAssignment,
   listClassAssignments,
+  listClassThreads,
   listClassStudents,
   listTeacherClasses,
   publishClass,

@@ -229,6 +229,36 @@ type ListClassStudentsResponse = {
   }[];
 };
 
+type ListClassThreadsResponse = {
+  threads: {
+    thread_id: string;
+    name: string;
+    teacher: {
+      teacher_id: string;
+      teacher_name: string;
+      profile_pic: string;
+    };
+    last_edit: number;
+  }[];
+};
+
+type ListClassAssignmentsResponse = {
+  assignments: {
+    assignment_id: string;
+    name: string;
+    group_name: string;
+    last_edit: number;
+    due_date: number;
+    submission_count: {
+      submit_count: 10;
+      unsubmit_count: 10;
+    };
+    status: "open | closed";
+    max_score: number;
+    text: string;
+  }[];
+};
+
 export type {
   GetClassDetailResponse,
   GetCourseAnnouncementResponse,
@@ -244,4 +274,6 @@ export type {
   ListCourseLessonsResponse,
   ListEnrolledClassesResponse,
   ListEnrolledCoursesResponse,
+  ListClassThreadsResponse,
+  ListClassAssignmentsResponse,
 };

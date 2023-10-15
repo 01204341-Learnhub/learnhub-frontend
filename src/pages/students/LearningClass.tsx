@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { LearnhubUser } from "../../types/user";
-import { generateMockUser } from "../../features/learns/types/thread";
+// import { generateMockUser } from "../../features/learns/types/thread";
 import useClass from "../../features/learns/hooks/useClass";
 import { Class } from "../../features/learns/types/classes";
 import ClassAnnouncementThread from "../../features/learns/components/ClassAnnouncementThread";
@@ -8,6 +8,7 @@ import ClassHomeworkThread from "../../features/learns/components/ClassHomeworkT
 import { useState } from "react";
 import ClassHomeworkListEntry from "../../features/learns/components/ClassHomeworkListEntry.tsx";
 import ClassPeopleListEntry from "../../features/learns/components/ClassPeopleListEntry.tsx";
+import { useUser } from "../../hooks/useUser.ts";
 
 interface _TabSwitcherProps {
   currentTab: "main" | "homeworks" | "people";
@@ -104,9 +105,9 @@ function _HomeworksTab({ cls }: _HomeworksTabProps) {
         cls.simpleThreads
           .filter((st) => st.typ === "homework")
           .map((st) => st.homeworkTopicName)
-          .sort(),
-      ),
-    ),
+          .sort()
+      )
+    )
   );
   return (
     <div className="flex w-full justify-center">
@@ -119,7 +120,7 @@ function _HomeworksTab({ cls }: _HomeworksTabProps) {
             <div className="flex flex-col space-y-2">
               {cls.simpleThreads
                 .filter(
-                  (st) => st.typ === "homework" && st.homeworkTopicName === tp,
+                  (st) => st.typ === "homework" && st.homeworkTopicName === tp
                 )
                 .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime())
                 .map((st) => (
@@ -171,36 +172,37 @@ type PathParams = {
 function LearningClass() {
   const { classId } = useParams<PathParams>();
   const [currentTab, setCurrentTab] = useState<"main" | "homeworks" | "people">(
-    "main",
+    "main"
   );
-  // TODO: use useUser hook
-  const user = generateMockUser("student", "student0");
+  // const user = generateMockUser("student", "student0");
+  const { user } = useUser();
   const { cls } = useClass(classId);
   return (
     <div className="bg-[#F6F6F6] w-full h-full">
-      {user && cls && (
-        <>
-          <_TabSwitcher
-            currentTab={currentTab}
-            onTabChange={(tab) => setCurrentTab(tab)}
-          />
-          <div className="p-5 w-full">
-            {(() => {
-              if (currentTab === "main") {
+      {user && // TODO: maybe utilize isFetching
+        cls && ( // TODO: maybe utilize isFetching
+          <>
+            <_TabSwitcher
+              currentTab={currentTab}
+              onTabChange={(tab) => setCurrentTab(tab)}
+            />
+            <div className="p-5 w-full">
+              {(() => {
+                if (currentTab === "main") {
+                  return <_MainTab user={user} cls={cls} />;
+                }
+                if (currentTab === "homeworks") {
+                  return <_HomeworksTab cls={cls} />;
+                }
+                if (currentTab === "people") {
+                  return <_PeopleTab cls={cls} />;
+                }
+                alert("Invalid tab, redirecting to main tab");
                 return <_MainTab user={user} cls={cls} />;
-              }
-              if (currentTab === "homeworks") {
-                return <_HomeworksTab cls={cls} />;
-              }
-              if (currentTab === "people") {
-                return <_PeopleTab cls={cls} />;
-              }
-              alert("Invalid tab, redirecting to main tab");
-              return <_MainTab user={user} cls={cls} />;
-            })()}
-          </div>
-        </>
-      )}
+              })()}
+            </div>
+          </>
+        )}
     </div>
   );
 }

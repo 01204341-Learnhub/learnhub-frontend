@@ -3,8 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useDispatch } from "react-redux"
 import Swal from "sweetalert2"
 import { useUser } from "../../../hooks/useUser"
-import { setStatusFetchOnce } from "../../../slices/basketSlice"
+import { setStatusFetchOnce,addItem, clearItem } from "../../../slices/basketSlice"
 import { addBasketItem } from "../services/purchase"
+import { fetchBasketItems } from "../services/purchase"
 
 interface CourseDetailedSummaryProps {
     costs: number;
@@ -22,6 +23,15 @@ function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryPro
 
     const dispatcher = useDispatch()
     const { user } = useUser()
+    async function refresh(){
+    
+        const BasketItems = await fetchBasketItems(user.userID)
+        dispatcher(setStatusFetchOnce(true))
+        dispatcher(clearItem())
+        BasketItems.items.map((item) => {
+          dispatcher(addItem(item))
+        })
+    }
     async function handleAddBusketItems() {
         const basketItmeID = await addBasketItem(myCourseDetailedSummary.courseID, "course", user.userID)
         if (!basketItmeID) {
@@ -40,6 +50,7 @@ function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryPro
             })
             dispatcher(setStatusFetchOnce(false))
         }
+        refresh()
 
     }
 

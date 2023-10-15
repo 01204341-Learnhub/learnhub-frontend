@@ -1,20 +1,19 @@
 import { faClipboardList } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SimpleThread } from "../types/classes";
-import { LearnhubUser } from "../../../types/user";
 import { toDateTimeStringOmitDateOnSameDay } from "../../../utils/functions";
 import { useNavigate } from "react-router-dom";
 
 interface ClassHomeworkThreadProps {
-  teacher: LearnhubUser;
-  simpleThread: SimpleThread;
+  teacherFullName: string;
   classId: string;
+  simpleThread: SimpleThread;
 }
 
 function ClassHomeworkThread({
-  teacher,
-  simpleThread,
+  teacherFullName,
   classId,
+  simpleThread,
 }: ClassHomeworkThreadProps) {
   const navigate = useNavigate();
   return (
@@ -29,7 +28,7 @@ function ClassHomeworkThread({
           <FontAwesomeIcon icon={faClipboardList} size="xl" />
         </div>
         <div className="flex flex-col space-y-1">
-          <p className="text-black text-[16px] font-[500]">{`${teacher.username} โพสต์งานใหม่แล้ว: ${simpleThread.name}`}</p>
+          <p className="text-black text-[16px] font-[500]">{`${teacherFullName} โพสต์งานใหม่แล้ว: ${simpleThread.name}`}</p>
           <p className="text-[#A0A0A0] text-[14px] font-[500]">
             {toDateTimeStringOmitDateOnSameDay(simpleThread.lastEdit)}
           </p>

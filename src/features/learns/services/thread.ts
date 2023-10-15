@@ -183,4 +183,7 @@ export {
   addThreadReply,
   submitThreadHomework,
   unsubmitThreadHomework,
+  getClassThread,
+  getClassAssignment,
+  getClassAssignmentSubmission,
 };

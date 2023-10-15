@@ -5,13 +5,14 @@ import WorkCreate from "../../features/teaches/components/WorkCreate";
 import { ClassAssignment } from "../../features/teaches/types/classWork";
 // import Workreview from "../../features/teaches/components/reviewwork"
 import { Link, useParams } from "react-router-dom";
+import { LoadingSpash } from "../../components/LoadingSpash";
+import ClassThread from "../../features/teaches/components/ClassThread";
 import { FormPublishPostClass } from "../../features/teaches/components/FormPublishPostClass";
 import { useClassAssignments } from "../../features/teaches/hooks/useClassAssignments";
 import { useClassInfo } from "../../features/teaches/hooks/useClassInfo";
 import { useClassStudents } from "../../features/teaches/hooks/useClassStudents";
-import { useUser } from "../../hooks/useUser";
 import useClassThreads from "../../features/teaches/hooks/useClassThreads";
-import ClassThread from "../../features/teaches/components/ClassThread";
+import { useUser } from "../../hooks/useUser";
 
 type View = "main" | "works" | "members" | "create-work";
 
@@ -179,7 +180,7 @@ function TeachingClasses() {
     isFetching: isFetchingAssignments,
     addAssignment,
   } = useClassAssignments(classID);
-  const { threads, isFetching: isFetchingClassThreads } =
+  const { threads, isFetching: isFetchingClassThreads, postThread } =
     useClassThreads(classID);
   const { students } = useClassStudents(classID);
   const { user } = useUser();
@@ -201,7 +202,11 @@ function TeachingClasses() {
   }
 
   if (isFetchingClassInfo || isFetchingAssignments || isFetchingClassThreads) {
-    return <div> LoADING... </div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoadingSpash></LoadingSpash>
+      </div>
+    )
   }
 
   if (view == "main") {
@@ -230,7 +235,7 @@ function TeachingClasses() {
             id="teacherNotAnnoucement"
             className="flex justify-center items-center"
           >
-            <FormPublishPostClass profileTeacher="https://optimise2.assets-servd.host/maniacal-finch/production/animals/southern-rock-hopper-penguin-01-01.jpg?w=1200&auto=compress%2Cformat&fit=crop&dm=1660831481&s=9a929ad4ca101687860476bb97d562c1" />
+            <FormPublishPostClass handleAddPost={postThread} />
           </button>
           <div className="flex flex-col w-full space-y-3 px-16 py-5">
             {threads

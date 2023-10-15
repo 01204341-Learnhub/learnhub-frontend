@@ -5,12 +5,16 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { getFileNameFromSrc } from "../../../utils/functions";
-import { uploadImageFile } from "../../../services/uploader/image";
 import Swal from "sweetalert2";
+import { useUser } from "../../../hooks/useUser";
+import { uploadImageFile } from "../../../services/uploader/image";
 
-export function FormPublishPostClass(props: { profileTeacher: string }) {
-  const { profileTeacher } = props;
+interface FormPublishPostClassProps {
+  handleAddPost: (text: string, attachments: { attachmentType: string, src: string }[]) => void;
+}
+
+export function FormPublishPostClass({ handleAddPost }: FormPublishPostClassProps) {
+  const { user } = useUser()
   const [isActionCreatePost, setIsActionCreatePost] = useState(false);
   const [textDetailForm, setTextDetailForm] = useState("");
   //const [fileUpLoad, setFileUpLoad] = useState<File | null>(null);
@@ -38,15 +42,15 @@ export function FormPublishPostClass(props: { profileTeacher: string }) {
   function getLinkType(link: string): string {
     const imageExtensions = [".jpg", ".jpeg", ".png", ".gif"];
     if (link.includes("youtube.com/watch?v=")) {
-        console.log("video");
-        
+      console.log("video");
+
       return "video";
     } else if (imageExtensions.some((ext) => link.endsWith(ext))) {
-        console.log("image");
-        
+      console.log("image");
+
       return "image";
     } else {
-        console.log("file");
+      console.log("file");
       return "file";
     }
   }
@@ -56,7 +60,7 @@ export function FormPublishPostClass(props: { profileTeacher: string }) {
   };
 
   const addNewPost = () => {
-    alert("add new post");
+    handleAddPost(textDetailForm, attachments)
   };
 
   const handleClickUploadLink = () => {
@@ -68,41 +72,41 @@ export function FormPublishPostClass(props: { profileTeacher: string }) {
     setUpLoadLink(link);
   };
 
-const handelUploadFileChange = async (
+  const handelUploadFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>
-) => {
+  ) => {
     const fileList = e.target.files;
     const firstFile = fileList[0];
     let url = "";
     Swal.fire({
-        title: "กำลังอัพโหลดไฟล์",
-        timerProgressBar: true,
-        didOpen: () => {
-            Swal.showLoading();
-        },
+      title: "กำลังอัพโหลดไฟล์",
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+      },
     });
 
     url = await uploadImageFile(firstFile);
     const file = fileList[0];
     console.log(getFileType(file));
-    
+
     setAttachments([
-        ...attachments,
-        { attachmentType: getFileType(file), src: url },
+      ...attachments,
+      { attachmentType: getFileType(file), src: url },
     ]);
     Swal.close();
     Swal.fire({
-        icon: "success",
-        title: "อัพโหลดไฟล์สำเร็จ",
-        showConfirmButton: false,
-        timer: 1500,
+      icon: "success",
+      title: "อัพโหลดไฟล์สำเร็จ",
+      showConfirmButton: false,
+      timer: 1500,
     })
-};
+  };
 
   const addNewAttachment = () => {
     const linkType = getLinkType(upLoadLink);
     console.log(linkType);
-    
+
     setAttachments([
       ...attachments,
       { attachmentType: linkType, src: upLoadLink },
@@ -116,10 +120,10 @@ const handelUploadFileChange = async (
     newAttachments.slice(index, 1);
     setAttachments(newAttachments);
     Swal.fire({
-        icon: "success",
-        title: "ลบไฟล์สำเร็จ",
-        showConfirmButton: false,
-        timer: 1500,
+      icon: "success",
+      title: "ลบไฟล์สำเร็จ",
+      showConfirmButton: false,
+      timer: 1500,
     })
   };
 
@@ -147,25 +151,25 @@ const handelUploadFileChange = async (
     );
   };
 
-  const renderPreview = (typeFile : string, src: string) => {
+  const renderPreview = (typeFile: string, src: string) => {
     if (typeFile === "image") {
-        return (
-            <div className="w-1/5 flex items-center justify-center h-full border-r-2">
-                <img src={src} alt="" className="w-full h-full object-cover" />
-            </div>
-        )
+      return (
+        <div className="w-1/5 flex items-center justify-center h-full border-r-2">
+          <img src={src} alt="" className="w-full h-full object-cover" />
+        </div>
+      )
     } else if (typeFile === "video") {
-        return (
-            <div className="w-1/5 flex items-center justify-center h-full border-r-2">
-                <video src={src} className="w-full h-full object-cover" />
-            </div>
-        )
+      return (
+        <div className="w-1/5 flex items-center justify-center h-full border-r-2">
+          <video src={src} className="w-full h-full object-cover" />
+        </div>
+      )
     } else if (typeFile === "file") {
-        return (
-            <div className="w-1/5 flex items-center justify-center h-full border-r-2">
-                <img src="https://img.icons8.com/ios/50/000000/file.png" alt="" className="w-full h-full object-scale-down" />
-            </div>
-        )
+      return (
+        <div className="w-1/5 flex items-center justify-center h-full border-r-2">
+          <img src="https://img.icons8.com/ios/50/000000/file.png" alt="" className="w-full h-full object-scale-down" />
+        </div>
+      )
     }
   }
 
@@ -173,23 +177,23 @@ const handelUploadFileChange = async (
     return attachments.map((argument, index) => {
       return (
         <div key={index} className="flex w-full items-center justify-center">
-            <div className="flex w-4/5 bg-white h-24 mb-2 items-center justify-center border-2">
+          <div className="flex w-4/5 bg-white h-24 mb-2 items-center justify-center border-2">
             {renderPreview(argument.attachmentType, argument.src)}
             <div className="w-4/5 flex flex-col justify-center items-start ml-8 h-full overflow-hidden mx-8">
-                <p className="text-sm w-full text-start semibold truncate">
+              <p className="text-sm w-full text-start semibold truncate">
                 {argument.src}
-                </p>
-                <p className="text-sm w-full text-start truncate">
+              </p>
+              <p className="text-sm w-full text-start truncate">
                 {argument.attachmentType}
-                </p>
+              </p>
             </div>
-            </div>
-            <button
+          </div>
+          <button
             onClick={() => handleDeleteAttachment(index)}
             className="ml-4"
-        >
+          >
             <FontAwesomeIcon icon={faTimes} size="lg"></FontAwesomeIcon>
-        </button>
+          </button>
         </div>
       );
     });
@@ -301,7 +305,7 @@ const handelUploadFileChange = async (
         >
           <div className="w-10 h-10 rounded-full drop-shadow-none shadow-none">
             <img
-              src={profileTeacher}
+              src={user.profilePicture}
               alt=""
               className="w-10 h-10 rounded-full shadow-none drop-shadow-none bg-black"
             />

@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import booklogo from '../assets/images/bookLogo.png'
 import namelogo from '../assets/images/textNameLogo.png'
 import BasketItemSlot from '../features/stores/components/BasketItemSlot'
+import WishlistItemSlot from '../features/stores/components/WishlistItemSlot'
 import { fetchBasketItems } from '../features/stores/services/purchase'
 import { useUser } from '../hooks/useUser'
 import { signOut } from '../services/auth/signOut'
@@ -27,6 +28,22 @@ function MainBar() {
         } else {
             setOpenDropdown(dropdownName)
         }
+    }
+
+    const handleClickWishlist = () => {
+        // async function fetchBasket() {
+        //     //console.log(isFetchOnce)
+        //     if (!isFetchOnce) {
+        //         const BasketItems = await fetchBasketItems(user.userID)
+        //         dispatcher(setStatusFetchOnce(true))
+        //         dispatcher(clearItem())
+        //         BasketItems.items.map((item) => {
+        //             dispatcher(addItem(item))
+        //         })
+        //     }
+        // }
+        // fetchBasket()
+        toggleDropdown('wishlistdropdown')
     }
 
     const handleClickBasket = () => {
@@ -77,17 +94,27 @@ function MainBar() {
                             </Link>
                         </button>
 
-                        <button onClick={() => toggleDropdown('mypindropdown')}>
-                            <FontAwesomeIcon icon={faHeart} size='xl' color={openDropdown === 'mypindropdown' ? '#FF2171' : 'none'} />
+                        {/* wishlist ยังใช้ข้อมูล item ของ basket อยู่ */}
 
-                            {/* Mypin dropdown menu */}
-                            <div
-                                style={{ display: openDropdown === 'mypindropdown' ? 'block' : 'none', top: '90%', right: '17%' }}
-                                className=" absolute w-[320px] h-[550px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
+                        <button onClick={handleClickWishlist}>
+                            <FontAwesomeIcon icon={faHeart} size='xl' color={openDropdown === 'wishlistdropdown' ? '#FF2171' : 'none'} />
+                            <div className='flex flex-col  absolute w-[320px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100'
+                                style={{ display: openDropdown === 'wishlistdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
                             >
-                                <div className="px-8 py-3">
+                                <div
+                                    className='overflow-y-auto max-h-[450px] min-h-0'
+                                    style={{ display: openDropdown === 'wishlistdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
 
+                                >
+                                    <div className="px-8 py-3">
+                                        {basketItems.map((item) => (
+                                            <div key={item.itemID}>
+                                                <WishlistItemSlot item={item} />
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
+                                <h1 className=' font-bold text-[20px]'>{basketItems.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
                             </div>
                         </button>
 

@@ -41,7 +41,7 @@ function ProgramSlot(myProgram: ProgramSlotProps) {
                 </div>
                 <div className=" text-[18px] grow font-bold">{myProgram.price} บาท</div>
                 <div className=" flex justify-between items-center">
-                    <div className="bg-[#FF8989] h-[34px] w-[68px] font-semibold text-black text-[13px] flex items-center justify-center">{myProgram.tag}</div>
+                    <div className="bg-[#FF8989] h-[34px] px-4 rounded-md font-semibold text-black text-[13px] flex items-center justify-center">{myProgram.tag}</div>
                     <div className="flex items-center ">
                         <FontAwesomeIcon icon={faChartColumn} size="2xl" />
                         <div className="  p-2 font-semibold text-[14px] text-gray-500 text-center " >{myProgram.lvl}</div>

@@ -1,6 +1,7 @@
 import { faBook, faCartShopping, faChartColumn, faCirclePlay, faClipboardList, faFileArrowDown, faHeart, faInfinity, faUserGroup } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import Swal from "sweetalert2"
 import { useUser } from "../../../hooks/useUser"
 import { setStatusFetchOnce } from "../../../slices/basketSlice"
@@ -21,6 +22,7 @@ interface CourseDetailedSummaryProps {
 function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryProps) {
 
     const dispatcher = useDispatch()
+    const navigate = useNavigate()
     const { user } = useUser()
     async function handleAddBusketItems() {
         const basketItmeID = await addBasketItem(myCourseDetailedSummary.courseID, "course", user.userID)
@@ -42,6 +44,19 @@ function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryPro
         }
 
     }
+    function handleBuyCourse() {
+        addBasketItem(myCourseDetailedSummary.courseID, "course", user.userID).then(() => {
+            dispatcher(setStatusFetchOnce(false))
+            navigate("/baskets/payment")
+        }).catch(() => {
+            Swal.fire({
+                title: 'ไม่สามารถดำเนินการนี้ได้',
+                text: 'คุณมีคอร์สนี้อยู่แล้ว หรือ คอร์สนี้อยู่ในรถเข็นอยู่แล้ว',
+                icon: 'error'
+            })
+        })
+    }
+
 
     return (
         <>
@@ -141,7 +156,8 @@ function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryPro
                     <div className="flex pt-[7%] px-[10%]">
                         <div className="pr-2">
                             {user.userType == "student" ?
-                                <button className="bg-black shadow-xl hover:shadow-2xl cursor-pointer w-[165px] h-[65px] text-white font-bold text-xl border rounded-3xl ">
+                                <button className="bg-black shadow-xl hover:shadow-2xl cursor-pointer w-[165px] h-[65px] text-white font-bold text-xl border rounded-3xl "
+                                    onClick={handleBuyCourse}>
                                     ซื้อเลย
                                 </button> : <></>}
                         </div>

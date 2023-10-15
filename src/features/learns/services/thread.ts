@@ -119,11 +119,14 @@ async function addThreadReply(
   typ: "announcement" | "homework",
   text: string
 ): Promise<void> {
-  // TODO: Implement this
-  console.log(
-    `Adding reply to ${typ} thread ${threadId} of class ${classId} with text ${text} from user ${userId} `
-  );
-  console.log("Reply added");
+  const url = `${baseURL}/programs/classes/${classId}/${
+    typ === "announcement" ? "threads" : "assignments"
+  }/${threadId}/reply`;
+  await axios.post(url, {
+    user_id: userId,
+    user_type: "student",
+    text: text,
+  });
 }
 
 async function submitThreadHomework(

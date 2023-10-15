@@ -28,9 +28,7 @@ function MainBar() {
             setOpenDropdown(dropdownName)
         }
     }
-    
     const itemsInBasket =  basketItems.length
-
     const handleClickBasket = () => {
         async function fetchBasket() {
             //console.log(isFetchOnce)
@@ -46,6 +44,16 @@ function MainBar() {
         fetchBasket()
         toggleDropdown('mycartdropdown')
     }
+    async function refresh(){
+                const BasketItems = await fetchBasketItems(user.userID)
+                dispatcher(setStatusFetchOnce(true))
+                dispatcher(clearItem())
+                BasketItems.items.map((item) => {
+                  dispatcher(addItem(item))
+                })
+    }  
+    refresh()
+    
     
     const handleSignOut = () => {
         signOut().then(() => {
@@ -87,7 +95,7 @@ function MainBar() {
                             </div>
                         </button>
 
-                        <button className=' flex justify-center relative' onClick={handleClickBasket}>
+                        <button className=' flex justify-center relative items-center' onClick={handleClickBasket}>
                             <div className=' flex relative'>
                                 <FontAwesomeIcon icon={faCartShopping} size='xl' color={openDropdown === 'mycartdropdown' ? 'red' : 'none'} />
                                 <div className={itemsInBasket === 0 ? "hidden" : ""}>

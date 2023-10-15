@@ -56,7 +56,7 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
   );
 }
 
-function _WorkSlot({ work, classID }: { work: ClassAssignment, classID: string }) {
+function _WorkSlot({ work }: { work: ClassAssignment }) {
   const [isOpen, setISOpen] = useState(false);
   return (
     <div className="w-full">

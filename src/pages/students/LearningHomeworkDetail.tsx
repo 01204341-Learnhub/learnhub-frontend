@@ -55,7 +55,7 @@ function LearningHomeworkDetail() {
 
   return (
     <div className="w-full h-full bg-[#eeeeee80] overflow-auto">
-      {thread && (
+      {user && thread && (
         <>
           <_TopNavbar thread={thread} />
           <div className="flex p-5 mt-5 justify-center items-start space-x-5 w-full">

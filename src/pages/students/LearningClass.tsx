@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import { LearnhubUser } from "../../types/user";
-// import { generateMockUser } from "../../features/learns/types/thread";
 import useClass from "../../features/learns/hooks/useClass";
 import { Class } from "../../features/learns/types/classes";
 import ClassAnnouncementThread from "../../features/learns/components/ClassAnnouncementThread";
@@ -179,30 +178,29 @@ function LearningClass() {
   const { cls } = useClass(classId);
   return (
     <div className="bg-[#F6F6F6] w-full h-full">
-      {user && // TODO: maybe utilize isFetching
-        cls && ( // TODO: maybe utilize isFetching
-          <>
-            <_TabSwitcher
-              currentTab={currentTab}
-              onTabChange={(tab) => setCurrentTab(tab)}
-            />
-            <div className="p-5 w-full">
-              {(() => {
-                if (currentTab === "main") {
-                  return <_MainTab user={user} cls={cls} />;
-                }
-                if (currentTab === "homeworks") {
-                  return <_HomeworksTab cls={cls} />;
-                }
-                if (currentTab === "people") {
-                  return <_PeopleTab cls={cls} />;
-                }
-                alert("Invalid tab, redirecting to main tab");
+      {user && cls && (
+        <>
+          <_TabSwitcher
+            currentTab={currentTab}
+            onTabChange={(tab) => setCurrentTab(tab)}
+          />
+          <div className="p-5 w-full">
+            {(() => {
+              if (currentTab === "main") {
                 return <_MainTab user={user} cls={cls} />;
-              })()}
-            </div>
-          </>
-        )}
+              }
+              if (currentTab === "homeworks") {
+                return <_HomeworksTab cls={cls} />;
+              }
+              if (currentTab === "people") {
+                return <_PeopleTab cls={cls} />;
+              }
+              alert("Invalid tab, redirecting to main tab");
+              return <_MainTab user={user} cls={cls} />;
+            })()}
+          </div>
+        </>
+      )}
     </div>
   );
 }

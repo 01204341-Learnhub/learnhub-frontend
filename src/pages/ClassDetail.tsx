@@ -49,7 +49,7 @@ function ClassDetail() {
             console.log(classProgram)
             setisFetching(false);
         })
-    }, [id]
+    }, [id, classProgram]
     )
     if (isFetching || classProgram === null) return (
         <div className="w-screen h-screen justify-center items-center">

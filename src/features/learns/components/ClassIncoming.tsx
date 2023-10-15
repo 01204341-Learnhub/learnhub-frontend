@@ -2,21 +2,44 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarDays } from "@fortawesome/free-solid-svg-icons";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 
-
 interface ClassIncomingProps {
     titleName: string;
     date: string;
     start: string;
     end: string;
     instrName: string;
-    color: string;
     profilePic:string
 }
 
 export default function ClassIncoming (props: ClassIncomingProps) { 
+    const dayInWeek = props.date.split(" ")[0]
+    let color = "red"
+
+    if (dayInWeek === "Mon") {
+        color = "yellow"
+    }
+    else if (dayInWeek === "Tue") {
+        color = "pink"
+    }
+    else if (dayInWeek === "Wed") {
+        color = "green"
+    }
+    else if (dayInWeek === "Thu") {
+        color = "orange"
+    }
+    else if (dayInWeek === "Fri") {
+        color = "blue"
+    }
+    else if (dayInWeek === "Sat") {
+        color = "purple"
+    }
+    else {
+        color = "red"
+    }
+
     return (
         <div className=" flex flex-cols-2 w-[460px] h-[160px] drop-shadow-lg">
-            <div className={`bg-${props.color}-500 w-[10px] px-1`}/>
+            <div className={`bg-${color}-400 w-[10px] px-1`}/>
     
             <div className=" flex flex-rows-3 relative bg-white">
                 <div className="py-4">

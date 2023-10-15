@@ -127,7 +127,7 @@ function LearningOverview() {
                                         end={`${formatTimeFromTimestamp(schedules[0].end)} `}
                                         instrName={classInfo.className}
                                         profilePic={teacher.profilePic}
-                                        color={"green"} />
+                                    />
                                 </li>
                             ))}
                         </div>

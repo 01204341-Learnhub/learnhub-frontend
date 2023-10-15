@@ -58,7 +58,7 @@ async function getClass(classID: string): Promise<Class> {
   return c;
 }
 
-async function _getClassDetail(classID: string) {
+async function _getClassDetail(classID: string): Promise<ClassDetail> {
   const url = `${baseURL}/programs/classes/${classID}`;
   const res = await axios.get<GetClassDetailResponse>(url);
   const classDetail: ClassDetail = {

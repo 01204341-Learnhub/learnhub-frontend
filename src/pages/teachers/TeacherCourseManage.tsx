@@ -9,11 +9,15 @@ import Swal from "sweetalert2";
 import { uploadFile } from "../../services/uploader/file";
 import { uploadImageFile } from "../../services/uploader/image";
 import { useAnnouncementsCourses } from "../../features/stores/hooks/useListAnnouncementsCourses";
-import { getFileNameFromSrc } from "../../utils/functions";
 import { useCourseDetail } from "../../features/stores/hooks/useCourseDetail";
 import { CourseAnnouncement } from "../../features/stores/types/courseAnnouncements";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStar, faTimes } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCirclePlay,
+  faFile,
+  faStar,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
 
 function getFileType(file: File): string {
   const imageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -27,6 +31,25 @@ function getFileType(file: File): string {
     return "image";
   } else if (videoTypes.includes(file.type)) {
     return "video";
+  } else {
+    return "file";
+  }
+}
+
+function getLinkType(link: string): string {
+  const imageExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+  const videoExtensions = [".mp4", ".avi", ".mov", ".wmv"];
+  if (link.includes("youtube.com/watch?v=")) {
+    return "video";
+  } else if (link.includes("1drv.ms") || link.includes("drive.google.com")) {
+    const extension = link.substring(link.lastIndexOf("."));
+    if (videoExtensions.includes(extension)) {
+      return "video";
+    } else {
+      return "file";
+    }
+  } else if (imageExtensions.some((ext) => link.endsWith(ext))) {
+    return "image";
   } else {
     return "file";
   }
@@ -78,8 +101,10 @@ function TeacherCourseManage() {
     setIsClickAddLink(false);
   };
 
-  const handleClickPublish = () => {
-    const attachmentType = getFileNameFromSrc(linkAttach);
+  const handleAddLink = () => {
+    const attachmentType = getLinkType(linkAttach);
+    console.log(attachmentType);
+    
     setAttachments([
       ...attachments,
       { attachmentType: attachmentType, src: linkAttach },
@@ -105,8 +130,15 @@ function TeacherCourseManage() {
         didOpen: () => {
           Swal.showLoading();
         },
-      })
-      const url = await uploadFile(fileList[0]);
+      });
+      let url = "";
+      if (getFileType(fileList[0]) == "image") {
+        url = await uploadImageFile(fileList[0]);
+      } else {
+        url = await uploadFile(fileList[0]);
+      }
+      console.log(getFileType(fileList[0]));
+      
       setAttachments([
         ...attachments,
         { attachmentType: getFileType(fileList[0]), src: url },
@@ -117,7 +149,7 @@ function TeacherCourseManage() {
         title: "อัพโหลดไฟล์สำเร็จ",
         showConfirmButton: false,
         timer: 1500,
-      })
+      });
     } else {
       alert("กรุณาเลือกไฟล์เพียง 1 ไฟล์");
     }
@@ -128,11 +160,11 @@ function TeacherCourseManage() {
     newAttachments.slice(index, 1);
     setAttachments(newAttachments);
     Swal.fire({
-        icon: "success",
-        title: "ลบไฟล์สำเร็จ",
-        showConfirmButton: false,
-        timer: 1500,
-    })
+      icon: "success",
+      title: "ลบไฟล์สำเร็จ",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   };
 
   const addNewAnnouncement = async (): Promise<string> => {
@@ -172,16 +204,18 @@ function TeacherCourseManage() {
 
   const renderPreviewAttachments = (type: string, src: string) => {
     if (type == "image") {
-      return (
-          <img src={src} alt="" className=" object-cover w-full h-full" />
-      );
+      return <img src={src} alt="" className=" object-cover w-full h-full" />;
     } else if (type == "video") {
       return (
-          <video src={src} className=" object-cover w-full h-full" />
+        <div className="flex items-center justify-center w-full h-full">
+          <FontAwesomeIcon icon={faCirclePlay} color="#808080" size="xl" />
+        </div>
       );
     } else if (type == "file") {
       return (
-          <p>file</p>
+        <div className="flex items-center justify-center w-full h-full">
+          <FontAwesomeIcon icon={faFile} color="#555555" size="xl" className="" />
+        </div>
       );
     }
   };
@@ -192,7 +226,7 @@ function TeacherCourseManage() {
         {attachments.map((attach, index) => {
           return (
             <div key={index} className="flex items-center justify-center mt-4">
-              <a className="w-11/12 h-16 border-2 flex">
+              <div className="w-11/12 h-16 border-2 flex">
                 <div className="w-1/5 border-r-2">
                   {renderPreviewAttachments(attach.attachmentType, attach.src)}
                 </div>
@@ -203,8 +237,9 @@ function TeacherCourseManage() {
                     </h1>
                   </a>
                 </div>
-              </a>
-              <button className="mx-2"
+              </div>
+              <button
+                className="mx-2"
                 onClick={() => handleDeleteAttachment(index)}
               >
                 <FontAwesomeIcon icon={faTimes} size="lg"></FontAwesomeIcon>
@@ -283,7 +318,7 @@ function TeacherCourseManage() {
                     htmlFor="attachments"
                     className="text-xs font-bold mx-2"
                   >
-                    select File
+                    เลือกไฟล์
                   </label>
                   <input
                     type="file"
@@ -296,7 +331,7 @@ function TeacherCourseManage() {
                     onClick={handleClickAddLink}
                     className="text-xs font-bold mx-2"
                   >
-                    Add Link
+                    เพิ่มลิงค์
                   </button>
                   {isClickAddLink ? (
                     <div className="bg-white border-2 relative z-10">
@@ -320,7 +355,7 @@ function TeacherCourseManage() {
                               ยกเลิก
                             </button>
                             <button
-                              onClick={handleClickPublish}
+                              onClick={handleAddLink}
                               type="button"
                               className="text-sm font-bold mx-2 mt-4"
                             >
@@ -346,6 +381,9 @@ function TeacherCourseManage() {
 
   const handlePublish = async () => {
     addNewAnnouncement();
+    setNameAnc("");
+    setTextAnc("");
+    setAttachments([]);
   };
 
   const handleCloseModal = () => {
@@ -462,8 +500,8 @@ function TeacherCourseManage() {
             </section>
           </>
 
-          <section className="flex flex-col items-start basis-2/3">
-            <div className="flex items-center font-medium w-4/5 pr-4 pt-4 pb-2 justify-between ">
+          <section className="flex flex-col items-start basis-2/3 w-2/3">
+            <div className="flex items-center font-medium w-[800px] pr-4 pt-4 pb-2 justify-between ">
               <h1 className="text-lg font-semibold">
                 โพสต์ที่ประกาศในคอร์สนี้
               </h1>

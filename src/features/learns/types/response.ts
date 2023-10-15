@@ -20,8 +20,11 @@ type ListEnrolledClassesResponse = {
     name: string;
     class_pic: string;
     progress: number;
-
     class_ended_date: number;
+    schedules: {
+      start: number
+      end: number
+    }[];
     teacher: {
       teacher_id: string;
       teacher_name: string;
@@ -153,8 +156,9 @@ type GetStudentCourseQuizReportResponse = {
 type GetStudentDashboardResponse = {
   classes: {
     class_info: {
-      class_name: string;
-      class_id: string;
+      class_name: string,
+      class_id: string,
+      class_pic: string,
     };
     teacher: {
       teacher_id: string;
@@ -229,6 +233,100 @@ type ListClassStudentsResponse = {
   }[];
 };
 
+type ListClassThreadsResponse = {
+  threads: {
+    thread_id: string;
+    name: string;
+    teacher: {
+      teacher_id: string;
+      teacher_name: string;
+      profile_pic: string;
+    };
+    last_edit: number;
+  }[];
+};
+
+type ListClassAssignmentsResponse = {
+  assignments: {
+    assignment_id: string;
+    name: string;
+    group_name: string;
+    last_edit: number;
+    due_date: number;
+    submission_count: {
+      submit_count: 10;
+      unsubmit_count: 10;
+    };
+    status: "open | closed";
+    max_score: number;
+    text: string;
+  }[];
+};
+
+type GetClassThreadResponse = {
+  name: string;
+  teacher: {
+    teacher_id: string;
+    teacher_name: string;
+    profile_pic: string;
+  };
+  last_edit: number;
+  text: string;
+  attachments: {
+    attachment_type: string;
+    src: string;
+  }[];
+  replies: {
+    user: {
+      user_id: string;
+      type: "student" | "teacher";
+      name: string;
+      profile_pic: string;
+    };
+    reply_date: number;
+    text: string;
+  }[];
+};
+
+type GetClassAssignmentResponse = {
+  name: string;
+  group_name: string;
+  last_edit: number;
+  due_date: number;
+  status: "open" | "closed";
+  max_score: number;
+  text: string;
+  attachments: {
+    attachment_type: string;
+    src: string;
+  }[];
+  replies: {
+    user: {
+      user_id: string;
+      type: "student" | "teacher";
+      name: string;
+      profile_pic: string;
+    };
+    reply_date: number;
+    text: string;
+  }[];
+};
+
+type GetClassAssignmentSubmissionResponse = {
+  student: {
+    student_id: string;
+    student_name: string;
+    profile_pic: string;
+  };
+  score: number;
+  status: "check" | "uncheck" | "unsubmit";
+  submission_date: number;
+  attachments: {
+    attachment_type: string;
+    src: string;
+  }[];
+};
+
 export type {
   GetClassDetailResponse,
   GetCourseAnnouncementResponse,
@@ -238,10 +336,15 @@ export type {
   GetStudentCourseProgressResponse,
   GetStudentCourseQuizReportResponse,
   GetStudentDashboardResponse,
+  GetClassThreadResponse,
+  GetClassAssignmentResponse,
+  GetClassAssignmentSubmissionResponse,
   ListClassStudentsResponse,
   ListCourseAnnouncementResponse,
   ListCourseChaptersResponse,
   ListCourseLessonsResponse,
   ListEnrolledClassesResponse,
   ListEnrolledCoursesResponse,
+  ListClassThreadsResponse,
+  ListClassAssignmentsResponse,
 };

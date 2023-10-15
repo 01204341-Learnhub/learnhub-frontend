@@ -1,9 +1,16 @@
 import axios from "axios";
 import { LearnhubUser } from "../../../types/user";
-import { Class, ClassDetail, EnrolledClass } from "../types/classes";
+import {
+  Class,
+  ClassDetail,
+  EnrolledClass,
+  SimpleThread,
+} from "../types/classes";
 import {
   GetClassDetailResponse,
+  ListClassAssignmentsResponse,
   ListClassStudentsResponse,
+  ListClassThreadsResponse,
   ListEnrolledClassesResponse,
 } from "../types/response";
 
@@ -30,12 +37,34 @@ async function listEnrolledClass(studentID: string): Promise<EnrolledClass[]> {
       },
       registrationEndDate: detail.registrationEndDate,
       endDate: detail.EndDate,
+      schedules: detail.schedules.map((s) => {
+        return {
+          start: s.start,
+          end: s.end,
+        };
+      }),
     });
   }
   return enrolled;
 }
 
-async function getClassDetail(classID: string) {
+async function getClass(classID: string): Promise<Class> {
+  const classDetail = await getClassDetail(classID);
+  const classStudents = await listClassStudents(classID);
+  const classTeacher = await getTeacher(classDetail.teacher.teacherID);
+  const simpleThreads = await listSimpleThreads(classID);
+  const c: Class = {
+    classId: classDetail.classID,
+    name: classDetail.name,
+    thumbnailUrl: classDetail.thumbnailUrl,
+    students: classStudents,
+    simpleThreads: simpleThreads,
+    teacher: classTeacher,
+  };
+  return c;
+}
+
+async function getClassDetail(classID: string): Promise<ClassDetail> {
   const url = `${baseURL}/programs/classes/${classID}`;
   const res = await axios.get<GetClassDetailResponse>(url);
   const classDetail: ClassDetail = {
@@ -57,13 +86,13 @@ async function getClassDetail(classID: string) {
     status: res.data.status,
     schedules: res.data.schedules.map((s) => {
       return {
-        start: new Date(s.start),
-        end: new Date(s.end),
+        start: new Date(s.start * 1000),
+        end: new Date(s.end * 1000 ),
       };
     }),
-    registrationEndDate: new Date(res.data.registration_ended_date),
-    openDate: new Date(res.data.open_date),
-    EndDate: new Date(res.data.class_ended_date),
+    registrationEndDate: new Date(res.data.registration_ended_date * 1000),
+    openDate: new Date(res.data.open_date * 1000),
+    EndDate: new Date(res.data.class_ended_date * 1000),
     objectives: res.data.class_objective,
     price: res.data.price,
     difficultyLevel: res.data.difficulty_level,
@@ -72,40 +101,6 @@ async function getClassDetail(classID: string) {
     studentLimit: res.data.max_student,
   };
   return classDetail;
-}
-
-async function getClass(classID: string): Promise<Class> {
-  const classDetail = await getClassDetail(classID);
-  const classStudents = await listClassStudents(classID);
-  const classTeacher = await getTeacher(classDetail.teacher.teacherID);
-  const c: Class = {
-    // TODO: get simple threads
-    classId: classDetail.classID,
-    name: classDetail.name,
-    thumbnailUrl: classDetail.thumbnailUrl,
-    students: classStudents,
-    simpleThreads: [],
-    teacher: classTeacher,
-  };
-  return c;
-}
-
-async function getTeacher(teacherID: string): Promise<LearnhubUser> {
-  const url = `${baseURL}/users/teachers/${teacherID}`;
-  const res = await axios.get<{
-    username: string;
-    fullname: string;
-    email: string;
-    profile_pic: string;
-  }>(url);
-  return {
-    userType: "teacher",
-    userID: teacherID,
-    username: res.data.username,
-    fullname: res.data.fullname,
-    email: res.data.email,
-    profilePicture: res.data.profile_pic,
-  };
 }
 
 async function listClassStudents(classID: string): Promise<LearnhubUser[]> {
@@ -130,4 +125,74 @@ async function listClassStudents(classID: string): Promise<LearnhubUser[]> {
   return students;
 }
 
-export { getClass, getClassDetail, listClassStudents, listEnrolledClass };
+async function getTeacher(teacherID: string): Promise<LearnhubUser> {
+  const url = `${baseURL}/users/teachers/${teacherID}`;
+  const res = await axios.get<{
+    username: string;
+    fullname: string;
+    email: string;
+    profile_pic: string;
+  }>(url);
+  return {
+    userType: "teacher",
+    userID: teacherID,
+    username: res.data.username,
+    fullname: res.data.fullname,
+    email: res.data.email,
+    profilePicture: res.data.profile_pic,
+  };
+}
+
+async function listSimpleThreads(classID: string): Promise<SimpleThread[]> {
+  const simpleThreads: SimpleThread[] = [];
+  const threads = await listClassThreads(classID);
+  const assignments = await listClassAssignments(classID);
+  threads.threads.forEach((t) => {
+    simpleThreads.push({
+      threadId: t.thread_id,
+      typ: "announcement",
+      name: t.name,
+      lastEdit: new Date(t.last_edit * 1000),
+    });
+  });
+  assignments.assignments.forEach((a) => {
+    simpleThreads.push({
+      threadId: a.assignment_id,
+      typ: "homework",
+      name: a.name,
+      lastEdit: new Date(a.last_edit * 1000),
+      homeworkTopicName: a.group_name,
+    });
+  });
+  simpleThreads.sort((a, b) => {
+    return b.lastEdit.getTime() - a.lastEdit.getTime();
+  });
+  return simpleThreads;
+}
+
+async function listClassThreads(
+  classID: string
+): Promise<ListClassThreadsResponse> {
+  const url = `${baseURL}/programs/classes/${classID}/threads`;
+  const res = await axios.get<ListClassThreadsResponse>(url);
+  return res.data;
+}
+
+async function listClassAssignments(
+  classID: string
+): Promise<ListClassAssignmentsResponse> {
+  const url = `${baseURL}/programs/classes/${classID}/assignments`;
+  const res = await axios.get<ListClassAssignmentsResponse>(url);
+  return res.data;
+}
+
+export {
+  listEnrolledClass,
+  getClass,
+  getClassDetail,
+  listClassStudents,
+  getTeacher,
+  listSimpleThreads,
+  listClassThreads,
+  listClassAssignments,
+};

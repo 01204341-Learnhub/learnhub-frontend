@@ -4,10 +4,8 @@ import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import Swal from "sweetalert2"
 import { useUser } from "../../../hooks/useUser"
-import { setStatusFetchOnce } from "../../../slices/basketSlice"
-import { addBasketItem } from "../services/purchase"
-
-
+import { addItem, clearItem, setStatusFetchOnce } from "../../../slices/basketSlice"
+import { addBasketItem, fetchBasketItems } from "../services/purchase"
 interface ClassDetailedSummaryProps {
     costs: number;
     quantity: number;
@@ -23,6 +21,16 @@ function ClassDetailedSummary(myClassDetailedSummary: ClassDetailedSummaryProps)
     const dispatcher = useDispatch()
     const navigate = useNavigate()
     const { user } = useUser()
+    async function refresh() {
+
+        const BasketItems = await fetchBasketItems(user.userID)
+        dispatcher(setStatusFetchOnce(true))
+        dispatcher(clearItem())
+        BasketItems.items.map((item) => {
+            dispatcher(addItem(item))
+        })
+
+    }
     async function handleAddBusketItems() {
         const basketItmeID = await addBasketItem(myClassDetailedSummary.classesID, "class", user.userID)
         if (!basketItmeID) {
@@ -40,7 +48,7 @@ function ClassDetailedSummary(myClassDetailedSummary: ClassDetailedSummaryProps)
             })
             dispatcher(setStatusFetchOnce(false))
         }
-
+        refresh()
     }
     async function handleRegister() {
         addBasketItem(myClassDetailedSummary.classesID, "class", user.userID).then(() => {
@@ -146,6 +154,7 @@ function ClassDetailedSummary(myClassDetailedSummary: ClassDetailedSummaryProps)
             </div>
         </>
     )
+
 }
 
 export default ClassDetailedSummary

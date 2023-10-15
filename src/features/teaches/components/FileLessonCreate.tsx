@@ -1,9 +1,10 @@
-import { faX, faUpload } from "@fortawesome/free-solid-svg-icons";
+import { faUpload, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Lesson } from "../types/course";
 
 interface VideoLessonCreateProps {
+  defaultLesson?: Lesson;
   chapterNumber: number;
   chapterName: string;
   lessonNumber: number;
@@ -12,6 +13,7 @@ interface VideoLessonCreateProps {
 }
 
 function FileLessonCreate({
+  defaultLesson,
   chapterName,
   chapterNumber,
   lessonNumber,
@@ -19,7 +21,6 @@ function FileLessonCreate({
   onCancel,
 }: VideoLessonCreateProps) {
   const [lessonName, setLessonName] = useState<string>("");
-  const [lessonDescription, setLessonDescription] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
 
   const onRemoveFile = (index: number) => {
@@ -28,11 +29,6 @@ function FileLessonCreate({
   const onLessonNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLessonName(e.target.value);
   };
-  const onLessonDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
-  ) => {
-    setLessonDescription(e.target.value);
-  };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileList = e.target.files;
     for (let i = 0; i < fileList.length; i++) {
@@ -40,6 +36,14 @@ function FileLessonCreate({
     }
   };
   const handleSubmit = () => {
+    if (lessonName == "") {
+      alert("กรุณาใส่ชื่อบทเรียน");
+      return;
+    }
+    else if (files.length == 0) {
+      alert("กรุณาเลือกไฟล์");
+      return;
+    }
     const lesson: Lesson = {
       lessonId: "1234567890",
       name: lessonName,
@@ -49,6 +53,12 @@ function FileLessonCreate({
     };
     onSubmit(lesson);
   };
+  useEffect(() => {
+    if (defaultLesson) {
+      setLessonName(defaultLesson.name)
+      setFiles([new File([], defaultLesson.fileUrl!)])
+    }
+  }, [defaultLesson])
 
   return (
     <div className="w-full">
@@ -63,7 +73,7 @@ function FileLessonCreate({
       <div className="ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
         <div className="  flex grow items-center pt-2 pb-4">
           <h1 className="my-auto mx-[40px] font-semibold text-[18px]">
-            หัวข้อ
+            ชื่อไฟล์
           </h1>
           <input
             type="text"
@@ -72,28 +82,8 @@ function FileLessonCreate({
             onChange={onLessonNameChange}
           />
         </div>
-        <div className="  flex pt-2 pb-4">
-          <h1 className="mx-[40px] font-semibold text-[18px]">
-            คำอธิบาย
-          </h1>
-          <textarea
-            className="mr-[50px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
-            value={lessonDescription}
-            onChange={onLessonDescriptionChange}
-          />
-        </div>
       </div>
 
-      {/* <div className="bg-white">
-                <div className="flex">
-                    <h1>หัวข้อ</h1>
-                    <input type="text" className="input" value={lessonName} onChange={onLessonNameChange} />
-                </div>
-                <div>
-                    <h1>คำอธิบาย</h1>
-                    <input type="text" className="input" value={lessonDescription} onChange={onLessonDescriptionChange} />
-                </div>
-            </div> */}
       <div className="ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
         <ol>
           {files.map((file, index) => (
@@ -118,7 +108,7 @@ function FileLessonCreate({
           style={{ display: "none" }}
           onChange={handleFileChange}
         />
-        <button
+        {files.length == 0 ? <button
           className="btn mx-[40px] my-[20px] text-[#808080]"
           onClick={() => {
             document.getElementById("lessonFileSelector").click();
@@ -131,7 +121,7 @@ function FileLessonCreate({
             className=" border-[#e0e0e0] border-2 p-2 rounded-full"
           />
           เพิ่มไฟล์
-        </button>
+        </button> : <></>}
       </div>
       <div className="flex mt-[40px] justify-end mr-[100px] w-full">
         <button className="btn bg-black text-white" onClick={handleSubmit}>

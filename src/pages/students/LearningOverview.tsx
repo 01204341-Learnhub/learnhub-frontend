@@ -91,7 +91,7 @@ function LearningOverview() {
                                     <li key={announcementID} className={`flex justify-center mt-2`}>
                                         <div className="flex justify-center py-2 bg-gray-100 hover:bg-gray-300 rounded-xl">
                                             <div className="py-2 h-16 w-16  rounded-full mx-4">
-                                                <img src={teacher.profilePic} className=" h-16 w-16 rounded-full" />
+                                                <img src={teacher.profilePic} className=" h-16 w-16 rounded-full object-cover" />
                                             </div>
                                             <div className="flex flex-col w-[280px]">
                                                 <span className="text-lg truncate">{teacher.teacherName}</span>

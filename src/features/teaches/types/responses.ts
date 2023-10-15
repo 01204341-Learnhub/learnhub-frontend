@@ -86,12 +86,52 @@ type GetClassAssignmentResponse = {
   }[];
 };
 
+type ListClassThreadsResponse = {
+  threads: {
+    thread_id: string;
+    name: string;
+    teacher: {
+      teacher_id: string;
+      teacher_name: string;
+      profile_pic: string;
+    };
+    last_edit: number;
+  }[];
+};
+
+type GetClassThreadResponse = {
+  name: string;
+  teacher: {
+    teacher_id: string;
+    teacher_name: string;
+    profile_pic: string;
+  };
+  last_edit: number;
+  text: string;
+  attachments: {
+    attachment_type: string;
+    src: string;
+  }[];
+  replies: {
+    user: {
+      user_id: string;
+      type: "student" | "teacher";
+      name: string;
+      profile_pic: string;
+    };
+    reply_date: number;
+    text: string;
+  }[];
+};
+
 export type {
   GetClassAssignmentResponse,
+  GetClassThreadResponse,
   ListClassAssignmentsResponse,
   ListClassStudentsResponse,
   ListTagsResponse,
   ListTeacherClassesResponse,
   ListTeacherCourseResponse,
   ListTeacherIncomesResponse,
+  ListClassThreadsResponse,
 };

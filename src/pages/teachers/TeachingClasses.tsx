@@ -10,9 +10,10 @@ import { useClassAssignments } from "../../features/teaches/hooks/useClassAssign
 import { useClassInfo } from "../../features/teaches/hooks/useClassInfo";
 import { useClassStudents } from "../../features/teaches/hooks/useClassStudents";
 import { useUser } from "../../hooks/useUser";
+import useClassThreads from "../../features/teaches/hooks/useClassThreads";
+import ClassThread from "../../features/teaches/components/ClassThread";
 
 type View = "main" | "works" | "members" | "create-work";
-
 
 interface ViewSlectorProps {
   currentView: View;
@@ -27,7 +28,11 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
           setView("main");
         }}
       >
-        <h1 className={currentView == "main" ? "text-[#000]" : "text-[#808080]"}>หน้าหลักในชั้นเรียน</h1>
+        <h1
+          className={currentView == "main" ? "text-[#000]" : "text-[#808080]"}
+        >
+          หน้าหลักในชั้นเรียน
+        </h1>
         <div className={`bg-black ${currentView == "main" ? "h-2" : ""}`}></div>
       </div>
       <div
@@ -36,7 +41,11 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
           setView("works");
         }}
       >
-        <h1 className={currentView == "works" ? "text-[#000]" : "text-[#808080]"}>งานในชั้นเรียน</h1>
+        <h1
+          className={currentView == "works" ? "text-[#000]" : "text-[#808080]"}
+        >
+          งานในชั้นเรียน
+        </h1>
         <div
           className={`bg-black ${currentView == "works" ? "h-2" : ""}`}
         ></div>
@@ -47,7 +56,13 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
           setView("members");
         }}
       >
-        <h1 className={currentView == "members" ? "text-[#000]" : "text-[#808080]"}>คนในชั้นเรียน</h1>
+        <h1
+          className={
+            currentView == "members" ? "text-[#000]" : "text-[#808080]"
+          }
+        >
+          คนในชั้นเรียน
+        </h1>
         <div
           className={`bg-black ${currentView == "members" ? "h-2" : ""}`}
         ></div>
@@ -74,7 +89,9 @@ function _WorkSlot({ work }: { work: ClassAssignment }) {
       {isOpen && (
         <div className="">
           <div className="flex items-center border-2 px-5 py-5 h-fit">
-            <p className="w-8/12 border-4 h-fit break-all">{work.description}</p>
+            <p className="w-8/12 border-4 h-fit break-all">
+              {work.description}
+            </p>
             <div className="w-2/12 items-end">
               <p className="w-full text-xl text-gray-600 font-bold ml-5">
                 {work.send}
@@ -89,13 +106,14 @@ function _WorkSlot({ work }: { work: ClassAssignment }) {
             </div>
           </div>
           <div className="bg-white flex  items-center border-2 py-5 px-5">
-            <button
-              type="button"
-              className="text-blue-600 w-10/12">
+            <button type="button" className="text-blue-600 w-10/12">
               ดูวิธีการ
             </button>
             <div className="w-2/12 items-end">
-              <Link to={`review/${work.assignmentID}`} className="bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+              <Link
+                to={`review/${work.assignmentID}`}
+                className="bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+              >
                 ตรวจงาน
               </Link>
             </div>
@@ -155,10 +173,16 @@ function _ClassWorks({ onCreateClassWork, assignments }: _ClassWorksProps) {
 function TeachingClasses() {
   const [view, setView] = useState<View>("main");
   const { classID } = useParams<{ classID: string }>();
-  const { classInfo, isFetching: isFetchingClassInfo } = useClassInfo(classID)
-  const { assignments, isFetching: isFetchingAssignments, addAssignment } = useClassAssignments(classID)
-  const { students } = useClassStudents(classID)
-  const { user } = useUser()
+  const { classInfo, isFetching: isFetchingClassInfo } = useClassInfo(classID);
+  const {
+    assignments,
+    isFetching: isFetchingAssignments,
+    addAssignment,
+  } = useClassAssignments(classID);
+  const { threads, isFetching: isFetchingClassThreads } =
+    useClassThreads(classID);
+  const { students } = useClassStudents(classID);
+  const { user } = useUser();
 
   function handleAddAssignment(assignment: ClassAssignment) {
     addAssignment(assignment);
@@ -167,17 +191,17 @@ function TeachingClasses() {
 
   function getAvaliableTopics(): string[] {
     // get all topics from assignments
-    const topics: string[] = []
+    const topics: string[] = [];
     assignments.forEach((assignment) => {
       if (!topics.includes(assignment.topic)) {
-        topics.push(assignment.topic)
+        topics.push(assignment.topic);
       }
-    })
-    return topics
+    });
+    return topics;
   }
 
-  if (isFetchingClassInfo || isFetchingAssignments) {
-    return <div> LoADING... </div>
+  if (isFetchingClassInfo || isFetchingAssignments || isFetchingClassThreads) {
+    return <div> LoADING... </div>;
   }
 
   if (view == "main") {
@@ -202,17 +226,27 @@ function TeachingClasses() {
           </div>
         </div>
         <div className=" mt-[2%] flex flex-col space-y-[2%]">
-          <button id="teacherNotAnnoucement" className="flex justify-center items-center">
+          <button
+            id="teacherNotAnnoucement"
+            className="flex justify-center items-center"
+          >
             <FormPublishPostClass profileTeacher="https://optimise2.assets-servd.host/maniacal-finch/production/animals/southern-rock-hopper-penguin-01-01.jpg?w=1200&auto=compress%2Cformat&fit=crop&dm=1660831481&s=9a929ad4ca101687860476bb97d562c1" />
           </button>
-
-
+          <div className="flex flex-col w-full space-y-3 px-16 py-5">
+            {threads
+              .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime())
+              .map((thread) => (
+                <ClassThread
+                  key={thread.threadId}
+                  user={user}
+                  classId={classID}
+                  threadId={thread.threadId}
+                />
+              ))}
+          </div>
         </div>
       </div>
     );
-
-
-
   } else if (view == "works") {
     return (
       <div className="h-full">
@@ -232,27 +266,35 @@ function TeachingClasses() {
         <hr />
         <p className="text-xl text-gray-600 font-bold ml-5 my-5">ผู้สอน</p>
         <div className="w-3/4 flex bg-white  items-center border-2">
-          <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
+          <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full">
             <img src={user.profilePicture} />
           </div>
-          <h1 className="text-xl text-gray-600 font-bold ml-5">{user.fullname}</h1>
+          <h1 className="text-xl text-gray-600 font-bold ml-5">
+            {user.fullname}
+          </h1>
         </div>
 
-        <p className="text-xl text-gray-600 font-bold ml-5 my-5">ผู้เรียนในคลาส</p>
+        <p className="text-xl text-gray-600 font-bold ml-5 my-5">
+          ผู้เรียนในคลาส
+        </p>
         <div>
           {students.map((student, index) => {
             return (
-              <div className="w-3/4 flex bg-white  items-center border-2" key={index}>
-                <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
+              <div
+                className="w-3/4 flex bg-white  items-center border-2"
+                key={index}
+              >
+                <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full">
                   <img src={student.avatarURL} />
                 </div>
-                <h1 className="text-xl text-gray-600 font-bold ml-5">{student.name}</h1>
+                <h1 className="text-xl text-gray-600 font-bold ml-5">
+                  {student.name}
+                </h1>
               </div>
-            )
+            );
           })}
         </div>
       </div>
-
     );
   } else if (view == "create-work") {
     return (

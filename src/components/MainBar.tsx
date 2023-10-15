@@ -12,7 +12,7 @@ import { signOut } from '../services/auth/signOut'
 import { addItem, clearItem, setStatusFetchOnce } from '../slices/basketSlice'
 import { clearUser } from '../slices/userSlice'
 import { RootState } from '../store'
-
+import SearchBar from '../components/SearchBar'
 function MainBar() {
     const basket = useSelector((state: RootState) => state.basket)
     const basketItems = basket.basket.items
@@ -60,13 +60,7 @@ function MainBar() {
                 <img src={namelogo} alt="namelogo" />
             </div>
             {user && user.userType === 'teacher' ? <div className='w-2/4 py-2 px-2' /> : (
-                <div className='bg-gray-300 flex rounded-full w-2/4 py-2 px-2'>
-                    <FontAwesomeIcon icon={faMagnifyingGlass} color='black' size='xl' className='mr-4 ml-4' />
-                    <input
-                        type="search"
-                        className=" bg-transparent border-none outline-none w-full text-[18px] font-semibold "
-                    />
-                </div>
+                <SearchBar />
             )}
             <div className='w-2/12 grid grid-cols-4 my-2'>
                 {user && user.userType === 'teacher' ? null : (

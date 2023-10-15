@@ -4,7 +4,9 @@ import { useDispatch } from "react-redux"
 import Swal from "sweetalert2"
 import { useUser } from "../../../hooks/useUser"
 import { setStatusFetchOnce } from "../../../slices/basketSlice"
+import { setWishStatusFetchOnce } from "../../../slices/wishlistSlice"
 import { addBasketItem } from "../services/purchase"
+import { addWishListItem } from "../services/wishlist"
 
 interface CourseDetailedSummaryProps {
     costs: number;
@@ -42,6 +44,26 @@ function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryPro
         }
 
     }
+    async function handleAddWishlistItems() {
+        const wishlistItmeID = await addWishListItem(myCourseDetailedSummary.courseID, "course", user.userID)
+        if (!wishlistItmeID) {
+            Swal.fire({
+                title: 'ไม่สามารถดำเนินการนี้ได้',
+                text: 'คุณมีคอร์สนี้อยู่แล้ว หรือ คอร์สนี้อยู่ในรายการที่อยากได้อยู่แล้ว',
+                icon: 'error'
+            })
+
+        } else {
+            Swal.fire({
+                title: 'เพิ่มไปยังรายการที่อยากได้แล้ว',
+                icon: 'success',
+                confirmButtonColor: 'green'
+
+            })
+            dispatcher(setWishStatusFetchOnce(false))
+        }
+
+    }
 
     return (
         <>
@@ -51,11 +73,17 @@ function CourseDetailedSummary(myCourseDetailedSummary: CourseDetailedSummaryPro
                         {myCourseDetailedSummary.costs} บาท
                     </p>
                     {
-                        user.userType == "student" ? <button className="flex justify-between items-center content-center  text-base h-[52px] bg-[#D9D9D9] rounded-2xl px-[5%] my-4">
-                            <FontAwesomeIcon icon={faHeart} color="#FF2171" size="2xl" />
-                            <p className="font-bold	pl-2">
-                                เพิ่มในนการเรียนรู้ที่อยากได้
-                            </p>
+                        user.userType == "student" ? 
+                        <button
+                            onClick={() => {
+                                handleAddWishlistItems()
+                            }}
+                            type="button"
+                            className="flex justify-between items-center content-center  text-base h-[52px] bg-[#D9D9D9] rounded-2xl px-[5%] my-4">
+                                <FontAwesomeIcon icon={faHeart} color="#FF2171" size="2xl" />
+                                <p className="font-bold	pl-2">
+                                    เพิ่มในการเรียนรู้ที่อยากได้
+                                </p>
                         </button> : <></>
                     }
                 </div>

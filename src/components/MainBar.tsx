@@ -28,6 +28,8 @@ function MainBar() {
             setOpenDropdown(dropdownName)
         }
     }
+    
+    const itemsInBasket =  basketItems.length
 
     const handleClickBasket = () => {
         async function fetchBasket() {
@@ -37,7 +39,7 @@ function MainBar() {
                 dispatcher(setStatusFetchOnce(true))
                 dispatcher(clearItem())
                 BasketItems.items.map((item) => {
-                    dispatcher(addItem(item))
+                  dispatcher(addItem(item))
                 })
             }
         }
@@ -85,9 +87,16 @@ function MainBar() {
                             </div>
                         </button>
 
-                        <button onClick={handleClickBasket}>
-                            <FontAwesomeIcon icon={faCartShopping} size='xl' color={openDropdown === 'mycartdropdown' ? 'red' : 'none'} />
-
+                        <button className=' flex justify-center relative' onClick={handleClickBasket}>
+                            <div className=' flex relative'>
+                                <FontAwesomeIcon icon={faCartShopping} size='xl' color={openDropdown === 'mycartdropdown' ? 'red' : 'none'} />
+                                <div className={itemsInBasket === 0 ? "hidden" : ""}>
+                                    <div className=' absolute bottom-4 left-4 w-5 h-5 z-50 bg-red-500 flex rounded-full items-center justify-center font-bold'>
+                                        {itemsInBasket != 0 ? itemsInBasket : null}
+                                    </div>
+                                </div>
+                            </div>
+                            
                             {/* Mycart dropdown menu */}
                             <div className='flex flex-col  absolute w-[320px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100'
                                 style={{ display: openDropdown === 'mycartdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
@@ -95,7 +104,6 @@ function MainBar() {
                                 <div
                                     className='overflow-y-auto max-h-[450px] min-h-0'
                                     style={{ display: openDropdown === 'mycartdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
-
                                 >
                                     <div className="px-8 py-3">
                                         {basketItems.map((item) => (
@@ -111,6 +119,9 @@ function MainBar() {
                                 </div>
                             </div>
                         </button>
+
+
+
                     </div>
                 )}
 

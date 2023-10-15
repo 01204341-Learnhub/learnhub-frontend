@@ -13,10 +13,12 @@ function _ShowList({ submission, onClick }: { submission: ClassAssignmentSubmiss
             onClick(submission.student.studentID)
         }} className="w-full flex bg-white  items-center border-2 hover:bg-slate-300">
             <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
-                <img src={submission.student.profilePicture} />
+                <img src={submission.student.profilePicture} className="w-16 h-16 object-cover rounded-full"/>
             </div>
-            <h1 className="text-gray-600 font-bold ml-5">{submission.student.name}</h1>
-            <h1 className="text-gray-600 font-bold ml-5 justify-end">{submission.score}/100</h1>
+            <div className="flex w-96 justify-between">
+                <h1 className="text-gray-600 font-bold ml-5">{submission.student.name}</h1>
+                <h1 className="text-gray-600 font-bold ml-5 justify-end">{submission.score}/100</h1>
+            </div>
         </button>
     )
 }
@@ -74,8 +76,8 @@ function ReviewWork() {
             </div>
             <div className="flex">
                 <div className="w-4/12 px-5 py-5">
-                    <div className="bg-red-500 w-1/4  text-center my-10 ">
-                        <p className="text-white py-2">ยังไม่ได้ตรวจ</p>
+                    <div className="bg-[#F31559] w-1/4  text-center my-10 ">
+                        <p className="text-white font-bold py-2">ยังไม่ได้ตรวจ</p>
                     </div>
                     {getSubmissionByStatus("uncheck").map((submission, index) => {
                         return (
@@ -86,8 +88,8 @@ function ReviewWork() {
                     })}
 
 
-                    <div className="bg-yellow-400 w-1/4  text-center my-10">
-                        <p className="text-white py-2">ยังไม่ได้ส่ง</p>
+                    <div className="bg-[#F8DE22] w-1/4  text-center my-10">
+                        <p className="text-black font-bold py-2">ยังไม่ได้ส่ง</p>
                     </div>
                     {getSubmissionByStatus("unsubmit").map((submission, index) => {
                         return (
@@ -96,8 +98,8 @@ function ReviewWork() {
                             </div>
                         )
                     })}
-                    <div className="bg-green-600 w-1/4  text-center my-10">
-                        <p className="text-white py-2">ตรวจแล้ว</p>
+                    <div className="bg-[#ADE792] w-1/4  text-center my-10">
+                        <p className="text-black font-bold py-2">ตรวจแล้ว</p>
                     </div>
                     {getSubmissionByStatus("check").map((submission, index) => {
                         return (

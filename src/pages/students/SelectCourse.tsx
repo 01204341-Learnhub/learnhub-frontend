@@ -146,7 +146,7 @@ export default function SelectCourse() {
             }`}
             onChange={onRatingChange}
           />
-          <p>{rating}</p>
+          
         </div>
         {showReviewButton && (
           <button

@@ -12,22 +12,25 @@ import Calendar from "../../learns/components/Calendar";
 import { Work } from "../types/classWork";
 
 interface WorkCreateProps {
-  availableTopics: string[];
-  onSubmit: (work: Work) => void;
-  onCancel: () => void;
+    availableTopics: string[]
+    onSubmit: (work: ClassAssignment) => void,
+    onCancel: () => void
+}
+const defaultWork: ClassAssignment = {
+    assignmentID: "",
+    name: "",
+    description: "",
+    topic: "",
+    dueDate: new Date(),
+    score: 0,
+    nosend: 0,
+    send: 0,
+    attachments: [],
 }
 
 function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
-  const [work, setWork] = useState<Work>({
-    name: "",
-    description: "",
-    attachments: [],
-    score: 0,
-    topic: "",
-    send: 0,
-    nosend: 0,
-  });
-  const [dropdowndete, setdropdowndete] = useState<boolean>(false);
+    const [work, setWork] = useState<ClassAssignment>(defaultWork)
+    const [dropdowndete, setdropdowndete] = useState<boolean>(false)
 
   const onWorkNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setWork((p) => ({ ...p, name: e.target.value }));

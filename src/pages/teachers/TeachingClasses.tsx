@@ -2,9 +2,9 @@ import { faClipboardList, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import WorkCreate from "../../features/teaches/components/WorkCreate";
-import { ClassAssignment, Work } from "../../features/teaches/types/classWork";
+import { ClassAssignment } from "../../features/teaches/types/classWork";
 // import Workreview from "../../features/teaches/components/reviewwork"
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { FormPublishPostClass } from "../../features/teaches/components/FormPublishPostClass";
 import { useClassAssignments } from "../../features/teaches/hooks/useClassAssignments";
 import { useClassInfo } from "../../features/teaches/hooks/useClassInfo";
@@ -13,12 +13,6 @@ import { useUser } from "../../hooks/useUser";
 
 type View = "main" | "works" | "members" | "create-work";
 
-
-const fakeURL =
-  "https://www.hobbyfanclub.com/web/board/2022/odtjnwftssxcxgmfjaj5191220225035856071.jpg";
-
-const fakeTeacherThumbnail =
-  "https://scontent.fbkk22-6.fna.fbcdn.net/v/t39.30808-6/305494824_461079576060810_2645334172550963334_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEK3VHA0mex4atLPZYQZ9wnCYsANNdweP0JiwA013B4_UhN0q5hA-NjCs3Tpjd6Y8LAhmihkYTPgFGEhwffWZCN&_nc_ohc=zPEbVJrCs3AAX_tkIkk&_nc_ht=scontent.fbkk22-6.fna&oh=00_AfAdJoFNG5Z91b7iv1loO4Ct0tqbTzyWTFYxj7cz9iVAcg&oe=652EBD83";
 
 interface ViewSlectorProps {
   currentView: View;
@@ -62,7 +56,7 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
   );
 }
 
-function _WorkSlot({ work }: { work: Work }) {
+function _WorkSlot({ work }: { work: ClassAssignment }) {
   const [isOpen, setISOpen] = useState(false);
   return (
     <div className="w-full">
@@ -101,9 +95,9 @@ function _WorkSlot({ work }: { work: Work }) {
               ดูวิธีการ
             </button>
             <div className="w-2/12 items-end">
-              <button className="bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+              <Link to={`review/${work.assignmentID}`} className="bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 border border-blue-700 rounded">
                 ตรวจงาน
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -162,12 +156,12 @@ function TeachingClasses() {
   const [view, setView] = useState<View>("main");
   const { classID } = useParams<{ classID: string }>();
   const { classInfo, isFetching: isFetchingClassInfo } = useClassInfo(classID)
-  const { assignments, isFetching: isFetchingAssignments } = useClassAssignments(classID)
+  const { assignments, isFetching: isFetchingAssignments, addAssignment } = useClassAssignments(classID)
   const { students } = useClassStudents(classID)
   const { user } = useUser()
 
   function handleAddAssignment(assignment: ClassAssignment) {
-    alert(`add assignment ${JSON.stringify(assignment, null, 2)} `);
+    addAssignment(assignment);
     setView("works");
   }
 

@@ -45,7 +45,7 @@ function LearningOverview() {
                     <div className="flex flex-col bg-[#f5f5f580]">
                         <div className="text-2xl mt-10 pb-4 font-bold">คลาสเรียนที่ใกล้จะเริ่มสอน</div>
                         <div className="mr-52">
-                            {dashboard.classes.map(({ classInfo, schedules }) => (
+                            {dashboard.classes.map(({ classInfo, schedules, teacher}) => (
                                 <li key={classInfo.classID} className={`flex justify-center mt-2`}>
                                     <ClassIncoming
                                         titleName={classInfo.className}
@@ -53,6 +53,7 @@ function LearningOverview() {
                                         start={`${formatTimeFromTimestamp(schedules[0].start)} `}
                                         end={`${formatTimeFromTimestamp(schedules[0].end)} `}
                                         instrName={classInfo.className}
+                                        profilePic={teacher.profilePic}
                                         color={"green"} />
                                 </li>
                             ))}
@@ -90,7 +91,7 @@ function LearningOverview() {
                                     <li key={announcementID} className={`flex justify-center mt-2`}>
                                         <div className="flex justify-center py-2 bg-gray-100 hover:bg-gray-300 rounded-xl">
                                             <div className="py-2 h-16 w-16  rounded-full mx-4">
-                                                <img src={teacher.profilePic} className=" h-16 w-16 rounded-full" />
+                                                <img src={teacher.profilePic} className=" h-16 w-16 rounded-full object-cover" />
                                             </div>
                                             <div className="flex flex-col w-[280px]">
                                                 <span className="text-lg truncate">{teacher.teacherName}</span>

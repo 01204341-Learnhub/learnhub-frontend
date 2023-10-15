@@ -1,11 +1,13 @@
 import { useParams } from "react-router-dom";
 import { LearnhubUser } from "../../types/user";
-import { generateMockUser } from "../../features/learns/types/thread";
 import useClass from "../../features/learns/hooks/useClass";
 import { Class } from "../../features/learns/types/classes";
 import ClassAnnouncementThread from "../../features/learns/components/ClassAnnouncementThread";
 import ClassHomeworkThread from "../../features/learns/components/ClassHomeworkThread";
 import { useState } from "react";
+import ClassHomeworkListEntry from "../../features/learns/components/ClassHomeworkListEntry.tsx";
+import ClassPeopleListEntry from "../../features/learns/components/ClassPeopleListEntry.tsx";
+import { useUser } from "../../hooks/useUser.ts";
 
 interface _TabSwitcherProps {
   currentTab: "main" | "homeworks" | "people";
@@ -61,28 +63,30 @@ function _MainTab({ user, cls }: _MainTabProps) {
           className="w-full h-[315px] object-cover border-[1px] border-[#a0a0a080] rounded-[10px]"
         />
         <div className="flex flex-col w-full space-y-3">
-          {cls.simpleThreads.map((simpleThread) => {
-            if (simpleThread.typ === "announcement") {
-              return (
-                <ClassAnnouncementThread
-                  key={simpleThread.threadId}
-                  user={user}
-                  simpleThread={simpleThread}
-                  classId={cls.classId}
-                />
-              );
-            }
-            if (simpleThread.typ === "homework") {
-              return (
-                <ClassHomeworkThread
-                  key={simpleThread.threadId}
-                  teacher={cls.teacher}
-                  simpleThread={simpleThread}
-                  classId={cls.classId}
-                />
-              );
-            }
-          })}
+          {cls.simpleThreads
+            .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime())
+            .map((simpleThread) => {
+              if (simpleThread.typ === "announcement") {
+                return (
+                  <ClassAnnouncementThread
+                    key={simpleThread.threadId}
+                    user={user}
+                    classId={cls.classId}
+                    threadId={simpleThread.threadId}
+                  />
+                );
+              }
+              if (simpleThread.typ === "homework") {
+                return (
+                  <ClassHomeworkThread
+                    key={simpleThread.threadId}
+                    teacherFullName={cls.teacher.fullname}
+                    classId={cls.classId}
+                    simpleThread={simpleThread}
+                  />
+                );
+              }
+            })}
         </div>
       </div>
     </div>
@@ -94,8 +98,45 @@ interface _HomeworksTabProps {
 }
 
 function _HomeworksTab({ cls }: _HomeworksTabProps) {
-  cls;
-  return <div>homeworks</div>;
+  const [topics] = useState<string[]>(
+    Array.from(
+      new Set(
+        cls.simpleThreads
+          .filter((simpleThread) => simpleThread.typ === "homework")
+          .map((simpleThread) => simpleThread.homeworkTopicName)
+          .sort()
+      )
+    )
+  );
+  return (
+    <div className="flex w-full justify-center">
+      <div className="flex flex-col bg-white w-full min-w-[600px] max-w-[950px] p-5 space-y-5 ">
+        {topics.map((topic) => (
+          <div key={topic}>
+            <h1 className="text-black text-[32px] font-bold p-5 mb-2 border-b-[5px]">
+              {topic ?? "ไม่มีหัวข้อ"}
+            </h1>
+            <div className="flex flex-col space-y-2">
+              {cls.simpleThreads
+                .filter(
+                  (simpleThread) =>
+                    simpleThread.typ === "homework" &&
+                    simpleThread.homeworkTopicName === topic
+                )
+                .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime())
+                .map((simpleThread) => (
+                  <ClassHomeworkListEntry
+                    key={simpleThread.threadId}
+                    classId={cls.classId}
+                    simpleThread={simpleThread}
+                  />
+                ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 interface _PeopleTabProps {
@@ -103,8 +144,26 @@ interface _PeopleTabProps {
 }
 
 function _PeopleTab({ cls }: _PeopleTabProps) {
-  cls;
-  return <div>people</div>;
+  return (
+    <div className="flex w-full justify-center">
+      <div className="flex flex-col w-full min-w-[600px] max-w-[950px] p-5 space-y-10 ">
+        <div>
+          <h1 className="text-black text-[32px] font-bold mb-4">ผู้สอน</h1>
+          <ClassPeopleListEntry user={cls.teacher} />
+        </div>
+        <div>
+          <h1 className="text-black text-[32px] font-bold mb-4">ผู้เรียน</h1>
+          <div className="flex flex-col space-y-2">
+            {cls.students
+              .sort((a, b) => a.fullname.localeCompare(b.fullname))
+              .map((student) => (
+                <ClassPeopleListEntry key={student.userID} user={student} />
+              ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 type PathParams = {
@@ -117,8 +176,8 @@ function LearningClass() {
   const [currentTab, setCurrentTab] = useState<"main" | "homeworks" | "people">(
     "main"
   );
-  // TODO: use useUser hook
-  const user = generateMockUser("student", "student0");
+  // const user = generateMockUser("student", "student0");
+  const { user } = useUser();
   const { cls } = useClass(classId);
   return (
     <div className="bg-[#F6F6F6] w-full h-full">
@@ -148,4 +207,5 @@ function LearningClass() {
     </div>
   );
 }
+
 export default LearningClass;

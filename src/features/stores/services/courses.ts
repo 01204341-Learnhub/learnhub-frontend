@@ -37,6 +37,7 @@ async function listCourse(): Promise<Course[]> {
         })),
         rating: course.rating,
         reviewerCount: course.review_count,
+        difficultyLevel: course.difficulty_level,
         price: course.price,
       };
     });

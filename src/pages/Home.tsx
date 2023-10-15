@@ -1,18 +1,16 @@
 import { Link } from "react-router-dom";
+import { LoadingSpash } from "../components/LoadingSpash";
 import ProgramCarousel from "../features/stores/components/ProgramCarousel";
 import ProgramSlot from "../features/stores/components/ProgramSlot";
 import { useAllClasses } from "../features/stores/hooks/useAllClasses";
 import { useAllCourses } from "../features/stores/hooks/useAllCourses";
-import { LoadingSpash } from "../components/LoadingSpash";
-
 
 export default function Home() {
-
-    const { courses, isFetching: isFetchingCourses } = useAllCourses()
-    const { classes, isFetching: isFetchingClasses } = useAllClasses()
+    const { courses, isFetching: isFetchingCourses } = useAllCourses();
+    const { classes, isFetching: isFetchingClasses } = useAllClasses();
 
     if (isFetchingCourses || isFetchingClasses) {
-        return  (
+        return (
 
             <div className="flex justify-center items-center h-screen">
                 <LoadingSpash></LoadingSpash>
@@ -27,8 +25,12 @@ export default function Home() {
                 programName: program.name,
                 programId: program.courseID,
                 instructorName: program.instructor.name,
-                percentCompleted: 100,
+                percentCompleted: program.rating,
                 programThumbnailUrl: program.thumbnailUrl,
+                voter: program.reviewerCount,
+                price: program.price,
+                tag: program.tags[0].name,
+                lvl: program.difficultyLevel
             })
         })
         return coursePopularSlot
@@ -42,8 +44,12 @@ export default function Home() {
                 programName: program.name,
                 programId: program.classID,
                 instructorName: program.instructor.name,
-                percentCompleted: 100,
+                percentCompleted: null,
                 programThumbnailUrl: program.thumbnailURL,
+                voter: null,
+                price: program.price,
+                tag: program.tags[0].name,
+                lvl: program.difficultyLevel
             })
         })
         return classNewSlot
@@ -61,9 +67,9 @@ export default function Home() {
                                 <ProgramSlot key={index} courseThumbnailUrl={program.thumbnailUrl}
                                     courseName={program.name}
                                     instructorName={program.instructor.name}
-                                    percentCompleted={100}
-                                    regisDate={""} voter={program.rating} price={program.price} tag={program.tags[0].name}
-                                    lvl={"พื้นฐาน"} />
+                                    percentCompleted={program.rating}
+                                    regisDate={""} voter={program.reviewerCount} price={program.price} tag={program.tags[0].name}
+                                    lvl={program.difficultyLevel} />
                             </Link>
                         )
                     }
@@ -72,7 +78,6 @@ export default function Home() {
         )
     }
 
-
     const renderProgramClasses = () => {
         return (
             <>
@@ -80,15 +85,14 @@ export default function Home() {
                     if (index > 7) {
                         return null
                     } else {
-
                         return (
                             <Link to={`/detail/class/${program.classID}`} key={index} className="my-4 px-6" >
                                 <ProgramSlot key={index} courseThumbnailUrl={program.thumbnailURL}
                                     courseName={program.name}
                                     instructorName={program.instructor.name}
-                                    percentCompleted={100}
-                                    regisDate={program.registerEndedDate.toString()} voter={0} price={3000} tag={program.tags[0].name}
-                                    lvl={"พื้นฐาน"} />
+                                    percentCompleted={null}
+                                    regisDate={program.registerEndedDate.toString()} voter={null} price={program.price} tag={program.tags[0].name}
+                                    lvl={program.difficultyLevel} />
                             </Link>
                         )
                     }
@@ -116,34 +120,28 @@ export default function Home() {
                     displayCount={3} />
             </div>
             <hr className="border-[#d9d9d9] my-8 w-full" />
-
             <section className="relative flex flex-col items-center w-full overflow-hidden">
                 <h1 className="absolute left-[16%] pb-12 text-2xl font-bold self-start">คลาสเรียน</h1>
-                <div className="pl-6 mt-5 pt-8 grid overflow-hidden grid-cols-4">
+                <div className=" w-4/5 mt-5 pt-8 flex-[3] flex flex-wrap justify-center">
                     {renderProgramClasses()}
                 </div>
                 <Link to={`/home/classes`}>
                     <div className="flex pb-4 pt-2">
-                        <button
-                            type="button"
-                            className="text-lg font-bold">
+                        <button type="button" className="px-4 py-2 rounded-lg bg-[#404040] hover:bg-[#909090] text-lg text-white font-semibold hover:shadow-lg">
                             ดูทั้งหมด
                         </button>
                     </div>
                 </Link>
             </section>
             <hr className="border-[#d9d9d9] my-8 w-full" />
-
             <section className="relative flex flex-col items-center w-full overflow-hidden">
                 <h1 className="absolute left-[16%] pb-12 text-2xl font-bold self-start">คอร์สเรียน</h1>
-                <div className="pl-6 mt-5 pt-8 grid grid-cols-4">
+                <div className=" w-4/5 mt-5 pt-8 flex-[3] flex flex-wrap justify-center">
                     {renderProgramsCourse()}
                 </div>
                 <Link to={`/home/courses`}>
-                    <div className="flex pb-4 pt-2">
-                        <button
-                            type="button"
-                            className="text-lg font-bold">
+                    <div className="pb-4 pt-2 ">
+                        <button type="button" className="px-4 py-2 rounded-lg bg-[#404040] hover:bg-[#909090] text-lg text-white font-semibold hover:shadow-lg">
                             ดูทั้งหมด
                         </button>
                     </div>

@@ -76,7 +76,7 @@ async function listClassAssignments(classID: string) {
       description: res.data.assignments[i].text,
       attachments: assignmentRes.data.attachments.map((a) => ({
         src: a.src,
-        name: a.attachment_type,
+        attachmentType: a.attachment_type,
       })),
       score: res.data.assignments[i].max_score,
       topic: res.data.assignments[i].group_name,
@@ -88,7 +88,28 @@ async function listClassAssignments(classID: string) {
   return assignments;
 }
 
+async function createClassAssignment(
+  classID: string,
+  assignment: ClassAssignment
+) {
+  const url = `${baseURL}/programs/classes/${classID}/assignments`;
+  const body = {
+    name: assignment.name,
+    group_name: assignment.topic,
+    due_date: Math.floor(assignment.dueDate.getTime() / 1000),
+    text: assignment.description,
+    max_score: assignment.score,
+    attachments: assignment.attachments.map((a) => ({
+      attachment_type: a.attachmentType,
+      src: a.src,
+    })),
+  };
+  const res = await axios.post<{ assignment_id: string }>(url, body);
+  return res.data.assignment_id;
+}
+
 export {
+  createClassAssignment,
   listClassAssignments,
   listClassStudents,
   listTeacherClasses,

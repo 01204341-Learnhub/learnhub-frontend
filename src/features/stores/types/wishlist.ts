@@ -10,9 +10,9 @@ type WishlistItem = {
   description: string;
   thumbnailURL: string;
   teacherName: string;
-  rating: number;
-  voter: number;
-  totalTime: number;
+  rating?: number;
+  voter?: number;
+  totalTime?: number;
   tag: string;
   level : string
 };

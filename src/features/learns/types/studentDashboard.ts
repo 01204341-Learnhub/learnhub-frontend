@@ -3,7 +3,8 @@ type StudentDashboard = {
         {
           classInfo: {
             className: string,
-            classID: string
+            classID: string,
+            classPic: string,
           },
           teacher: {
             teacherID: string,

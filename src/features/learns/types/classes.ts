@@ -20,6 +20,10 @@ export type EnrolledClass = {
   registrationEndDate: Date;
   endDate: Date;
   price: number;
+  schedules: {
+    start: Date
+    end: Date
+  }[];
 };
 
 type Class = {

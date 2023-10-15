@@ -20,8 +20,11 @@ type ListEnrolledClassesResponse = {
     name: string;
     class_pic: string;
     progress: number;
-
     class_ended_date: number;
+    schedules: {
+      start: number
+      end: number
+    }[];
     teacher: {
       teacher_id: string;
       teacher_name: string;
@@ -153,8 +156,9 @@ type GetStudentCourseQuizReportResponse = {
 type GetStudentDashboardResponse = {
   classes: {
     class_info: {
-      class_name: string;
-      class_id: string;
+      class_name: string,
+      class_id: string,
+      class_pic: string,
     };
     teacher: {
       teacher_id: string;

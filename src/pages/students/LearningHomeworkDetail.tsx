@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { Thread, generateMockUser } from "../../features/learns/types/thread";
+import { Thread } from "../../features/learns/types/thread";
 import useThread from "../../features/learns/hooks/useThread";
 import ClassHomeworkDetailMainContent from "../../features/learns/components/ClassHomeworkDetailMainContent";
 import ClassHomeworkDetailFileUploader from "../../features/learns/components/ClassHomeworkDetailFileUploader";
+import { useUser } from "../../hooks/useUser";
 
 interface _TopNavbarProps {
   thread: Thread;
@@ -41,8 +42,8 @@ type PathParams = {
 
 function LearningHomeworkDetail() {
   const { classId, homeworkId } = useParams<PathParams>();
-  // TODO: use useUser hook
-  const user = generateMockUser("student", "student0");
+  // const user = generateMockUser("student", "student0");
+  const { user } = useUser();
   const {
     thread,
     addReply,
@@ -54,7 +55,7 @@ function LearningHomeworkDetail() {
 
   return (
     <div className="w-full h-full bg-[#eeeeee80] overflow-auto">
-      {thread && (
+      {user && thread && (
         <>
           <_TopNavbar thread={thread} />
           <div className="flex p-5 mt-5 justify-center items-start space-x-5 w-full">

@@ -13,6 +13,10 @@ export function getCustomFileTypeFromFile(file: File) {
 }
 
 export function getFileNameFromSrc(src: string) {
+  // If src is not hosted on our firebase storage, return src as is.
+  if (!src.includes("firebasestorage.googleapis.com")) {
+    return src;
+  }
   const startIndex = src.indexOf("%00") + 3;
   const endIndex = src.indexOf("?", startIndex);
   if (startIndex === -1) {
@@ -50,4 +54,3 @@ export function toDateTimeStringOmitDateOnSameDay(dateTime: Date) {
   }
   return dateTime.toLocaleString("th-TH", format);
 }
-

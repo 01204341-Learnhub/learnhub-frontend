@@ -1,3 +1,4 @@
+import { LoadingSpash } from "../../../components/LoadingSpash";
 import { useUser } from "../../../hooks/useUser"
 import { useCourseQuiz } from "../hooks/useCourseQuiz"
 import { useStudentCourseQuizReport } from "../hooks/useStudentCourseQuizReport"
@@ -28,13 +29,13 @@ function CourseMultipleChoiceQuizReport({ quizID }: CourseMultipleChoiceQuizRepo
     }
     if (isFetchingQuiz || isFetchingReport) {
         return (
-            <div>Loading...</div>
+            <LoadingSpash></LoadingSpash>
         )
     }
     else return (
-        <div>
+        <div >
             <div className="flex items-center">
-                <h1 className=" ml-[70px] grow font-bold text-[30px]">แบบทดสอบ : {quiz.name}</h1>
+                <h1 className="ml-[70px] grow font-bold text-[30px]">แบบทดสอบ : {quiz.name}</h1>
                 <div className="flex mr-[150px] text-[30px]">
                     <div className="bg-black">
                         <h1 className="text-white text-[30px] m-2">คะแนน</h1>
@@ -44,13 +45,14 @@ function CourseMultipleChoiceQuizReport({ quizID }: CourseMultipleChoiceQuizRepo
                     </div>
                 </div>
             </div>
+            <div className="overflow-scroll h-96">
             {quiz.problems.map((problem, problemIndex) => {
                 return (
                     <div key={problemIndex}>
                         <div className="flex flex-col ml-[100px] mr-[150px] mt-[40px] rounded-xl bg-white drop-shadow-xl">
                             <div className="flex pt-2 pb-4 mt-[20px]">
                                 <div className="my-auto mx-[40px] grow font-semibold text-[18px]">คำถามที่ {problemIndex + 1} : {problem.question}</div>
-                                <div className="mx-5  font-bold text-[22px]">
+                                <div className="mx-5 font-bold text-[22px]">
                                     {checkIfProblemCorrect(problemIndex) ? <FontAwesomeIcon icon={faCheck} size='xl' color="#ADE792" /> : <FontAwesomeIcon icon={faXmark} size='xl' color="#FF2171" /> }
                                 </div>
                             </div>
@@ -76,6 +78,7 @@ function CourseMultipleChoiceQuizReport({ quizID }: CourseMultipleChoiceQuizRepo
                     </div>
                 )
             })}
+            </div>
         </div>
     )
 }

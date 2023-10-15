@@ -29,7 +29,7 @@ function ClassThreadReplyInputBar({
       <img
         src={user.profilePicture}
         className="rounded-full min-w-[40px] max-w-[40px] min-h-[40px] max-h-[40px] bg-[#d9d9d9] mt-1"
-        alt={`https://robohash.org/${user.userID}`}
+        alt="profile picture"
       />
       <textarea
         id="reply-textarea"

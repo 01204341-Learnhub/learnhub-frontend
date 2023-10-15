@@ -1,5 +1,4 @@
 import { LearnhubUser } from "../../../types/user";
-import { generateMockUser } from "./thread";
 
 type Teacher = {
   id: string;
@@ -19,6 +18,7 @@ export type EnrolledClass = {
   status: string;
   tags: Tag[];
   registrationEndDate: Date;
+  endDate: Date;
   price: number;
 };
 
@@ -39,65 +39,34 @@ type SimpleThread = {
   homeworkTopicName?: string; // For homework threads
 };
 
-function generateMockClass(classId: string): Class {
-  return {
-    classId: classId,
-    name: `Class ${classId}`,
-    thumbnailUrl: `https://picsum.photos/seed/${classId}/1920/1080`,
-    teacher: generateMockUser("teacher", "teacher0"),
-    students: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) =>
-      generateMockUser("student", `student${i}`),
-    ),
-    simpleThreads: [
-      {
-        threadId: "announcement0",
-        typ: "announcement",
-        name: "Announcement 0",
-        lastEdit: new Date(),
-      },
-      {
-        threadId: "homework0",
-        typ: "homework",
-        name: "Homework 0",
-        lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 3),
-        homeworkTopicName: "Topic 0",
-      },
-      {
-        threadId: "announcement1",
-        typ: "announcement",
-        name: "Announcement 1",
-        lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 10),
-      },
-      {
-        threadId: "homework1",
-        typ: "homework",
-        name: "Homework 1",
-        lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
-        homeworkTopicName: "Topic 1",
-      },
-      {
-        threadId: "announcement2",
-        typ: "announcement",
-        name: "Announcement 2",
-        lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 7),
-      },
-      {
-        threadId: "homework2",
-        typ: "homework",
-        name: "Homework 2",
-        lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 10),
-        homeworkTopicName: "Topic 0",
-      },
-      {
-        threadId: "homework3",
-        typ: "homework",
-        name: "Homework 3",
-        lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 14),
-        homeworkTopicName: "Topic 1",
-      },
-    ],
+type ClassDetail = {
+  classID: string;
+  name: string;
+  thumbnailUrl: string;
+  teacher: {
+    teacherID: string;
+    name: string;
+    avatarUrl: string;
   };
-}
+  description: string;
+  tags: {
+    tagID: string;
+    name: string;
+  }[];
+  status: string;
+  schedules: {
+    start: Date;
+    end: Date;
+  }[];
+  registrationEndDate: Date;
+  openDate: Date;
+  EndDate: Date;
+  price: number;
+  objectives: string[];
+  requirements: string;
+  difficultyLevel: string;
+  studentCount: number;
+  studentLimit: number;
+};
 
-export type { Teacher, Tag, Class, SimpleThread };
-export { generateMockClass };
+export type { Class, ClassDetail, SimpleThread, Tag, Teacher };

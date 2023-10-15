@@ -30,6 +30,40 @@ type ListEnrolledClassesResponse = {
   }[];
 };
 
+type GetClassDetailResponse = {
+  class_id: string;
+  name: string;
+  class_pic: string;
+  teacher: {
+    teacher_id: string;
+    teacher_name: string;
+    profile_pic: string;
+  };
+  description: string;
+  tags: [
+    {
+      tag_id: string;
+      tag_name: string;
+    },
+  ];
+  status: string;
+  schedules: {
+    start: number;
+    end: number;
+  }[];
+  registration_ended_date: number;
+  open_date: number;
+  class_ended_date: number;
+  price: number;
+  class_objective: string[];
+  class_requirement: string;
+  difficulty_level: string;
+  meeting_count: number;
+  student_count: number;
+  max_student: number;
+  assignment_count: number;
+};
+
 type GetQuizResponse = {
   name: string;
   description: string;
@@ -188,6 +222,7 @@ type GetCourseAnnouncementResponse = {
 };
 
 export type {
+  GetClassDetailResponse,
   GetCourseAnnouncementResponse,
   GetCourseChapterResponse,
   GetCourseLessonResponse,

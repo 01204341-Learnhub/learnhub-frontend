@@ -5,8 +5,10 @@ import {
   faCircleQuestion,
   faClipboardList,
   faDownload,
+  faEdit,
   faFileLines,
-  IconDefinition,
+  faX,
+  IconDefinition
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -24,7 +26,7 @@ function _LessonEntry({ lesson }: _LessonEntryProps) {
     icon = faFileLines;
   } else if (lesson.type === "quiz") {
     icon = faClipboardList;
-  } else if (lesson.type === "file") {
+  } else if (lesson.type === "files") {
     icon = faDownload;
   } else {
     icon = faCircleQuestion;
@@ -39,9 +41,11 @@ function _LessonEntry({ lesson }: _LessonEntryProps) {
 
 interface CourseChapterInfoProps {
   chapter: Chapter;
+  onEdit: () => void;
+  onRemove: () => void
 }
 
-function CourseChapterInfo({ chapter }: CourseChapterInfoProps) {
+function CourseChapterInfo({ chapter, onEdit, onRemove }: CourseChapterInfoProps) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const handleExpandClick = () => {
     setIsExpanded(!isExpanded);
@@ -50,15 +54,25 @@ function CourseChapterInfo({ chapter }: CourseChapterInfoProps) {
     <div className="flex flex-col justify-start space-y-0.5">
       <div className="bg-white w-full drop-shadow-md p-5">
         <div className="flex flex-col justify-start space-y-4">
-          <div className="flex justify-start items-start space-x-6">
-            <div className="flex flex-col min-w-fit">
-              <p className="text-[18px] font-semibold text-black">
-                บทที่ {chapter.number}:
+          <div className="flex justify-between items-start space-x-6">
+            <div className="flex">
+              <div className="flex flex-col min-w-fit">
+                <p className="text-[18px] font-semibold text-black">
+                  บทที่ {chapter.number}:
+                </p>
+              </div>
+              <p className="text-[18px] font-semibold ml-5 text-[#808080]">
+                {chapter.name}
               </p>
             </div>
-            <p className="text-[18px] font-semibold text-[#808080]">
-              {chapter.name}
-            </p>
+            <div>
+              <button className="hover:bg-slate-100 mr-5" onClick={onEdit}>
+                <FontAwesomeIcon icon={faEdit} />
+              </button>
+              <button className="hover:bg-slate-100" onClick={onRemove}>
+                <FontAwesomeIcon icon={faX} />
+              </button>
+            </div>
           </div>
           <div className="flex justify-start items-start space-x-6">
             <div className="flex flex-col min-w-fit">
@@ -88,7 +102,9 @@ function CourseChapterInfo({ chapter }: CourseChapterInfoProps) {
       {isExpanded && (
         <div className="bg-[#F1F1F1] w-full min-h-fit p-5">
           {chapter.lessons.map((lesson) => (
-            <_LessonEntry lesson={lesson} />
+            <div key={lesson.number}>
+              <_LessonEntry lesson={lesson} />
+            </div>
           ))}
         </div>
       )}

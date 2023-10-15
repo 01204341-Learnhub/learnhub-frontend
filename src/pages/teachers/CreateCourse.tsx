@@ -6,6 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import CourseCardPreview from "../../features/teaches/components/CourseCardPreview";
 import CourseChapterCreate from "../../features/teaches/components/CourseChapterCreate";
 import CourseChapterInfo from "../../features/teaches/components/CourseChapterInfo";
@@ -19,9 +20,10 @@ import {
 } from "../../features/teaches/types/course";
 import { useUser } from "../../hooks/useUser.ts";
 
+type AvailableTab = "content" | "goals" | "publishing" | "add-chapter" | "edit-chapter";
 interface _SideNavProps {
   currentTab: string;
-  onChangeTab: (tab: string) => void;
+  onChangeTab: (tab: AvailableTab) => void;
   onPublish?: () => void;
   readyToPublish: boolean;
 }
@@ -248,7 +250,7 @@ function checkReadyToPublish(course: Course) {
           return lesson.doc !== null;
         } else if (lesson.type === "quiz") {
           return lesson.quiz !== null;
-        } else if (lesson.type === "file") {
+        } else if (lesson.type === "files") {
           return lesson.fileUrl !== null && lesson.fileUrl !== "";
         } else {
           return false;
@@ -263,6 +265,7 @@ interface CourseContextType {
   setCourse: (course: Course) => void;
 }
 
+
 const CourseContext = React.createContext<CourseContextType | undefined>(
   undefined,
 );
@@ -271,6 +274,7 @@ function CreateCourse() {
   const navigate = useNavigate();
   const { user } = useUser();
   const teacherID = user.userID;
+  const [chapterToEdit, setChapterToEdit] = useState(-1)
   const [course, setCourse] = useState<Course>({
     courseId: "1234567890", // TODO: Get an ID, possibly uuid.
     name: "",
@@ -289,7 +293,7 @@ function CreateCourse() {
     studentCount: 0,
     chapters: [],
   });
-  const [currentTab, setCurrentTab] = useState<string>("content");
+  const [currentTab, setCurrentTab] = useState<AvailableTab>("content");
   const [initializedCourse, setInitializedCourse] = useState<boolean>(false);
 
   const handleInitializeCourse = () => {
@@ -297,16 +301,33 @@ function CreateCourse() {
     setCurrentTab("content");
   };
 
+  const handleRemoveChapter = (chapterNumber: number) => {
+    // remove chapter from course and renumber the rest of the chapters
+    const newCourse = { ...course };
+    newCourse.chapters = newCourse.chapters.filter((chapter) => chapter.number !== chapterNumber)
+    newCourse.chapters.forEach((chapter, idx) => {
+      if (chapter.number > chapterNumber) {
+        newCourse.chapters[idx].number -= 1;
+      }
+    })
+    setCourse(newCourse)
+  }
+
   const handlePublishCourse = () => {
-    // TODO: Send the course to the server.
     async function publishCourse() {
+      if (!checkReadyToPublish(course)) throw new Error("ยังกรอกข้อมูลไม่ครบ")
       await createCourse(course, teacherID);
     }
     publishCourse().then(() => {
       alert("Course published!");
       navigate("/teach/overview");
     }).catch((err) => {
-      alert("Error: " + err);
+      Swal.fire({
+        title: "เกิดข้อผิดพลาดในการเผยแพร่คอร์ส",
+        text: err,
+        icon: "error",
+        confirmButtonText: "ตกลง",
+      })
     })
 
   };
@@ -348,8 +369,14 @@ function CreateCourse() {
             readyToPublish={checkReadyToPublish(course)}
           />
           <div className="flex flex-col justify-start space-y-5 w-full h-fit p-8 bg-white">
-            {course.chapters.map((chapter) => (
-              <CourseChapterInfo chapter={chapter} />
+            {course.chapters.map((chapter, idx) => (
+              <div key={idx}>
+                <CourseChapterInfo chapter={chapter} onEdit={() => {
+                  setChapterToEdit(chapter.number)
+                  setCurrentTab("edit-chapter")
+                }}
+                  onRemove={() => { handleRemoveChapter(chapter.number) }} />
+              </div>
             ))}
             <button
               className="bg-[#D9D9D9] p-3 w-fit h-fit hover:drop-shadow-md"
@@ -429,7 +456,29 @@ function CreateCourse() {
         </CourseContext.Provider>
       </div>
     );
+  } else if (currentTab == "edit-chapter") {
+    return (
+      <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
+        <_TopNav
+          onQuit={() => {
+            navigate("/teach/overview");
+          }}
+        />
+        <CourseContext.Provider value={{ course, setCourse }}>
+          <CourseChapterCreate
+            onSubmit={() => {
+              setCurrentTab("content");
+            }}
+            onCancel={() => {
+              setCurrentTab("content");
+            }}
+            chapterToEdit={chapterToEdit}
+          />
+        </CourseContext.Provider>
+      </div>
+    );
   }
+
 }
 
 export default CreateCourse;

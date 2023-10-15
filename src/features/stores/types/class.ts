@@ -17,6 +17,7 @@ type ClassProgram = {
   openDate: number;
   classEndedDate: number;
   price: number;
+  difficultyLevel: string;
 };
 
 type ClassProgramDetail = {

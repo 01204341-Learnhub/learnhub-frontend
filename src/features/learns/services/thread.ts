@@ -132,11 +132,13 @@ async function submitThreadHomework(
   threadId: string,
   homeworkSubmissionFiles: HomeworkSubmissionFile[]
 ): Promise<void> {
-  // TODO: Implement this
-  console.log(
-    `Submitting homework to homework thread ${threadId} of class ${classId} with ${homeworkSubmissionFiles.length} files from user ${userId} `
-  );
-  console.log("Homework submitted");
+  const url = `${baseURL}/programs/classes/${classId}/assignments/${threadId}/submissions/${userId}/submit`;
+  await axios.put(url, {
+    attachments: homeworkSubmissionFiles.map((f) => ({
+      attachment_type: f.typ,
+      src: f.src,
+    })),
+  });
 }
 
 async function unsubmitThreadHomework(
@@ -144,11 +146,8 @@ async function unsubmitThreadHomework(
   classId: string,
   threadId: string
 ): Promise<void> {
-  // TODO: Implement this
-  console.log(
-    `Unsubmitting homework from homework thread ${threadId} of class ${classId} from user ${userId}`
-  );
-  console.log("Homework unsubmitted");
+  const url = `${baseURL}/programs/classes/${classId}/assignments/${threadId}/submissions/${userId}/unsubmit`;
+  await axios.patch(url);
 }
 
 async function getClassThread(

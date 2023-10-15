@@ -10,11 +10,6 @@ import {
 import { getCustomFileTypeFromFile } from "../../../utils/functions";
 import { uploadFile } from "../../../services/uploader/file";
 
-// Prevent unused imports
-addThreadReply;
-submitThreadHomework;
-unsubmitThreadHomework;
-
 function useThread(
   learnhubUser: LearnhubUser,
   classId: string,
@@ -51,6 +46,7 @@ function useThread(
         console.error(err);
         alert("Failed to add reply");
       });
+    // FOR MOCKUP, COMMENT OUT ABOVE AND UNCOMMENT BELOW
     // setThread({
     //   ...thread,
     //   replies: [
@@ -160,25 +156,25 @@ function useThread(
       console.error(new Error("Already submitted"));
       return;
     }
-    // TODO: Uncomment this and remove manual setThread
-    // submitThreadHomework(
-    //   user.userID,
-    //   thread.cls.classId,
-    //   thread.threadId,
-    //   thread.homeworkSubmissionFiles
-    // )
-    //   .then(() => {
-    //     updateThread();
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     alert("Failed to submit homework");
-    //   });
-    setThread({
-      ...thread,
-      homeworkSubmissionStatus: "submitted",
-      homeworkLastSubmissionDateTime: new Date(),
-    });
+    submitThreadHomework(
+      user.userID,
+      thread.classId,
+      thread.threadId,
+      thread.homeworkSubmissionFiles
+    )
+      .then(() => {
+        updateThread();
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Failed to submit homework");
+      });
+    // FOR MOCKUP, COMMENT OUT ABOVE AND UNCOMMENT BELOW
+    // setThread({
+    //   ...thread,
+    //   homeworkSubmissionStatus: "submitted",
+    //   homeworkLastSubmissionDateTime: new Date(),
+    // });
   };
 
   const unsubmitHomework = () => {
@@ -196,20 +192,20 @@ function useThread(
       console.error(new Error("Not submitted"));
       return;
     }
-    // TODO: Uncomment this and remove manual setThread
-    // unsubmitThreadHomework(user.userID, thread.cls.classId, thread.threadId)
-    //   .then(() => {
-    //     updateThread();
-    //   })
-    //   .catch((err) => {
-    //     console.error(err);
-    //     alert("Failed to unsubmit homework");
-    //   });
-    setThread({
-      ...thread,
-      homeworkSubmissionStatus: "not-submitted",
-      homeworkGotScore: undefined,
-    });
+    unsubmitThreadHomework(user.userID, thread.classId, thread.threadId)
+      .then(() => {
+        updateThread();
+      })
+      .catch((err) => {
+        console.error(err);
+        alert("Failed to unsubmit homework");
+      });
+    // FOR MOCKUP, COMMENT OUT ABOVE AND UNCOMMENT BELOW
+    // setThread({
+    //   ...thread,
+    //   homeworkSubmissionStatus: "not-submitted",
+    //   homeworkGotScore: undefined,
+    // });
   };
 
   return {

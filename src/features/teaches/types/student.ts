@@ -1,9 +1,9 @@
-type student = {
-    student_id: string;
+type Student = {
+    studentId: string;
     name: string;
-    profile_pic: string;
+    profilePic: string;
     
   };
   
-  export type { student };
+  export type { Student };
   

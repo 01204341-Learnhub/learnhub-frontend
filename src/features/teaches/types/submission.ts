@@ -1,14 +1,12 @@
-type submission = {
-    status : "check"| "uncheck" | "unsubmit";
-    description: string;
-    attachments: { src: string; name: string }[];
-    submission_date?: Date;
-    score: number;
-    student_name: string;
-    student_id : number;
-    student_pic? : string;
-    
-  };
+type Submission = {
+  status : string;
+  attachments?: { src: string; name: string }[];
+  submissionDate?: Date;
+  score: number;
+  studentName: string;
+  studentId : string;
+  studentPic? : string;
   
-  export type { submission };
-  
+};
+
+export type { Submission };

@@ -156,7 +156,7 @@ type GetStudentDashboardResponse = {
       class_name: string,
       class_id: string,
       class_pic: string,
-    },
+    };
     teacher: {
       teacher_id: string;
       teacher_name: string;

@@ -1,7 +1,7 @@
 import axios from "axios";
-import { Thread } from "../types/thread";
-import { GetClassThreadResponse } from "../types/responses";
 import { LearnhubUser } from "../../../types/user";
+import { GetClassThreadResponse } from "../types/responses";
+import { Thread } from "../types/thread";
 
 const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
@@ -79,4 +79,29 @@ async function getTeacher(teacherID: string): Promise<LearnhubUser> {
   };
 }
 
-export { fetchThread, addThreadReply, getClassThread, getTeacher };
+async function createThread(
+  classID: string,
+  text: string,
+  attachments: { attachmentType: string; src: string }[]
+) {
+  const url = `${baseURL}/programs/classes/${classID}/threads/`;
+  const body = {
+    name: "",
+    text: text,
+    attachments: attachments.map((attachment) => ({
+      attachment_type: attachment.attachmentType,
+      src: attachment.src,
+    })),
+  };
+  const res = await axios.post<{ thread_id: string }>(url, body);
+  const thread = await fetchThread(classID, res.data.thread_id);
+  return thread;
+}
+
+export {
+  addThreadReply,
+  createThread,
+  fetchThread,
+  getClassThread,
+  getTeacher,
+};

@@ -13,6 +13,7 @@ import { addItem, clearItem, setStatusFetchOnce } from '../slices/basketSlice'
 import { clearUser } from '../slices/userSlice'
 import { RootState } from '../store'
 import SearchBar from '../components/SearchBar'
+
 function MainBar() {
     const basket = useSelector((state: RootState) => state.basket)
     const basketItems = basket.basket.items
@@ -45,14 +46,13 @@ function MainBar() {
         toggleDropdown('mycartdropdown')
     }
     async function refresh(){
-                const BasketItems = await fetchBasketItems(user.userID)
-                dispatcher(setStatusFetchOnce(true))
-                dispatcher(clearItem())
-                BasketItems.items.map((item) => {
-                  dispatcher(addItem(item))
-                })
-    }  
-    refresh()
+        const BasketItems = await fetchBasketItems(user.userID)
+        dispatcher(setStatusFetchOnce(true))
+        dispatcher(clearItem())
+        BasketItems.items.map((item) => {
+          dispatcher(addItem(item))
+        })
+    }
     
     
     const handleSignOut = () => {

@@ -13,6 +13,7 @@ async function getStudentDashboard(studentID: string) {
         classInfo: {
           classID: c.class_info.class_id,
           className: c.class_info.class_name,
+          classPic: c.class_info.class_pic,
         },
         teacher: {
           teacherID: c.teacher.teacher_id,

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import WorkCreate from "../../features/teaches/components/WorkCreate";
 import { Work } from "../../features/teaches/types/classWork";
+import { student } from "../../features/teaches/types/student";
 // import Workreview from "../../features/teaches/components/reviewwork"
 import PostClass from "../../features/teaches/components/PostClass";
 import { FormPublishPostClass } from "../../features/teaches/components/FormPublishPostClass";
@@ -112,7 +113,18 @@ function _WorkSlot({ work }: { work: Work }) {
     </div>
   );
 }
-
+function _studentslot()
+{
+  return(
+    <div className="w-3/4 flex bg-white  items-center border-2">
+                    <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
+                            <img src="" />
+                        </div>
+                    <h1 className="text-xl text-gray-600 font-bold ml-5">namew</h1>
+                    
+                        </div>
+  )
+}
 interface _ClassWorksProps {
   onCreateClassWork: () => void;
   works: Work[];
@@ -209,7 +221,23 @@ const mockWorks: Work[] = [
     nosend: 15,
   },
 ];
-
+const mockstudents: student[]=[
+  {
+    student_id: "1234",
+    name: "name1",
+    profile_pic: ""
+},
+{
+  student_id: "1235",
+  name: "name2",
+  profile_pic: ""
+},
+{
+  student_id: "1236",
+  name: "name3",
+  profile_pic: ""
+},
+]
 function TeachingClasses() {
   const [view, setView] = useState<View>("main");
   const [classInfo, setClassInfo] = useState<ClassInfoPrototype>({

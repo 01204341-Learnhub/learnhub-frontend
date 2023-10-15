@@ -37,6 +37,7 @@ import TeachingCourses from "./pages/teachers/TeachingCourses";
 import TeachingHomeworks from "./pages/teachers/TeachingHomeworks";
 import BasketPayment from "./pages/ฺBasketPayment";
 import store from "./store";
+import Workreview from "./pages/teachers/reviewwork";
 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -85,6 +86,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                   path="/teach/classes/assignment/:assignmentID"
                   element={<TeachingClasses />}
                 />
+                <Route path="/teach/classes/review" element={<Workreview />} />
+
                 <Route path="/teach/homework" element={<TeachingHomeworks />} />
                 <Route path="/teach/overview" element={<TeacherOverview />} />
                 <Route path="/teach/course/:id" element={<TeacherCourseManage />} />

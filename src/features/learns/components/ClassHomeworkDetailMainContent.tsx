@@ -21,7 +21,7 @@ function ClassHomeworkDetailMainContent({
   onAddReply,
 }: ClassHomeworkDetailMainContentProps) {
   const [showRepliesAndTextBox, setShowRepliesAndTextBox] = useState<boolean>(
-    thread.replies.length !== 0,
+    thread.replies.length !== 0
   );
 
   return (
@@ -42,7 +42,7 @@ function ClassHomeworkDetailMainContent({
             </p>
             <p className="text-[#404040] text-[14px] font-semibold">
               {`กำหนดส่ง ${toDateTimeStringOmitDateOnSameDay(
-                thread.homeworkDueDateTime,
+                thread.homeworkDueDateTime
               )}`}
             </p>
           </div>
@@ -80,16 +80,18 @@ function ClassHomeworkDetailMainContent({
       </div>
       <div className={showRepliesAndTextBox ? "block" : "hidden"}>
         <div className="flex items-center space-x-5 mx-3 mt-4">
-          <img src={PeopleSvg} width={23} />
+          <img src={PeopleSvg} width={23} alt="people icon" />
           <h3 className="text-[#808080] text-[18px] font-bold">
             ความคิดเห็นสำหรับงานนี้
           </h3>
         </div>
         <div className={thread.replies.length > 0 ? "block" : "hidden"}>
           <div className="flex flex-col w-full space-y-5 mx-3 mt-5">
-            {thread.replies.map((reply, index) => (
-              <ClassThreadReplyEntry key={index} reply={reply} />
-            ))}
+            {thread.replies
+              .sort((a, b) => a.dateTime.getTime() - b.dateTime.getTime())
+              .map((reply, index) => (
+                <ClassThreadReplyEntry key={index} reply={reply} />
+              ))}
           </div>
         </div>
         <div className="mt-7 w-[95%]">

@@ -29,11 +29,11 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
           setView("main");
         }}
       >
-        <h1
+        <button
           className={currentView == "main" ? "text-[#000]" : "text-[#808080]"}
         >
           หน้าหลักในชั้นเรียน
-        </h1>
+        </button>
         <div className={`bg-black ${currentView == "main" ? "h-2" : ""}`}></div>
       </div>
       <div
@@ -42,11 +42,11 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
           setView("works");
         }}
       >
-        <h1
+        <button
           className={currentView == "works" ? "text-[#000]" : "text-[#808080]"}
         >
           งานในชั้นเรียน
-        </h1>
+        </button>
         <div
           className={`bg-black ${currentView == "works" ? "h-2" : ""}`}
         ></div>
@@ -57,13 +57,13 @@ function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
           setView("members");
         }}
       >
-        <h1
+        <button
           className={
             currentView == "members" ? "text-[#000]" : "text-[#808080]"
           }
         >
           คนในชั้นเรียน
-        </h1>
+        </button>
         <div
           className={`bg-black ${currentView == "members" ? "h-2" : ""}`}
         ></div>
@@ -272,13 +272,13 @@ function TeachingClasses() {
         <p className="text-xl text-gray-600 font-bold ml-5 my-5">ผู้สอน</p>
         <div className="w-3/4 flex bg-white  items-center border-2">
           <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full">
-            <img src={user.profilePicture} />
+            <img src={user.profilePicture} className=" aspect-square rounded-full object-cover"/>
           </div>
           <h1 className="text-xl text-gray-600 font-bold ml-5">
             {user.fullname}
           </h1>
         </div>
-
+        
         <p className="text-xl text-gray-600 font-bold ml-5 my-5">
           ผู้เรียนในคลาส
         </p>
@@ -290,7 +290,7 @@ function TeachingClasses() {
                 key={index}
               >
                 <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full">
-                  <img src={student.avatarURL} />
+                  <img src={student.avatarURL} className=" aspect-square rounded-full object-cover"/>
                 </div>
                 <h1 className="text-xl text-gray-600 font-bold ml-5">
                   {student.name}

@@ -35,6 +35,22 @@ export function FormPublishPostClass(props: { profileTeacher: string }) {
     }
   }
 
+  function getLinkType(link: string): string {
+    const imageExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+    if (link.includes("youtube.com/watch?v=")) {
+        console.log("video");
+        
+      return "video";
+    } else if (imageExtensions.some((ext) => link.endsWith(ext))) {
+        console.log("image");
+        
+      return "image";
+    } else {
+        console.log("file");
+      return "file";
+    }
+  }
+
   const handleClickCreatePost = () => {
     setIsActionCreatePost(!isActionCreatePost);
   };
@@ -68,6 +84,8 @@ const handelUploadFileChange = async (
 
     url = await uploadImageFile(firstFile);
     const file = fileList[0];
+    console.log(getFileType(file));
+    
     setAttachments([
         ...attachments,
         { attachmentType: getFileType(file), src: url },
@@ -82,7 +100,9 @@ const handelUploadFileChange = async (
 };
 
   const addNewAttachment = () => {
-    const linkType = getFileNameFromSrc(upLoadLink);
+    const linkType = getLinkType(upLoadLink);
+    console.log(linkType);
+    
     setAttachments([
       ...attachments,
       { attachmentType: linkType, src: upLoadLink },

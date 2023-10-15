@@ -221,6 +221,14 @@ type GetCourseAnnouncementResponse = {
   }[];
 };
 
+type ListClassStudentsResponse = {
+  students: {
+    student_id: string;
+    name: string;
+    profile_pic: string;
+  }[];
+};
+
 export type {
   GetClassDetailResponse,
   GetCourseAnnouncementResponse,
@@ -230,6 +238,7 @@ export type {
   GetStudentCourseProgressResponse,
   GetStudentCourseQuizReportResponse,
   GetStudentDashboardResponse,
+  ListClassStudentsResponse,
   ListCourseAnnouncementResponse,
   ListCourseChaptersResponse,
   ListCourseLessonsResponse,

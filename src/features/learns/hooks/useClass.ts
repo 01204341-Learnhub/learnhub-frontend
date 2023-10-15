@@ -1,29 +1,26 @@
 import { useEffect, useState } from "react";
-import { fetchClass } from "../services/classes";
+import { getClass } from "../services/classes";
 import { Class } from "../types/classes";
 
 function useClass(classId: string) {
-  const [cls, setCls] = useState<Class | undefined>(undefined);
+  const [cls, setCls] = useState<Class>();
+  const [isFetching, setIsFetching] = useState(true);
+  const [reload, setReload] = useState(0);
 
-  useEffect(
-    () => {
-      updateClass();
-    },
-    [] // eslint-disable-line react-hooks/exhaustive-deps
-  ); // IMPORTANT: Empty dependency array in useEffect is needed to prevent infinite loop.
-
+  useEffect(() => {
+    async function fetchClass() {
+      const fetchedCls = await getClass(classId);
+      setCls(fetchedCls);
+    }
+    fetchClass().then(() => {
+      setIsFetching(false);
+    });
+  }, [classId, reload]);
   const updateClass = () => {
-    fetchClass(classId)
-      .then((cls) => {
-        setCls(cls);
-      })
-      .catch((err) => {
-        console.error(err);
-        alert("Failed to update class");
-      });
+    setReload(reload + 1);
   };
 
-  return { cls, updateClass };
+  return { cls, isFetching, updateClass };
 }
 
 export default useClass;

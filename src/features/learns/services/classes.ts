@@ -1,7 +1,9 @@
 import axios from "axios";
-import { ClassDetail, EnrolledClass } from "../types/classes";
+import { LearnhubUser } from "../../../types/user";
+import { Class, ClassDetail, EnrolledClass } from "../types/classes";
 import {
   GetClassDetailResponse,
+  ListClassStudentsResponse,
   ListEnrolledClassesResponse,
 } from "../types/response";
 
@@ -72,4 +74,60 @@ async function getClassDetail(classID: string) {
   return classDetail;
 }
 
-export { getClassDetail, listEnrolledClass };
+async function getClass(classID: string): Promise<Class> {
+  const classDetail = await getClassDetail(classID);
+  const classStudents = await listClassStudents(classID);
+  const classTeacher = await getTeacher(classDetail.teacher.teacherID);
+  const c: Class = {
+    // TODO: get simple threads
+    classId: classDetail.classID,
+    name: classDetail.name,
+    thumbnailUrl: classDetail.thumbnailUrl,
+    students: classStudents,
+    simpleThreads: [],
+    teacher: classTeacher,
+  };
+  return c;
+}
+
+async function getTeacher(teacherID: string): Promise<LearnhubUser> {
+  const url = `${baseURL}/users/teachers/${teacherID}`;
+  const res = await axios.get<{
+    username: string;
+    fullname: string;
+    email: string;
+    profile_pic: string;
+  }>(url);
+  return {
+    userType: "teacher",
+    userID: teacherID,
+    username: res.data.username,
+    fullname: res.data.fullname,
+    email: res.data.email,
+    profilePicture: res.data.profile_pic,
+  };
+}
+
+async function listClassStudents(classID: string): Promise<LearnhubUser[]> {
+  const url = `${baseURL}/programs/classes/${classID}/students`;
+  const res = await axios.get<ListClassStudentsResponse>(url);
+  const students: LearnhubUser[] = [];
+  for (let i = 0; i < res.data.students.length; i++) {
+    const s = await axios.get<{
+      username: string;
+      fullname: string;
+      email: string;
+    }>(`${baseURL}/users/students/${res.data.students[i].student_id}`);
+    students.push({
+      userType: "student",
+      userID: res.data.students[i].student_id,
+      username: s.data.username,
+      fullname: s.data.fullname,
+      profilePicture: res.data.students[i].profile_pic,
+      email: s.data.email,
+    });
+  }
+  return students;
+}
+
+export { getClass, getClassDetail, listClassStudents, listEnrolledClass };

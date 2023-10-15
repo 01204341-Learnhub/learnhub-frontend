@@ -19,6 +19,7 @@ type ListCoursesResponse = {
     }[];
     rating: number;
     review_count: number;
+    difficulty_level: string;
     price: number;
   }[];
 };
@@ -43,6 +44,7 @@ type ListClassesResponse = {
     open_date: number;
     class_ended_date: number;
     price: number;
+    difficulty_level: string;
   }[];
 };
 

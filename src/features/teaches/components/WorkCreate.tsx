@@ -9,7 +9,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChangeEventHandler, useState } from "react";
 import Calendar from "../../learns/components/Calendar";
-import { Work } from "../types/classWork";
+import { ClassAssignment, Work } from "../types/classWork";
+import Swal from "sweetalert2";
 
 interface WorkCreateProps {
     availableTopics: string[]
@@ -45,6 +46,16 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
     setWork((p) => ({ ...p, description: e.target.value }));
   };
   const onWorkScoreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/[^0-9]/g, "")
+    if (value !== e.target.value) {
+        Swal.fire({
+            icon: "error",
+            title: "คะแนนต้องเป็นตัวเลขเท่านั้น",
+            showConfirmButton: false,
+            timer: 1500,
+        })
+        e.target.value = "";
+      }
     if (e.target.value != "" && Number(e.target.value) >= 0) {
       setWork((p) => ({ ...p, score: Number(e.target.value) }));
       console.log(e.target.value);
@@ -193,9 +204,10 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
           <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">คะแนน</h1>
           <input
             type="text"
-            pattern="[0-9]+"
+            pattern="[0-9]*"
+            //onKeyPress="return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))"
             onChange={onWorkScoreChange}
-            className="mx-10 mb-5 input input-bordered bg-[#f0f0f0]"
+            className="mx-10 mb-5 input bg-[#f0f0f0]"
           />
           <h1 className="mx-10 mt-10 mb-5 text-xl font-bold">กำหนดเวลา</h1>
           <div className="flex w-[100%] ml-10 ">

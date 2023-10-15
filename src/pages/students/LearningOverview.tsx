@@ -118,7 +118,7 @@ function LearningOverview() {
                     <div className="flex flex-col bg-[#f5f5f580]">
                         <div className="text-2xl mt-10 pb-4 font-bold">คลาสเรียนที่ใกล้จะเริ่มสอน</div>
                         <div className="mr-52">
-                            {getUpcomingClasses().map(({ classInfo, schedules, teacher }) => (
+                            {getUpcomingClasses().length!=0? getUpcomingClasses().map(({ classInfo, schedules, teacher }) => (
                                 <li key={classInfo.classID} className={`flex justify-center mt-2`}>
                                     <ClassIncoming
                                         titleName={classInfo.className}
@@ -129,12 +129,12 @@ function LearningOverview() {
                                         profilePic={teacher.profilePic}
                                     />
                                 </li>
-                            ))}
+                            )):<div className="w-[550px] ml-10">ไม่มีคลาสเรียนที่กำลังมาถึง</div>}
                         </div>
                     </div>
                     <div className="mt-10">
-                        <h1 className="text-2xl pl-4 font-bold">การบ้านในคลาสที่ต้องส่งเร็วๆนี้</h1>
-                        {getUpcomingAssignments().map(({ assignmentName, assignmentID, classInfo, submission, dueDate }) => (
+                        <h1 className="text-2xl pl-4 font-bold ">การบ้านในคลาสที่ต้องส่งเร็วๆนี้</h1>
+                        {getUpcomingAssignments().length!=0? getUpcomingAssignments().map(({ assignmentName, assignmentID, classInfo, submission, dueDate }) => (
                             <li key={assignmentID} className={`flex justify-center mt-2`}>
                                 <ClassHomeworkIncoming
                                     titleName={assignmentName}
@@ -144,8 +144,7 @@ function LearningOverview() {
                                     status={submission.submissionStatus}
                                 />
                             </li>
-                        ))}
-
+                        )):<div className="w-[550px] ml-20 mt-4">ยังไม่มีงานที่ต้องส่งเร็วๆนี้</div>}
                     </div>
                 </div>
 
@@ -157,7 +156,7 @@ function LearningOverview() {
                             <span className="px-1 truncate font-semibold text-xl">classname</span>
                         </div>
 
-                        {getRecentAnnouncements().map(({ announcementID, courseInfo, teacher, lastEdit }) => {
+                        {getRecentAnnouncements().length!=0? getRecentAnnouncements().map(({ announcementID, courseInfo, teacher, lastEdit }) => {
                             return (
                                 <Link to={`/learn/courses/${courseInfo.courseID}`}>
                                     <li key={announcementID} className={`flex justify-center mt-2`}>
@@ -174,7 +173,7 @@ function LearningOverview() {
                                     </li>
                                 </Link>
                             )
-                        })}
+                        }):<div className="w-[550px] ml-14 mt-2">ไม่มีประกาศจากผู้สอนเร็วๆนี้</div>}
                     </div>
                 </div>
             </div>

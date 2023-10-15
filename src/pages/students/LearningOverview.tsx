@@ -45,7 +45,7 @@ function LearningOverview() {
                     <div className="flex flex-col bg-[#f5f5f580]">
                         <div className="text-2xl mt-10 pb-4 font-bold">คลาสเรียนที่ใกล้จะเริ่มสอน</div>
                         <div className="mr-52">
-                            {dashboard.classes.map(({ classInfo, schedules }) => (
+                            {dashboard.classes.map(({ classInfo, schedules, teacher}) => (
                                 <li key={classInfo.classID} className={`flex justify-center mt-2`}>
                                     <ClassIncoming
                                         titleName={classInfo.className}
@@ -53,6 +53,7 @@ function LearningOverview() {
                                         start={`${formatTimeFromTimestamp(schedules[0].start)} `}
                                         end={`${formatTimeFromTimestamp(schedules[0].end)} `}
                                         instrName={classInfo.className}
+                                        profilePic={teacher.profilePic}
                                         color={"green"} />
                                 </li>
                             ))}

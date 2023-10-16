@@ -86,7 +86,6 @@ function LearnCourse() {
     const { announcements, isFetching } = useAnnouncementsCourses(courseID)
     const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>('contents')
     const [currentLesson, setCurrentLesson] = useState<CourseLesson | undefined>(undefined)
-    //const [announcements, setAnnouncements] = useState<CourseAnnouncement[]>([])
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
 
 

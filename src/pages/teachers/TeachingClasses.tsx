@@ -2,100 +2,138 @@ import { faClipboardList, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import WorkCreate from "../../features/teaches/components/WorkCreate";
-import { Work } from "../../features/teaches/types/classWork";
+import { ClassAssignment } from "../../features/teaches/types/classWork";
 // import Workreview from "../../features/teaches/components/reviewwork"
+import { Link, useParams } from "react-router-dom";
+import { LoadingSpash } from "../../components/LoadingSpash";
+import ClassThread from "../../features/teaches/components/ClassThread";
+import { FormPublishPostClass } from "../../features/teaches/components/FormPublishPostClass";
+import { useClassAssignments } from "../../features/teaches/hooks/useClassAssignments";
+import { useClassInfo } from "../../features/teaches/hooks/useClassInfo";
+import { useClassStudents } from "../../features/teaches/hooks/useClassStudents";
+import useClassThreads from "../../features/teaches/hooks/useClassThreads";
+import { useUser } from "../../hooks/useUser";
+
 type View = "main" | "works" | "members" | "create-work";
-
-type ClassInfoPrototype = {
-  className: string;
-  classThumbnail: string;
-};
-
-const fakeURL =
-  "https://www.hobbyfanclub.com/web/board/2022/odtjnwftssxcxgmfjaj5191220225035856071.jpg";
 
 interface ViewSlectorProps {
   currentView: View;
   setView: (view: View) => void;
 }
-function _ViewSlector({ currentView, setView }: ViewSlectorProps) {
+function _ViewSelector({ currentView, setView }: ViewSlectorProps) {
   return (
-    <div className="flex">
-      <div
-        className="m-5"
-        onClick={() => {
-          setView("main");
-        }}
-      >
-        <h1>หน้าหลักในชั้นเรียน</h1>
-        <div className={`bg-black ${currentView == "main" ? "h-3" : ""}`}></div>
-      </div>
-      <div
-        className="m-5"
-        onClick={() => {
-          setView("works");
-        }}
-      >
-        <h1>งานในชั้นเรียน</h1>
+    <div className="flex flex-col w-full">
+      <div className=" flex ml-10 text-lg font-medium self-start">
         <div
-          className={`bg-black ${currentView == "works" ? "h-3" : ""}`}
-        ></div>
-      </div>
-      <div
-        className="m-5"
-        onClick={() => {
-          setView("members");
-        }}
-      >
-        <h1>คนในชั้นเรียน</h1>
+          className="m-5"
+          onClick={() => {
+            setView("main");
+          }}
+        >
+          <button
+            className={currentView == "main" ? "text-[#000]" : "text-[#808080]"}
+          >
+            หน้าหลักในชั้นเรียน
+          </button>
+          <div
+            className={`bg-black ${currentView == "main" ? "h-2" : ""}`}
+          ></div>
+        </div>
         <div
-          className={`bg-black ${currentView == "members" ? "h-3" : ""}`}
-        ></div>
+          className="m-5"
+          onClick={() => {
+            setView("works");
+          }}
+        >
+          <button
+            className={
+              currentView == "works" ? "text-[#000]" : "text-[#808080]"
+            }
+          >
+            งานในชั้นเรียน
+          </button>
+          <div
+            className={`bg-black ${currentView == "works" ? "h-2" : ""}`}
+          ></div>
+        </div>
+        <div
+          className="m-5"
+          onClick={() => {
+            setView("members");
+          }}
+        >
+          <button
+            className={
+              currentView == "members" ? "text-[#000]" : "text-[#808080]"
+            }
+          >
+            คนในชั้นเรียน
+          </button>
+          <div
+            className={`bg-black ${currentView == "members" ? "h-2" : ""}`}
+          ></div>
+        </div>
+      </div>
+      <div>
+        <hr className="w-full h-[2px] bg-gray-300" />
       </div>
     </div>
   );
 }
 
-function _WorkSlot({ work }: { work: Work }) {
+function _WorkSlot({ work }: { work: ClassAssignment }) {
   const [isOpen, setISOpen] = useState(false);
   return (
-    <div>
+    <div className="w-full">
       <button
-        className="bg-white flex m-3 items-center w-full"
+        className="bg-white flex mx-3 items-center w-full drop-shadow-lg"
         onClick={() => setISOpen(!isOpen)}
       >
-        <div className="bg-white flex m-3 items-center">
-          <div className="flex justify-center items-center bg-[#D9D9D9] w-16 h-16 m-2 rounded-full">
-            <FontAwesomeIcon icon={faClipboardList} size="2xl" />
+        <div className="bg-white flex items-center py-2 px-4">
+          <div className="flex justify-center items-center bg-[#D9D9D9] w-14 h-14  rounded-full">
+            <FontAwesomeIcon
+              icon={faClipboardList}
+              size="2xl"
+              className=" drop-shadow-lg"
+            />
           </div>
-          <h1 className="text-xl text-gray-600 font-bold ml-5">{work.name}</h1>
+          <h1 className="text-sm text-gray-600 font-bold ml-5">{work.name}</h1>
         </div>
       </button>
       {isOpen && (
-        <div>
-          <div className="bg-white flex items-center border-2 px-5 py-5 h-fit">
-            <p className="w-8/12 h-fit break-all">{work.description}</p>
-            <div className="w-2/12 items-end">
-              <p className="w-full text-xl text-gray-600 font-bold ml-5">
+        <div className="flex flex-col items-center justify-center mx-3 w-full border-[1px] drop-shadow-lg bg-white">
+
+          <div className="flex items-center w-11/12">
+            <p className="break-all py-4">{work.description}</p>
+          </div>
+
+          <div className="flex justify-end w-9/12 pb-8 pt-4">
+            <div className="items-end flex flex-col">
+              <p className="w-full text-4xl font-bold ml-5">
                 {work.send}
               </p>
-              <p className="text-xl text-gray-600 font-bold ml-5">ส่งแล้ว</p>
+              <p className="text-sm text-[#808080] font-semibold ml-5">ส่งแล้ว</p>
             </div>
-            <div className="w-2/12 items-end">
-              <p className="w-full text-xl text-gray-600 font-bold ml-5">
+            <div className="items-end flex flex-col">
+              <p className="w-full text-4xl font-bold ml-5">
                 {work.nosend}
               </p>
-              <p className="text-xl text-gray-600 font-bold ml-5">ยังไม่ส่ง</p>
+              <p className="text-sm text-[#808080] font-semibold ml-5">ยังไม่ส่ง</p>
             </div>
           </div>
-          <div className="bg-white flex  items-center border-2 py-5 px-5">
-            <a href="" className="text-blue-600 w-10/12">
+          <hr className="w-full py-2" />
+
+          <div className="bg-white flex items-center w-11/12 justify-between py-5 px-5">
+            <button type="button" className="text-blue-600">
               ดูวิธีการ
-            </a>
-            <div className="w-2/12 items-end">
-              <button className="bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+            </button>
+            <div className="">
+              <Link
+                to={`review/${work.assignmentID}`}
+                className="bg-black hover:bg-slate-900 text-white font-bold py-2 px-4 border border-blue-700 rounded"
+              >
                 ตรวจงาน
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -103,24 +141,22 @@ function _WorkSlot({ work }: { work: Work }) {
     </div>
   );
 }
-
 interface _ClassWorksProps {
   onCreateClassWork: () => void;
-  works: Work[];
+  assignments: ClassAssignment[];
 }
-
-function _ClassWorks({ onCreateClassWork, works }: _ClassWorksProps) {
+function _ClassWorks({ onCreateClassWork, assignments }: _ClassWorksProps) {
   const getAllTopics = () => {
     const topics: string[] = [];
-    works.forEach((w) => {
+    assignments.forEach((w) => {
       if (!topics.includes(w.topic)) {
         topics.push(w.topic);
       }
     });
     return topics;
   };
-  if (works.length == 0) {
-    <div className="h-full w-full">
+  if (assignments.length == 0) {
+    <div className="h-full w-7/12">
       <button className="btn m-7" onClick={onCreateClassWork}>
         <FontAwesomeIcon icon={faPlus} size="xl" />
         <h1 className="text-xl">สร้าง</h1>
@@ -128,20 +164,20 @@ function _ClassWorks({ onCreateClassWork, works }: _ClassWorksProps) {
     </div>;
   }
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-7/12">
       <button className="btn m-7" onClick={onCreateClassWork}>
         <FontAwesomeIcon icon={faPlus} size="xl" />
         <h1 className="text-xl">สร้าง</h1>
       </button>
       {getAllTopics().map((topic, index) => (
         <div key={index}>
-          <h1 className="mx-10 text-black font-bold text-3xl my-2">{topic}</h1>
-          <hr className="mx-10 h-1.5 bg-gray-300" />
+          <h1 className="mx-10 text-black font-bold text-xl my-2">{topic}</h1>
+          <hr className="mx-10 h-[2px] bg-gray-300" />
           <div className="my-16">
-            {works
+            {assignments
               .filter((w) => w.topic == topic)
               .map((w) => (
-                <div className="mx-10">
+                <div className="mx-10" key={w.assignmentID}>
                   <_WorkSlot key={w.name} work={w} />
                 </div>
               ))}
@@ -152,118 +188,161 @@ function _ClassWorks({ onCreateClassWork, works }: _ClassWorksProps) {
   );
 }
 
-const mockWorks: Work[] = [
-  {
-    name: "Mock",
-    description:
-      "Moc65d4f9asd4f9as49f84asd9asd1f8as1d4f9as49f84asd9asd1f8as18ad4f9as49f84asd9asd1f8as18ad4f9as49f84asd9asd1f8as18ad4f9as49f84asd9asd1f8as18a8a1fas9d5sdff651as6f1as65fas65dd1ffdksfk",
-    topic: "ไม่ได้กำหนดหัวข้อ",
-    attachments: [],
-    score: 0,
-    send: 10,
-    nosend: 15,
-  },
-  {
-    name: "Mock 3",
-    description: "Mockckdkkfdksfk",
-    topic: "ไม่ได้กำหนดหัวข้อ",
-    attachments: [],
-    score: 0,
-    send: 10,
-    nosend: 15,
-  },
-  {
-    name: "Mock 2",
-    description: "Mockckdkkfdksfk",
-    topic: "ไม่ได้กำหนดหัวข้อ",
-    attachments: [],
-    score: 0,
-    send: 10,
-    nosend: 15,
-  },
-  {
-    name: "Mock 2",
-    description: "Mockckdkkfdksfk",
-    topic: "หัวข้อที่ 1",
-    attachments: [],
-    score: 0,
-    send: 10,
-    nosend: 15,
-  },
-  {
-    name: "Mock 2",
-    description: "Mockckdkkfdksfk",
-    topic: "หัวข้อที่ 2",
-    attachments: [],
-    score: 0,
-    send: 10,
-    nosend: 15,
-  },
-];
-
 function TeachingClasses() {
   const [view, setView] = useState<View>("main");
-  const [classInfo, setClassInfo] = useState<ClassInfoPrototype>({
-    className: "Mock class name",
-    classThumbnail: fakeURL,
-  });
-  const [works, setWorks] = useState<Work[]>([...mockWorks]);
+  const { classID } = useParams<{ classID: string }>();
+  const { classInfo, isFetching: isFetchingClassInfo } = useClassInfo(classID);
+  const {
+    assignments,
+    isFetching: isFetchingAssignments,
+    addAssignment,
+  } = useClassAssignments(classID);
+  const {
+    threads,
+    isFetching: isFetchingClassThreads,
+    postThread,
+  } = useClassThreads(classID);
+  const { students } = useClassStudents(classID);
+  const { user } = useUser();
+
+  function handleAddAssignment(assignment: ClassAssignment) {
+    addAssignment(assignment);
+    setView("works");
+  }
+
+  function getAvaliableTopics(): string[] {
+    // get all topics from assignments
+    const topics: string[] = [];
+    assignments.forEach((assignment) => {
+      if (!topics.includes(assignment.topic)) {
+        topics.push(assignment.topic);
+      }
+    });
+    return topics;
+  }
+
+  if (isFetchingClassInfo || isFetchingAssignments || isFetchingClassThreads) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoadingSpash></LoadingSpash>
+      </div>
+    );
+  }
+
   if (view == "main") {
     return (
-      <div className="h-full">
-        <_ViewSlector currentView={view} setView={setView} />
+      <div className=" flex flex-col items-center w-full">
+        <_ViewSelector currentView={view} setView={setView} />
         <hr />
-        <div className="mx-7 mt-8">
-          <div className="flex">
+        <div className="mx-7 mt-8 w-full">
+          <div className="flex items-center ml-16">
             <h1 className="text-2xl font-bold text-black">
               {classInfo.className}
             </h1>
-            <h1 className="px-2 py-1 bg-green-500 ml-5 rounded-l-full rounded-r-full ">
+            <h1 className=" px-3 py-1 font-semibold  bg-[#ADE792] ml-5 rounded-l-full rounded-r-full ">
               class
             </h1>
           </div>
-          <div className="mt-7">
+          <div className="mt-7 w-full flex items-center justify-center">
             <img
-              src={classInfo.classThumbnail}
+              src={classInfo.classThumbnailUrl}
               alt="class-cover"
-              className="object-cover w-full h-64"
+              className="object-cover w-11/12 h-64 "
             />
+          </div>
+        </div>
+        <div className="w-3/4 mt-[2%] flex flex-col items-center space-y-[2%]">
+          <div className="w-3/4">
+            <FormPublishPostClass handleAddPost={postThread} />
+          </div>
+
+          <div className="flex flex-col w-3/4 items-center space-y-3 pb-4">
+            {threads
+              .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime())
+              .map((thread) => (
+                <ClassThread
+                  key={thread.threadId}
+                  user={user}
+                  classId={classID}
+                  threadId={thread.threadId}
+                />
+              ))}
           </div>
         </div>
       </div>
     );
   } else if (view == "works") {
     return (
-      <div className="h-full">
-        <_ViewSlector currentView={view} setView={setView} />
-        <hr />
+      <div className="h-full flex flex-col items-center w-full">
+        <_ViewSelector currentView={view} setView={setView} />
         <_ClassWorks
           onCreateClassWork={() => {
             setView("create-work");
           }}
-          works={works}
+          assignments={assignments}
         />
       </div>
     );
   } else if (view == "members") {
     return (
-      <div className="h-full">
-        <_ViewSlector currentView={view} setView={setView} />
+      <div className="h-full py-5 flex flex-col items-center w-full">
+        <_ViewSelector currentView={view} setView={setView} />
         <hr />
+        <div className="flex flex-col w-3/4 items-center">
+          <p className="text-lg self-start text-gray-600 font-bold ml-5 my-5">
+            ผู้สอน
+          </p>
+          <div className="w-full flex bg-white  items-center border-[1px]">
+            <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-12 h-12 m-2 rounded-full">
+              <img
+                src={user.profilePicture}
+                className="rounded-full w-12 h-12 object-cover"
+              />
+            </div>
+            <h1 className=" text-gray-600 font-bold ml-5">
+              {user.fullname}
+            </h1>
+          </div>
+        </div>
+
+        <div className="flex flex-col w-3/4 items-center">
+          <p className="text-lg self-start text-gray-600 font-bold ml-5 my-5">
+            ผู้เรียนในคลาส
+          </p>
+          <div className="w-full flex flex-col items-center">
+            {students.map((student, index) => {
+              return (
+                <div
+                  className="w-full flex bg-white  items-center border-[1px]"
+                  key={index}
+                >
+                  <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-12 h-12 m-2 rounded-full">
+                    <img
+                      src={student.avatarURL}
+                      className="rounded-full object-cover"
+                    />
+                  </div>
+                  <h1 className=" text-gray-600 font-bold ml-5">
+                    {student.name}
+                  </h1>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     );
   } else if (view == "create-work") {
     return (
-      <WorkCreate
-        availableTopics={["ฟัสสี่", "WTF"]}
-        onCancel={() => {
-          setView("works");
-        }}
-        onSubmit={(w) => {
-          setWorks((p) => [...p, w]);
-          setView("works");
-        }}
-      />
+      <div className="w-full">
+        <WorkCreate
+          availableTopics={getAvaliableTopics()}
+          onCancel={() => {
+            setView("works");
+          }}
+          onSubmit={handleAddAssignment}
+        />
+      </div>
     );
   } else if (view == "review-work") {
     // return <Workreview />;

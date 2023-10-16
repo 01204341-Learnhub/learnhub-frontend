@@ -45,7 +45,7 @@ function FileLessonCreate({
       return;
     }
     const lesson: Lesson = {
-      lessonId: "1234567890",
+      lessonId: defaultLesson?.lessonId || "",
       name: lessonName,
       number: lessonNumber,
       type: "files",

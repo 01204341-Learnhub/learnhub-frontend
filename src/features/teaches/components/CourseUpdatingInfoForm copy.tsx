@@ -1,15 +1,14 @@
-import React, { useContext, useRef } from "react";
-import { CourseContext } from "../../../pages/teachers/CreateCourse.tsx";
-import { uploadFile } from "../../../services/uploader/file.ts";
-import { useTags } from "../hooks/useTags.ts";
-import { Tag } from "../types/tags.ts";
+import React, { useRef } from "react";
+import { uploadFile } from "../../../services/uploader/file.js";
+import { useTags } from "../hooks/useTags.js";
+import { Course } from "../types/course.js";
+import { Tag } from "../types/tags.js";
 
-function _Name() {
-  const courseContext = useContext(CourseContext);
+function _Name({ course, setCourse }: { course: Course, setCourse: (course: Course) => void }) {
   const onUpdateName = (name: string) => {
-    const updatedCourse = { ...courseContext.course };
+    const updatedCourse = { ...course };
     updatedCourse.name = name;
-    courseContext.setCourse(updatedCourse);
+    setCourse(updatedCourse);
   };
   return (
     <div className="flex flex-col justify-start items-start space-y-3 w-full">
@@ -20,7 +19,7 @@ function _Name() {
         className="border-2 border-[#C0C0C0] py-2 px-3 w-[90%]"
         type="text"
         placeholder="ชื่อคอร์สเรียน"
-        value={courseContext.course.name}
+        value={course.name}
         onChange={(e) => {
           onUpdateName(e.target.value);
         }}
@@ -33,12 +32,11 @@ function _Name() {
   );
 }
 
-function _Description() {
-  const courseContext = useContext(CourseContext);
+function _Description({ course, setCourse }: { course: Course, setCourse: (course: Course) => void }) {
   const onUpdateDescription = (description: string) => {
-    const updatedCourse = { ...courseContext.course };
+    const updatedCourse = { ...course };
     updatedCourse.description = description;
-    courseContext.setCourse(updatedCourse);
+    setCourse(updatedCourse);
   };
   return (
     <div className="flex flex-col justify-start items-start space-y-3 w-full">
@@ -48,7 +46,7 @@ function _Description() {
       <textarea
         className="border-2 border-[#C0C0C0] py-2 px-3 w-[90%]"
         placeholder="คำอธิบายคอร์สเรียน"
-        value={courseContext.course.description}
+        value={course.description}
         rows={8}
         onChange={(e) => {
           onUpdateDescription(e.target.value);
@@ -59,15 +57,14 @@ function _Description() {
           คำอธิบายควรยาวอย่างน้อย 200 คำ
         </p>
         <p className="text-[#606060] text-[16px] font-semibold">
-          {courseContext.course.description.length}
+          {course.description.length}
         </p>
       </div>
     </div>
   );
 }
 
-function _Thumbnail() {
-  const courseContext = useContext(CourseContext);
+function _Thumbnail({ course, setCourse }: { course: Course, setCourse: (course: Course) => void }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -83,9 +80,9 @@ function _Thumbnail() {
     }
   };
   const onUpdateThumbnailUrl = (thumbnailUrl: string) => {
-    const updatedCourse = { ...courseContext.course };
+    const updatedCourse = { ...course };
     updatedCourse.thumbnailUrl = thumbnailUrl;
-    courseContext.setCourse(updatedCourse);
+    setCourse(updatedCourse);
   };
   return (
     <div className="flex flex-col justify-start items-start space-y-3 w-full">
@@ -96,7 +93,7 @@ function _Thumbnail() {
         <div className="flex-shrink-0 bg-gray-200 w-[300px] h-[169px]">
           <img
             className="w-[300px] h-[169px] object-cover"
-            src={courseContext.course.thumbnailUrl}
+            src={course.thumbnailUrl}
             alt="thumbnail"
           />
         </div>
@@ -106,7 +103,7 @@ function _Thumbnail() {
               className="border-2 border-[#C0C0C0] py-2 px-3 w-3/5"
               type="text"
               placeholder="ใส่ URL ของภาพ หรืออัพโหลด"
-              value={courseContext.course.thumbnailUrl}
+              value={course.thumbnailUrl}
               onChange={(e) => {
                 onUpdateThumbnailUrl(e.target.value);
               }}
@@ -123,7 +120,7 @@ function _Thumbnail() {
                 fileRef.current?.click();
               }}
             >
-              {courseContext.course.thumbnailUrl === "" ? "อัพโหลด" : "เปลี่ยน"}
+              {course.thumbnailUrl === "" ? "อัพโหลด" : "เปลี่ยน"}
             </button>
           </div>
         </div>
@@ -132,12 +129,11 @@ function _Thumbnail() {
   );
 }
 
-function _Price() {
-  const courseContext = useContext(CourseContext);
+function _Price({ course, setCourse }: { course: Course, setCourse: (course: Course) => void }) {
   const onUpdatePrice = (price: number) => {
-    const updatedCourse = { ...courseContext.course };
+    const updatedCourse = { ...course };
     updatedCourse.price = price;
-    courseContext.setCourse(updatedCourse);
+    setCourse(updatedCourse);
   };
   return (
     <div className="flex flex-col justify-start items-start space-y-3 w-full">
@@ -151,7 +147,7 @@ function _Price() {
         type="number"
         min="0"
         placeholder="ราคา"
-        value={courseContext.course.price}
+        value={course.price}
         onChange={(e) => {
           onUpdatePrice(parseInt(e.target.value));
         }}
@@ -160,13 +156,12 @@ function _Price() {
   );
 }
 
-function _Category() {
-  const courseContext = useContext(CourseContext);
+function _Category({ course, setCourse }: { course: Course, setCourse: (course: Course) => void }) {
   const { tags: availableTags } = useTags();
   const onUpdateTag = (tag: Tag) => {
-    const updatedCourse = { ...courseContext.course };
+    const updatedCourse = { ...course };
     updatedCourse.tag = tag;
-    courseContext.setCourse(updatedCourse);
+    setCourse(updatedCourse);
   };
   const tagIDtoName = (tagID: string) => {
     for (const tag of availableTags) {
@@ -183,7 +178,7 @@ function _Category() {
         โปรดเลือกหมวดหมู่สำหรับคลาสเรียนของคุณ
       </p>
       <select
-        value={courseContext.course.tag.tagID}
+        value={course.tag.tagID}
         onChange={(e) => {
           onUpdateTag({
             tagID: e.target.value,
@@ -203,7 +198,7 @@ function _Category() {
   );
 }
 
-function CoursePublishingInfoForm() {
+function CourseUpdatingInfoForm({ course, setCourse }: { course: Course, setCourse: (course: Course) => void }) {
   return (
     <div className="flex flex-col justify-start items-start space-y-10 bg-white p-8 w-full">
       <h1 className="text-[32px] font-semibold text-black w-full pb-4 border-b-2">
@@ -219,13 +214,13 @@ function CoursePublishingInfoForm() {
           คำอธิบายเหล่านี้จะช่วยให้ผู้เรียนตัดสินใจว่าหลักสูตรของคุณเหมาะกับพวกเขาหรือไม่
         </p>
       </div>
-      <_Name />
-      <_Description />
-      <_Thumbnail />
-      <_Price />
-      <_Category />
+      <_Name course={course} setCourse={setCourse} />
+      <_Description course={course} setCourse={setCourse} />
+      <_Thumbnail course={course} setCourse={setCourse} />
+      <_Price course={course} setCourse={setCourse} />
+      <_Category course={course} setCourse={setCourse} />
     </div>
   );
 }
 
-export default CoursePublishingInfoForm;
+export default CourseUpdatingInfoForm;

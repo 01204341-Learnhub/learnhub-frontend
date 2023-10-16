@@ -15,18 +15,16 @@ function useCourseDetail(courseID: string) {
         setIsFetching(false);
       } catch (err) {
         console.log("Error fetching course detail:");
-        
+
         setError(err.message);
         setCourseDetail(null);
         setIsFetching(false);
       }
     }
     fetchCourseDetail(courseID);
-    console.log(courseDetail);
-    
-  }, [courseID, courseDetail]);
+  }, [courseID]);
 
-  return { courseDetail, isFetching, error};
+  return { courseDetail, isFetching, error };
 }
 
 export { useCourseDetail };

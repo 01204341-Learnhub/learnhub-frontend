@@ -215,7 +215,7 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
             return
         }
         const lesson: Lesson = {
-            lessonId: "1234567890",
+            lessonId: defaultLesson?.lessonId || "",
             name: quiz.name,
             number: lessonNumber,
             type: "quiz",

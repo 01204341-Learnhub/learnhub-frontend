@@ -5,20 +5,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
+import { LoadingSpash } from "../../components/LoadingSpash";
 import CourseCardPreview from "../../features/teaches/components/CourseCardPreview";
 import CourseChapterCreate from "../../features/teaches/components/CourseChapterCreate";
 import CourseChapterInfo from "../../features/teaches/components/CourseChapterInfo";
-import CourseCreateStepper from "../../features/teaches/components/CourseCreateStepper";
-import CourseGoalsInfoForm from "../../features/teaches/components/CourseGoalsInfoForm.tsx";
-import CourseUpdateingInfoForm from "../../features/teaches/components/CoursePublishingInfoForm.tsx";
-import { useTags } from "../../features/teaches/hooks/useTags.ts";
-import { createCourse } from "../../features/teaches/services/courses.ts";
+import CourseChapterUpdate from "../../features/teaches/components/CourseChapterUpdate";
+import CourseUpdatingInfoForm from "../../features/teaches/components/CourseUpdatingInfoForm copy";
+import UpdateCourseGoalsInfoForm from "../../features/teaches/components/UpdateCourseGoalsInfoForm";
+import { useCourse } from "../../features/teaches/hooks/useCourse";
+import { useTags } from "../../features/teaches/hooks/useTags";
+import { updateCourse } from "../../features/teaches/services/courses";
 import {
   Course,
 } from "../../features/teaches/types/course";
-import { useUser } from "../../hooks/useUser.ts";
+import { useUser } from "../../hooks/useUser";
 
 type AvailableTab = "content" | "goals" | "publishing" | "add-chapter" | "edit-chapter";
 interface _SideNavProps {
@@ -275,31 +277,12 @@ function CreateCourse() {
   const { user } = useUser();
   const teacherID = user.userID;
   const [chapterToEdit, setChapterToEdit] = useState(-1)
-  const [course, setCourse] = useState<Course>({
-    courseId: "1234567890", // TODO: Get an ID, possibly uuid.
-    name: "",
-    thumbnailUrl: "https://placehold.co/1920x1080",
-    tag: {
-      name: "computer",
-      tagID: "6509b76eda50b4eec1867261",
-    },
-    level: "",
-    instructorName: user.fullname, // TODO: Get from user profile.
-    description: "",
-    objectives: ["", "", "", ""],
-    requirement: "",
-    price: 0,
-    rating: 0,
-    studentCount: 0,
-    chapters: [],
-  });
+  const { courseID } = useParams<{ courseID: string }>()
+  const { course, setCourse: setCourseHook, isFetching } = useCourse(courseID)
   const [currentTab, setCurrentTab] = useState<AvailableTab>("content");
-  const [initializedCourse, setInitializedCourse] = useState<boolean>(false);
-
-  const handleInitializeCourse = () => {
-    setInitializedCourse(true);
-    setCurrentTab("content");
-  };
+  const setCourse = (course: Course) => {
+    setCourseHook(course)
+  }
 
   const handleRemoveChapter = (chapterNumber: number) => {
     // remove chapter from course and renumber the rest of the chapters
@@ -314,16 +297,15 @@ function CreateCourse() {
   }
 
   const handlePublishCourse = () => {
-    async function publishCourse() {
+    async function onUpdateCourse() {
       if (!checkReadyToPublish(course)) throw new Error("ยังกรอกข้อมูลไม่ครบ")
-      await createCourse(course, teacherID);
+      await updateCourse(course);
     }
-    publishCourse().then(() => {
-      alert("Course published!");
-      navigate("/teach/overview");
+    onUpdateCourse().then(() => {
+      alert("อัพเดทคอร์สสำเร็จ!");
     }).catch((err) => {
       Swal.fire({
-        title: "เกิดข้อผิดพลาดในการเผยแพร่คอร์ส",
+        title: "เกิดข้อผิดพลาดในการอัพเดทคอร์ส",
         text: err,
         icon: "error",
         confirmButtonText: "ตกลง",
@@ -331,27 +313,13 @@ function CreateCourse() {
     })
 
   };
-
-  if (initializedCourse === false) {
+  if (isFetching) {
     return (
-      <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
-        <_TopNav
-          onQuit={() => {
-            navigate("/teach/overview");
-          }}
-        />
-        <CourseContext.Provider
-          value={{
-            course,
-            setCourse,
-          }}
-        >
-          <CourseCreateStepper onSubmit={handleInitializeCourse} />
-        </CourseContext.Provider>
+      <div className="flex justify-center items-center w-full h-screen">
+        <LoadingSpash />
       </div>
-    );
+    )
   }
-
   if (currentTab === "content") {
     return (
       <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
@@ -408,9 +376,7 @@ function CreateCourse() {
             onPublish={handlePublishCourse}
             readyToPublish={checkReadyToPublish(course)}
           />
-          <CourseContext.Provider value={{ course, setCourse }}>
-            <CourseGoalsInfoForm />
-          </CourseContext.Provider>
+          <UpdateCourseGoalsInfoForm course={course} setCourse={setCourse} />
         </div>
       </div>
     );
@@ -430,9 +396,7 @@ function CreateCourse() {
             onPublish={handlePublishCourse}
             readyToPublish={checkReadyToPublish(course)}
           />
-          <CourseContext.Provider value={{ course, setCourse }}>
-            <CourseUpdateingInfoForm />
-          </CourseContext.Provider>
+          <CourseUpdatingInfoForm course={course} setCourse={setCourse} />
         </div>
       </div>
     );
@@ -465,7 +429,7 @@ function CreateCourse() {
           }}
         />
         <CourseContext.Provider value={{ course, setCourse }}>
-          <CourseChapterCreate
+          <CourseChapterUpdate
             onSubmit={() => {
               setCurrentTab("content");
             }}
@@ -473,6 +437,8 @@ function CreateCourse() {
               setCurrentTab("content");
             }}
             chapterToEdit={chapterToEdit}
+            course={course}
+            setCourse={setCourse}
           />
         </CourseContext.Provider>
       </div>

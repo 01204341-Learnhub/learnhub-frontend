@@ -24,7 +24,7 @@ function useCourseDetail(courseID: string) {
     fetchCourseDetail(courseID);
     console.log(courseDetail);
     
-  }, [courseID]);
+  }, [courseID, courseDetail]);
 
   return { courseDetail, isFetching, error};
 }

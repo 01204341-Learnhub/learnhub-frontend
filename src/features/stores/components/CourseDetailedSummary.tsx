@@ -85,6 +85,11 @@ function CourseDetailedSummary(
       });
   }
 
+  function formatDateFromTimestamp(timestamp: number) : string{
+    const  date = new Date(timestamp * 1000)
+    return date.getHours().toLocaleString()
+  }
+
   return (
     <>
       <div className="card flex w-[518px] h-[544px] bg-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[5px] cursor-pointer">
@@ -149,7 +154,7 @@ function CourseDetailedSummary(
             <p className="ml-3">
               วิดีโอสอน
               <span className="font-bold ml-2">
-                {myCourseDetailedSummary.availablesource} ชั่วโมง
+                {formatDateFromTimestamp(myCourseDetailedSummary.hours)} ชั่วโมง
               </span>
             </p>
           </div>
@@ -170,17 +175,6 @@ function CourseDetailedSummary(
           </div>
           <div className="flex items-center content-center pt-[4%] px-[10%]">
             <div className="flex w-8 justify-center">
-              <FontAwesomeIcon icon={faInfinity} color="#000000" size="xl" />
-            </div>
-            <p className="ml-3">
-              การเข้าถึง
-              <span className="font-bold ml-2">
-                {myCourseDetailedSummary.availablesource}
-              </span>
-            </p>
-          </div>
-          <div className="flex items-center content-center pt-[4%] px-[10%]">
-            <div className="flex w-8 justify-center">
               <FontAwesomeIcon
                 icon={faFileArrowDown}
                 color="#000000"
@@ -196,7 +190,7 @@ function CourseDetailedSummary(
           </div>
         </div>
         {user.userType == "student" ? (
-          <div className="flex pt-[7%] px-[10%]">
+          <div className="flex pt-[15%] px-[10%]">
             <div className="pr-2">
               {user.userType == "student" ? (
                 <button

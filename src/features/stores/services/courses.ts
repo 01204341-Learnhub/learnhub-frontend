@@ -68,7 +68,7 @@ async function getCourseDetail(courseID: string): Promise<CourseDetail> {
       level: courseIdData.difficulty_level,
       rating: courseIdData.rating,
       reviewerCount: courseIdData.review_count,
-      studentCount: courseIdData.chapter_count,
+      studentCount: courseIdData.student_count,
       instructor: {
         instructorID: courseIdData.teacher.teacher_id,
         name: courseIdData.teacher.teacher_name,

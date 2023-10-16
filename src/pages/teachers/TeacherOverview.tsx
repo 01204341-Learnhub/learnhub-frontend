@@ -77,7 +77,7 @@ function TeacherOverview() {
       </ul>
       <div className="flex m-6 items-center py-4">
         <h1 className="font-bold text-2xl">คลาสเรียนที่กำลังดำเนิน</h1>
-        <h2 className="rounded-full bg-[#ADE792] ml-5 font-semibold px-2 py-1">course</h2>
+        <h2 className="rounded-full bg-[#ADE792] ml-5 font-semibold px-2 py-1">class</h2>
       </div>
       <ul className="grid grid-cols-5 gap-5 ml-5">
         {classes.map(

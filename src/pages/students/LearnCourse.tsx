@@ -1,5 +1,6 @@
 import { useReducer, useState } from "react"
 import { useParams } from "react-router-dom"
+import { LoadingSpash } from "../../components/LoadingSpash"
 import ChapterOutline from "../../features/learns/components/ChapterOutline"
 import CourseAnnouncementDropdown from "../../features/learns/components/CourseAnnouncementDropdown"
 import CourseMultipleChoiceQuiz from "../../features/learns/components/CourseMultipleChoiceQuiz"
@@ -163,7 +164,9 @@ function LearnCourse() {
                         else {
                             if (isFetching) {
                                 return (
-                                    <div>is loading</div>
+                                    <div className="flex justify-center items-center h-screen">
+                                        <LoadingSpash />
+                                    </div>
                                 )
                             }
                             return (

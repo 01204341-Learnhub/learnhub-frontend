@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { LoadingSpash } from '../../components/LoadingSpash';
 import ClassCard from '../../features/learns/components/ClassCard';
 import ClassTeachNow from '../../features/learns/components/ClassTeachNow';
 import { useEnrolledClasses } from '../../features/learns/hooks/useEnrolledClasses';
@@ -21,18 +23,18 @@ function LearningClasses() {
     const selected = 'text-lg font-semibold border-b-8 border-black mx-4 pb-2 px-2'
     const notSelected = 'text-lg text-[#808080] font-medium border-b-8 border-transparent mx-4 px-2 pb-2'
 
-    function _getTeachingClass() : ClassTeachNowProp {
+    function _getTeachingClass(): ClassTeachNowProp {
         console.log(enrolledClasses)
-        const teachingClass : ClassTeachNowProp = {
-            titleName : "",
+        const teachingClass: ClassTeachNowProp = {
+            titleName: "",
             thumbnailUrl: "",
             minute: 0,
         }
         enrolledClasses.forEach((cls) => {
             cls.schedules.forEach((sched) => {
                 if (
-                    new Date(sched.start) <= new Date() && 
-                    new Date(sched.end) >= new Date() 
+                    new Date(sched.start) <= new Date() &&
+                    new Date(sched.end) >= new Date()
                 ) {
                     teachingClass.titleName = cls.name
                     teachingClass.thumbnailUrl = cls.imageClassUrl
@@ -64,7 +66,13 @@ function LearningClasses() {
                     }
                     return (
                         <div key={index} className='px-4 py-3'>
-                            <ClassCard classThumbnailUrl={c.imageClassUrl} className={c.name} instructorName={c.teacher.name} percentCompleted={999} completionDate={new Date()} />
+                            {true ?
+
+                                <Link to={c.id} >
+                                    <ClassCard classThumbnailUrl={c.imageClassUrl} className={c.name} instructorName={c.teacher.name} percentCompleted={999} completionDate={new Date()} />
+                                </Link> :
+                                <ClassCard classThumbnailUrl={c.imageClassUrl} className={c.name} instructorName={c.teacher.name} percentCompleted={999} completionDate={new Date()} />
+                            }
                         </div>
                     )
                 })}
@@ -73,7 +81,9 @@ function LearningClasses() {
     }
     if (isFetching) {
         return (
-            <div>LOADING ....</div>
+            <div className="flex justify-center items-center h-screen">
+                <LoadingSpash />
+            </div>
         )
     }
 
@@ -106,7 +116,7 @@ function LearningClasses() {
                     <div className='flex items-center justify-center  w-[90%]'>
                         {
                             teachingClass != null &&
-                            <ClassTeachNow {...teachingClass}/>
+                            <ClassTeachNow {...teachingClass} />
                         }
                         {
                             teachingClass == null &&

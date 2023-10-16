@@ -43,6 +43,8 @@ export default function AllCourses() {
                                 price={course.price}
                                 tag={course.tags[0].name}
                                 lvl={course.difficultyLevel}
+                                rating={course.rating}
+                                
                             />
                         </Link>
                     );

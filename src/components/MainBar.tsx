@@ -1,10 +1,11 @@
-import { faBell, faBook, faBookmark, faCartShopping, faHeart, faMagnifyingGlass, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faBell, faBook, faBookmark, faCartShopping, faHeart, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import booklogo from '../assets/images/bookLogo.png'
 import namelogo from '../assets/images/textNameLogo.png'
+import SearchBar from '../components/SearchBar'
 import BasketItemSlot from '../features/stores/components/BasketItemSlot'
 import { fetchBasketItems } from '../features/stores/services/purchase'
 import { useUser } from '../hooks/useUser'
@@ -12,7 +13,6 @@ import { signOut } from '../services/auth/signOut'
 import { addItem, clearItem, setStatusFetchOnce } from '../slices/basketSlice'
 import { clearUser } from '../slices/userSlice'
 import { RootState } from '../store'
-import SearchBar from '../components/SearchBar'
 
 function MainBar() {
     const basket = useSelector((state: RootState) => state.basket)
@@ -29,7 +29,7 @@ function MainBar() {
             setOpenDropdown(dropdownName)
         }
     }
-    const itemsInBasket =  basketItems.length
+    const itemsInBasket = basketItems.length
     const handleClickBasket = () => {
         async function fetchBasket() {
             //console.log(isFetchOnce)
@@ -38,7 +38,7 @@ function MainBar() {
                 dispatcher(setStatusFetchOnce(true))
                 dispatcher(clearItem())
                 BasketItems.items.map((item) => {
-                  dispatcher(addItem(item))
+                    dispatcher(addItem(item))
                 })
             }
         }
@@ -46,14 +46,15 @@ function MainBar() {
         toggleDropdown('mycartdropdown')
     }
 
-    async function refresh(){
+    async function refresh() {
         if (!isFetchOnce) {
-        const BasketItems = await fetchBasketItems(user.userID)
-        dispatcher(setStatusFetchOnce(true))
-        dispatcher(clearItem())
-        BasketItems.items.map((item) => {
-          dispatcher(addItem(item))
-        })}
+            const BasketItems = await fetchBasketItems(user.userID)
+            dispatcher(setStatusFetchOnce(true))
+            dispatcher(clearItem())
+            BasketItems.items.map((item) => {
+                dispatcher(addItem(item))
+            })
+        }
 
     }
     refresh()
@@ -106,7 +107,7 @@ function MainBar() {
                                     </div>
                                 </div>
                             </div>
-                            
+
                             {/* Mycart dropdown menu */}
                             <div className='flex flex-col  absolute w-[320px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100'
                                 style={{ display: openDropdown === 'mycartdropdown' ? 'block' : 'none', top: '90%', right: '13%' }}
@@ -156,7 +157,7 @@ function MainBar() {
                                 className="w-[50px] h-[50px] mr-3 justify-self-center"
                                 onClick={() => toggleDropdown('userdropdown')}
                             >
-                                <img src={user.profilePicture} alt="profile" className=' h-full rounded-full object-cover' />
+                                <img src={user.profilePicture} alt="profile" className=' h-full rounded-full object-cover aspect-square' />
 
                                 {/* User dropdown menu */}
                                 <div
@@ -164,7 +165,7 @@ function MainBar() {
                                     className=" absolute w-[320px] h-[550px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
                                 >
                                     <div className="px-8 py-3">
-                                        <img src={user.profilePicture} alt="profile" className=' h-[50px] w-[50px] rounded-full object-cover' />
+                                        <img src={user.profilePicture} alt="profile" className=' h-[50px] w-[50px] rounded-full object-cover aspect-square' />
                                         <div className='flex justify-between items-center'>
                                             <span className="block text-[18px] font-bold text-black text-left">{user.username}</span>
                                             <div className=' bg-[#A1CCD1] rounded-full px-3 py-1 font-bold text-[13px]'>{user.userType}</div>

@@ -30,7 +30,9 @@ export default function Home() {
                 voter: program.reviewerCount,
                 price: program.price,
                 tag: program.tags[0].name,
-                lvl: program.difficultyLevel
+                lvl: program.difficultyLevel,
+                ratting: program.rating
+                
             })
         })
         return coursePopularSlot
@@ -49,7 +51,10 @@ export default function Home() {
                 voter: null,
                 price: program.price,
                 tag: program.tags[0].name,
-                lvl: program.difficultyLevel
+                lvl: program.difficultyLevel,
+                rating: 0  
+                
+                
             })
         })
         return classNewSlot
@@ -69,7 +74,9 @@ export default function Home() {
                                     instructorName={program.instructor.name}
                                     percentCompleted={program.rating}
                                     regisDate={""} voter={program.reviewerCount} price={program.price} tag={program.tags[0].name}
-                                    lvl={program.difficultyLevel} />
+                                    lvl={program.difficultyLevel}
+                                    rating={program.rating}
+                                    />
                             </Link>
                         )
                     }
@@ -92,7 +99,9 @@ export default function Home() {
                                     instructorName={program.instructor.name}
                                     percentCompleted={null}
                                     regisDate={program.registerEndedDate.toString()} voter={null} price={program.price} tag={program.tags[0].name}
-                                    lvl={program.difficultyLevel} />
+                                    lvl={program.difficultyLevel}
+                                    rating={0} />
+                                    
                             </Link>
                         )
                     }

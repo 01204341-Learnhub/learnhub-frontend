@@ -66,15 +66,15 @@ function CourseDetailPage() {
             </div>
 
             <div className="flex-[2] flex flex-col mx-6 mt-8 sticky top-0">
-                <CourseDetailedSummary costs={price}
-                    quantity={chapterCount}
-                    level={level}
-                    students={studentCount}
-                    availablesource={fileCount}
-                    hours={videoCount}
-                    examples={quizCount}
+                <CourseDetailedSummary costs={courseDetail.courseDetail.price}
+                    quantity={courseDetail.courseDetail.chapterCount}
+                    level={courseDetail.courseDetail.level}
+                    students={courseDetail.courseDetail.studentCount}
+                    availablesource={courseDetail.courseDetail.fileCount}
+                    hours={courseDetail.courseDetail.videoLength}
+                    examples={courseDetail.courseDetail.quizCount}
                     status="Available"
-                    courseID={courseID}
+                    courseID={courseDetail.courseDetail.courseID}
                 />
 
                 <div className="px-2 py-4 mt-8 mr-32">

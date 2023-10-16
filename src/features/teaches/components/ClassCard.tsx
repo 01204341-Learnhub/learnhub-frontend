@@ -17,15 +17,15 @@ export default function ClassCard(myClassesCard: ClassCardProps) {
       <div className="px-3 pt-2 text-[14px] align-middle font-bold">
         {myClassesCard.className}
       </div>
-      <div className="px-3 pt-4 text-[12px] font-semibold">ความคืบหน้า</div>
-      <div className="px-3">
+      {/* <div className="px-3 pt-4 text-[12px] font-semibold">ความคืบหน้า</div> */}
+      {/* <div className="px-3">
         <progress
           className="progress"
           value={`${myClassesCard.percentCompleted}`}
           max="100"
         ></progress>
-      </div>
-      <div className="px-3 pt-1 text-[12px] font-semibold text-end">{`${myClassesCard.percentCompleted}%`}</div>
+      </div> */}
+      {/* <div className="px-3 pt-1 text-[12px] font-semibold text-end">{`${myClassesCard.percentCompleted}%`}</div> */}
       <div className="px-3 pt-1 text-[12px] font-semibold">
         มีผู้เรียน {myClassesCard.studentCount}/{myClassesCard.studentLimit}
       </div>

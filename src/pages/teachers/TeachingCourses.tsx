@@ -1,7 +1,7 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import CourseCard from "../../features/teaches/components/CourseCard";
 import NewProgramClass from "../../features/teaches/components/NewProgramCard";
 import { useTeachCourses } from "../../features/teaches/hooks/useTeachCourses";
@@ -43,14 +43,17 @@ function TeachingCourses() {
             thumbnailUrl: courseThumbnailUrl,
             studentCount,
           }) => (
-            <li key={courseID} className="mt-5">
-              <CourseCard
-                courseName={courseName}
-                courseThumbnailUrl={courseThumbnailUrl}
-                courseRating={courseRating}
-                studentCount={studentCount}
-              />
-            </li>
+            
+              <li key={courseID} className="mt-5">
+                <Link to={`/teach/course/${courseID}`}>
+                  <CourseCard
+                    courseName={courseName}
+                    courseThumbnailUrl={courseThumbnailUrl}
+                    courseRating={courseRating}
+                    studentCount={studentCount}
+                  />
+                </Link>
+              </li>
           ),
         )}
         <NewProgramClass

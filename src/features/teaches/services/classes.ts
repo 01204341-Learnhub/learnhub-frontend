@@ -1,60 +1,41 @@
 import axios from "axios";
 import { ClassInfo, CreatingClass } from "../types/class.ts";
-const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
+import { ClassAssignment } from "../types/classWork.ts";
+import {
+  ListClassAssignmentsResponse,
+  ListClassStudentsResponse,
+  ListClassThreadsResponse,
+  ListTeacherClassesResponse,
+} from "../types/responses.ts";
+import { ClassStudent } from "../types/student.ts";
+import { Thread } from "../types/thread.ts";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function listTeacherClasses(teacherID: string) {
-  const mock: ClassInfo[] = [
-    {
-      classID: "1",
-      className: "Course 1",
-      classThumbnailUrl: "https://picsum.photos/200",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-    {
-      classID: "2",
-      className: "Course 2",
-      classThumbnailUrl: "https://picsum.photos/300",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-    {
-      classID: "3",
-      className: "Course 3",
-      classThumbnailUrl: "https://picsum.photos/300",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-    {
-      classID: "4",
-      className: "Course 4",
-      classThumbnailUrl: "https://picsum.photos/400",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-    {
-      classID: "5",
-      className: "Course 5",
-      classThumbnailUrl: "https://picsum.photos/500",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-    {
-      classID: "6",
-      className: "Course 6",
-      classThumbnailUrl: "https://picsum.photos/600",
-      percentCompleted: 20,
-      studentCount: 200,
-      studentLimit: 500,
-    },
-  ];
-  return mock;
+const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
+async function listTeacherClasses(teacherID: string): Promise<ClassInfo[]> {
+  const url = `${baseURL}/users/teachers/${teacherID}/classes`;
+  const res = await axios.get<ListTeacherClassesResponse>(url);
+  const classes: ClassInfo[] = res.data.classes.map((c) => {
+    return {
+      classID: c.class_id,
+      className: c.name,
+      classThumbnailUrl: c.class_pic,
+      percentCompleted: 999,
+      studentCount: c.student_count,
+      studentLimit: c.max_student,
+    };
+  });
+  return classes;
+}
+
+async function listClassStudents(classID: string) {
+  const url = `${baseURL}/programs/classes/${classID}/students`;
+  const res = await axios.get<ListClassStudentsResponse>(url);
+  const students: ClassStudent[] = res.data.students.map((s) => ({
+    studentID: s.student_id,
+    name: s.name,
+    avatarURL: s.profile_pic,
+  }));
+  return students;
 }
 
 async function publishClass(cls: CreatingClass): Promise<string> {
@@ -82,4 +63,82 @@ async function publishClass(cls: CreatingClass): Promise<string> {
   return res.data.class_id;
 }
 
-export { listTeacherClasses, publishClass };
+async function listClassAssignments(classID: string) {
+  const url = `${baseURL}/programs/classes/${classID}/assignments`;
+  const res = await axios.get<ListClassAssignmentsResponse>(url);
+  const assignments: ClassAssignment[] = [];
+  for (let i = 0; i < res.data.assignments.length; i++) {
+    const getAssignmentUrl = `${baseURL}/programs/classes/${classID}/assignments/${res.data.assignments[i].assignment_id}`;
+    const assignmentRes = await axios.get<{
+      attachments: { attachment_type: string; src: string }[];
+    }>(getAssignmentUrl);
+    const a: ClassAssignment = {
+      assignmentID: res.data.assignments[i].assignment_id,
+      name: res.data.assignments[i].name,
+      description: res.data.assignments[i].text,
+      attachments: assignmentRes.data.attachments.map((a) => ({
+        src: a.src,
+        attachmentType: a.attachment_type,
+      })),
+      score: res.data.assignments[i].max_score,
+      topic: res.data.assignments[i].group_name,
+      send: res.data.assignments[i].submission_count.submit_count,
+      nosend: res.data.assignments[i].submission_count.unsubmit_count,
+    };
+    assignments.push(a);
+  }
+  return assignments;
+}
+
+async function createClassAssignment(
+  classID: string,
+  assignment: ClassAssignment
+) {
+  const url = `${baseURL}/programs/classes/${classID}/assignments`;
+  const body = {
+    name: assignment.name,
+    group_name: assignment.topic,
+    due_date: Math.floor(assignment.dueDate.getTime() / 1000),
+    text: assignment.description,
+    max_score: assignment.score,
+    attachments: assignment.attachments.map((a) => ({
+      attachment_type: a.attachmentType,
+      src: a.src,
+    })),
+  };
+  const res = await axios.post<{ assignment_id: string }>(url, body);
+  return res.data.assignment_id;
+}
+
+async function listClassThreads(classID: string): Promise<Thread[]> {
+  const url = `${baseURL}/programs/classes/${classID}/threads`;
+  const res = await axios.get<ListClassThreadsResponse>(url);
+  return res.data.threads
+    .map((thread) => ({
+      classId: classID,
+      threadId: thread.thread_id,
+      name: thread.name,
+      teacher: {
+        userID: thread.teacher.teacher_id,
+        userType: "teacher",
+        username: thread.teacher.teacher_name,
+        fullname: thread.teacher.teacher_name,
+        email: "",
+        profilePicture: thread.teacher.profile_pic,
+      },
+      text: "",
+      attachments: [],
+      lastEdit: new Date(thread.last_edit * 1000),
+      replies: [],
+    }))
+    .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime()) as Thread[];
+}
+
+export {
+  createClassAssignment,
+  listClassAssignments,
+  listClassThreads,
+  listClassStudents,
+  listTeacherClasses,
+  publishClass,
+};

@@ -13,7 +13,7 @@ function _ShowList({ submission, onClick }: { submission: ClassAssignmentSubmiss
             onClick(submission.student.studentID)
         }} className="w-full flex bg-white  items-center border-2 hover:bg-slate-300">
             <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
-                <img src={submission.student.profilePicture} className="w-16 h-16 object-cover rounded-full"/>
+                <img src={submission.student.profilePicture} className="w-16 h-16 object-cover rounded-full" />
             </div>
             <div className="flex w-96 justify-between">
                 <h1 className="text-gray-600 font-bold ml-5">{submission.student.name}</h1>
@@ -25,7 +25,7 @@ function _ShowList({ submission, onClick }: { submission: ClassAssignmentSubmiss
 
 type SubmissionStatus = "unsubmit" | "uncheck" | "check"
 function ReviewWork() {
-    const { classID, assignmentID } = useParams<{ classID: string, assignmentID: string },>()
+    const { classID, assignmentID } = useParams<{ classID: string, assignmentID: string }>()
     const { classInfo, isFetching: isFetchingInfo } = useClassInfo(classID)
     const { submissions, isFetching, reloadSubmissions } = useAssignmentSubmissions(classID, assignmentID)
     const [targetStudentID, setTargetStudentID] = useState("")

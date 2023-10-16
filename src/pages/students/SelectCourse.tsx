@@ -1,11 +1,12 @@
 import { faMagnifyingGlass, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import Swal from "sweetalert2";
+import { LoadingSpash } from "../../components/LoadingSpash";
 import CourseCard from "../../features/learns/components/CourseCard";
 import { useEnrolledCourses } from "../../features/learns/hooks/useEnrolledCourses";
-import { useUser } from "../../hooks/useUser";
 import { addRatingCourse } from "../../features/learns/services/ratingCourse";
-import Swal from "sweetalert2";
+import { useUser } from "../../hooks/useUser";
 
 const Modal = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -87,77 +88,72 @@ export default function SelectCourse() {
 
     return (
 
-    <Modal>
-      <div className="flex flex-col w-full h-64 items-center justify-start">
-        <FontAwesomeIcon
-          icon={faX}
-          size="lg"
-          className="self-end px-3 py-2"
-          onClick={handleClickClose}
-        />
-        
-        <h1 className="text-3xl font-bold h-1/5">
-          { isReview ? ("แก้ไขคะแนนหลักสูตรนี้") : ("คุณจะให้คะแนนหลักสูตรนี้เท่าไร")}
-        </h1>
-        <p className="my-4 font-semibold text-lg">{renderWordRatting()}</p>
-        <div className="rating rating-lg flex flex-row justify-center items-center px-3 py-2">
-          <input
-            type="radio"
-            name="rating-1"
-            value="1"
-            className={`mask mask-star bg-gray-100  hover:bg-amber-300 ${
-              rating >= 1 ? "bg-yellow-300" : ""
-            }`}
-            onChange={onRatingChange}
+      <Modal>
+        <div className="flex flex-col w-full h-64 items-center justify-start">
+          <FontAwesomeIcon
+            icon={faX}
+            size="lg"
+            className="self-end px-3 py-2"
+            onClick={handleClickClose}
           />
-          <input
-            type="radio"
-            name="rating-1"
-            value="2"
-            className={`mask mask-star hover:bg-amber-300 bg-gray-100  ${
-              rating >= 2 ? "bg-yellow-300" : ""
-            }`}
-            onChange={onRatingChange}
-          />
-          <input
-            type="radio"
-            name="rating-1"
-            value="3"
-            className={`mask mask-star hover:bg-amber-300 bg-gray-100 ${
-              rating >= 3 ? "bg-yellow-300" : ""
-            }`}
-            onChange={onRatingChange}
-          />
-          <input
-            type="radio"
-            name="rating-1"
-            value="4"
-            className={`mask mask-star hover:bg-amber-300 bg-gray-100  ${
-              rating >= 4 ? "bg-yellow-300" : ""
-            }`}
-            onChange={onRatingChange}
-          />
-          <input
-            type="radio"
-            value="5"
-            name="rating-1"
-            className={`mask mask-star hover:bg-amber-300 bg-gray-100  ${
-              rating >= 5 ? "bg-yellow-300" : ""
-            }`}
-            onChange={onRatingChange}
-          />
-          
+
+          <h1 className="text-3xl font-bold h-1/5">
+            {isReview ? ("แก้ไขคะแนนหลักสูตรนี้") : ("คุณจะให้คะแนนหลักสูตรนี้เท่าไร")}
+          </h1>
+          <p className="my-4 font-semibold text-lg">{renderWordRatting()}</p>
+          <div className="rating rating-lg flex flex-row justify-center items-center px-3 py-2">
+            <input
+              type="radio"
+              name="rating-1"
+              value="1"
+              className={`mask mask-star bg-gray-100  hover:bg-amber-300 ${rating >= 1 ? "bg-yellow-300" : ""
+                }`}
+              onChange={onRatingChange}
+            />
+            <input
+              type="radio"
+              name="rating-1"
+              value="2"
+              className={`mask mask-star hover:bg-amber-300 bg-gray-100  ${rating >= 2 ? "bg-yellow-300" : ""
+                }`}
+              onChange={onRatingChange}
+            />
+            <input
+              type="radio"
+              name="rating-1"
+              value="3"
+              className={`mask mask-star hover:bg-amber-300 bg-gray-100 ${rating >= 3 ? "bg-yellow-300" : ""
+                }`}
+              onChange={onRatingChange}
+            />
+            <input
+              type="radio"
+              name="rating-1"
+              value="4"
+              className={`mask mask-star hover:bg-amber-300 bg-gray-100  ${rating >= 4 ? "bg-yellow-300" : ""
+                }`}
+              onChange={onRatingChange}
+            />
+            <input
+              type="radio"
+              value="5"
+              name="rating-1"
+              className={`mask mask-star hover:bg-amber-300 bg-gray-100  ${rating >= 5 ? "bg-yellow-300" : ""
+                }`}
+              onChange={onRatingChange}
+            />
+
+          </div>
+          {showReviewButton && (
+            <button
+              onClick={() => handleClickSendRating(courseID)}
+              className="bg-blue-500 btn text-lg text-white px-3 py-2 rounded-md mt-4"
+            >
+              {isReview ? ("แก้ไขคะแนน") : ("ให้คะแนน")}
+            </button>
+          )}
         </div>
-        {showReviewButton && (
-          <button
-            onClick={() => handleClickSendRating(courseID)}
-            className="bg-blue-500 btn text-lg text-white px-3 py-2 rounded-md mt-4"
-          >
-            { isReview ? ("แก้ไขคะแนน") : ("ให้คะแนน") }
-          </button>
-        )}
-      </div>
-    </Modal>
+      </Modal>
     )
   }
 
@@ -180,7 +176,12 @@ export default function SelectCourse() {
     }
     throw Error("error");
   }
-  if (isFetching) return <div>Loading...</div>;
+  if (isFetching) return (
+    <div className="flex justify-center items-center h-screen">
+      <LoadingSpash />
+    </div>
+  )
+
   return (
     <div className="">
       <div className="flex mt-5">
@@ -195,45 +196,39 @@ export default function SelectCourse() {
             onClick={() => {
               setQuery("IN-PROGRESS");
             }}
-            className={`bg-white p-2 ${
-              query === "IN-PROGRESS" ? "bg-[#808080]" : ""
-            }`}
+            className={`bg-white p-2 ${query === "IN-PROGRESS" ? "bg-[#808080]" : ""
+              }`}
           >
             <h1 className="text-xl font-bold">กำลังดำเนินการ</h1>
             <div
-              className={`w-full h-2 ${
-                query === "IN-PROGRESS" ? "bg-slate-500" : ""
-              }`}
+              className={`w-full h-2 ${query === "IN-PROGRESS" ? "bg-slate-500" : ""
+                }`}
             ></div>
           </button>
           <button
             onClick={() => {
               setQuery("NOT-START");
             }}
-            className={`bg-white p-2 ${
-              query === "NOT-START" ? "bg-[#808080]" : ""
-            }`}
+            className={`bg-white p-2 ${query === "NOT-START" ? "bg-[#808080]" : ""
+              }`}
           >
             <h1 className="text-xl font-bold">ยังไม่ได้เริ่ม</h1>
             <div
-              className={`w-full h-2 ${
-                query === "NOT-START" ? "bg-slate-500" : ""
-              }`}
+              className={`w-full h-2 ${query === "NOT-START" ? "bg-slate-500" : ""
+                }`}
             ></div>
           </button>
           <button
             onClick={() => {
               setQuery("COMPLETED");
             }}
-            className={`bg-white p-2 ${
-              query === "COMPLETED" ? "bg-[#808080]" : ""
-            }`}
+            className={`bg-white p-2 ${query === "COMPLETED" ? "bg-[#808080]" : ""
+              }`}
           >
             <h1 className="text-xl font-bold">เสร็จสิ้นแล้ว</h1>
             <div
-              className={`w-full h-2 ${
-                query === "COMPLETED" ? "bg-slate-500" : ""
-              }`}
+              className={`w-full h-2 ${query === "COMPLETED" ? "bg-slate-500" : ""
+                }`}
             ></div>
           </button>
         </div>
@@ -280,9 +275,9 @@ export default function SelectCourse() {
                     </button>
                     {showModal ? (
                       <>
-                        { isReview ? (renderModalAddReview(courseID)) : (
-                            ( renderModalAddReview(courseID) )
-                        ) }
+                        {isReview ? (renderModalAddReview(courseID)) : (
+                          (renderModalAddReview(courseID))
+                        )}
                       </>
                     ) : null}
                   </div>

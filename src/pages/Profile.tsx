@@ -99,7 +99,7 @@ function Profile() {
           <div className="flex flex-col w-full mr-24">
             <h1 className="text-2xl font-semibold">{user.username}</h1>
             <p className="text-base py-2">
-              ทุกคนจะเห็นช์่อนี้บน โปรไฟล์ของคุณและสามารถเปลี่ยนได้ทุกเมื่อ
+              ทุกคนจะเห็นชื่อนี้บนโปรไฟล์ของคุณ คุณสามารถเปลี่ยนได้ทุกเมื่อ
             </p>
             <div className="flex flex-col items-start">
               <label htmlFor="FirstName" className="font-semibold text-lg py-2 mt-4">ชื่อจริง</label>

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ReviewStarsDisplay from "../../../components/ReviewStarsDisplay";
 
 interface CourseCardProps {
@@ -5,6 +6,7 @@ interface CourseCardProps {
   courseName: string;
   courseRating: number;
   studentCount: number;
+  courseID: string;
 }
 
 export default function CourseCard(myCoursesCard: CourseCardProps) {
@@ -26,9 +28,9 @@ export default function CourseCard(myCoursesCard: CourseCardProps) {
       </div>
       <div className="absolute right-[12px] bottom-[12px]">
         <button className="w-[60px] h-[30px] rounded-full bg-gray-600 hover:shadow-xl hover:bg-gray-800">
-          <div className="text-[14px] text-base-200 font-semibold text-center">
+          <Link to={`/teach/update-course/${myCoursesCard.courseID}`} className="text-[14px] text-base-200 font-semibold text-center">
             แก้ไข
-          </div>
+          </Link>
         </button>
       </div>
     </div>

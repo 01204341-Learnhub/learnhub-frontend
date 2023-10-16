@@ -66,13 +66,9 @@ function LearningClasses() {
                     }
                     return (
                         <div key={index} className='px-4 py-3'>
-                            {true ?
-
-                                <Link to={c.id} >
-                                    <ClassCard classThumbnailUrl={c.imageClassUrl} className={c.name} instructorName={c.teacher.name}  completionDate={new Date()} />
-                                </Link> :
+                            <Link to={c.id} >
                                 <ClassCard classThumbnailUrl={c.imageClassUrl} className={c.name} instructorName={c.teacher.name} completionDate={new Date()} />
-                            }
+                            </Link> :
                         </div>
                     )
                 })}

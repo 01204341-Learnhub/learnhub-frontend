@@ -77,7 +77,7 @@ function _SideNav({
             color="black"
           />
           <h1 className="font-semibold text-black text-[18px]">
-            อัพเดทคอร์ส
+            เผยแพร่คอร์ส
           </h1>
         </button>
       </div>
@@ -108,7 +108,7 @@ interface _TopNavProps {
 function _TopNav({ onQuit }: _TopNavProps) {
   return (
     <div className="flex justify-between items-center w-full">
-      <h1 className="text-black font-semibold text-[32px]">สร้างคอร์ส</h1>
+      <h1 className="text-black font-semibold text-[32px]">อัพเดทคอร์ส</h1>
       <button className="flex items-center space-x-4 w-fit" onClick={onQuit}>
         <h1 className="text-black font-semibold text-[29px]">ออก</h1>
         <FontAwesomeIcon icon={faArrowRight} color="black" size="lg" />

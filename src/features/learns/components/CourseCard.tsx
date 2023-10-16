@@ -15,7 +15,7 @@ interface CourseCardProps {
 export default function CourseCard(myCoursesCard: CourseCardProps) {
   return (
     <div className="w-[249px] h-[254px] bg-base-200 rounded-tl-[20px] rounded-tr-[20px]">
-       <Link to={`/learn/courses/${myCoursesCard.courseID}`}>
+      <Link to={`/learn/courses/${myCoursesCard.courseID}`}>
         <img
           className="object-cover h-[146px] w-full rounded-t-[20px] pointer-events-none"
           src={myCoursesCard.courseThumbnailUrl}
@@ -27,7 +27,7 @@ export default function CourseCard(myCoursesCard: CourseCardProps) {
         <div className="px-3 pt-1 text-[12px] text-gray-500 font-semibold">
           {myCoursesCard.instructorName}
         </div>
-        <div className="px-3 pt-3 text-[12px] font-semibold">{`สำเร็จไปแล้ว ${myCoursesCard.percentCompleted}%`}</div>
+        <div className="px-3 pt-3 text-[12px] font-semibold">{`สำเร็จไปแล้ว ${myCoursesCard.percentCompleted.toFixed(2)}%`}</div>
         <div className="px-3">
           <progress
             className="progress"
@@ -35,7 +35,7 @@ export default function CourseCard(myCoursesCard: CourseCardProps) {
             max="100"
           ></progress>
         </div>
-       </Link>
+      </Link>
     </div>
   );
 }

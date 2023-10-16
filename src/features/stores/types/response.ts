@@ -19,6 +19,7 @@ type ListCoursesResponse = {
     }[];
     rating: number;
     review_count: number;
+    difficulty_level: string;
     price: number;
   }[];
 };
@@ -43,6 +44,7 @@ type ListClassesResponse = {
     open_date: number;
     class_ended_date: number;
     price: number;
+    difficulty_level: string;
   }[];
 };
 
@@ -209,10 +211,20 @@ type BasketData = {
     profile_pic: string;
   };
 };
-
+type WishlistData ={
+  wishlist_item_id: string;
+  name: string;
+  type: string;
+  program_id: string;
+  price: number;
+}
 type ResponseBasket = {
   basket: BasketData[];
 };
+
+type ResponseWishlist ={
+  wishlist: WishlistData[];
+}
 
 type ResponseTeacherInfo = {
   uid:string,
@@ -239,5 +251,6 @@ export type {
   ResponseGetCourses,
   ResponseLesson,
   ResponseLessons,
+  ResponseWishlist,
   Tag,
 };

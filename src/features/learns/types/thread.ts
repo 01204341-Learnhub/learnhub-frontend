@@ -107,25 +107,21 @@ function generateMockThread(
     typ: typ,
     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
     attachments: ["image", "video", "file"].map(generateMockAttachment),
-    lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
+    lastEdit: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 2),
     replies: [
       {
         user: generateMockUser("student", "student1"),
-        dateTime: new Date(
-          new Date().getTime() - 1000 * 60 * 60 * 24 * 7 - 1000 * 60 * 60 * 4
-        ),
+        dateTime: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 3),
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
       },
       {
         user: generateMockUser("student", "student2"),
-        dateTime: new Date(
-          new Date().getTime() - 1000 * 60 * 60 * 24 * 1 - 1000 * 60 * 60 * 1
-        ),
+        dateTime: new Date(new Date().getTime() - 1000 * 60 * 60 * 24 * 2),
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
       },
       {
         user: teacher,
-        dateTime: new Date(new Date().getTime() - 1000 * 60 * 30),
+        dateTime: new Date(),
         text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam pretium eros nisi, vitae ultrices augue malesuada vel.",
       },
     ],

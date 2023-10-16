@@ -1,6 +1,6 @@
 import { faEdit, faPlusCircle, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Lesson } from "../types/course";
 import { CourseQuiz, CourseQuizProblem } from "../types/courseQuiz";
 
@@ -181,6 +181,9 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
     function handleLessonDescriptionChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
         setQuiz({ ...quiz, description: e.target.value })
     }
+    function handleQuizTimeLimitChange(e) {
+        setQuiz({ ...quiz, timeLimit: e.target.value })
+    }
     const onProblemSubmit = (problem: CourseQuizProblemWithoutNumber) => {
         const newProblem: CourseQuizProblem = { problemNumber: quiz.problems.length + 1, ...problem }
         setQuiz({ ...quiz, problems: [...quiz.problems, newProblem] })
@@ -216,6 +219,7 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
             name: quiz.name,
             number: lessonNumber,
             type: "quiz",
+            length: quiz.timeLimit * 60,
             quiz: JSON.stringify(quiz),
         }
         onSubmit(lesson)
@@ -257,10 +261,11 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                     />
                 </div>
                 <div className="  flex grow items-center pt-2 pb-4">
-                    <h1 className="my-auto mx-[40px] font-semibold text-[18px]">เวลาที่ใช้ (วินาที)</h1>
+                    <h1 className="my-auto mx-[40px] font-semibold text-[18px]">เวลาที่ใช้ (นาที)</h1>
                     <input
                         type="text"
                         className="mr-[50px] min-w-0  grow input input-bordered"
+                        onChange={handleQuizTimeLimitChange}
                     />
                 </div>
             </div>

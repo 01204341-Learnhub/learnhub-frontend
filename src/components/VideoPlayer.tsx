@@ -1,8 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
+import { OnProgressProps } from "react-player/base";
 
 interface VideoPlayerProps {
   url: string;
+  onGetDuration?: (duration: number) => void
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
@@ -11,6 +13,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
   const [played, setPlayed] = useState(0);
   const [seeking, setSeeking] = useState(false);
   const playerRef = useRef<ReactPlayer | null>(null);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      if (playerRef.current?.getDuration() && props.onGetDuration) {
+        props.onGetDuration(playerRef.current.getDuration())
+      }
+    }, 200)
+    return () => { clearInterval(id) }
+  }, [playerRef, props])
 
   const handlePlay = () => {
     setPlaying(true);
@@ -24,7 +35,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
     setVolume(volume);
   };
 
-  const handleProgress = (state: any) => {
+  const handleProgress = (state: OnProgressProps) => {
     if (!seeking) {
       setPlayed(state.played);
     }

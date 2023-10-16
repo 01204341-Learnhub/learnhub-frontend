@@ -18,6 +18,7 @@ type Lesson = {
   name: string;
   number: number;
   type: string;
+  length: number;
   videoUrl?: string;
   doc?: string;
   quiz?: string;

@@ -5,7 +5,7 @@ import VideoPlayer from "../../../components/VideoPlayer";
 import { uploadFile } from "../../../services/uploader/file";
 import { Lesson } from "../types/course";
 
-function _Preview({ src }: { src: string | undefined }) {
+function _Preview({ src, setDuration }: { src: string | undefined, setDuration: (duration) => void }) {
   if (src == undefined) {
     return (
       <div className="">
@@ -23,7 +23,7 @@ function _Preview({ src }: { src: string | undefined }) {
         <h1 className="font-bold text-[18px]">
           Preview
         </h1>
-        <VideoPlayer url={src} />
+        <VideoPlayer url={src} onGetDuration={setDuration} />
       </div>
     );
   }
@@ -52,6 +52,7 @@ function VideoLessonCreate({
   };
   const [fileSrc, setFileSrc] = useState<File | undefined>(undefined);
   const [urlSrc, setUrlSrc] = useState<string>("");
+  const [duration, setDuration] = useState<number>(0);
   useEffect(() => {
     if (defaultLesson != undefined) {
       setLessonName(defaultLesson.name);
@@ -75,6 +76,7 @@ function VideoLessonCreate({
             lessonId: "1234567890",
             name: lessonName,
             number: lessonNumber,
+            length: duration,
             type: "video",
             videoUrl: url,
           };
@@ -92,6 +94,7 @@ function VideoLessonCreate({
         name: lessonName,
         number: lessonNumber,
         type: "video",
+        length: duration,
         videoUrl: urlSrc,
       };
       onSubmit(lesson);
@@ -185,7 +188,7 @@ function VideoLessonCreate({
         </div>
       </div>
       <div className="ml-[70px] mr-[100px] flex grow  bg-white drop-shadow-xl pt-2 pb-4 mt-5">
-        <_Preview src={fileSrc != undefined ? URL.createObjectURL(fileSrc) : urlSrc} />
+        <_Preview src={fileSrc != undefined ? URL.createObjectURL(fileSrc) : urlSrc} setDuration={(duration) => { setDuration(duration) }} />
       </div>
       <div className="flex mt-[40px] justify-end mr-[100px] w-full">
         <button className="btn bg-black text-white" onClick={handleSubmit}>

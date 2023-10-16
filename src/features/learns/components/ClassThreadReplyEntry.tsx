@@ -11,12 +11,12 @@ function ClassThreadReplyEntry({ reply }: ClassThreadReplyEntryProps) {
       <img
         src={reply.user.profilePicture}
         className="rounded-full min-w-[40px] max-w-[40px] min-h-[40px] max-h-[40px] bg-[#d9d9d9] mt-1"
-        alt={`https://robohash.org/${reply.user.userID}`}
+        alt="profile picture"
       />
       <div className="flex flex-col w-full space-y-0.3">
         <div className="flex space-x-3">
           <p className="text-'[#505050] text-[16px] font-semibold">
-            {reply.user.username}
+            {reply.user.fullname}
           </p>
           <p className="text-[#707070] text-[14px] font-normal">
             {toDateTimeStringOmitDateOnSameDay(reply.dateTime)}

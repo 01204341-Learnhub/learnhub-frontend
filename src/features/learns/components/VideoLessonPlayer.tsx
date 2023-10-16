@@ -89,7 +89,7 @@ function VideoLessonPlayer({ url, lessonProgress, onProgressUpdate }: VideoPlaye
         onPause={handlePause}
         onEnded={handleEnded}
         onVolumeChange={handleVolumeChange}
-        progressInterval={1000 * 30}
+        progressInterval={1000 * 15}
         onProgress={handleProgress}
         onSeek={handleSeek}
         onSeekChange={handleSeekChange}

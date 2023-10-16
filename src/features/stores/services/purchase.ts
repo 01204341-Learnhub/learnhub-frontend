@@ -86,8 +86,8 @@ async function addBasketItem(
 
     return basketItemID;
   } catch (err) {
-    console.log("errr");
-    console.log(err);
+    console.log("error add basket item");
+    throw err;
   }
 }
 

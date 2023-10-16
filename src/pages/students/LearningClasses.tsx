@@ -69,9 +69,9 @@ function LearningClasses() {
                             {true ?
 
                                 <Link to={c.id} >
-                                    <ClassCard classThumbnailUrl={c.imageClassUrl} className={c.name} instructorName={c.teacher.name} percentCompleted={999} completionDate={new Date()} />
+                                    <ClassCard classThumbnailUrl={c.imageClassUrl} className={c.name} instructorName={c.teacher.name}  completionDate={new Date()} />
                                 </Link> :
-                                <ClassCard classThumbnailUrl={c.imageClassUrl} className={c.name} instructorName={c.teacher.name} percentCompleted={999} completionDate={new Date()} />
+                                <ClassCard classThumbnailUrl={c.imageClassUrl} className={c.name} instructorName={c.teacher.name} completionDate={new Date()} />
                             }
                         </div>
                     )

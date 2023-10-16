@@ -163,31 +163,34 @@ function ClassDetailedSummary(
             </p>
           </div>
         </div>
-        <div className="flex pt-[7%] px-[10%]">
-          <div className="pr-2">
-            <button
-              className="bg-black shadow-xl hover:shadow-2xl cursor-pointer w-[165px] h-[65px] text-white font-bold text-xl border rounded-3xl "
-              onClick={handleRegister}
-            >
-              ลงทะเบียน
-            </button>
-          </div>
-          <div className="px-2">
-            <button
-              onClick={() => {
-                handleAddBusketItems();
-              }}
-              className="flex justify-center items-center content-center bg-white shadow-xl hover:shadow-2xl cursor-pointer w-[165px] h-[65px] text-black font-bold text-xl border-2 border-gray-300 rounded-3xl "
-            >
-              <FontAwesomeIcon
-                icon={faCartShopping}
-                color="#000000"
-                size="xl"
-              />
-              <p className="ml-3">ใส่รถเข็น</p>
-            </button>
-          </div>
-        </div>
+        {
+          user.userType == "student" ?
+            <div className="flex pt-[7%] px-[10%]">
+              <div className="pr-2">
+                <button
+                  className="bg-black shadow-xl hover:shadow-2xl cursor-pointer w-[165px] h-[65px] text-white font-bold text-xl border rounded-3xl "
+                  onClick={handleRegister}
+                >
+                  ลงทะเบียน
+                </button>
+              </div>
+              <div className="px-2">
+                <button
+                  onClick={() => {
+                    handleAddBusketItems();
+                  }}
+                  className="flex justify-center items-center content-center bg-white shadow-xl hover:shadow-2xl cursor-pointer w-[165px] h-[65px] text-black font-bold text-xl border-2 border-gray-300 rounded-3xl "
+                >
+                  <FontAwesomeIcon
+                    icon={faCartShopping}
+                    color="#000000"
+                    size="xl"
+                  />
+                  <p className="ml-3">ใส่รถเข็น</p>
+                </button>
+              </div>
+            </div>
+            : null}
       </div>
     </>
   );

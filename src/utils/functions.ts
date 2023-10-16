@@ -17,17 +17,15 @@ export function getFileNameFromSrc(src: string) {
   if (!src.includes("firebasestorage.googleapis.com")) {
     return src;
   }
-  const startIndex = src.indexOf("%00") + 3;
-  const endIndex = src.indexOf("?", startIndex);
-  if (startIndex === -1) {
-    console.error(
-      new Error("Invalid src, cannot find %00 marking start of file name")
-    );
+  // If src doesn't contain %00, marking the start of file name, return src as is.
+  if (!src.includes("%00")) {
     return src;
   }
-  if (endIndex === -1) {
+  const startIndex = src.indexOf("%00") + 3;
+  if (!src.includes("?")) {
     return src.substring(startIndex);
   }
+  const endIndex = src.indexOf("?", startIndex);
   return src.substring(startIndex, endIndex);
 }
 

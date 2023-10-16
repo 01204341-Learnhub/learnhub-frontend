@@ -4,15 +4,15 @@
 name: Building test on pull request
 on:
   pull_request:
-    branches: 
+    branches:
       - main
       - dev
 jobs:
   test_building:
-    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+    if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - run: npm install -g pnpm
-      - run: pnpm install
+      - run: pnpm install --no-frozen-lockfile
       - run: pnpm run build

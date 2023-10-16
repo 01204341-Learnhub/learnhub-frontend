@@ -276,6 +276,7 @@ function CreateCourse() {
   const [chapterToEdit, setChapterToEdit] = useState(-1)
   const { courseID } = useParams<{ courseID: string }>()
   const { course, setCourse: setCourseHook, isFetching } = useCourse(courseID)
+  const [isLoading, setIsLoading] = useState(false)
   const [currentTab, setCurrentTab] = useState<AvailableTab>("content");
   const setCourse = (course: Course) => {
     setCourseHook(course)
@@ -296,10 +297,11 @@ function CreateCourse() {
   const handlePublishCourse = () => {
     async function onUpdateCourse() {
       if (!checkReadyToPublish(course)) throw new Error("ยังกรอกข้อมูลไม่ครบ")
+      setIsLoading(true)
       await updateCourse(course);
+      setIsLoading(false)
     }
     onUpdateCourse().then(() => {
-      alert("อัพเดทคอร์สสำเร็จ!");
     }).catch((err) => {
       Swal.fire({
         title: "เกิดข้อผิดพลาดในการอัพเดทคอร์ส",
@@ -310,7 +312,7 @@ function CreateCourse() {
     })
 
   };
-  if (isFetching) {
+  if (isFetching || isLoading) {
     return (
       <div className="flex justify-center items-center w-full h-screen">
         <LoadingSpash />

@@ -14,6 +14,7 @@ interface ProgramCardProps {
     price: number;
     tag: string;
     lvl: string;
+    rating: number;
 
 }
 
@@ -82,7 +83,8 @@ export default function ProgramCarousel({ type, programs, displayCount, carousel
                                     instructorName={program.instructorName}
                                     percentCompleted={type=== "course"? program.percentCompleted : null}
                                     regisDate={""} voter={type === "course" ? program.voter : null} price={program.price} tag={program.tag}
-                                    lvl={program.lvl} />
+                                    lvl={program.lvl}
+                                    rating={program.rating} />
                             </Link>
                         )
                     })}

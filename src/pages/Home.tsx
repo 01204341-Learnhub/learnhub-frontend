@@ -31,7 +31,7 @@ export default function Home() {
                 price: program.price,
                 tag: program.tags[0].name,
                 lvl: program.difficultyLevel,
-                ratting: program.rating
+                rating: program.rating
                 
             })
         })

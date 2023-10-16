@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom"
+import { LoadingSpash } from "../components/LoadingSpash"
 import CourseChaptersOutline from "../features/stores/components/CourseChaptersOutline"
 import CourseDetailedSummary from "../features/stores/components/CourseDetailedSummary"
 import ProgramCoverWithInstructorProfile from "../features/stores/components/ProgramCoverWithInstructorProfile"
 import { useCourseChaptersOutline } from "../features/stores/hooks/useCourseChaptersOutline"
 import { useCourseDetail } from "../features/stores/hooks/useCourseDetail"
-import { LoadingSpash } from "../components/LoadingSpash"
 
 function CourseDetailPage() {
     const { id } = useParams<{ id: string }>()
@@ -36,7 +36,8 @@ function CourseDetailPage() {
                 </div>
                 <div className="flex flex-col items-center pb-4">
                     <ProgramCoverWithInstructorProfile programCoverUrl={thumnailUrl}
-                        instructor={{ profileUrl: instructor.avatarUrl, name: instructor.name, jobTitle: instructor.name , teacherID:instructor.instructorID
+                        instructor={{
+                            profileUrl: instructor.avatarUrl, name: instructor.name, teacherID: instructor.instructorID
                         }}
                         reviewCount={reviewerCount}
                         rating={rating} />
@@ -44,17 +45,17 @@ function CourseDetailPage() {
 
                     <h1 className="self-start text-4xl ml-8 font-bold mt-3">{name}</h1>
                     <p className="self-start mt-3 ml-8 text-lg mb-12">{description}</p>
-                   
+
                     <div className="self-start mx-8">
                         <h1 className="text-xl font-semibold">สิ่งที่คุณจะได้เรียนรู้</h1>
                         <ul className="list-disc px-8">
-                            { courseDetail.courseDetail?.objective.map((objective, index) => {
+                            {courseDetail.courseDetail?.objective.map((objective, index) => {
                                 return (
                                     <li key={index} className="py-4 text-lg">
                                         {objective}
                                     </li>
                                 )
-                            }) }
+                            })}
                         </ul>
                         <div className="pb-8 pt-12">
                             <CourseChaptersOutline chapters={courseChaptersOutline.courseChaptersOutline} courseID={id} />

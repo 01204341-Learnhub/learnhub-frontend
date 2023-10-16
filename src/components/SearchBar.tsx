@@ -41,10 +41,10 @@ function Searchbar(){
 
     return(
 <div className='w-2/4 '>
-<div className='bg-gray-300 flex rounded-full w-full py-2 px-2 '>
+<div className='bg-gray-300 flex rounded-full w-full py-2 px-2 items-center justify-center'>
                     <FontAwesomeIcon icon={faMagnifyingGlass} color='black' size='xl' className='mr-4 ml-4' />
-                    { isOpen && <button className='bg-white  w-2/12 text-xl h-15' onClick={() => setISOpen(!isOpen)}>classes</button>}
-                    { !isOpen && <button className='bg-white  w-2/12 text-xl h-15' onClick={() => setISOpen(!isOpen)}>courses</button>}
+                    { isOpen && <button className='bg-white   text-xl  rounded-xl px-2 py-1' onClick={() => setISOpen(!isOpen)}>classes</button>}
+                    { !isOpen && <button className='bg-white  text-xl  rounded-xl px-2 py-1' onClick={() => setISOpen(!isOpen)}>courses</button>}
                     <input
                         type="search"
                         className=" bg-transparent border-none outline-none w-full text-[18px] font-semibold mx-5"

@@ -39,18 +39,26 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
         console.warn("Lesson not found in progress");
         return false
     }
+
+    function formatDatetime(timestamp: number): string {
+        const date = new Date(timestamp * 1000)
+        if (date.getHours() < 1) {
+            return `${date.getMinutes()} นาที`
+        }
+        return `${date.getHours()} ชั่วโมง ${date.getMinutes()} นาที`
+    }
     return (
         <>
             <div className="w-4/5">
                 <div className="flex bg-[#ECF3F9] border-t-[2px] w-full justify-between" onClick={() => handleShow()}>
 
                     <div className="flex flex-col items-start flex-1 pl-6 py-2">
-                        <h1 className="text-base font-semibold">บทที่ : {chapter.name}</h1>
+                        <h1 className="text-base font-semibold">บทที่ {chapter.chapterNumber} : {chapter.name}</h1>
                         <div className="py-1">
-                            <span className='text- text-[#202020] font-medium text-sm pr-4'>{1}/{chapter.lessonCount}</span>
+                            <span className='text- text-[#202020] font-medium text-sm pr-4'>{currentLesson?.lessonNumber || 0}/{chapter.lessonCount}</span>
                             <FontAwesomeIcon icon={faClock} color="#606060" className="pr-4" />
                             <span className='text-sm text-[#404040]'>
-                                {chapter.chapterLength / 3600 >= 1 ? chapter.chapterLength / 3600 + " ชั่วโมง" + ((chapter.chapterLength % 3600 > 0) ? chapter.chapterLength % 3600 + " นาที" : "") : chapter.chapterLength / 60 + " นาที"}
+                                {formatDatetime(chapter.chapterLength)}
                             </span>
                         </div>
                     </div>

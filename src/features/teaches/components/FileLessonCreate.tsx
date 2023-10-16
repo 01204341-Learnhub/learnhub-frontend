@@ -49,6 +49,7 @@ function FileLessonCreate({
       name: lessonName,
       number: lessonNumber,
       type: "files",
+      length: 60 * 10,
       fileUrl: files[0].name,
     };
     onSubmit(lesson);

@@ -37,7 +37,7 @@ async function createLesson(
       name: lesson.name,
       src: lesson.videoUrl as string,
       lesson_type: "video",
-      lesson_length: 999,
+      lesson_length: lesson.length,
     };
   } else if (lesson.type === "quiz") {
     const quiz = JSON.parse(lesson.quiz as string) as CourseQuiz;
@@ -46,7 +46,14 @@ async function createLesson(
       name: lesson.name,
       src: quizID,
       lesson_type: "quiz",
-      lesson_length: 999,
+      lesson_length: lesson.length,
+    };
+  } else if (lesson.type == "files") {
+    body = {
+      name: lesson.name,
+      src: lesson.fileUrl,
+      lesson_length: 60 * 5,
+      lesson_type: "file",
     };
   }
   const lessonID = (await axios.post<{ lesson_id: string }>(url, body)).data

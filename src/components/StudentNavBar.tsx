@@ -1,4 +1,4 @@
-import { faBookOpen, faCalendar, faChalkboardUser, faClipboardList } from "@fortawesome/free-solid-svg-icons"
+import { faBookOpen, faChalkboardUser } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { NavLink } from "react-router-dom"
 
@@ -18,14 +18,14 @@ function StudentNavBar() {
                 <FontAwesomeIcon icon={faChalkboardUser} color='black' size='xl' className="ml-3 mr-1" />
                 <h1 className="ml-2 font-bold text-[20px]">คลาสเรียนของฉัน</h1>
             </NavLink>
-            <NavLink to="/learn/homework" replace={true} className={({ isActive }) => ` flex items-center my-[3px] h-[47px] hover:bg-[#d9d9d9] ${isActive ? "bg-[#d9d9d9]" : ""}`}>
+            {/* <NavLink to="/learn/homework" replace={true} className={({ isActive }) => ` flex items-center my-[3px] h-[47px] hover:bg-[#d9d9d9] ${isActive ? "bg-[#d9d9d9]" : ""}`}>
                 <FontAwesomeIcon icon={faClipboardList} color='black' size='xl' className="ml-4 mr-2" />
                 <h1 className="ml-2 font-bold text-[20px]">งานที่ต้องทำ</h1>
-            </NavLink>
-            <NavLink to="/learn/schedule" replace={true} className={({ isActive }) => ` flex items-center my-[3px] h-[47px] hover:bg-[#d9d9d9] ${isActive ? "bg-[#d9d9d9]" : ""}`}>
+            </NavLink> */}
+            {/* <NavLink to="/learn/schedule" replace={true} className={({ isActive }) => ` flex items-center my-[3px] h-[47px] hover:bg-[#d9d9d9] ${isActive ? "bg-[#d9d9d9]" : ""}`}>
                 <FontAwesomeIcon icon={faCalendar} color='black' size='xl' className="ml-4 mr-2" />
                 <h1 className="ml-2 font-bold text-[20px]">ตารางเรียน</h1>
-            </NavLink>
+            </NavLink> */}
         </div>
     )
 }

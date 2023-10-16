@@ -46,7 +46,6 @@ function ClassDetail() {
 
         setisFetching(true);
         fetchClassDetail().then(() => {
-            console.log(classProgram)
             setisFetching(false);
         })
     }, [id]

@@ -92,7 +92,7 @@ interface _TransactionBoxProps {
 
 function _TransactionBox(props : _TransactionBoxProps) {
     return (
-        <div className="flex w-full h-[70px] drop-shadow-xl hover:bg-[#f0f0f0]
+        <div className="flex h-[70px] drop-shadow-xl hover:bg-[#f0f0f0]
         bg-white items-center my-5">
             <div className="w-[8%] h-full bg-green-500">
                 <img
@@ -102,19 +102,27 @@ function _TransactionBox(props : _TransactionBoxProps) {
                 >
                 </img>
             </div>
-            <div className="w-[5%]"></div>
-            <div className="flex w-[25%] h-full text-xl text-black items-center">
+
+            <div className="flex w-full h-full items-center">
+                <span className="truncate mr-4 w-5/12 ml-8">{props.name}</span>
+                <span className="truncate mr-4 w-3/12">ถูกซื้อโดย</span>
+                <span className="truncate mr-4 w-3/12">{props.buyer.studentName}</span>
+                <span className="truncate w-1/12 h-full flex items-center justify-center text-lg bg-[#ade792]">+{props.price}</span>
+            </div>
+
+            {/* <div className="pl-8"></div>
+            <div className="flex w-[25%] h-full text-base bg-red-100 truncate mr-4 text-black items-center">
                 {props.name}
             </div>
-            <div className="flex w-[25%] h-full text-xl text-black items-center">
+            <div className="flex w-[25%] h-full pl-8 text-lg text-black items-center">
                 ถูกซื้อโดย
             </div>
-            <div className="flex w-[25%] h-full text-xl text-black items-center">
+            <div className="flex w-[25%] h-full text-lg text-black items-center">
                 {props.buyer.studentName}
             </div>
             <div className="flex w-[12%] h-full text-2xl text-black bg-[#ade792] justify-center items-center">
                 +{props.price}
-            </div>
+            </div> */}
         </div>
     )
 }
@@ -122,13 +130,10 @@ function _TransactionBox(props : _TransactionBoxProps) {
 function _isDateWithinNextMonth(date : Date): boolean {
 
     console.log(`purchase date: ${date}`)
-    // Calculate the date one month from now
     const lastMonthDate = new Date()
     lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
     console.log(`last month date: ${lastMonthDate}`)
   
-    // Compare if the input date is greater than or equal to the current date
-    // and less than the date one month from now
     return date >= lastMonthDate;
   }
 

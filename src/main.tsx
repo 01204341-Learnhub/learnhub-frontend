@@ -36,6 +36,7 @@ import TeacherOverview from "./pages/teachers/TeacherOverview";
 import TeachingClasses from "./pages/teachers/TeachingClasses";
 import TeachingCourses from "./pages/teachers/TeachingCourses";
 import TeachingHomeworks from "./pages/teachers/TeachingHomeworks";
+import UpdateCourse from "./pages/teachers/UpdateCourse";
 import BasketPayment from "./pages/ฺBasketPayment";
 import store from "./store";
 
@@ -92,6 +93,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 <Route path="/teach/course/:id" element={<TeacherCourseManage />} />
                 <Route path="/teach/create/course" element={<CreateCourse />} />
                 <Route path="/teach/create/class" element={<CreateClass />} />
+                <Route path="/teach/update-course/:courseID" element={<UpdateCourse />} />
                 <Route path="/teach/incomes" element={< TeacherIncomes />} />
               </Route>
             </Route>

@@ -69,6 +69,7 @@ function TeacherOverview() {
                   courseThumbnailUrl={courseThumbnailUrl}
                   courseRating={courseRating}
                   studentCount={studentCount}
+                  courseID={courseID}
                 />
               </Link>
             </li>

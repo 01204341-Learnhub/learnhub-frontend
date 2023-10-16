@@ -1,21 +1,26 @@
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { LoadingSpash } from "../../components/LoadingSpash";
 import CourseCard from "../../features/teaches/components/CourseCard";
 import NewProgramClass from "../../features/teaches/components/NewProgramCard";
 import { useTeachCourses } from "../../features/teaches/hooks/useTeachCourses";
 
 function TeachingCourses() {
   const { courses, isFetchingCourse } = useTeachCourses()
-  const [isFetching, setIsFetching] = useState<boolean>(false);
   const navigate = useNavigate();
   if (isFetchingCourse) return <div>loading...</div>;
   function handleNavigate(type: string) {
     navigate(`/teach/create/${type}`);
   }
+  if (isFetchingCourse) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoadingSpash />
+      </div>
+    )
+  }
 
-  if (isFetching) return <div>loading...</div>;
   return (
     <div className="ml-10">
       <div className="flex items-center m-6">
@@ -43,17 +48,18 @@ function TeachingCourses() {
             thumbnailUrl: courseThumbnailUrl,
             studentCount,
           }) => (
-            
-              <li key={courseID} className="mt-5">
-                <Link to={`/teach/course/${courseID}`}>
-                  <CourseCard
-                    courseName={courseName}
-                    courseThumbnailUrl={courseThumbnailUrl}
-                    courseRating={courseRating}
-                    studentCount={studentCount}
-                  />
-                </Link>
-              </li>
+
+            <li key={courseID} className="mt-5">
+              <Link to={`/teach/course/${courseID}`}>
+                <CourseCard
+                  courseName={courseName}
+                  courseThumbnailUrl={courseThumbnailUrl}
+                  courseRating={courseRating}
+                  studentCount={studentCount}
+                  courseID={courseID}
+                />
+              </Link>
+            </li>
           ),
         )}
         <NewProgramClass

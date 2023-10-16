@@ -20,7 +20,6 @@ import { updateCourse } from "../../features/teaches/services/courses";
 import {
   Course,
 } from "../../features/teaches/types/course";
-import { useUser } from "../../hooks/useUser";
 
 type AvailableTab = "content" | "goals" | "publishing" | "add-chapter" | "edit-chapter";
 interface _SideNavProps {
@@ -78,7 +77,7 @@ function _SideNav({
             color="black"
           />
           <h1 className="font-semibold text-black text-[18px]">
-            การเผยแพร่คอร์ส
+            อัพเดทคอร์ส
           </h1>
         </button>
       </div>
@@ -95,7 +94,7 @@ function _SideNav({
             : "text-black"
             }`}
         >
-          เผยแพร่คอร์ส
+          อัพเดทคอร์ส
         </h1>
       </button>
     </div>
@@ -274,8 +273,6 @@ const CourseContext = React.createContext<CourseContextType | undefined>(
 
 function CreateCourse() {
   const navigate = useNavigate();
-  const { user } = useUser();
-  const teacherID = user.userID;
   const [chapterToEdit, setChapterToEdit] = useState(-1)
   const { courseID } = useParams<{ courseID: string }>()
   const { course, setCourse: setCourseHook, isFetching } = useCourse(courseID)

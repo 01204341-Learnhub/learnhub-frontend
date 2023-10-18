@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom"
 import Swal from "sweetalert2"
 import ReviewSubmission from "../../features/teaches/components/ReviewSubmission.js"
 import { useAssignmentSubmissions } from "../../features/teaches/hooks/useAssignmentSubmissions.js"
+import { useClassAssignments } from "../../features/teaches/hooks/useClassAssignments.js"
 import { useClassInfo } from "../../features/teaches/hooks/useClassInfo.js"
 import { markAssignmentSubmission } from "../../features/teaches/services/assignments.js"
 import { ClassAssignmentSubmission } from "../../features/teaches/types/classWork.js"
 
-function _ShowList({ submission, onClick }: { submission: ClassAssignmentSubmission, onClick: (studentID: string) => void }) {
+function _ShowList({ submission, onClick, maxScore }: { submission: ClassAssignmentSubmission, onClick: (studentID: string) => void, maxScore: number }) {
     return (
         <button onClick={() => {
             onClick(submission.student.studentID)
@@ -17,7 +18,7 @@ function _ShowList({ submission, onClick }: { submission: ClassAssignmentSubmiss
             </div>
             <div className="flex w-96 justify-between">
                 <h1 className="text-gray-600 font-bold ml-5">{submission.student.name}</h1>
-                <h1 className="text-gray-600 font-bold ml-5 justify-end">{submission.score}/100</h1>
+                <h1 className="text-gray-600 font-bold ml-5 justify-end">{submission.score}/{maxScore}</h1>
             </div>
         </button>
     )
@@ -27,7 +28,11 @@ type SubmissionStatus = "unsubmit" | "uncheck" | "check"
 function ReviewWork() {
     const { classID, assignmentID } = useParams<{ classID: string, assignmentID: string }>()
     const { classInfo, isFetching: isFetchingInfo } = useClassInfo(classID)
+    const { assignments, isFetching: isFetchingAssignments } = useClassAssignments(classID)
     const { submissions, isFetching, reloadSubmissions } = useAssignmentSubmissions(classID, assignmentID)
+    const getMaxScore = () => {
+        return assignments.find(assignment => assignment.assignmentID === assignmentID).score
+    }
     const [targetStudentID, setTargetStudentID] = useState("")
     const [_, forceUpdate] = useReducer(x => x + 1, 0)
     const getSubmissionByStatus = (status: SubmissionStatus) => {
@@ -40,6 +45,9 @@ function ReviewWork() {
         return setTargetStudentID(studentID)
     }
     const handleMark = (studentID: string, score: number) => {
+        if (score > getMaxScore()) {
+            throw new Error("คะแนนที่ให้มากกว่าคะแนนเต็ม")
+        }
         markAssignmentSubmission(assignmentID, classID, studentID, score).then(() => {
             Swal.fire({
                 icon: 'success',
@@ -60,7 +68,7 @@ function ReviewWork() {
             })
         })
     }
-    if (isFetching || isFetchingInfo) {
+    if (isFetching || isFetchingInfo || isFetchingAssignments) {
         return (
             <div>
                 Loading...
@@ -82,7 +90,7 @@ function ReviewWork() {
                     {getSubmissionByStatus("uncheck").map((submission, index) => {
                         return (
                             <div key={index}>
-                                <_ShowList submission={submission} onClick={handleSelectTargetStudent} />
+                                <_ShowList submission={submission} onClick={handleSelectTargetStudent} maxScore={getMaxScore()} />
                             </div>
                         )
                     })}
@@ -94,7 +102,7 @@ function ReviewWork() {
                     {getSubmissionByStatus("unsubmit").map((submission, index) => {
                         return (
                             <div key={index}>
-                                <_ShowList submission={submission} onClick={handleSelectTargetStudent} />
+                                <_ShowList submission={submission} onClick={handleSelectTargetStudent} maxScore={getMaxScore()} />
                             </div>
                         )
                     })}
@@ -104,7 +112,7 @@ function ReviewWork() {
                     {getSubmissionByStatus("check").map((submission, index) => {
                         return (
                             <div key={index}>
-                                <_ShowList submission={submission} onClick={handleSelectTargetStudent} />
+                                <_ShowList submission={submission} onClick={handleSelectTargetStudent} maxScore={getMaxScore()} />
                             </div>
                         )
                     })}

@@ -1,6 +1,7 @@
 import { faFile } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect, useState } from 'react'
+import Swal from 'sweetalert2'
 import { getFileNameFromSrc } from '../../../utils/functions'
 import { ClassAssignmentSubmission } from '../types/classWork'
 
@@ -13,7 +14,16 @@ interface ReviewSubmissionProps {
 function ReviewSubmission({ submission, onMark }: ReviewSubmissionProps) {
     const [score, setScore] = useState(0)
     const handleMark = () => {
-        onMark(submission.student.studentID, score)
+        try {
+            onMark(submission.student.studentID, score)
+        } catch (err) {
+            Swal.fire({
+                icon: 'error',
+                title: 'คุณให้คะแนนเกินคะแนนเต็ม',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
     }
     useEffect(() => {
         setScore(submission.score)
@@ -22,7 +32,7 @@ function ReviewSubmission({ submission, onMark }: ReviewSubmissionProps) {
         <div className="w-8/12 bg-white px-5 py-5 my-5 h-fit" >
             <div className="flex items-center mb-5">
                 <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-16 h-16 m-2 rounded-full" >
-                    <img src={submission.student.profilePicture} className='w-full h-full object-cover rounded-full'/>
+                    <img src={submission.student.profilePicture} className='w-full h-full object-cover rounded-full' />
                 </div>
                 <h1 className="text-gray-600 font-bold ml-5">{submission.student.name}</h1>
                 <h1 className="text-gray-600 font-bold ml-5"></h1>
@@ -47,7 +57,7 @@ function ReviewSubmission({ submission, onMark }: ReviewSubmissionProps) {
                         return (
                             <div className="flex rounded-xl h-[120px] bg-white w-full " key={idx} >
                                 <div className="flex w-[30%] h-full justify-center items-center border-2 text-center py-2">
-                                    {s.attachmentType == "image" ? <img src={s.src} className='object-cover h-full w-full mx-2'/> : (
+                                    {s.attachmentType == "image" ? <img src={s.src} className='object-cover h-full w-full mx-2' /> : (
                                         <div>
                                             <FontAwesomeIcon icon={faFile} />
                                         </div>

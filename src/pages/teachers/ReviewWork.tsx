@@ -1,3 +1,5 @@
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useReducer, useState } from "react"
 import { useParams } from "react-router-dom"
 import Swal from "sweetalert2"
@@ -41,6 +43,9 @@ function ReviewWork() {
     const getStudentSubmission = () => {
         return submissions.find(submission => submission.student.studentID === targetStudentID)!
     }
+    const getAssignmentName = () => {
+        return assignments.find(assignment => assignment.assignmentID === assignmentID).name
+    }
     const handleSelectTargetStudent = (studentID: string) => {
         return setTargetStudentID(studentID)
     }
@@ -79,8 +84,11 @@ function ReviewWork() {
 
         <div className="w-full h-full bg-slate-100">
             <div className="w-full border-2 px-4 py-4 flex">
+                <h1 className="text-3xl">{classInfo.className}</h1>
+                <FontAwesomeIcon icon={faChevronRight} size="xl" className="mx-4 my-auto" />
                 <h1 className="text-3xl">งานในชั้นเรียน</h1>
-                <h1 className="text-3xl px-10">{classInfo.className}</h1>
+                <FontAwesomeIcon icon={faChevronRight} size="xl" className="mx-4 my-auto" />
+                <h1 className="text-3xl ">{getAssignmentName()}</h1>
             </div>
             <div className="flex">
                 <div className="w-4/12 px-5 py-5">

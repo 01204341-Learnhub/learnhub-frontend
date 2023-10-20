@@ -8,6 +8,10 @@ function useCourse(courseID: string) {
   useEffect(() => {
     async function fetchCourse() {
       const fetchedCourse = await getCourse(courseID);
+      fetchedCourse.chapters.sort((a, b) => a.number - b.number);
+      fetchedCourse.chapters.forEach((chapter) => {
+        chapter.lessons.sort((a, b) => a.number - b.number);
+      });
       setCourse(fetchedCourse);
     }
     setIsFetching(true);

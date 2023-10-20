@@ -73,6 +73,13 @@ async function createChapter(courseID: string, chapter: Chapter) {
 }
 
 async function createCourse(course: Course, teacherID: string) {
+  // sort chapters by chapter number
+  course.chapters.sort((a, b) => a.number - b.number);
+  // sort lessons by lesson number
+  course.chapters.forEach((chapter) => {
+    chapter.lessons.sort((a, b) => a.number - b.number);
+  });
+
   // create course instance
   const url = `${baseURL}/programs/courses`;
   const body = {
@@ -94,6 +101,10 @@ async function createCourse(course: Course, teacherID: string) {
     const chapterID = await createChapter(courseID, chapter);
     chapter.chapterId = chapterID;
     chapter.lessons.forEach(async (lesson) => {
+      console.log(
+        `create lesson ${lesson.number} of chapter ${chapter.number}`
+      );
+
       const lessonID = await createLesson(courseID, chapterID, lesson);
       lesson.lessonId = lessonID;
     });

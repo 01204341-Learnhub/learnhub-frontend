@@ -22,6 +22,7 @@ function FileLessonCreate({
 }: VideoLessonCreateProps) {
   const [lessonName, setLessonName] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
+  const [lessonLength, setLessonLength] = useState<number>(0);
 
   const onRemoveFile = (index: number) => {
     setFiles((p) => p.filter((_, i) => i != index));
@@ -35,6 +36,19 @@ function FileLessonCreate({
       setFiles((p) => [...p, fileList.item(i)]);
     }
   };
+  const handleLessonLengthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value == "") {
+      setLessonLength(0);
+      return;
+    }
+    if (isNaN(parseInt(e.target.value))) {
+      return;
+    }
+    if (parseInt(e.target.value) < 0) {
+      return;
+    }
+    setLessonLength(parseInt(e.target.value));
+  }
   const handleSubmit = () => {
     if (lessonName == "") {
       alert("กรุณาใส่ชื่อบทเรียน");
@@ -49,7 +63,7 @@ function FileLessonCreate({
       name: lessonName,
       number: lessonNumber,
       type: "files",
-      length: 60 * 10,
+      length: 60 * lessonLength,
       fileUrl: files[0].name,
     };
     onSubmit(lesson);
@@ -83,26 +97,29 @@ function FileLessonCreate({
             onChange={onLessonNameChange}
           />
         </div>
+        <div className="  flex grow items-center pt-2 pb-4">
+          <h1 className="my-auto mx-[40px] font-semibold text-[18px]">เวลาที่ใช้ (นาที)</h1>
+          <input
+            type="text"
+            value={lessonLength}
+            onChange={handleLessonLengthChange}
+            className="mr-[50px] min-w-0  grow input input-bordered"
+          />
+        </div>
       </div>
 
       <div className="ml-[70px] mr-[100px] mt-[30px] bg-white drop-shadow-xl">
-        <ol>
-          {files.map((file, index) => (
-            <li key={index}>
-              <div className=" ml-[40px] mr-[100px] mt-[20px] flex bg-white drop-shadow-xl">
-                <h1 className=" ml-[40px] mr-[50px] my-[20px] grow font-semibold text-[#808080] text-[18px]">
-                  {file.name}
-                </h1>
-                <FontAwesomeIcon
-                  icon={faX}
-                  color="#606060"
-                  className=" mx-[40px] my-auto"
-                  onClick={() => onRemoveFile(index)}
-                />
-              </div>
-            </li>
-          ))}
-        </ol>
+        {files.length != 0 ? <div className="flex justify-between">
+          <h1 className=" ml-[40px] mr-[50px] my-[20px] grow font-semibold text-[#808080] text-[18px]">
+            {files[0].name}
+          </h1>
+          <FontAwesomeIcon
+            icon={faX}
+            color="#606060"
+            className=" mx-[40px] my-auto"
+            onClick={() => onRemoveFile(0)}
+          />
+        </div> : null}
         <input
           type="file"
           id="lessonFileSelector"

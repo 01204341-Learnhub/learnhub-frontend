@@ -14,6 +14,7 @@ import { CourseLesson } from "../../features/learns/types/lessons"
 import { StudentCourseLessonProgress, StudentCourseProgress } from "../../features/learns/types/progress"
 import { useAnnouncementsCourses } from "../../features/stores/hooks/useListAnnouncementsCourses"
 import { useUser } from "../../hooks/useUser"
+import { getFileNameFromSrc } from "../../utils/functions"
 
 interface _CourseContentProp {
     chapters: CourseChapter[]
@@ -59,7 +60,7 @@ function _LessonDisplay({ lesson, progress, onLessonEnd, onUpdateProgress }: _Le
     } else if (lesson.lessonType == "quiz") {
         if (progress.finished) {
             return (
-                <div className="w-f">
+                <div className="w-full">
                     <CourseMultipleChoiceQuizReport quizID={lesson.src} />
                 </div>
             )
@@ -75,6 +76,16 @@ function _LessonDisplay({ lesson, progress, onLessonEnd, onUpdateProgress }: _Le
                 </div>
             )
         }
+    } else if (lesson.lessonType == "files" || lesson.lessonType == "file") {
+        return (
+            <div className="flex rounded-xl h-[120px] bg-white w-full " >
+                <div className='flex justify-center items-center w-[70%] border-2 h-full text-center py-2'>
+                    <a className="text-blue-500" target='_blank' href={lesson.src}>
+                        {getFileNameFromSrc(lesson.src)}
+                    </a>
+                </div>
+            </div>
+        )
     }
 }
 

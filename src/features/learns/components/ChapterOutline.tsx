@@ -118,7 +118,7 @@ function LessonSlot({ lesson, finished, onSelectLesson, onFinishedChange, isFocu
                     <div className="flex h-24 w-24 bg-[#D9D9D9] justify-center items-center">
                         {
                             lesson.lessonType == "video" ? <FontAwesomeIcon icon={faCirclePlay} size='2xl' color="black" className="drop-shadow-lg" />
-                                : lesson.lessonType == "doc" ? <FontAwesomeIcon icon={faFile} color="#000" size='2xl' className="drop-shadow-lg" />
+                                : lesson.lessonType == "file" ? <FontAwesomeIcon icon={faFile} color="#000" size='2xl' className="drop-shadow-lg" />
                                     : lesson.lessonType == "quiz" ? <FontAwesomeIcon icon={faClipboardList} color="#000" size="2xl" className="drop-shadow-lg" /> : <></>
                         }
                     </div>

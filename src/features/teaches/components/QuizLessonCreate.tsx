@@ -102,7 +102,7 @@ function _ProblemCreate({ onSubmit, problemToBeEdit, onEdit }: _ProblemCreatePro
                     placeholder="คำอธิบายเพิ่มเติมที่่ผู้เรียนจะเห็นหลังทำแบบฝึกหัดเสร็จ" value={explaination}
                     onChange={(e) => { setExplaination(e.target.value) }} />
             </div>
-            <h1 className="my-auto mx-[40px] font-semibold text-[15px] text-[#808080]">ติ๊กถูกด้านหน้าเพื่อกำหนดตัวเลือกที่ตอบแล้วได้คะแนน</h1>
+            <h1 className="my-auto mx-[40px] font-semibold text-[15px] text-black">ติ๊กถูกเพื่อเลือกข้อที่เป็นจริง</h1>
             {Object.entries(choices).map(([key, value], index) => {
                 if (index >= numChoice) {
                     return (null)
@@ -294,7 +294,7 @@ function QuizLessonCreate({ chapterName, chapterNumber, lessonNumber, onCancel, 
                             else {
                                 return (
                                     <div className="mx-[55px] my-2 flex items-center" key={`${key}-${value}-${index}`}>
-                                        <div className={`mr-5 rounded-full w-4 h-4 border-2 border-[#646464] ${problem.correctAnswers[key] ? "bg-green-400" : "bg-slate-200"}`}></div>
+                                        <input type="checkbox" checked={problem.correctAnswers[key]} className="mr-5"></input>
                                         <h1 className=" font-semibold text-[16px] text-[#3a3a3a]">{value}</h1>
                                     </div>
                                 )

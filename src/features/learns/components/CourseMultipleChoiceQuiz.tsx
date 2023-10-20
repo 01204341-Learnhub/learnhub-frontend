@@ -52,10 +52,10 @@ function _Question({ problem, submission, onNext, onPrev, isLast }: _QuestionPro
                     if (v == "") return (<></>)
                     else return (
                         <div key={index} className="flex items-center text-lg font-bold mx-[5%] my-10">
-                            <div className="flex rounded-full justify-center items-center w-5 h-5 bg-gray-400">
-                                <div className="flex rounded-full justify-center items-center w-5 h-5">
-                                    <button className={`rounded-full w-4 h-4 ${isSelect(k) ? 'bg-black' : 'bg-white'} border-2 border-black}`}
-                                        onClick={() => { handleSelect(k) }}></button>
+                            <div className="flex  justify-center items-center w-5 h-5 bg-gray-400">
+                                <div className="flex  justify-center items-center w-5 h-5">
+                                    <input type="checkbox" checked={isSelect(k)} className={`w-4 h-4 ${isSelect(k) ? 'bg-black' : 'bg-white'} border-2 border-black}`}
+                                        onClick={() => { handleSelect(k) }}></input>
                                 </div>
                             </div>
                             <p className="mx-2">{v}</p>

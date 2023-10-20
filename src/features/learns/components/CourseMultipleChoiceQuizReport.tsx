@@ -1,9 +1,9 @@
-import { LoadingSpash } from "../../../components/LoadingSpash";
-import { useUser } from "../../../hooks/useUser"
-import { useCourseQuiz } from "../hooks/useCourseQuiz"
-import { useStudentCourseQuizReport } from "../hooks/useStudentCourseQuizReport"
 import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { LoadingSpash } from "../../../components/LoadingSpash";
+import { useUser } from "../../../hooks/useUser";
+import { useCourseQuiz } from "../hooks/useCourseQuiz";
+import { useStudentCourseQuizReport } from "../hooks/useStudentCourseQuizReport";
 
 interface CourseMultipleChoiceQuizReportProps {
     quizID: string,
@@ -14,11 +14,11 @@ function CourseMultipleChoiceQuizReport({ quizID }: CourseMultipleChoiceQuizRepo
     const { quiz, isFetching: isFetchingQuiz } = useCourseQuiz(quizID)
     const { report, isFetching: isFetchingReport } = useStudentCourseQuizReport(quizID, user.userID)
     function checkIfProblemCorrect(problemIndex: number) {
-        Object.entries(report.problems[problemIndex].answer).map(([key, value]) => {
-            if (report.problems[problemIndex].correctAnswer[key] != value) {
+        for (const [key, value] of Object.entries(report.problems[problemIndex].answer)) {
+            if (value != report.problems[problemIndex].correctAnswer[key]) {
                 return false
             }
-        })
+        }
         return true
     }
     function checkIfChoiceCorrect(problemIndex: number, key: string) {
@@ -46,38 +46,38 @@ function CourseMultipleChoiceQuizReport({ quizID }: CourseMultipleChoiceQuizRepo
                 </div>
             </div>
             <div className="overflow-scroll h-96">
-            {quiz.problems.map((problem, problemIndex) => {
-                return (
-                    <div key={problemIndex}>
-                        <div className="flex flex-col ml-[100px] mr-[150px] mt-[40px] rounded-xl bg-white drop-shadow-xl">
-                            <div className="flex pt-2 pb-4 mt-[20px]">
-                                <div className="my-auto mx-[40px] grow font-semibold text-[18px]">คำถามที่ {problemIndex + 1} : {problem.question}</div>
-                                <div className="mx-5 font-bold text-[22px]">
-                                    {checkIfProblemCorrect(problemIndex) ? <FontAwesomeIcon icon={faCheck} size='xl' color="#ADE792" /> : <FontAwesomeIcon icon={faXmark} size='xl' color="#FF2171" /> }
-                                </div>
-                            </div>
-                            {Object.entries(problem.choices).map(([key, value], index) => {
-                                if (value == "") {
-                                    return (
-                                        <></>
-                                    )
-                                }
-                                return (
-                                    <div className="mx-[55px] my-2 flex items-center" key={index}>
-                                        <input className="mr-5 rounded-full w-4 h-4 border-2 border-[#646464]" type="checkbox" checked={report.problems[problemIndex].answer[key]} />
-                                        <p className=" font-semibold text-[16px] text-[#3a3a3a]">{value}</p>
-                                        <div className="ml-5">
-                                            {checkIfChoiceCorrect(problemIndex, key) ? <FontAwesomeIcon icon={faCheck} size='xl' color="#ADE792" /> : <FontAwesomeIcon icon={faXmark} size='xl' color="#FF2171" />}
-                                        </div>
+                {quiz.problems.map((problem, problemIndex) => {
+                    return (
+                        <div key={problemIndex}>
+                            <div className="flex flex-col ml-[100px] mr-[150px] mt-[40px] rounded-xl bg-white drop-shadow-xl">
+                                <div className="flex pt-2 pb-4 mt-[20px]">
+                                    <div className="my-auto mx-[40px] grow font-semibold text-[18px]">คำถามที่ {problemIndex + 1} : {problem.question}</div>
+                                    <div className="mx-5 font-bold text-[22px]">
+                                        {checkIfProblemCorrect(problemIndex) ? <FontAwesomeIcon icon={faCheck} size='xl' color="#ADE792" /> : <FontAwesomeIcon icon={faXmark} size='xl' color="#FF2171" />}
                                     </div>
-                                )
-                            })}
-                            <hr />
-                            <p className=" ml-[40px] my-3 pt-2 pb-2 text-[#909090] font-medium text-[16px]">คำอธิบาย : {report.problems[problemIndex].explaination}</p>
+                                </div>
+                                {Object.entries(problem.choices).map(([key, value], index) => {
+                                    if (value == "") {
+                                        return (
+                                            <></>
+                                        )
+                                    }
+                                    return (
+                                        <div className="mx-[55px] my-2 flex items-center" key={index}>
+                                            <input className="mr-5 rounded-full w-4 h-4 border-2 border-[#646464]" type="checkbox" checked={report.problems[problemIndex].answer[key]} />
+                                            <p className=" font-semibold text-[16px] text-[#3a3a3a]">{value}</p>
+                                            <div className="ml-5">
+                                                {checkIfChoiceCorrect(problemIndex, key) ? <FontAwesomeIcon icon={faCheck} size='xl' color="#ADE792" /> : <FontAwesomeIcon icon={faXmark} size='xl' color="#FF2171" />}
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                                <hr />
+                                <p className=" ml-[40px] my-3 pt-2 pb-2 text-[#909090] font-medium text-[16px]">คำอธิบาย : {report.problems[problemIndex].explaination}</p>
+                            </div>
                         </div>
-                    </div>
-                )
-            })}
+                    )
+                })}
             </div>
         </div>
     )

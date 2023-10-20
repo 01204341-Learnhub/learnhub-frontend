@@ -1,5 +1,5 @@
-import { useReducer, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useEffect, useReducer, useState } from "react"
+import { useParams, useSearchParams } from "react-router-dom"
 import { LoadingSpash } from "../../components/LoadingSpash"
 import ChapterOutline from "../../features/learns/components/ChapterOutline"
 import CourseAnnouncementDropdown from "../../features/learns/components/CourseAnnouncementDropdown"
@@ -84,7 +84,8 @@ function LearnCourse() {
     const { progress, updateLessonProgress } = useStudentCourseProgress(user.userID, courseID)
     const { chapters } = useCourseChapters(courseID)
     const { announcements, isFetching } = useAnnouncementsCourses(courseID)
-    const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>('contents')
+    const [searchParams, setSearchParams] = useSearchParams()
+    const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>(searchParams.get('view') == 'announcements' ? 'announcements' : 'contents')
     const [currentLesson, setCurrentLesson] = useState<CourseLesson | undefined>(undefined)
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
 
@@ -117,6 +118,9 @@ function LearnCourse() {
             forceUpdate()
         })
     }
+    useEffect(() => {
+        setSearchParams({ view: outlineViewMode })
+    }, [setSearchParams, outlineViewMode])
     return (
         <div className="">
             <div className="flex pt-8 pl-14 pb-14">

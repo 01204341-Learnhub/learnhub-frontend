@@ -79,7 +79,7 @@ function LearningOverview() {
         return teachingClass
     }
     function formatTimeFromTimestamp(timestamp: number): string {
-        const date = new Date(timestamp*1000);
+        const date = new Date(timestamp * 1000);
         const hours = date.getHours().toString().padStart(2, '0');
         const minutes = date.getMinutes().toString().padStart(2, '0');
         return `${hours}:${minutes}`;
@@ -164,7 +164,7 @@ function LearningOverview() {
 
                         {getRecentAnnouncements().length != 0 ? getRecentAnnouncements().map(({ announcementID, courseInfo, teacher, lastEdit }) => {
                             return (
-                                <Link to={`/learn/courses/${courseInfo.courseID}`}>
+                                <Link to={`/learn/courses/${courseInfo.courseID}?view=announcements`}>
                                     <li key={announcementID} className={`flex justify-center mt-2`}>
                                         <div className="flex justify-center py-2 bg-gray-100 hover:bg-gray-300 rounded-xl">
                                             <div className="py-2 h-16 w-16  rounded-full mx-4">

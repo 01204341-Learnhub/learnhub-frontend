@@ -29,4 +29,16 @@ async function updateProfileFromFile(
   return uploadedUrl;
 }
 
-export { updateProfileFromFile, updateProfilePicture };
+async function updateFullname(
+  userType: string,
+  userID: string,
+  fullname: string
+) {
+  const url = `${baseURL}/users/${userType}${"s"}/${userID}/`;
+  const body = {
+    fullname: fullname,
+  };
+  await axios.patch(url, body);
+}
+
+export { updateFullname, updateProfileFromFile, updateProfilePicture };

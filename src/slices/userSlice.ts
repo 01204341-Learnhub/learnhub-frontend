@@ -12,6 +12,11 @@ export const userSlice = createSlice({
       state.user.profilePicture = newProfilePic;
       localStorage.setItem("learnhubUser", JSON.stringify(state.user));
     },
+    changeFullName: (state, action) => {
+      const newFullname = action.payload as string;
+      state.user.fullname = newFullname;
+      localStorage.setItem("learnhubUser", JSON.stringify(state.user));
+    },
     clearUser: (state) => {
       state.user = undefined;
     },
@@ -21,5 +26,9 @@ export const userSlice = createSlice({
   },
 });
 export default userSlice.reducer;
-export const { changeProfilePicture, clearUser, setLearnhubUser } =
-  userSlice.actions;
+export const {
+  changeProfilePicture,
+  clearUser,
+  setLearnhubUser,
+  changeFullName,
+} = userSlice.actions;

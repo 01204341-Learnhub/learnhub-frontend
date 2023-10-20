@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { updateProfileFromFile } from "../features/profiles/services/updateProfile";
+import { updateFullname, updateProfileFromFile } from "../features/profiles/services/updateProfile";
 import { useUser } from "../hooks/useUser";
-import { changeProfilePicture } from "../slices/userSlice";
+import { changeFullName, changeProfilePicture } from "../slices/userSlice";
 
 function Profile() {
   const { user, isFetching } = useUser();
@@ -46,15 +46,29 @@ function Profile() {
           setIsUpdating(false);
         })
       }
+      if (`${firstName} ${lastName}` != user.fullname) {
+        updateFullname(user.userType, user.userID, `${firstName} ${lastName}`).then(() => {
+          dispatch(changeFullName(`${firstName} ${lastName}`))
+          setIsUpdating(false);
+        })
+      }
     }
     setIsEdit(!isEdit);
   }
 
   const ChangeFirstName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.includes(" ")) {
+      alert("ชื่อจริงห้ามมีช่องว่าง");
+      return;
+    }
     setFirstName(e.target.value);
   }
 
   const ChangeLastName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.includes(" ")) {
+      alert("นามสกุลห้ามมีช่องว่าง");
+      return;
+    }
     setLastName(e.target.value);
   }
 
@@ -109,6 +123,7 @@ function Profile() {
                   onChange={ChangeFirstName}
                   placeholder="ชื่อจริง"
                   className="border-2 border-gray-300 outline-none h-12 w-4/5 px-4 mb-4"
+                  value={firstName}
                   type="text"
                   name="FirstName"
                   id="FirstName" />
@@ -119,6 +134,7 @@ function Profile() {
                 <input
                   onChange={ChangeLastName}
                   placeholder="นามสกุล"
+                  value={lastName}
                   className="border-2 border-gray-300 outline-none h-12 w-4/5 px-4 mb-4"
                   type="text"
                   name="LastName"

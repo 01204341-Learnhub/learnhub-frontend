@@ -140,12 +140,6 @@ function Profile() {
                   name="LastName"
                   id="LastName" />
               ) : <span className={classText(lastName)}>{lastName ? lastName : "คุณยังไม่ตั้งนามสกุลของคุณ"}</span>}
-
-
-              <label htmlFor="Occupation" className="font-semibold text-lg py-2">อาชีพ</label>
-
-
-
               {ButtonEditProfile()}
             </div>
           </div>

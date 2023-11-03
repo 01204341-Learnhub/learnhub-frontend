@@ -33,7 +33,8 @@ function TeacherProfile() {
     const renderProgramCourse = () => {
         return (
             <>
-                {instructor.courses.slice(0, displayedCourses).map((program, index) => {
+                {instructor.courses.map((program, index) => {
+                    console.log(program.courseID)
                     return (
                         <div className="flex mr-10 my-5 pl-[10%] ">
                             <img src={program.thumbnailUrl} className="h-[100px] w-[100px] object-cover bg-black  rounded-l-lg"></img>
@@ -59,7 +60,7 @@ function TeacherProfile() {
     const renderProgramClass = () => {
         return (
             <>
-                {instructor.classes.slice(0, displayedCourses).map((program, index) => {
+                {instructor.classes.map((program, index) => {
                     return (
                         <div className="flex mr-10 my-5 pl-[10%] ">
                             <img src={program.classThumbnailUrl} className="h-[100px] w-[100px] bg-black ml-[10px] rounded-l-lg"></img>
@@ -69,7 +70,7 @@ function TeacherProfile() {
                                         {program.className}
                                     </div>
                                     <div className="mx-5">
-                                        <Link to={`/detail/course/${program.classID}`} key={index} className="my-4">
+                                        <Link to={`/detail/class/${program.classID}`} key={index} className="my-4">
                                             รายละเอียด
                                         </Link>
                                     </div>

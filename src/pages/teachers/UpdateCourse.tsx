@@ -4,7 +4,7 @@ import {
   faCircle as faCircleSolid,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { LoadingSpash } from "../../components/LoadingSpash";
@@ -261,15 +261,11 @@ function checkReadyToPublish(course: Course) {
   );
 }
 
-interface CourseContextType {
-  course: Course;
-  setCourse: (course: Course) => void;
-}
 
-
-const CourseContext = React.createContext<CourseContextType | undefined>(
-  undefined,
-);
+// const CourseContext = React.createContext<CourseContextType | undefined>(
+//   undefined,
+// );
+import { CourseContext } from "./CreateCourse";
 
 function CreateCourse() {
   const navigate = useNavigate();

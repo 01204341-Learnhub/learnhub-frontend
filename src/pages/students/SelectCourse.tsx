@@ -234,14 +234,6 @@ export default function SelectCourse() {
         </div>
         <hr />
       </div>
-      <div className=" my-8 ml-20">
-        <div className="flex drop-shadow-md">
-          <input type="text" placeholder="ค้นหาคอร์สเรียน" />
-          <button className="bg-black p-2">
-            <FontAwesomeIcon icon={faMagnifyingGlass} color="white" size="xl" />
-          </button>
-        </div>
-      </div>
       <h1 className="ml-5 text-xl font-bold mt-20">คอร์สเรียน</h1>
       <ul className="grid grid-cols-5 mx-5">
         {enrolledCourses.map(

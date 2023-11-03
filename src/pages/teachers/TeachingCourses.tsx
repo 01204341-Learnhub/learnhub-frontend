@@ -28,16 +28,6 @@ function TeachingCourses() {
         <h2 className="rounded-full font-semibold px-2 py-1 bg-[#FF9B9B] ml-5">
           course
         </h2>
-        <div className="flex drop-shadow-md ml-5">
-          <input
-            type="text"
-            className="input input-bordered w-full rounded-none"
-            placeholder="ค้นหาคอร์สเรียนของฉัน"
-          />
-          <div className="bg-black flex justify-center items-center px-2">
-            <FontAwesomeIcon icon={faMagnifyingGlass} size="xl" color="white" />
-          </div>
-        </div>
       </div>
       <ul className="grid grid-cols-5 gap-3 ml-5">
         {courses.map(

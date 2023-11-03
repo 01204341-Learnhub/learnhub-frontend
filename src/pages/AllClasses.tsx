@@ -43,6 +43,7 @@ export default function AllClasses() {
                                 instructorName={program.instructor.name}
                                 percentCompleted={null}
                                 regisDate={program.registerEndedDate.toString()} voter={null} price={program.price} tag={program.tags[0].name}
+                                rating={9999999} // HARDCODE
                                 lvl={program.difficultyLevel} />
                         </Link>
                     )

@@ -179,12 +179,12 @@ function _TopPanel({ cls }: _TopPanelProps) {
 }
 
 function checkReadyToPublish(cls: CreatingClass) {
-  if (cls.name === "" || cls.pictureUrl === "" || cls.description === "") return false;
+  if (cls.name === "" || cls.pictureUrl === "" || cls.description.trim() === "") return false;
   if (cls.maxStudent <= 0 || cls.maxStudent > 100) return false;
   if (cls.price < 0) return false;
   if (cls.objectives.length !== 4) return false;
-  if (cls.objectives.some((objective) => objective === "")) return false;
-  if (cls.requirement === "") return false;
+  if (cls.objectives.some((objective) => objective.trim() === "")) return false;
+  if (cls.requirement.trim() === "") return false;
   if (cls.level === "") return false;
   if (cls.tag === undefined) return false;
   if (cls.schedule.length === 0) return false;

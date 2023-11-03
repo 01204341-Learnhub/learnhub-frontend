@@ -238,9 +238,9 @@ function checkReadyToPublish(course: Course) {
     course.thumbnailUrl !== "" &&
     course.level !== "" &&
     course.instructorName !== "" &&
-    course.description !== "" &&
-    course.objectives.every((objective) => objective !== "") &&
-    course.requirement !== "" &&
+    course.description.trim() !== "" &&
+    course.objectives.every((objective) => objective.trim() !== "") &&
+    course.requirement.trim() !== "" &&
     course.chapters.length !== 0 &&
     course.chapters.every((chapter) => chapter.lessons.length !== 0) &&
     course.chapters.every((chapter) =>

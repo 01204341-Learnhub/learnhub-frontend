@@ -64,15 +64,47 @@ async function publishClass(cls: CreatingClass): Promise<string> {
   return res.data.class_id;
 }
 
+async function getClassTagAndObjectives(classID: string) {
+  const url = `${baseURL}/programs/classes/${classID}`;
+  const res = await axios.get<GetClassInfoResponse>(url);
+  return {
+    tagID: res.data.tags[0].tag_id,
+    objectives: res.data.class_objective,
+  };
+}
+
 async function updateClass(cls: CreatingClass, classID: string) {
   const url = `${baseURL}/programs/classes/${classID}`;
+  // clear objectives
+  const old = await getClassTagAndObjectives(classID);
+  const clearObjective = old.objectives.map((o) => ({
+    op: "remove",
+    value: o,
+  }));
+  await axios.patch(url, clearObjective);
+
+  // clear tags
+  const clearTag = {
+    tag_id: old.tagID,
+    op: "remove",
+  };
+  await axios.patch(url, clearTag);
+
   const body = {
     name: cls.name,
     class_pic: cls.pictureUrl,
+    class_objective: cls.objectives.map((o) => ({
+      op: "add",
+      value: o,
+    })),
+    tag: {
+      tag_id: cls.tag.tagID,
+      op: "add",
+    },
     description: cls.description,
     class_requirement: cls.requirement,
   };
-  const res = await axios.patch(url, body);
+  await axios.patch(url, body);
 }
 
 async function listClassAssignments(classID: string) {

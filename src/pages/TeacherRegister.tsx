@@ -125,7 +125,7 @@ function TeacherRegister() {
               <input
                 type="text"
                 className="border-none outline-none text-[24px] text-black w-full bg-white"
-                placeholder="Username"
+                placeholder="ชื่อบัญชีผู้ใช้"
                 value={username}
                 onChange={handleUsernameChange}
               />
@@ -137,7 +137,7 @@ function TeacherRegister() {
               <input
                 type="email"
                 className="border-none outline-none text-[24px] text-black w-full bg-white"
-                placeholder="Email"
+                placeholder="อีเมล"
                 value={email}
                 onChange={handleEmailChange}
               />
@@ -152,7 +152,7 @@ function TeacherRegister() {
               <input
                 type="password"
                 className="border-none outline-none text-[24px] text-black w-full bg-white"
-                placeholder="Password"
+                placeholder="รหัสผ่าน"
                 value={password}
                 onChange={handlePasswordChange}
               />
@@ -167,7 +167,7 @@ function TeacherRegister() {
               <input
                 type="password"
                 className="border-none outline-none text-[24px] text-black w-full bg-white"
-                placeholder="Confirm Password"
+                placeholder="ยืนยันรหัสผ่าน"
                 value={confirmpassword}
                 onChange={handleConfirmPasswordChange}
               />

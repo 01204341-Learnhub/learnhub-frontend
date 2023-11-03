@@ -37,7 +37,7 @@ async function createLesson(
       name: lesson.name,
       src: lesson.videoUrl as string,
       lesson_type: "video",
-      lesson_length: lesson.length,
+      lesson_length: Math.floor(lesson.length),
     };
   } else if (lesson.type === "quiz") {
     const quiz = JSON.parse(lesson.quiz as string) as CourseQuiz;
@@ -46,13 +46,13 @@ async function createLesson(
       name: lesson.name,
       src: quizID,
       lesson_type: "quiz",
-      lesson_length: lesson.length,
+      lesson_length: Math.floor(lesson.length),
     };
   } else if (lesson.type == "files") {
     body = {
       name: lesson.name,
       src: lesson.fileUrl,
-      lesson_length: 60 * 5,
+      lesson_length: 60 * 5, // HARDCODE
       lesson_type: "file",
     };
   }
@@ -307,7 +307,7 @@ async function updateCourse(course: Course) {
       }
       const lessonInfoBody = {
         name: lesson.name,
-        lesson_length: lesson.length,
+        lesson_length: Math.floor(lesson.length),
       };
       if (lesson.type == "video") {
         lessonInfoBody["src"] = lesson.videoUrl;

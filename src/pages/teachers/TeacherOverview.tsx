@@ -92,6 +92,7 @@ function TeacherOverview() {
           }) => (
             <li key={classID}>
               <ClassCard
+                classID={classID}
                 className={className}
                 classThumbnailUrl={classThumbnailUrl}
                 percentCompleted={percentCompleted}

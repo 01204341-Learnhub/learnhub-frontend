@@ -2,6 +2,7 @@ import axios from "axios";
 import { ClassInfo, CreatingClass } from "../types/class.ts";
 import { ClassAssignment } from "../types/classWork.ts";
 import {
+  GetClassInfoResponse,
   ListClassAssignmentsResponse,
   ListClassStudentsResponse,
   ListClassThreadsResponse,
@@ -63,6 +64,17 @@ async function publishClass(cls: CreatingClass): Promise<string> {
   return res.data.class_id;
 }
 
+async function updateClass(cls: CreatingClass, classID: string) {
+  const url = `${baseURL}/programs/classes/${classID}`;
+  const body = {
+    name: cls.name,
+    class_pic: cls.pictureUrl,
+    description: cls.description,
+    class_requirement: cls.requirement,
+  };
+  const res = await axios.patch(url, body);
+}
+
 async function listClassAssignments(classID: string) {
   const url = `${baseURL}/programs/classes/${classID}/assignments`;
   const res = await axios.get<ListClassAssignmentsResponse>(url);
@@ -88,6 +100,35 @@ async function listClassAssignments(classID: string) {
     assignments.push(a);
   }
   return assignments;
+}
+
+async function getClass(classID: string): Promise<CreatingClass> {
+  const url = `${baseURL}/programs/classes/${classID}`;
+  const res = await axios.get<GetClassInfoResponse>(url);
+  const data = res.data;
+  const cls: CreatingClass = {
+    name: data.name,
+    pictureUrl: data.class_pic,
+    teacher: undefined,
+    description: data.description,
+    maxStudent: data.max_student,
+    price: data.price,
+    objectives: data.class_objective,
+    requirement: data.class_requirement,
+    level: data.difficulty_level,
+    tag: {
+      tagID: data.tags[0].tag_id,
+      name: data.tags[0].tag_name,
+    },
+    schedule: data.schedules.map((s) => ({
+      start: new Date(s.start * 1000),
+      end: new Date(s.end * 1000),
+    })),
+    start: new Date(data.open_date * 1000),
+    registrationEnd: new Date(data.registration_ended_date * 1000),
+    end: new Date(data.class_ended_date * 1000),
+  };
+  return cls;
 }
 
 async function createClassAssignment(
@@ -136,9 +177,11 @@ async function listClassThreads(classID: string): Promise<Thread[]> {
 
 export {
   createClassAssignment,
+  getClass,
   listClassAssignments,
-  listClassThreads,
   listClassStudents,
+  listClassThreads,
   listTeacherClasses,
   publishClass,
+  updateClass,
 };

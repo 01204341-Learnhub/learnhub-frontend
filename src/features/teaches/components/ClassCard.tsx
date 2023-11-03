@@ -1,9 +1,12 @@
+import { Link } from "react-router-dom";
+
 interface ClassCardProps {
   classThumbnailUrl: string;
   className: string;
   percentCompleted: number;
   studentCount: number;
   studentLimit: number;
+  classID: string;
 }
 
 export default function ClassCard(myClassesCard: ClassCardProps) {
@@ -28,6 +31,13 @@ export default function ClassCard(myClassesCard: ClassCardProps) {
       {/* <div className="px-3 pt-1 text-[12px] font-semibold text-end">{`${myClassesCard.percentCompleted}%`}</div> */}
       <div className="px-3 pt-1 text-[12px] font-semibold">
         มีผู้เรียน {myClassesCard.studentCount}/{myClassesCard.studentLimit}
+      </div>
+      <div className="absolute right-[12px] bottom-[12px]">
+        <button className="w-[60px] h-[30px] rounded-full bg-gray-600 hover:shadow-xl hover:bg-gray-800">
+          <Link to={`/teach/update-class/${myClassesCard.classID}`} className="text-[14px] text-base-200 font-semibold text-center">
+            แก้ไข
+          </Link>
+        </button>
       </div>
     </div>
   );

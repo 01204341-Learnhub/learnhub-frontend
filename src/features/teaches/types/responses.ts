@@ -124,14 +124,37 @@ type GetClassThreadResponse = {
   }[];
 };
 
+type GetClassInfoResponse = {
+  name: string;
+  class_pic: string;
+  max_student: number;
+  price: number;
+  description: string;
+  class_objective: string[];
+  tags: {
+    tag_id: string;
+    tag_name: string;
+  }[];
+  class_requirement: string;
+  difficulty_level: string;
+  schedules: {
+    start: number;
+    end: number;
+  }[];
+  open_date: number;
+  registration_ended_date: number;
+  class_ended_date: number;
+};
+
 export type {
   GetClassAssignmentResponse,
+  GetClassInfoResponse,
   GetClassThreadResponse,
   ListClassAssignmentsResponse,
   ListClassStudentsResponse,
+  ListClassThreadsResponse,
   ListTagsResponse,
   ListTeacherClassesResponse,
   ListTeacherCourseResponse,
   ListTeacherIncomesResponse,
-  ListClassThreadsResponse,
 };

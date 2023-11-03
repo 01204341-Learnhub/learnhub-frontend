@@ -33,6 +33,7 @@ function SelectTeachingClass() {
             <li key={c.classID} className="mt-5">
               <Link to={`/teach/classes/${c.classID}`} >
                 <ClassCard
+                  classID={c.classID}
                   className={c.className}
                   classThumbnailUrl={c.classThumbnailUrl}
                   studentCount={c.studentCount}

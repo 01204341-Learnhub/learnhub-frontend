@@ -242,6 +242,16 @@ async function updateCourse(course: Course) {
     //   tag_id: course.tag.tagID,
     // },
   };
+  // find and remove deleted chapters
+  currentCourse.chapters.forEach(async (chapter) => {
+    if (!course.chapters.find((c) => c.chapterId === chapter.chapterId)) {
+      console.log("delete chapter");
+      const deleteChapterURL = `${baseURL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}`;
+      await axios.delete(deleteChapterURL);
+      return;
+    }
+  });
+
   const updateCourseInfoURL = `${baseURL}/programs/courses/${course.courseId}`;
   await axios.patch(updateCourseInfoURL, courseInfoBody);
   course.chapters.forEach(async (chapter, chapterIndex) => {
@@ -268,6 +278,18 @@ async function updateCourse(course: Course) {
     };
     const updateChapterInfoURL = `${baseURL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}`;
     await axios.patch(updateChapterInfoURL, chapterInfoBody);
+    // find and remove deleted lessons
+    currentCourse.chapters[chapterIndex].lessons.forEach(async (lesson) => {
+      if (
+        !chapter.lessons.find((l) => l.lessonId === lesson.lessonId) &&
+        lesson.lessonId
+      ) {
+        console.log("delete lesson");
+        const deleteLessonURL = `${baseURL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}/lessons/${lesson.lessonId}`;
+        await axios.delete(deleteLessonURL);
+        return;
+      }
+    });
     chapter.lessons.forEach(async (lesson, lessonIndex) => {
       if (
         !currentCourse.chapters[chapterIndex].lessons.find(

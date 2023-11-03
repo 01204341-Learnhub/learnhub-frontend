@@ -75,29 +75,14 @@ function MainBar() {
             {user && user.userType === 'teacher' ? <div className='w-2/4 py-2 px-2' /> : (
                 <SearchBar />
             )}
-            <div className='w-2/12 grid grid-cols-4 my-2'>
+            <div className='w-2/12 grid grid-cols-3 my-2'>
                 {user && user.userType === 'teacher' ? null : (
-                    <div className=' col-span-3 grid grid-cols-3'>
+                    <div className=' col-span-3 grid grid-cols-2'>
                         <button>
                             <Link to={"/learn/overview"}>
                                 <FontAwesomeIcon icon={faBook} size='xl' />
                             </Link>
                         </button>
-
-                        <button onClick={() => toggleDropdown('mypindropdown')}>
-                            <FontAwesomeIcon icon={faHeart} size='xl' color={openDropdown === 'mypindropdown' ? '#FF2171' : 'none'} />
-
-                            {/* Mypin dropdown menu */}
-                            <div
-                                style={{ display: openDropdown === 'mypindropdown' ? 'block' : 'none', top: '90%', right: '17%' }}
-                                className=" absolute w-[320px] h-[550px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
-                            >
-                                <div className="px-8 py-3">
-
-                                </div>
-                            </div>
-                        </button>
-
                         <button className=' flex justify-center items-center relative' onClick={handleClickBasket}>
                             <div className=' flex relative'>
                                 <FontAwesomeIcon icon={faCartShopping} size='xl' color={openDropdown === 'mycartdropdown' ? 'red' : 'none'} />
@@ -135,19 +120,6 @@ function MainBar() {
 
                     </div>
                 )}
-                <button className=' col-start-4' onClick={() => toggleDropdown('mynotidropdown')}>
-                    <FontAwesomeIcon icon={faBell} size='xl' color={openDropdown === 'mynotidropdown' ? '#F1C93B' : 'none'} />
-
-                    {/* MyNotification dropdown menu */}
-                    <div
-                        style={{ display: openDropdown === 'mynotidropdown' ? 'block' : 'none', top: '90%', right: '9%' }}
-                        className=" absolute w-[320px] h-[550px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
-                    >
-                        <div className="px-8 py-3">
-
-                        </div>
-                    </div>
-                </button>
             </div>
             {
                 (() => {

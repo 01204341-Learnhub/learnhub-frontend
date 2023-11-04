@@ -1,9 +1,8 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { LearnhubUser } from "../../../types/user";
 import { GetClassThreadResponse } from "../types/responses";
 import { Thread } from "../types/thread";
-
-const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 async function fetchThread(classId: string, threadId: string): Promise<Thread> {
   const classThread = await getClassThread(classId, threadId);
@@ -44,7 +43,7 @@ async function addThreadReply(
   threadId: string,
   text: string
 ): Promise<void> {
-  const url = `${baseURL}/programs/classes/${classId}/threads/${threadId}/reply`;
+  const url = `${BASE_URL}/programs/classes/${classId}/threads/${threadId}/reply`;
   await axios.post(url, {
     user_id: userId,
     user_type: "teacher",
@@ -56,13 +55,13 @@ async function getClassThread(
   classId: string,
   threadId: string
 ): Promise<GetClassThreadResponse> {
-  const url = `${baseURL}/programs/classes/${classId}/threads/${threadId}`;
+  const url = `${BASE_URL}/programs/classes/${classId}/threads/${threadId}`;
   const res = await axios.get<GetClassThreadResponse>(url);
   return res.data;
 }
 
 async function getTeacher(teacherID: string): Promise<LearnhubUser> {
-  const url = `${baseURL}/users/teachers/${teacherID}`;
+  const url = `${BASE_URL}/users/teachers/${teacherID}`;
   const res = await axios.get<{
     username: string;
     fullname: string;
@@ -84,7 +83,7 @@ async function createThread(
   text: string,
   attachments: { attachmentType: string; src: string }[]
 ) {
-  const url = `${baseURL}/programs/classes/${classID}/threads/`;
+  const url = `${BASE_URL}/programs/classes/${classID}/threads/`;
   const body = {
     name: "",
     text: text,

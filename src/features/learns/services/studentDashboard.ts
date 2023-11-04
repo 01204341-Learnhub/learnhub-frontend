@@ -1,11 +1,10 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { GetStudentDashboardResponse } from "../types/response";
 import { StudentDashboard } from "../types/studentDashboard";
 
-const baseUrl = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
-
 async function getStudentDashboard(studentID: string) {
-  const url = `${baseUrl}/users/students/${studentID}/dashboard`;
+  const url = `${BASE_URL}/users/students/${studentID}/dashboard`;
   const res = await axios.get<GetStudentDashboardResponse>(url);
   const dashboard: StudentDashboard = {
     classes: res.data.classes.map((c) => {

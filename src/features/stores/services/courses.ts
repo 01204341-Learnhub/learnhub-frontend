@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { Chapter } from "../types/chapter";
 import {
   Course,
@@ -15,10 +16,8 @@ import {
   ResponseLessons,
 } from "../types/response";
 
-const baseUrl = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
-
 async function listCourse(): Promise<Course[]> {
-  const url = `${baseUrl}/programs/courses/`;
+  const url = `${BASE_URL}/programs/courses/`;
   try {
     const response = await axios.get<ListCoursesResponse>(url);
     const courses: Course[] = response.data.courses.map((course) => {
@@ -49,12 +48,12 @@ async function listCourse(): Promise<Course[]> {
 }
 
 async function getCourseDetail(courseID: string): Promise<CourseDetail> {
-  const url = `${baseUrl}/programs/courses/${courseID}`;
+  const url = `${BASE_URL}/programs/courses/${courseID}`;
   try {
     const response = await axios.get<GetCourseDetailResponse>(url);
     const courseIdData = response.data;
     console.log(response.status);
-    
+
     return {
       courseID: courseIdData.course_id,
       name: courseIdData.name,
@@ -92,7 +91,7 @@ async function getCourseDetail(courseID: string): Promise<CourseDetail> {
 async function ListCourseChaptersOutline(
   courseID: string
 ): Promise<CourseChapterOutline[]> {
-  const url = `${baseUrl}/programs/courses/${courseID}/chapters`;
+  const url = `${BASE_URL}/programs/courses/${courseID}/chapters`;
   try {
     const response = await axios.get<ListCourseChapterOutlineResponse>(url);
     const chaptersOutline: CourseChapterOutline[] = response.data.chapters.map(
@@ -118,7 +117,7 @@ async function fetchLessons(courseID: string, chapterID: string) {
   console.log(courseID, chapterID);
   try {
     const response = await axios.get<ResponseLessons>(
-      `${baseUrl}/programs/courses/${courseID}/chapters/${chapterID}/lessons`
+      `${BASE_URL}/programs/courses/${courseID}/chapters/${chapterID}/lessons`
     );
     const lessonsData = response.data.lessons;
     lessonsData.map((lesson) => {
@@ -143,7 +142,7 @@ async function getChapterInCourse(id: string) {
   const chapterCourse: Chapter[] = [];
   try {
     const response = await axios.get<ResponseChapters>(
-      `${baseUrl}/programs/courses/${id}/chapters`
+      `${BASE_URL}/programs/courses/${id}/chapters`
     );
     const chapterData = response.data.chapters;
 

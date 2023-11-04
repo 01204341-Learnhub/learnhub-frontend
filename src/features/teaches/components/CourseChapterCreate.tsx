@@ -13,6 +13,7 @@ import { Chapter, Lesson } from "../types/course";
 import FileLessonCreate from "./FileLessonCreate";
 import QuizLessonCreate from "./QuizLessonCreate.tsx";
 import VideoLessonCreate from "./VideoLessonCreate";
+import Swal from "sweetalert2";
 
 interface _LessonTypeSelectorProps {
   onSelect: (lessonType: string) => void;
@@ -136,7 +137,11 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
 
   const handleSubmit = () => {
     if (lessons.length == 0) {
-      alert("กรุณาเพิ่มบทเรียนอย่างน้อย 1 บทเรียน");
+      Swal.fire({
+        icon: 'warning',
+        title: 'เกิดข้อผิดพลาด',
+        text: 'กรุณาเพิ่มบทเรียนอย่างน้อย 1 บทเรียน',
+      })
       return;
     }
     const newChapter: Chapter = {

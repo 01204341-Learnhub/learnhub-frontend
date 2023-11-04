@@ -74,9 +74,7 @@ function MainBar() {
                     <img src={namelogo} alt="namelogo" className='w-full' />
                 </button>
             </div>
-            {user && user.userType === 'teacher' ? <div className='w-11/12 py-2 px-2' /> : (
-                <SearchBar />
-            )}
+            <SearchBar />
             <div className='flex items-center my-2 pl-3 pr-3 w-[300px]'>
                 {user && user.userType === 'teacher' ? null : (
                     <div className=' col-span-3 grid grid-cols-2 pr-4'>

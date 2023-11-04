@@ -285,7 +285,7 @@ function QuizLessonCreate({
 
     if (quiz.problems.length === 0) {
       errorMessage +=
-        "<span class='font-medium text-xl'>กรุณาเพิ่มคำถามอย่างน้อย 1 คำถาม</span>";
+        "<span class='font-medium text-lg text-red-500'>กรุณาเพิ่มคำถามอย่างน้อย 1 คำถาม</span>";
     }
 
     if (errorMessage !== "") {

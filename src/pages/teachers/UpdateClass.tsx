@@ -102,7 +102,7 @@ interface _TopNavProps {
 function _TopNav({ onQuit }: _TopNavProps) {
   return (
     <div className="flex justify-between items-center w-full">
-      <h1 className="text-black font-semibold text-[32px]">สร้างคลาส</h1>
+      <h1 className="text-black font-semibold text-[32px]">อัพเดทคลาส</h1>
       <button className="flex items-center space-x-4 w-fit" onClick={onQuit}>
         <h1 className="text-black font-semibold text-[29px]">ออก</h1>
         <FontAwesomeIcon icon={faArrowRight} color="black" size="lg" />
@@ -212,6 +212,7 @@ function UpdateClass() {
 
   const handleUpdateClass = () => {
     if (!checkReadyToPublish(cls)) {
+      console.log(cls);
       alert("กรุณากรอกข้อมูลให้ครบถ้วน");
       return;
     }

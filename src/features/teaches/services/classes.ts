@@ -81,14 +81,14 @@ async function updateClass(cls: CreatingClass, classID: string) {
     op: "remove",
     value: o,
   }));
-  await axios.patch(url, clearObjective);
+  await axios.patch(url, { class_objective: clearObjective });
 
   // clear tags
   const clearTag = {
     tag_id: old.tagID,
     op: "remove",
   };
-  await axios.patch(url, clearTag);
+  await axios.patch(url, { tag: clearTag });
 
   const body = {
     name: cls.name,

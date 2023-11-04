@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { UpdatingClassContext } from "../../../pages/teachers/UpdateClass.tsx";
+import { CreatingClassContext } from "../../../pages/teachers/CreateClass.tsx";
 import { uploadFile } from "../../../services/uploader/file.ts";
 import { listTags } from "../services/tags.ts";
 import { Tag } from "../types/tags.ts";
 
 function _Name() {
-  const creatingClassContext = useContext(UpdatingClassContext);
+  const creatingClassContext = useContext(CreatingClassContext);
   const handleUpdateName = (name: string) => {
     const updatedClass = { ...creatingClassContext.cls };
     updatedClass.name = name;
@@ -34,7 +34,7 @@ function _Name() {
 }
 
 function _Description() {
-  const creatingClassContext = useContext(UpdatingClassContext);
+  const creatingClassContext = useContext(CreatingClassContext);
   const handleUpdateDescription = (description: string) => {
     const updatedClass = { ...creatingClassContext.cls };
     updatedClass.description = description;
@@ -67,7 +67,7 @@ function _Description() {
 }
 
 function _Picture() {
-  const creatingClassContext = useContext(UpdatingClassContext);
+  const creatingClassContext = useContext(CreatingClassContext);
   const handleUpdatePictureUrl = (src: string) => {
     const updatedClass = { ...creatingClassContext.cls };
     updatedClass.pictureUrl = src;
@@ -135,7 +135,7 @@ function _Picture() {
 }
 
 function _Price() {
-  const creatingClassContext = useContext(UpdatingClassContext);
+  const creatingClassContext = useContext(CreatingClassContext);
   const handleUpdatePrice = (price: number) => {
     const updatedClass = { ...creatingClassContext.cls };
     updatedClass.price = price;
@@ -163,7 +163,7 @@ function _Price() {
 }
 
 function _Tag() {
-  const creatingClassContext = useContext(UpdatingClassContext);
+  const creatingClassContext = useContext(CreatingClassContext);
   const [availableTags, setAvailableTags] = React.useState<Tag[]>([]);
   useEffect(() => {
     listTags()
@@ -210,7 +210,7 @@ function _Tag() {
 }
 
 function _MaxStudent() {
-  const creatingClassContext = useContext(UpdatingClassContext);
+  const creatingClassContext = useContext(CreatingClassContext);
   const handleUpdateMaxStudent = (maxStudent: number) => {
     const updatedClass = { ...creatingClassContext.cls };
     updatedClass.maxStudent = maxStudent;

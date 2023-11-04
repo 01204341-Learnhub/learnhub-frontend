@@ -235,6 +235,7 @@ function _MaxStudent() {
           handleUpdateMaxStudent(parseInt(e.target.value));
         }}
         className="border-2 border-[#C0C0C0] py-2 px-3 w-fit"
+        disabled
       >
         <option value={0} disabled>
           0

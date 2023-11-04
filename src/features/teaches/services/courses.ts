@@ -4,6 +4,7 @@ import { CourseQuiz } from "../types/courseQuiz";
 import { ListTeacherCourseResponse } from "../types/responses";
 import { createCourseQuiz } from "./courseQuiz";
 
+const DELAY = 120;
 const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 async function listTeacherCourse(teacherID: string): Promise<CourseInfo[]> {
   const url = `${baseURL}/users/teachers/${teacherID}/courses`;
@@ -97,18 +98,23 @@ async function createCourse(course: Course, teacherID: string) {
   const courseID = (await axios.post<{ course_id: string }>(url, body)).data
     .course_id;
   course.courseId = courseID;
-  course.chapters.forEach(async (chapter) => {
+  for (let i = 0; i < course.chapters.length; i++) {
+    const chapter = course.chapters[i];
     const chapterID = await createChapter(courseID, chapter);
+    // delay to avoid rate limit
+    await new Promise((resolve) => setTimeout(resolve, DELAY));
     chapter.chapterId = chapterID;
-    chapter.lessons.forEach(async (lesson) => {
+    for (let j = 0; j < chapter.lessons.length; j++) {
+      const lesson = chapter.lessons[j];
       console.log(
         `create lesson ${lesson.number} of chapter ${chapter.number}`
       );
-
       const lessonID = await createLesson(courseID, chapterID, lesson);
+      // delay to avoid rate limit
+      await new Promise((resolve) => setTimeout(resolve, DELAY));
       lesson.lessonId = lessonID;
-    });
-  });
+    }
+  }
 }
 
 async function listCourseChapterLessons(
@@ -121,7 +127,7 @@ async function listCourseChapterLessons(
   ).data.lessons;
   type GetLessonResponse = {
     lesson_id: string;
-    lesson_number: number;
+    lesson_num: number;
     name: string;
     lesson_type: string;
     lesson_length: number;
@@ -134,7 +140,7 @@ async function listCourseChapterLessons(
     const lesson: Lesson = {
       lessonId: res.data.lesson_id,
       name: res.data.name,
-      number: res.data.lesson_number,
+      number: res.data.lesson_num,
       type: res.data.lesson_type,
       length: res.data.lesson_length,
     };
@@ -238,7 +244,7 @@ async function updateCourse(course: Course) {
       value: objective,
     });
   });
-  await axios.patch(updateCourseInfoURL, { class_objective: clearObjectives });
+  await axios.patch(updateCourseInfoURL, { course_objective: clearObjectives });
   // clear course tag
   await axios.patch(updateCourseInfoURL, {
     tag: { op: "remove", tag_id: currentCourse.tag.tagID },
@@ -264,14 +270,15 @@ async function updateCourse(course: Course) {
     },
   };
   // find and remove deleted chapters
-  currentCourse.chapters.forEach(async (chapter) => {
+  for (let i = 0; i < currentCourse.chapters.length; i++) {
+    const chapter = currentCourse.chapters[i];
     if (!course.chapters.find((c) => c.chapterId === chapter.chapterId)) {
       console.log("delete chapter");
       const deleteChapterURL = `${baseURL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}`;
       await axios.delete(deleteChapterURL);
-      return;
+      await new Promise((resolve) => setTimeout(resolve, DELAY));
     }
-  });
+  }
 
   await axios.patch(updateCourseInfoURL, courseInfoBody);
   course.chapters.forEach(async (chapter, chapterIndex) => {
@@ -299,7 +306,12 @@ async function updateCourse(course: Course) {
     const updateChapterInfoURL = `${baseURL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}`;
     await axios.patch(updateChapterInfoURL, chapterInfoBody);
     // find and remove deleted lessons
-    currentCourse.chapters[chapterIndex].lessons.forEach(async (lesson) => {
+    for (
+      let i = 0;
+      i < currentCourse.chapters[chapterIndex].lessons.length;
+      i++
+    ) {
+      const lesson = currentCourse.chapters[chapterIndex].lessons[i];
       if (
         !chapter.lessons.find((l) => l.lessonId === lesson.lessonId) &&
         lesson.lessonId
@@ -307,9 +319,11 @@ async function updateCourse(course: Course) {
         console.log("delete lesson");
         const deleteLessonURL = `${baseURL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}/lessons/${lesson.lessonId}`;
         await axios.delete(deleteLessonURL);
+        // delay to avoid rate limit
+        await new Promise((resolve) => setTimeout(resolve, DELAY));
         return;
       }
-    });
+    }
     chapter.lessons.forEach(async (lesson, lessonIndex) => {
       if (
         !currentCourse.chapters[chapterIndex].lessons.find(

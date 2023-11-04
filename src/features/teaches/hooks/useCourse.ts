@@ -12,6 +12,8 @@ function useCourse(courseID: string) {
       fetchedCourse.chapters.forEach((chapter) => {
         chapter.lessons.sort((a, b) => a.number - b.number);
       });
+      console.log(JSON.stringify(fetchedCourse, null, 2));
+
       setCourse(fetchedCourse);
     }
     setIsFetching(true);

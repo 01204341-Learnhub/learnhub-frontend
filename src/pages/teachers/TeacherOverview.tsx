@@ -98,14 +98,16 @@ function TeacherOverview() {
             studentCount,
           }) => (
             <li key={classID}>
-              <ClassCard
-                classID={classID}
-                className={className}
-                classThumbnailUrl={classThumbnailUrl}
-                percentCompleted={percentCompleted}
-                studentCount={studentCount}
-                studentLimit={studentLimit}
-              />
+              <Link to={`/teach/classes/${classID}`} >
+                <ClassCard
+                  classID={classID}
+                  className={className}
+                  classThumbnailUrl={classThumbnailUrl}
+                  percentCompleted={percentCompleted}
+                  studentCount={studentCount}
+                  studentLimit={studentLimit}
+                />
+              </Link>
             </li>
           ),
         )}

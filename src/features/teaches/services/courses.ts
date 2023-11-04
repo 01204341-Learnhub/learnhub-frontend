@@ -1,13 +1,13 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { Chapter, Course, CourseInfo, Lesson } from "../types/course";
 import { CourseQuiz } from "../types/courseQuiz";
 import { ListTeacherCourseResponse } from "../types/responses";
 import { createCourseQuiz } from "./courseQuiz";
 
 const DELAY = 120;
-const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 async function listTeacherCourse(teacherID: string): Promise<CourseInfo[]> {
-  const url = `${baseURL}/users/teachers/${teacherID}/courses`;
+  const url = `${BASE_URL}/users/teachers/${teacherID}/courses`;
   const res = await axios.get<ListTeacherCourseResponse>(url);
   const courses: CourseInfo[] = res.data.courses.map((course) => {
     return {
@@ -26,7 +26,7 @@ async function createLesson(
   chapterID: string,
   lesson: Lesson
 ) {
-  const url = `${baseURL}/programs/courses/${courseID}/chapters/${chapterID}/lessons`;
+  const url = `${BASE_URL}/programs/courses/${courseID}/chapters/${chapterID}/lessons`;
   let body: {
     name: string;
     src: string;
@@ -63,7 +63,7 @@ async function createLesson(
 }
 
 async function createChapter(courseID: string, chapter: Chapter) {
-  const url = `${baseURL}/programs/courses/${courseID}/chapters`;
+  const url = `${BASE_URL}/programs/courses/${courseID}/chapters`;
   const body = {
     name: chapter.name,
     description: chapter.description,
@@ -82,7 +82,7 @@ async function createCourse(course: Course, teacherID: string) {
   });
 
   // create course instance
-  const url = `${baseURL}/programs/courses`;
+  const url = `${BASE_URL}/programs/courses`;
   const body = {
     name: course.name,
     teacher_id: teacherID,
@@ -121,7 +121,7 @@ async function listCourseChapterLessons(
   courseID: string,
   chapterID: string
 ): Promise<Lesson[]> {
-  const getAllLessonIDsURL = `${baseURL}/programs/courses/${courseID}/chapters/${chapterID}/lessons`;
+  const getAllLessonIDsURL = `${BASE_URL}/programs/courses/${courseID}/chapters/${chapterID}/lessons`;
   const lessonIDs = (
     await axios.get<{ lessons: { lesson_id: string }[] }>(getAllLessonIDsURL)
   ).data.lessons;
@@ -135,7 +135,7 @@ async function listCourseChapterLessons(
   };
   const lessons: Lesson[] = [];
   for (let i = 0; i < lessonIDs.length; i++) {
-    const getLessonURL = `${baseURL}/programs/courses/${courseID}/chapters/${chapterID}/lessons/${lessonIDs[i].lesson_id}`;
+    const getLessonURL = `${BASE_URL}/programs/courses/${courseID}/chapters/${chapterID}/lessons/${lessonIDs[i].lesson_id}`;
     const res = await axios.get<GetLessonResponse>(getLessonURL);
     const lesson: Lesson = {
       lessonId: res.data.lesson_id,
@@ -157,7 +157,7 @@ async function listCourseChapterLessons(
 }
 
 async function listCourseChapters(courseID: string): Promise<Chapter[]> {
-  const getAllChapterIDsURL = `${baseURL}/programs/courses/${courseID}/chapters`;
+  const getAllChapterIDsURL = `${BASE_URL}/programs/courses/${courseID}/chapters`;
   const chapterIDs = (
     await axios.get<{ chapters: { chapter_id: string }[] }>(getAllChapterIDsURL)
   ).data.chapters;
@@ -170,7 +170,7 @@ async function listCourseChapters(courseID: string): Promise<Chapter[]> {
   };
   const chapters: Chapter[] = [];
   for (let i = 0; i < chapterIDs.length; i++) {
-    const getChapterURL = `${baseURL}/programs/courses/${courseID}/chapters/${chapterIDs[i].chapter_id}`;
+    const getChapterURL = `${BASE_URL}/programs/courses/${courseID}/chapters/${chapterIDs[i].chapter_id}`;
     const res = await axios.get<GetChapterResponse>(getChapterURL);
     const chapter: Chapter = {
       chapterId: res.data.chapter_id,
@@ -206,7 +206,7 @@ async function getCourse(courseID: string): Promise<Course> {
     student_count: number;
     course_requirement: string;
   };
-  const url = `${baseURL}/programs/courses/${courseID}`;
+  const url = `${BASE_URL}/programs/courses/${courseID}`;
   const res = await axios.get<GetCourseResponse>(url);
   const course: Course = {
     courseId: res.data.course_id,
@@ -232,7 +232,7 @@ async function getCourse(courseID: string): Promise<Course> {
 }
 
 async function updateCourse(course: Course) {
-  const updateCourseInfoURL = `${baseURL}/programs/courses/${course.courseId}`;
+  const updateCourseInfoURL = `${BASE_URL}/programs/courses/${course.courseId}`;
   const currentCourse = await getCourse(course.courseId);
   // update course info
 
@@ -274,7 +274,7 @@ async function updateCourse(course: Course) {
     const chapter = currentCourse.chapters[i];
     if (!course.chapters.find((c) => c.chapterId === chapter.chapterId)) {
       console.log("delete chapter");
-      const deleteChapterURL = `${baseURL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}`;
+      const deleteChapterURL = `${BASE_URL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}`;
       await axios.delete(deleteChapterURL);
       await new Promise((resolve) => setTimeout(resolve, DELAY));
     }
@@ -302,7 +302,7 @@ async function updateCourse(course: Course) {
       name: chapter.name,
       description: chapter.description,
     };
-    const updateChapterInfoURL = `${baseURL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}`;
+    const updateChapterInfoURL = `${BASE_URL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}`;
     await axios.patch(updateChapterInfoURL, chapterInfoBody);
     // find and remove deleted lessons
     for (
@@ -316,7 +316,7 @@ async function updateCourse(course: Course) {
         lesson.lessonId
       ) {
         console.log("delete lesson");
-        const deleteLessonURL = `${baseURL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}/lessons/${lesson.lessonId}`;
+        const deleteLessonURL = `${BASE_URL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}/lessons/${lesson.lessonId}`;
         await axios.delete(deleteLessonURL);
         // delay to avoid rate limit
         await new Promise((resolve) => setTimeout(resolve, DELAY));
@@ -350,7 +350,7 @@ async function updateCourse(course: Course) {
       } else {
         throw new Error("unknown lesson type");
       }
-      const updateLessonInfoURL = `${baseURL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}/lessons/${lesson.lessonId}`;
+      const updateLessonInfoURL = `${BASE_URL}/programs/courses/${course.courseId}/chapters/${chapter.chapterId}/lessons/${lesson.lessonId}`;
       await axios.patch(updateLessonInfoURL, lessonInfoBody);
     });
   });

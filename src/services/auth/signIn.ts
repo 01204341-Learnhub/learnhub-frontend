@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { BASE_URL } from "../../config";
 import { app } from "../../firebase/firebase";
 import store from "../../store";
 import {
@@ -10,7 +11,6 @@ import {
 } from "../../types/user";
 
 const auth = getAuth(app);
-const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function signInWithEmail(
   email: string,
@@ -33,7 +33,7 @@ async function signInWithEmail(
     } else {
       learnhubUID = learnhubUserCredential.teacherID!;
     }
-    const url: string = `${baseURL}/users/${userType}s/${learnhubUID}`;
+    const url: string = `${BASE_URL}/users/${userType}s/${learnhubUID}`;
     const data = (
       await axios.get<LearnhubStudentResponse | LearnhubTeacherResponse>(url)
     ).data;

@@ -1,13 +1,12 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { EnrolledCourse } from "../types/course";
 import { ListEnrolledCoursesResponse } from "../types/response";
-
-const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function listEnrolledCourses(
   studentID: string
 ): Promise<EnrolledCourse[]> {
-  const url = `${baseURL}/users/students/${studentID}/courses/`;
+  const url = `${BASE_URL}/users/students/${studentID}/courses/`;
   const res = await axios.get<ListEnrolledCoursesResponse>(url);
   const enrolledCourses: EnrolledCourse[] = [];
   res.data.courses.map((course) => {

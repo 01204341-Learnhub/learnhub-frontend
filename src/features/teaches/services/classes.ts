@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config.ts";
 import { ClassInfo, CreatingClass } from "../types/class.ts";
 import { ClassAssignment } from "../types/classWork.ts";
 import {
@@ -11,9 +12,8 @@ import {
 import { ClassStudent } from "../types/student.ts";
 import { Thread } from "../types/thread.ts";
 
-const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 async function listTeacherClasses(teacherID: string): Promise<ClassInfo[]> {
-  const url = `${baseURL}/users/teachers/${teacherID}/classes`;
+  const url = `${BASE_URL}/users/teachers/${teacherID}/classes`;
   const res = await axios.get<ListTeacherClassesResponse>(url);
   const classes: ClassInfo[] = res.data.classes.map((c) => {
     return {
@@ -29,7 +29,7 @@ async function listTeacherClasses(teacherID: string): Promise<ClassInfo[]> {
 }
 
 async function listClassStudents(classID: string) {
-  const url = `${baseURL}/programs/classes/${classID}/students`;
+  const url = `${BASE_URL}/programs/classes/${classID}/students`;
   const res = await axios.get<ListClassStudentsResponse>(url);
   const students: ClassStudent[] = res.data.students.map((s) => ({
     studentID: s.student_id,
@@ -40,7 +40,7 @@ async function listClassStudents(classID: string) {
 }
 
 async function publishClass(cls: CreatingClass): Promise<string> {
-  const url = `${baseURL}/programs/classes`;
+  const url = `${BASE_URL}/programs/classes`;
   const body = {
     name: cls.name,
     class_pic: cls.pictureUrl,
@@ -65,7 +65,7 @@ async function publishClass(cls: CreatingClass): Promise<string> {
 }
 
 async function getClassTagAndObjectives(classID: string) {
-  const url = `${baseURL}/programs/classes/${classID}`;
+  const url = `${BASE_URL}/programs/classes/${classID}`;
   const res = await axios.get<GetClassInfoResponse>(url);
   return {
     tagID: res.data.tags[0].tag_id,
@@ -74,7 +74,7 @@ async function getClassTagAndObjectives(classID: string) {
 }
 
 async function updateClass(cls: CreatingClass, classID: string) {
-  const url = `${baseURL}/programs/classes/${classID}`;
+  const url = `${BASE_URL}/programs/classes/${classID}`;
   // clear objectives
   const old = await getClassTagAndObjectives(classID);
   const clearObjective = old.objectives.map((o) => ({
@@ -108,11 +108,11 @@ async function updateClass(cls: CreatingClass, classID: string) {
 }
 
 async function listClassAssignments(classID: string) {
-  const url = `${baseURL}/programs/classes/${classID}/assignments`;
+  const url = `${BASE_URL}/programs/classes/${classID}/assignments`;
   const res = await axios.get<ListClassAssignmentsResponse>(url);
   const assignments: ClassAssignment[] = [];
   for (let i = 0; i < res.data.assignments.length; i++) {
-    const getAssignmentUrl = `${baseURL}/programs/classes/${classID}/assignments/${res.data.assignments[i].assignment_id}`;
+    const getAssignmentUrl = `${BASE_URL}/programs/classes/${classID}/assignments/${res.data.assignments[i].assignment_id}`;
     const assignmentRes = await axios.get<{
       attachments: { attachment_type: string; src: string }[];
     }>(getAssignmentUrl);
@@ -135,7 +135,7 @@ async function listClassAssignments(classID: string) {
 }
 
 async function getClass(classID: string): Promise<CreatingClass> {
-  const url = `${baseURL}/programs/classes/${classID}`;
+  const url = `${BASE_URL}/programs/classes/${classID}`;
   const res = await axios.get<GetClassInfoResponse>(url);
   const data = res.data;
   const cls: CreatingClass = {
@@ -167,7 +167,7 @@ async function createClassAssignment(
   classID: string,
   assignment: ClassAssignment
 ) {
-  const url = `${baseURL}/programs/classes/${classID}/assignments`;
+  const url = `${BASE_URL}/programs/classes/${classID}/assignments`;
   const body = {
     name: assignment.name,
     group_name: assignment.topic,
@@ -184,7 +184,7 @@ async function createClassAssignment(
 }
 
 async function listClassThreads(classID: string): Promise<Thread[]> {
-  const url = `${baseURL}/programs/classes/${classID}/threads`;
+  const url = `${BASE_URL}/programs/classes/${classID}/threads`;
   const res = await axios.get<ListClassThreadsResponse>(url);
   return res.data.threads
     .map((thread) => ({

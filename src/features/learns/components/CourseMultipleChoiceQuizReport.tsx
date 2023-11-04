@@ -27,6 +27,45 @@ function CourseMultipleChoiceQuizReport({ quizID }: CourseMultipleChoiceQuizRepo
         }
         else return false
     }
+    const explanationRender = (problemIndex) => {
+        if (!checkIfProblemCorrect(problemIndex)){
+            const problem = quiz.problems[problemIndex]
+            const result = report.problems[problemIndex]
+            return (
+                <div className="w-full h-full py-5">
+                    <p className=" font-bold text-[20px] text-[#3a3a3a] px-5">คำตอบที่ถูกต้อง</p>
+                    {Object.entries(problem.choices).map(([key, value], index) => {
+                        if (value == "" || !result.correctAnswer[key]) {
+                            return (
+                                <></>
+                            )
+                        }
+                        return (
+                            <div className="mx-[40px] my-2 flex items-center" key={index}>
+                                <input className="mr-5 rounded-full w-4 h-4 border-2 border-[#646464]" type="checkbox" checked={true} />
+                                <p className=" font-semibold text-[16px] text-[#3a3a3a]">{value}</p>
+                                <div className="ml-5">
+                                    {
+                                    report.problems[problemIndex].answer[key]?(
+                                    checkIfChoiceCorrect(problemIndex, key) ? 
+                                    <FontAwesomeIcon icon={faCheck} size='xl' color="#ADE792" /> 
+                                    : <FontAwesomeIcon icon={faXmark} size='xl' color="#FF2171" />):<></>
+                                    }
+                                </div>
+                            </div>
+                        )
+                    })}
+                    <p className=" ml-[23px] my-3 pt-2 pb-2 text-[#909090] font-medium text-[16px]">คำอธิบาย : {report.problems[problemIndex].explaination}</p>
+                </div>
+            )
+        } else {
+            return (
+                <>
+                    <p className=" ml-[40px] my-3 pt-2 pb-2 text-[#909090] font-medium text-[16px]">คำอธิบาย : {report.problems[problemIndex].explaination}</p>
+                </>
+            )
+        }
+    }
     if (isFetchingQuiz || isFetchingReport) {
         return (
             <LoadingSpash></LoadingSpash>
@@ -67,13 +106,18 @@ function CourseMultipleChoiceQuizReport({ quizID }: CourseMultipleChoiceQuizRepo
                                             <input className="mr-5 rounded-full w-4 h-4 border-2 border-[#646464]" type="checkbox" checked={report.problems[problemIndex].answer[key]} />
                                             <p className=" font-semibold text-[16px] text-[#3a3a3a]">{value}</p>
                                             <div className="ml-5">
-                                                {checkIfChoiceCorrect(problemIndex, key) ? <FontAwesomeIcon icon={faCheck} size='xl' color="#ADE792" /> : <FontAwesomeIcon icon={faXmark} size='xl' color="#FF2171" />}
+                                                {
+                                                report.problems[problemIndex].answer[key]?(
+                                                checkIfChoiceCorrect(problemIndex, key) ? 
+                                                <FontAwesomeIcon icon={faCheck} size='xl' color="#ADE792" /> 
+                                                : <FontAwesomeIcon icon={faXmark} size='xl' color="#FF2171" />):<></>
+                                                }
                                             </div>
                                         </div>
                                     )
                                 })}
                                 <hr />
-                                <p className=" ml-[40px] my-3 pt-2 pb-2 text-[#909090] font-medium text-[16px]">คำอธิบาย : {report.problems[problemIndex].explaination}</p>
+                                {explanationRender(problemIndex)}
                             </div>
                         </div>
                     )

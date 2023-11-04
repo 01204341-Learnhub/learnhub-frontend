@@ -18,8 +18,6 @@ interface LessonEntryProps {
 }
 
 function LessonEntry(props: LessonEntryProps) {
-  console.log(props.lesson);
-
   return (
     <div className="flex flex-row justify-left space-x-3">
       {props.lesson.lessonType === "video" ? (

@@ -251,7 +251,6 @@ function Profile() {
           >
             เปลี่ยนรหัสผ่าน
           </button>
-          {isChangePassword ? modalChangePassword() : null}
         </div>
       </div>
     )

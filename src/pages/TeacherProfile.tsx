@@ -37,7 +37,7 @@ function TeacherProfile() {
                     console.log(program.courseID)
                     return (
                         <div className="flex mr-10 my-5 pl-[10%] ">
-                            <img src={program.thumbnailUrl} className="h-[100px] w-[100px] object-cover bg-black  rounded-l-lg"></img>
+                            <img src={program.thumbnailUrl} className="h-[100px] aspect-square object-cover  bg-black  rounded-l-lg"></img>
                             <div className="h-[100px] w-[250px] bg-white border-r border-y border-gray-300 rounded-r-lg">
                                 <div>
                                     <div className="mx-5 mt-4 mb-2 font-bold truncate">
@@ -63,7 +63,7 @@ function TeacherProfile() {
                 {instructor.classes.map((program, index) => {
                     return (
                         <div className="flex mr-10 my-5 pl-[10%] ">
-                            <img src={program.classThumbnailUrl} className="h-[100px] w-[100px] bg-black ml-[10px] rounded-l-lg"></img>
+                            <img src={program.classThumbnailUrl} className="h-[100px] aspect-square object-cover bg-black ml-[10px] rounded-l-lg"></img>
                             <div className="h-[100px] w-[250px] bg-white border-r border-y border-gray-300 rounded-r-lg">
                                 <div>
                                     <div className="mx-5 mt-4 mb-2 font-bold truncate">

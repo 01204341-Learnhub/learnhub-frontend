@@ -234,7 +234,7 @@ export default function SelectCourse() {
         </div>
         <hr />
       </div>
-      <h1 className="ml-5 text-xl font-bold mt-20">คอร์สเรียน</h1>
+      <h1 className="ml-5 text-xl font-bold mt-20">{enrolledCourses.length!=0? 'คอร์สเรียน':''}</h1>
       <ul className="grid grid-cols-5 mx-5">
         {enrolledCourses.map(
           ({ courseID, name, thumbnailUrl, teacher, progress }) => {

@@ -83,13 +83,34 @@ function LearningClasses() {
         )
     }
 
+    const teachingClass = _getTeachingClass()
+
     return (
         <div className=''>
-            <header className='flex items-center px-6 py-6'>
+            <header className='flex items-center px-12 h-40 pb-6'>
                 <span className='text-3xl font-bold'>คลาสเรียนของฉัน</span>
             </header>
             <article className='flex flex-col'>
-                <h1 className='text-2xl font-semibold pb-8 px-12'>เลือกความคืบหน้า</h1>
+                <section className='flex flex-col items-center pt-4 px-12 bg-[#d9d9d9] h-[360px]'>
+                    <h1 className='text-2xl font-semibold self-start pb-8'>คลาสเรียนที่กำลังสอน</h1>
+                    <div className='flex items-center justify-center  w-[90%]'>
+                        {
+                            teachingClass != null &&
+                            <ClassTeachNow {...teachingClass} />
+                        }
+                        {
+                            teachingClass == null &&
+                            <div className="w-full h-full justify-center align-middle">
+                                <p>
+                                    ไม่มีคลาสที่กำลังสอน
+                                </p>
+                            </div>
+                        }
+                    </div>
+                </section>
+
+                <h1 className='text-2xl font-semibold pb-8 pt-4 px-12'>เลือกความคืบหน้า</h1>
+
                 <nav className='flex px-12'>
                     <button
                         type='button'

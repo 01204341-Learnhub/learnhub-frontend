@@ -226,21 +226,42 @@ async function getCourse(courseID: string): Promise<Course> {
 }
 
 async function updateCourse(course: Course) {
+  const updateCourseInfoURL = `${baseURL}/programs/courses/${course.courseId}`;
   const currentCourse = await getCourse(course.courseId);
   // update course info
+
+  // clear course objectives
+  const clearObjectives = [];
+  currentCourse.objectives.forEach((objective) => {
+    clearObjectives.push({
+      op: "remove",
+      value: objective,
+    });
+  });
+  await axios.patch(updateCourseInfoURL, { class_objective: clearObjectives });
+  // clear course tag
+  await axios.patch(updateCourseInfoURL, {
+    tag: { op: "remove", tag_id: currentCourse.tag.tagID },
+  });
+
   console.warn(`hardcode tag, objective`);
   const courseInfoBody = {
     name: course.name,
     course_pic: course.thumbnailUrl,
     price: course.price,
     description: course.description,
-    // course_objective: course.objectives,
+    course_objective: course.objectives.map((obj) => {
+      return {
+        op: "add",
+        value: obj,
+      };
+    }),
     course_requirement: course.requirement,
     difficulty_level: course.level,
-    // tag: {
-    //   op: course.tag.name,
-    //   tag_id: course.tag.tagID,
-    // },
+    tag: {
+      op: "add",
+      tag_id: course.tag.tagID,
+    },
   };
   // find and remove deleted chapters
   currentCourse.chapters.forEach(async (chapter) => {
@@ -252,7 +273,6 @@ async function updateCourse(course: Course) {
     }
   });
 
-  const updateCourseInfoURL = `${baseURL}/programs/courses/${course.courseId}`;
   await axios.patch(updateCourseInfoURL, courseInfoBody);
   course.chapters.forEach(async (chapter, chapterIndex) => {
     if (

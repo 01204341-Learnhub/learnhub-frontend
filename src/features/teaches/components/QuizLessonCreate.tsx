@@ -40,19 +40,42 @@ function _ProblemCreate({
     choiceF: false,
   });
   const handleSubmit = () => {
+    let errorMessage = "";
     if (!onSubmit && !onEdit) {
       throw new Error("onSubmit and onEdit is undefined");
     }
-    if (question === "" || explaination === "") {
-      alert("ต้องกรอกคำถามและคำอธิบาย");
-      return;
+    if (question === "") {
+      errorMessage += "<span class='text-red-500 font-medium text-xl'>กรุณากรอกคำถาม</span>";
+        errorMessage += "<br>";
     }
+
+    if ( explaination === "") {
+        errorMessage +=
+            "<span class='text-red-500 font-medium text-xl'>กรุณากรอกคำอธิบายเพิ่มเติม</span>";
+        errorMessage += "<br>";
+    }
+
+
     for (let i = 0; i < numChoice; i++) {
       if (choices[Object.keys(choices)[i]] === "") {
-        alert("ต้องกรอกตัวเลือกทั้งหมด");
-        return;
+        errorMessage +=
+          "<span class='text-red-500 font-medium text-xl'>กรุณากรอกตัวเลือกที่ " +
+          (i + 1) +
+          "</span>";
+        errorMessage += "<br>";
+        
       }
     }
+
+    if (errorMessage !== "") {
+      Swal.fire({
+        icon: "warning",
+        title: "กรอกข้อมูลไม่ครบถ้วน",
+        html: errorMessage,
+      });
+      return;
+    }
+
     const problem: CourseQuizProblemWithoutNumber = {
       question: question,
       choices: choices,

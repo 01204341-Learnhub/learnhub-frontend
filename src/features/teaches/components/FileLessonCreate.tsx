@@ -2,6 +2,7 @@ import { faUpload, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { Lesson } from "../types/course";
+import Swal from "sweetalert2";
 
 interface VideoLessonCreateProps {
   defaultLesson?: Lesson;
@@ -50,14 +51,31 @@ function FileLessonCreate({
     setLessonLength(parseInt(e.target.value));
   }
   const handleSubmit = () => {
+    let errorMessage = "";
     if (lessonName == "") {
-      alert("กรุณาใส่ชื่อบทเรียน");
+        errorMessage += "<span class='text-red-500 font-medium text-xl'>กรุณากรอกชื่อไฟล์</span>"
+        errorMessage += "<br>"
+    }
+
+    if (lessonLength == 0) {
+        errorMessage += "<span class='text-red-500 font-medium text-xl'>กรุณากรอกเวลาที่ใช้</span>"
+        errorMessage += "<br>"
+    }
+
+    if (files.length == 0) {
+        errorMessage += "<span class='text-red-500 font-medium text-xl'>กรุณาเลือกไฟล์</span>"
+        errorMessage += "<br>"
+    }
+
+    if (errorMessage !== "") {
+      Swal.fire({
+        icon: "warning",
+        title: "กรอกข้อมูลไม่ครบถ้วน",
+        html: errorMessage,
+      });
       return;
     }
-    else if (files.length == 0) {
-      alert("กรุณาเลือกไฟล์");
-      return;
-    }
+    
     const lesson: Lesson = {
       lessonId: defaultLesson?.lessonId || "",
       name: lessonName,

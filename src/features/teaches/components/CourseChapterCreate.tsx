@@ -136,11 +136,29 @@ function CourseChapterCreate({ onSubmit, onCancel, chapterToEdit }: CourseChapte
   }, [chapterToEdit, courseContext.course.chapters])
 
   const handleSubmit = () => {
-    if (lessons.length == 0) {
+    if (lessons.length == 0 || chapterName == "" || chapterDescription == "") {
+      let errorMessage = ""
+
+      if (chapterName == "") {
+        errorMessage += "<span class='text-red-400 font-medium text-lg'>กรุณากรอกชื่อบทเรียน</span>"
+        errorMessage += "<br>"
+      }
+
+      if (chapterDescription == "") {
+        errorMessage += "<span class='text-red-400 font-medium'>กรุณากรอกคำอธิบาย</span>"
+        errorMessage += "<br>"
+      }
+
+      if (lessons.length == 0) {
+        errorMessage += "<span class='text-red-400 font-medium'>กรุณาเพิ่มบทเรียนอย่างน้อย 1 บทเรียน</span>"
+        errorMessage += "<br>"
+      }
+        
+
       Swal.fire({
         icon: 'warning',
-        title: 'เกิดข้อผิดพลาด',
-        text: 'กรุณาเพิ่มบทเรียนอย่างน้อย 1 บทเรียน',
+        title: 'กรอกข้อมูลไม่ครบถ้วน',
+        html: errorMessage,
       })
       return;
     }

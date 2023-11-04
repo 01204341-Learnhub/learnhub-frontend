@@ -298,6 +298,11 @@ function CreateCourse() {
       setIsLoading(false)
     }
     onUpdateCourse().then(() => {
+      Swal.fire({
+        title: "อัพเดทคอร์สสำเร็จ",
+        icon: "success",
+        confirmButtonText: "ตกลง",
+      })
     }).catch((err) => {
       Swal.fire({
         title: "เกิดข้อผิดพลาดในการอัพเดทคอร์ส",

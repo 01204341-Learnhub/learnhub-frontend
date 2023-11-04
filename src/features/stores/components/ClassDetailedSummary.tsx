@@ -19,11 +19,10 @@ import {
 import { addBasketItem, fetchBasketItems } from "../services/purchase";
 interface ClassDetailedSummaryProps {
   costs: number;
-  quantity: number;
   level: string;
   students: number;
   status: string;
-  availablesource: number;
+  assignment: number;
   timeTeaching: number;
   classesID: string;
 }
@@ -82,27 +81,12 @@ function ClassDetailedSummary(
     <>
       <div className="card w-[508px] h-[414px] bg-base-200 drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[5px] cursor-pointer">
         <div className="flex justify-between content-center items-center mx-[10%] pt-[2%]">
-          <p className="font-bold	text-[32px]">
+          <p className="font-bold	text-[32px] m-2">
             {myClassDetailedSummary.costs} บาท
           </p>
-          <button className="flex justify-between items-center content-center  text-sm w-[240px] h-[52px] bg-[#D9D9D9] rounded-xl px-[5%]">
-            <FontAwesomeIcon icon={faHeart} color="#FF2171" size="xl" />
-            <p className="font-bold	">เพิ่มในการเรียนรู้ที่อยากได้</p>
-          </button>
         </div>
         <div className="flex justify-center">
-          <div className="flex justify-between w-[412px] h-[72.339px] border-2 border-gray-300 rounded-xl mt-2">
-            <div className="flex justify-center w-[50%] items-center ">
-              <div>
-                <FontAwesomeIcon icon={faBook} color="#000000" size="2xl" />
-              </div>
-              <div className="ml-4">
-                <p>บทเรียนทั้งหมด</p>
-                <p className="font-bold">{myClassDetailedSummary.quantity}</p>
-              </div>
-            </div>
-
-            <div className="h-full border border-gray-300"></div>
+          <div className="flex justify-center w-[412px] h-[72.339px] border-2 border-gray-300 rounded-xl mt-2">
 
             <div className="flex justify-center w-[50%] items-center">
               <div className="flex w-8 justify-center">
@@ -143,7 +127,7 @@ function ClassDetailedSummary(
             <p className="ml-3">
               แบบฝึกหัด
               <span className="font-bold ml-2">
-                {myClassDetailedSummary.availablesource} แบบฝึกหัด
+                {myClassDetailedSummary.assignment} แบบฝึกหัด
               </span>
             </p>
           </div>

@@ -86,10 +86,9 @@ function ClassDetail() {
                 </div>
                 <div className="flex justify-center mt-10 ml-10">
                     <ClassDetailedSummary costs={classProgram.price}
-                        quantity={classProgram.assignmentCount}
                         level={classProgram.difficultyLevel}
                         students={classProgram.studentCount}
-                        availablesource={classProgram.assignmentCount}
+                        assignment={classProgram.assignmentCount}
                         timeTeaching={classProgram.meetingCount}
                         status={classProgram.status}
                         classesID={classProgram.classID}

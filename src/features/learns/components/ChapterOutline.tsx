@@ -40,12 +40,13 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
         return false
     }
 
-    function formatDatetime(timestamp: number): string {
-        const date = new Date(timestamp * 1000)
-        if (date.getHours() < 1) {
-            return `${date.getMinutes()} นาที`
+    function formatSeconds(seconds: number): string {
+        const hours = Math.floor(seconds/3600)
+        const minutes = Math.floor((seconds %3600) / 60)
+        if (hours < 1) {
+            return `${minutes} นาที`
         }
-        return `${date.getHours()} ชั่วโมง ${date.getMinutes()} นาที`
+        return `${hours} ชั่วโมง ${minutes} นาที`
     }
     return (
         <>
@@ -58,7 +59,7 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
                             <span className='text- text-[#202020] font-medium text-sm pr-4'>{currentLesson?.lessonNumber || 0}/{chapter.lessonCount}</span>
                             <FontAwesomeIcon icon={faClock} color="#606060" className="pr-4" />
                             <span className='text-sm text-[#404040]'>
-                                {formatDatetime(chapter.chapterLength)}
+                                {formatSeconds(chapter.chapterLength)}
                             </span>
                         </div>
                     </div>

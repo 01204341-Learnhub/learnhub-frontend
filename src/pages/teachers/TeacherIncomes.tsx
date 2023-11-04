@@ -14,14 +14,12 @@ function TeacherIncomes(){
     }
 
     if (isFetchingsIncomes) return <div>loading...</div>;
-    const courseIncomes = incomes.reduce(function (r,income ) {
-        r[income.programID] = r[income.programID] || []
-        r[income.programID].push(income)
-        return r
-    }, Object.create(null));
-
-    console.log(courseIncomes)
-
+    const courseIncomes = incomes.filter((income) => (isShowMonth  && _isDateWithinNextMonth(income.purchaseTime)) || !isShowMonth)
+                    .reduce(function (r,income ) {
+                            r[income.programID] = r[income.programID] || []
+                            r[income.programID].push(income)
+                            return r
+                        }, Object.create(null))
     return (
         <div className="flex-cols px-8 py-1">
             <div className="flex justify-between relative items-center w-full h-[200px]
@@ -62,22 +60,28 @@ function TeacherIncomes(){
             </div>
             <div className="w-full h-full">
                 <ol>
-                    {incomes.filter((income) => (isShowMonth  && _isDateWithinNextMonth(income.purchaseTime)) || !isShowMonth).map((income, index) => {
+                    {
+                    Object.keys(courseIncomes).map((key, index) => {
+                        const courseIncome = courseIncomes[key]
                         return <li key={index}>
                             <_TransactionBox 
-                            type={income.type}
-                            programID={income.programID}
-                            programPic={income.programPic}
-                            name={income.name}
-                            buyer={{
-                                studentID: income.buyer.studentID,
-                                studentName: income.buyer.studentName,
-                            }}
-                            price={income.price}
+                            type={courseIncome[0].type}
+                            programID={courseIncome[0].programID}
+                            programPic={courseIncome[0].programPic}
+                            name={courseIncome[0].name}
+                            totalPrice={courseIncome[0].price * courseIncome.length}
+                            transaction={courseIncome.map((transaction,) => {
+                                return {
+                                    buyer: transaction.buyer,
+                                    purchaseTime: transaction.purchaseTime,
+                                }
+                            })}
+                                
                             />
 
                         </li>
-                    }) }
+                    })
+                }
                 </ol>
             </div>
         </div>
@@ -90,11 +94,15 @@ interface _TransactionBoxProps {
     programID: string
     programPic: string
     name: string
-    buyer: {
-        studentID: string
-        studentName: string
-    }
-    price: number
+    totalPrice: number
+    transaction: {
+        buyer: {
+            studentID: string
+            studentName: string
+        }
+        purchaseTime: Date
+    }[]
+
 }
 
 function _TransactionBox(props : _TransactionBoxProps) {
@@ -112,9 +120,13 @@ function _TransactionBox(props : _TransactionBoxProps) {
 
             <div className="flex w-full h-full items-center">
                 <span className="truncate mr-4 w-5/12 ml-8">{props.name}</span>
-                <span className="truncate mr-4 w-3/12">ถูกซื้อโดย</span>
-                <span className="truncate mr-4 w-3/12">{props.buyer.studentName}</span>
-                <span className="truncate w-1/12 h-full flex items-center justify-center text-lg bg-[#ade792]">+{props.price}</span>
+                <span className="truncate mr-4 w-3/12">ขายไปแล้ว</span>
+                <span className="truncate mr-4 w-3/12">{props.transaction.length}</span>
+                <span className="truncate w-1/12 h-full flex items-center justify-center text-lg bg-[#ade792]">+{props.totalPrice}</span>
+            </div>
+
+            <div>
+                <span>รายละเอียด</span>
             </div>
 
             {/* <div className="pl-8"></div>
@@ -136,10 +148,8 @@ function _TransactionBox(props : _TransactionBoxProps) {
 
 function _isDateWithinNextMonth(date : Date): boolean {
 
-    console.log(`purchase date: ${date}`)
     const lastMonthDate = new Date()
     lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-    console.log(`last month date: ${lastMonthDate}`)
   
     return date >= lastMonthDate;
   }

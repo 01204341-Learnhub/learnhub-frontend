@@ -126,7 +126,7 @@ function LearningClasses() {
                         className={progressQuery == "ENDED" ? selected : notSelected}>จบไปแล้ว</button>
                 </nav>
                 <hr className='border-2' />
-                <h1 className='px-12 pt-12 text-xl font-semibold'>คลาสเรียนที่กำลังดำเนิน</h1>
+                <h1 className='px-12 pt-12 text-xl font-semibold'>คลาสเรียน</h1>
                 <section className='flex flex-wrap px-4 pt-8 pb-12'>
                     {renderClasses()}
                 </section>

@@ -6,6 +6,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
+import { LoadingSpash } from "../../components/LoadingSpash.tsx";
 import ClassCardPreview from "../../features/teaches/components/ClassCardPreview.tsx";
 import ClassDateUpdateInfoForm from "../../features/teaches/components/ClassDateUpdateInforform.tsx";
 import ClassGoalsUpdateForm from "../../features/teaches/components/ClassGoalsUpdateForm.tsx";
@@ -204,6 +206,7 @@ const UpdatingClassContext = createContext<
 function UpdateClass() {
   const navigate = useNavigate();
   const { classID } = useParams<{ classID: string }>()
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const { cls, setCls, isFetching } = useUpdatingClass(classID);
   const [currentTab, setCurrentTab] = useState<string>("goals");
 
@@ -212,20 +215,42 @@ function UpdateClass() {
       alert("กรุณากรอกข้อมูลให้ครบถ้วน");
       return;
     }
-    console.log(JSON.stringify(cls, null, 2));
+    setIsUpdating(true);
     updateClass(cls, classID)
-      .then((classId) => {
-        alert("อัพเดทคลาสสำเร็จ");
-        console.log(classId);
-        // navigate("/teach/overview");
+      .then(() => {
+        Swal.fire({
+          title: "อัพเดทคลาสสำเร็จ",
+          icon: "success",
+          confirmButtonText: "ตกลง",
+        })
       })
-      .catch((err) => {
-        console.log(err);
-        alert("อัพเดทคลาสไม่สำเร็จ");
-      });
+      .catch(() => {
+        Swal.fire({
+          title: "อัพเดทคลาสไม่สำเร็จ",
+          text: "กรุณาลองใหม่อีกครั้ง",
+          icon: "error",
+          confirmButtonText: "ตกลง",
+        })
+      }).finally(() => {
+        setIsUpdating(false);
+      })
   };
 
-  if (isFetching) return (<div>Loading...</div>)
+  if (isFetching) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoadingSpash />
+      </div>
+    )
+  }
+
+  if (isUpdating) {
+    return (
+      <div className="flex flex-col justify-center items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
+        <h1 className="text-black font-semibold text-[32px]">กำลังอัพเดทคลาส</h1>
+      </div>
+    )
+  }
   if (currentTab == "goals") {
     return (
       <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">

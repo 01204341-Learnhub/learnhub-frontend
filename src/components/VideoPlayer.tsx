@@ -4,7 +4,8 @@ import { OnProgressProps } from "react-player/base";
 
 interface VideoPlayerProps {
   url: string;
-  onGetDuration?: (duration: number) => void
+  onGetDuration?: (duration: number) => void;
+  onError?: () => void;
 }
 
 const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
@@ -55,6 +56,9 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
     setSeeking(false);
     playerRef.current?.seekTo(played);
   };
+  if (props.url === "") {
+    return <div></div>;
+  }
 
   return (
     <div className="player-wrapper aspect-w-16 aspect-h-9 flex items-center justify-center">
@@ -73,6 +77,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = (props) => {
         onSeekMouseUp={handleSeekMouseUp}
         controls={true}
         className="react-player"
+        onError={() => { props.onError() }}
       />
     </div>
   );

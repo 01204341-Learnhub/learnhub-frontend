@@ -1,11 +1,10 @@
 import {
   faBook,
-  faBookmark,
   faCartShopping,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import booklogo from "../assets/images/bookLogo.png";
@@ -27,7 +26,9 @@ function MainBar() {
     (state: RootState) => state.basket.isFetchOnce
   );
   const dispatcher = useDispatch();
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState<
+    "mycartdropdown" | "userdropdown"
+  >(null);
   const navigate = useNavigate();
   const toggleDropdown = (dropdownName) => {
     if (openDropdown === dropdownName) {
@@ -36,6 +37,31 @@ function MainBar() {
       setOpenDropdown(dropdownName);
     }
   };
+  const cartDropdownRef = useRef(null);
+  const userDropdownRef = useRef(null);
+  useEffect(() => {
+    if (openDropdown === null) return;
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        openDropdown === "mycartdropdown" &&
+        cartDropdownRef.current &&
+        !cartDropdownRef.current.contains(event.target)
+      ) {
+        setOpenDropdown(null);
+      }
+      if (
+        openDropdown === "userdropdown" &&
+        userDropdownRef.current &&
+        !userDropdownRef.current.contains(event.target)
+      ) {
+        setOpenDropdown(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openDropdown]);
   const itemsInBasket = basketItems.length;
   const handleClickBasket = () => {
     async function fetchBasket() {
@@ -73,7 +99,7 @@ function MainBar() {
   return (
     <nav
       style={{ height: "100px", zIndex: 1000 }}
-      className="fixed bg-white border-b-2 flex justify-around  w-screen  py-5"
+      className="fixed bg-white border-b-2 flex justify-between  w-screen  py-5"
     >
       <div className="flex flex-row items-center justify-center pl-12">
         <div className="px-2">
@@ -89,7 +115,7 @@ function MainBar() {
         </button>
       </div>
       <SearchBar />
-      <div className="flex items-center my-2 pl-3 pr-3 w-[300px]">
+      <div className={`flex items-center my-2 pl-3 pr-3 w-[300px] ${user.userType === "teacher" ? "justify-around " : ""}}`}>
         {user && user.userType === "teacher" ? null : (
           <div className=" col-span-3 grid grid-cols-2 pr-4">
             <button className="px-3 mx-2">
@@ -116,10 +142,11 @@ function MainBar() {
 
               {/* Mycart dropdown menu */}
               <div
+                ref={cartDropdownRef}
                 className="flex flex-col  absolute w-[320px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
                 style={{
                   display: openDropdown === "mycartdropdown" ? "block" : "none",
-                  top: "90%",
+                  top: "100%",
                   right: "13%",
                 }}
               >
@@ -159,7 +186,7 @@ function MainBar() {
           if (user) {
             return (
               <button
-                className="w-[50px] h-[50px] justify-self-center"
+                className="w-[50px] h-[50px]"
                 onClick={() => toggleDropdown("userdropdown")}
               >
                 <img
@@ -170,6 +197,7 @@ function MainBar() {
 
                 {/* User dropdown menu */}
                 <div
+                  ref={userDropdownRef}
                   style={{
                     display: openDropdown === "userdropdown" ? "block" : "none",
                     top: "90%",

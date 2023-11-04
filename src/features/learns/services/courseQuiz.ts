@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { CourseLesson } from "../types/lessons";
 import { StudentCourseLessonProgress } from "../types/progress";
 import {
@@ -12,9 +13,8 @@ import {
 } from "../types/response";
 import { updateStudentCourseLessonProgress } from "./progress";
 
-const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 async function getCourseQuiz(quizID: string): Promise<CourseQuiz> {
-  const url = `${baseURL}/quizzes/${quizID}/`;
+  const url = `${BASE_URL}/quizzes/${quizID}/`;
   const res = await axios.get<GetQuizResponse>(url);
   const quizData = res.data;
   const quiz: CourseQuiz = {
@@ -62,7 +62,7 @@ async function submitCourseQuiz(
       };
     }),
   };
-  const url = `${baseURL}/quizzes/${lesson.src}/result`;
+  const url = `${BASE_URL}/quizzes/${lesson.src}/result`;
   await axios.patch(url, body, { params: { student_id: studentID } });
   lessonProgress.finished = true;
   await updateStudentCourseLessonProgress(
@@ -73,7 +73,7 @@ async function submitCourseQuiz(
 }
 
 async function getStudentCourseQuizReport(quizID: string, studentID: string) {
-  const url = `${baseURL}/quizzes/${quizID}/result/`;
+  const url = `${BASE_URL}/quizzes/${quizID}/result/`;
   const res = await axios.get<GetStudentCourseQuizReportResponse>(url, {
     params: { student_id: studentID },
   });

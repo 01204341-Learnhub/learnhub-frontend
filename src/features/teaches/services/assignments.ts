@@ -1,21 +1,20 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import {
   ClassAssignmentSubmission,
   ListClassAssignmentSubmissionsResponse,
 } from "../types/classWork";
 
-const baseURL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
-
 async function listAssignmentSubmissions(
   assignmentID: string,
   classID: string
 ) {
-  const url = `${baseURL}/programs/classes/${classID}/assignments/${assignmentID}/submissions/`;
+  const url = `${BASE_URL}/programs/classes/${classID}/assignments/${assignmentID}/submissions/`;
   const res = await axios.get<ListClassAssignmentSubmissionsResponse>(url);
   const submissions: ClassAssignmentSubmission[] = [];
   for (let i = 0; i < res.data.submissions.length; i++) {
     const s = res.data.submissions[i];
-    const studentSubmissionUrl = `${baseURL}/programs/classes/${classID}/assignments/${assignmentID}/submissions/${s.student.student_id}`;
+    const studentSubmissionUrl = `${BASE_URL}/programs/classes/${classID}/assignments/${assignmentID}/submissions/${s.student.student_id}`;
     const studentSubmissionRes = await axios.get<{
       attachments: { attachment_type: string; src: string }[];
     }>(studentSubmissionUrl);
@@ -44,7 +43,7 @@ async function markAssignmentSubmission(
   studentID: string,
   score: number
 ) {
-  const url = `${baseURL}/programs/classes/${classID}/assignments/${assignmentID}/submissions/${studentID}/score`;
+  const url = `${BASE_URL}/programs/classes/${classID}/assignments/${assignmentID}/submissions/${studentID}/score`;
   const body = {
     score: score,
   };

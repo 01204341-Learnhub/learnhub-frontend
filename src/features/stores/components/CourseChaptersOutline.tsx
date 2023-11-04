@@ -3,8 +3,8 @@ import {
   faAngleUp,
   faCirclePlay,
   faClipboardList,
-  faFileLines,
-  faFolder,
+  faDownload,
+  faFileLines
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
@@ -29,8 +29,8 @@ function LessonEntry(props: LessonEntryProps) {
       {props.lesson.lessonType === "quiz" ? (
         <FontAwesomeIcon icon={faClipboardList} size="lg" color="#808080" />
       ) : null}
-      {props.lesson.lessonType === "files" ? (
-        <FontAwesomeIcon icon={faFolder} color="#808080" />
+      {["files", "file"].includes(props.lesson.lessonType) ? (
+        <FontAwesomeIcon icon={faDownload} color="#808080" />
       ) : null}
       <div className="text-[#808080] font-normal text-[13px]">
         {props.lesson.name}
@@ -100,7 +100,7 @@ interface CourseChaptersOutlineProps {
   courseID: string
 }
 
-function  CourseChaptersOutline(props: CourseChaptersOutlineProps) {
+function CourseChaptersOutline(props: CourseChaptersOutlineProps) {
   return (
     <div className="w-[600px] bg-[#eaeaea66] py-0.5">
       <div className="m-5 flex flex-col justify-start space-y-4">

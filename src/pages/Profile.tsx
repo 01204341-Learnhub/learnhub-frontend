@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import Swal from "sweetalert2";
 import { updateFullname, updateProfileFromFile } from "../features/profiles/services/updateProfile";
 import { useUser } from "../hooks/useUser";
+import { changePassword } from "../services/auth/updatePassword";
 import { changeFullName, changeProfilePicture } from "../slices/userSlice";
 
 function Profile() {
@@ -15,6 +17,8 @@ function Profile() {
   const [isChangePassword, setIsChangePassword] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [newProfile, setNewProfile] = useState<File>()
+  const [newPassword, setNewPassword] = useState<string>("")
+  const [confirmPassword, setConfirmPassword] = useState<string>("")
 
   const classNameSelectProfile = selectProfile
     ? "border-b-[10px] border-black ml-2 py-2 px-3 border-b-[12px] z-10"
@@ -169,47 +173,79 @@ function Profile() {
   }
 
 
-  const handleChangePassword = () => {
-    setIsChangePassword(!isChangePassword);
-  }
-
-  const modalChangePassword = () => {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center">
-        <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
-        <div className="bg-white rounded-lg p-6">
-          <div className="flex justify-end">
-            <button onClick={handleChangePassword}>Close</button>
-          </div>
-          <p> eiei {isChangePassword}</p>
-        </div>
-      </div>
-    )
+  const handleChangePassword = (newPassword: string) => {
+    changePassword(newPassword).then(() => {
+      (document.getElementById("my_modal_2") as HTMLDialogElement).close()
+      Swal.fire({
+        icon: 'success',
+        title: 'เปลี่ยนรหัสผ่านสำเร็จ',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }).catch(() => {
+      (document.getElementById("my_modal_2") as HTMLDialogElement).close()
+      Swal.fire({
+        icon: 'error',
+        title: 'เปลี่ยนรหัสผ่านไม่สำเร็จ',
+        showConfirmButton: false,
+        timer: 2000
+      })
+    })
   }
 
   const renderSetting = () => {
     return (
       <div className="w-4/5 h-full">
+        <dialog id="my_modal_2" className="modal" onClose={() => {
+          setConfirmPassword("")
+          setNewPassword("")
+        }}>
+          <div className="modal-box">
+            <div className="form-control w-full max-w-xs">
+              <label className="label">
+                <span className="label-text">รหัสผ่านใหม่</span>
+              </label>
+              <input type="text" placeholder="รหัสผ่านใหม่" className="input input-bordered w-full max-w-xs" value={newPassword}
+                onChange={(e) => {
+                  setNewPassword(e.target.value)
+                }} />
+              <label className="label">
+                <span className="label-text">ยืนยันรหัสผ่านใหม่</span>
+              </label>
+              <input type="text" placeholder="ยืนยันรหัสผ่านใหม่" className="input input-bordered w-full max-w-xs"
+                value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value) }} />
+            </div>
+            <button className="btn mt-5" onClick={() => {
+              if (newPassword != confirmPassword) {
+                alert("รหัสผ่านไม่ตรงกัน")
+                return
+              }
+              if (newPassword.length < 6) {
+                alert("รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร")
+                return
+              }
+              handleChangePassword(newPassword)
+            }}>
+              ตกลง
+            </button>
+          </div>
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
         <div className="flex flex-col items-start pt-20">
           <label
             className="font-semibold text-xl py-4"
             htmlFor="Email"
           >Email</label>
           <p className="font-semibold text-[#808080] border-2 w-96 bg-[#f5f5f580] px-4 py-4">{user.email}</p>
-          {/* <input
-            className="border-2 border-[#808080] bg-[#f5f5f5] outline-none h-12 w-2/5 px-4 mb-4" 
-            type="text" name="Email" id="Email" /> */}
-
           <label
             className="font-semibold text-xl py-4"
             htmlFor="Password"
           >Password</label>
           <p className="font-semibold tracking-[6px] text-[#808080] bg-[#f5f5f580] p-4 border-2 w-96 ">**********</p>
-          {/* <input
-            className="border-2 border-[#808080] bg-[#f5f5f5] outline-none h-12 w-2/5 px-4 mb-4" 
-            type="text" name="Password" id="Password" /> */}
           <button
-            onClick={handleChangePassword}
+            onClick={() => (document.getElementById('my_modal_2') as HTMLDialogElement).showModal()}
             type="button"
             className=" text-[#068FFF] text-xl rounded-md font-semibold mt-4"
           >

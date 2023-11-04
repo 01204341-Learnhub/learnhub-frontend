@@ -1,30 +1,23 @@
 import axios from "axios";
-import { Basket, BasketItem } from "../types/basket";
-import {
-  GetCourseDetailResponse,
-  ResponseBasket,
-  ResponseGetCourses,
-  ResponseWishlist,
-  GetClassResponse,
-} from "../types/response";
-import { Wishlist, WishlistItem } from "../types/wishlist";
-import BasketItemSlot from "../components/BasketItemSlot";
-import { getClass } from "../../learns/services/classes";
-import { getCourseDetail } from "./courses";
+import { BASE_URL } from "../../../config";
 import { ClassProgramDetail } from "../types/class";
 import { CourseDetail } from "../types/course";
+import { ResponseWishlist } from "../types/response";
+import { Wishlist, WishlistItem } from "../types/wishlist";
 import { getClasses } from "./classes";
-const baseUrl = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
+import { getCourseDetail } from "./courses";
 
 async function fetchWishlistItems(studentID: string) {
   const listwishlistItem: WishlistItem[] = [];
-  const url = `${baseUrl}/users/students/${studentID}/wishlist`;
+  const url = `${BASE_URL}/users/students/${studentID}/wishlist`;
   const response = await axios.get<ResponseWishlist>(url);
   const wishlistItemsData = response.data.wishlist;
   for (let i = 0; i < wishlistItemsData.length; i++) {
     const basketItem = wishlistItemsData[i];
     if (basketItem.type == "class") {
-      const programdetail: ClassProgramDetail = await getClasses(basketItem.program_id);
+      const programdetail: ClassProgramDetail = await getClasses(
+        basketItem.program_id
+      );
       listwishlistItem.push({
         itemID: basketItem.wishlist_item_id,
         programID: basketItem.program_id,
@@ -36,8 +29,7 @@ async function fetchWishlistItems(studentID: string) {
         teacherName: programdetail.instructor.name,
         description: "",
       });
-    } else 
-    {
+    } else {
       const programdetail: CourseDetail = await getCourseDetail(
         basketItem.program_id
       );
@@ -64,7 +56,7 @@ async function fetchWishlistItems(studentID: string) {
 }
 
 async function deleteWishlistItem(studentID: string, wishlist_item_id: string) {
-  const url = `${baseUrl}/users/students/${studentID}/wishlist/${wishlist_item_id}`;
+  const url = `${BASE_URL}/users/students/${studentID}/wishlist/${wishlist_item_id}`;
   try {
     const response = await axios.delete(url);
     return response;
@@ -78,7 +70,7 @@ async function addWishListItem(
   typeProgram: string,
   studentID: string
 ): Promise<string | boolean> {
-  const url = `${baseUrl}/users/students/${studentID}/wishlist`;
+  const url = `${BASE_URL}/users/students/${studentID}/wishlist`;
   const body = {
     type: typeProgram,
     program_id: programID,
@@ -98,4 +90,4 @@ async function addWishListItem(
   }
 }
 
-export { addWishListItem, deleteWishlistItem, fetchWishlistItems, };
+export { addWishListItem, deleteWishlistItem, fetchWishlistItems };

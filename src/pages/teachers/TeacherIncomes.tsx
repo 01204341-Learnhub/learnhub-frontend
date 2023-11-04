@@ -14,6 +14,13 @@ function TeacherIncomes(){
     }
 
     if (isFetchingsIncomes) return <div>loading...</div>;
+    const courseIncomes = incomes.reduce(function (r,income ) {
+        r[income.programID] = r[income.programID] || []
+        r[income.programID].push(income)
+        return r
+    }, Object.create(null));
+
+    console.log(courseIncomes)
 
     return (
         <div className="flex-cols px-8 py-1">

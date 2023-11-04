@@ -8,7 +8,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createTeacherWithEmail } from "../services/auth/createUser";
 
+import Swal from "sweetalert2";
 import smolRobotImage from "../../src/assets/images/smolRobot.jpeg";
+import { LoadingSpash } from "../components/LoadingSpash";
 
 function TeacherRegister() {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ function TeacherRegister() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmpassword, setConfirmPassword] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
@@ -60,12 +63,31 @@ function TeacherRegister() {
 
     try {
       const fullname = firstname.trim() + " " + lastname.trim();
+      setIsRegistering(true);
       await createTeacherWithEmail(email, password, username, fullname);
-      navigate("/login", { replace: true });
+      Swal.fire({
+        title: "สมัครสมาชิกสำเร็จ",
+        icon: "success",
+        confirmButtonText: "ตกลง",
+      }).then(() => {
+        navigate("/login", { replace: true });
+      });
     } catch (error) {
-      alert(`cannot register ${error}`);
+      Swal.fire({
+        title: "สมัครสมาชิกไม่สำเร็จ",
+        text: error.message,
+        icon: "error",
+        confirmButtonText: "ตกลง",
+      });
     }
   };
+  if (isRegistering) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoadingSpash />
+      </div>
+    )
+  }
 
   return (
     <div className=" bg-gray-300 h-screen">

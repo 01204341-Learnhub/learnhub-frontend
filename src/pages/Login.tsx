@@ -2,8 +2,10 @@ import { faEnvelope, faUnlockKeyhole } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import bookLogo from "../../src/assets/images/bookLogo.png";
 import textNameLogo from "../../src/assets/images/textNameLogo.png";
+import { LoadingSpash } from "../components/LoadingSpash";
 import { signInWithEmail } from "../services/auth/signIn";
 
 
@@ -11,6 +13,7 @@ export default function Login() {
     const [mode, setMode] = useState<"student" | "teacher">("student") // student or teacher
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [isLoggingIn, setIsLoggingIn] = useState(false)
 
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value)
@@ -27,16 +30,40 @@ export default function Login() {
             return
         }
 
-        signInWithEmail(email, password, mode).then((user) => {
-            if (mode == "student") navigate("/home");
-            else navigate("/teach/overview", { replace: true });
+        setIsLoggingIn(true)
+        signInWithEmail(email, password, mode).then(() => {
+            Swal.fire({
+                title: 'เข้าสู่ระบบสำเร็จ',
+                icon: 'success',
+                confirmButtonText: 'ตกลง'
+            }).then(() => {
+                if (mode == "student") navigate("/home");
+                else navigate("/teach/overview", { replace: true });
+            })
         }).catch((error) => {
-            alert(`cannot login ${error}`)
+            Swal.fire({
+                title: 'เข้าสู่ระบบไม่สำเร็จ',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            }).then(() => {
+                setIsLoggingIn(false)
+            })
+        }).finally(() => {
+            setIsLoggingIn(false)
         })
     }
 
     function handleBack() {
         navigate("/", { replace: true })
+    }
+
+    if (isLoggingIn) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <LoadingSpash />
+            </div>
+        )
     }
 
     return (

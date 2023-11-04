@@ -62,12 +62,12 @@ type ListClassAssignmentsResponse = {
     group_name: string;
     last_edit: number;
     due_date: number;
-    status: string;
-    max_score: number;
     submission_count: {
-      submit_count: number;
-      unsubmit_count: number;
+      submit_count: 10;
+      unsubmit_count: 10;
     };
+    status: "open | closed";
+    max_score: number;
     text: string;
   }[];
 };
@@ -77,12 +77,22 @@ type GetClassAssignmentResponse = {
   group_name: string;
   last_edit: number;
   due_date: number;
-  status: string;
+  status: "open" | "closed";
   max_score: number;
   text: string;
   attachments: {
+    attachment_type: string;
     src: string;
-    name: string;
+  }[];
+  replies: {
+    user: {
+      user_id: string;
+      type: "student" | "teacher";
+      name: string;
+      profile_pic: string;
+    };
+    reply_date: number;
+    text: string;
   }[];
 };
 

@@ -72,7 +72,7 @@ function MainBar() {
             <button className='flex flex-row items-center w-2/12' onClick={() => { navigate("/home") }}>
                 <img src={namelogo} alt="namelogo" />
             </button>
-            {user && user.userType === 'teacher' ? <div className='w-2/4 py-2 px-2' /> : (
+            {user && user.userType === 'teacher' ? <div className='w-7/12 py-2 px-2' /> : (
                 <SearchBar />
             )}
             <div className='flex items-center my-2 pl-24 pr-6 bg-white'>

@@ -124,6 +124,7 @@ async function listClassAssignments(classID: string) {
         src: a.src,
         attachmentType: a.attachment_type,
       })),
+      lastEdit: new Date(res.data.assignments[i].last_edit * 1000),
       score: res.data.assignments[i].max_score,
       topic: res.data.assignments[i].group_name,
       send: res.data.assignments[i].submission_count.submit_count,

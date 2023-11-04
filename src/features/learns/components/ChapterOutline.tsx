@@ -27,6 +27,15 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
     const { lessons } = useCourseLessons(chapter.courseID, chapter.chapterID)
 
+    const finishedLesson = () => {
+        let finished = 0
+        for (let i = 0; i < lessonsProgress.length; i++) {
+            if (lessonsProgress[i].finished) {
+                finished++
+            }
+        }
+        return finished
+    }
     const handleShow = async () => {
         setShow((prev) => !prev)
     }
@@ -41,8 +50,8 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
     }
 
     function formatSeconds(seconds: number): string {
-        const hours = Math.floor(seconds/3600)
-        const minutes = Math.floor((seconds %3600) / 60)
+        const hours = Math.floor(seconds / 3600)
+        const minutes = Math.floor((seconds % 3600) / 60)
         if (hours < 1) {
             return `${minutes} นาที`
         }
@@ -56,7 +65,7 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
                     <div className="flex flex-col items-start flex-1 pl-6 py-2">
                         <h1 className="text-base font-semibold">บทที่ {chapter.chapterNumber} : {chapter.name}</h1>
                         <div className="py-1">
-                            <span className='text- text-[#202020] font-medium text-sm pr-4'>{currentLesson?.lessonNumber || 0}/{chapter.lessonCount}</span>
+                            <span className='text- text-[#202020] font-medium text-sm pr-4'>{finishedLesson()}/{chapter.lessonCount}</span>
                             <FontAwesomeIcon icon={faClock} color="#606060" className="pr-4" />
                             <span className='text-sm text-[#404040]'>
                                 {formatSeconds(chapter.chapterLength)}

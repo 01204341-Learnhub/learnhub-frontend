@@ -132,6 +132,11 @@ function LearnCourse() {
     useEffect(() => {
         setSearchParams({ view: outlineViewMode })
     }, [setSearchParams, outlineViewMode])
+
+    if (isFetching || chapters.length == 0) return (<div className="flex justify-center items-center h-screen">
+        <LoadingSpash />
+    </div>)
+
     return (
         <div className="">
             <div className="flex pt-8 pl-14 pb-14">

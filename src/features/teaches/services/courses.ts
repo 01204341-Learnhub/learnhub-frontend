@@ -297,7 +297,6 @@ async function updateCourse(course: Course) {
         );
         course.chapters[chapterIndex].lessons[lessonIndex].lessonId = lessonID;
       });
-      return;
     }
     const chapterInfoBody = {
       name: chapter.name,
@@ -321,7 +320,6 @@ async function updateCourse(course: Course) {
         await axios.delete(deleteLessonURL);
         // delay to avoid rate limit
         await new Promise((resolve) => setTimeout(resolve, DELAY));
-        return;
       }
     }
     chapter.lessons.forEach(async (lesson, lessonIndex) => {

@@ -1,4 +1,4 @@
-import { faBell, faBook, faBookmark, faCartShopping, faHeart, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { faBook, faBookmark, faCartShopping, faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -72,13 +72,13 @@ function MainBar() {
             <button className='flex flex-row items-center w-2/12' onClick={() => { navigate("/home") }}>
                 <img src={namelogo} alt="namelogo" />
             </button>
-            {user && user.userType === 'teacher' ? <div className='w-2/4 py-2 px-2' /> : (
+            {user && user.userType === 'teacher' ? <div className='w-7/12 py-2 px-2' /> : (
                 <SearchBar />
             )}
-            <div className='w-2/12 grid grid-cols-3 my-2'>
+            <div className='flex items-center my-2 pl-24 pr-6 bg-white'>
                 {user && user.userType === 'teacher' ? null : (
                     <div className=' col-span-3 grid grid-cols-2'>
-                        <button>
+                        <button className='px-2 mx-2'>
                             <Link to={"/learn/overview"}>
                                 <FontAwesomeIcon icon={faBook} size='xl' />
                             </Link>

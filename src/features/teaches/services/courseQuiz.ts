@@ -1,10 +1,9 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { CourseQuiz } from "../types/courseQuiz";
 
-const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
-
 async function createCourseQuiz(quiz: CourseQuiz): Promise<string> {
-  const url = `${baseURL}/quizzes`;
+  const url = `${BASE_URL}/quizzes`;
   const body = {
     name: quiz.name,
     description: quiz.description,

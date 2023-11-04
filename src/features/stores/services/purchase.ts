@@ -1,12 +1,11 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { Basket, BasketItem } from "../types/basket";
 import { ResponseBasket } from "../types/response";
 
-const baseUrl = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
-
 async function purchaseCourse(studentID: string, paymentMethodID: string) {
   // TODO: use real payment_method_id
-  const url = `${baseUrl}/transactions/purchase`;
+  const url = `${BASE_URL}/transactions/purchase`;
   const body = {
     student_id: studentID,
     payment_method_id: studentID,
@@ -26,7 +25,7 @@ async function purchaseCourse(studentID: string, paymentMethodID: string) {
 async function fetchBasketItems(studentID: string) {
   const listBasketItem: BasketItem[] = [];
   try {
-    const url = `${baseUrl}/users/students/${studentID}/basket`;
+    const url = `${BASE_URL}/users/students/${studentID}/basket`;
     const response = await axios.get<ResponseBasket>(url);
     const basketItemsData = response.data.basket;
 
@@ -57,7 +56,7 @@ async function fetchBasketItems(studentID: string) {
 }
 
 async function deleteBasketItem(studentID: string, basketItemID: string) {
-  const url = `${baseUrl}/users/students/${studentID}/basket/${basketItemID}`;
+  const url = `${BASE_URL}/users/students/${studentID}/basket/${basketItemID}`;
   try {
     const response = await axios.delete(url);
     return response;
@@ -71,7 +70,7 @@ async function addBasketItem(
   typeProgram: string,
   studentID: string
 ): Promise<string | boolean> {
-  const url = `${baseUrl}/users/students/${studentID}/basket`;
+  const url = `${BASE_URL}/users/students/${studentID}/basket`;
   const body = {
     program_id: programID,
     type: typeProgram,

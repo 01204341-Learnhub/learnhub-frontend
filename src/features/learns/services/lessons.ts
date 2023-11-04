@@ -1,18 +1,17 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { CourseLesson } from "../types/lessons";
 import {
   GetCourseLessonResponse,
   ListCourseLessonsResponse,
 } from "../types/response";
 
-const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
-
 async function getCourseLesson(
   courseID: string,
   chapterID: string,
   lessonID: string
 ) {
-  const url = `${baseURL}/programs/courses/${courseID}/chapters/${chapterID}/lessons/${lessonID}`;
+  const url = `${BASE_URL}/programs/courses/${courseID}/chapters/${chapterID}/lessons/${lessonID}`;
   const res = await axios.get<GetCourseLessonResponse>(url);
   const courseLessonData = res.data;
   const courseLesson: CourseLesson = {
@@ -29,7 +28,7 @@ async function getCourseLesson(
 }
 
 async function listCourseLessons(courseID: string, chapterID: string) {
-  const url = `${baseURL}/programs/courses/${courseID}/chapters/${chapterID}/lessons`;
+  const url = `${BASE_URL}/programs/courses/${courseID}/chapters/${chapterID}/lessons`;
   const res = await axios.get<ListCourseLessonsResponse>(url);
   const courseLessons: CourseLesson[] = [];
   for (let i = 0; i < res.data.lessons.length; i++) {

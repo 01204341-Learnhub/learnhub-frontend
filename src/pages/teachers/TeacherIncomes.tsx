@@ -32,10 +32,11 @@ function TeacherIncomes(){
         if (courseKeys.length == 0){
             return (
                 <div className="font-bold">
-                    ไม่มีการซื้อคอร์สเรียน
+                    {isShowMonth?'ไม่มีการซื้อคอร์สเรียน':'ไม่มีการซื้อคอร์สเรียนในเดือนนั้น'}
                 </div>
             )
-        }
+
+        } 
         return (
             <>
             {
@@ -77,7 +78,7 @@ function TeacherIncomes(){
         if (classKeys.length == 0){
             return (
                 <div className="font-bold">
-                    ไม่มีการซื้อคลาสเรียน
+                    {isShowMonth?'ไม่มีการซื้อคลาสเรียน':'ไม่มีการซื้อคลาสเรียนในเดือนนั้น'}
                 </div>
             )
         }
@@ -209,11 +210,11 @@ function _TransactionBox(props : _TransactionBoxProps) {
     function _formatDatetime(dt: Date): string{
         const date= dt.getDate()
         const month =dt.getMonth()
-        const year = dt.getFullYear()
+        const year = dt.getFullYear() + 543
         const hours = dt.getHours()
         const minutes = dt.getMinutes().toString().padStart(2,'0')
 
-        return `${date} ${month} ${year} | ${hours}.${minutes} น.`
+        return `วันที่ ${date} เดือน ${month} ปี ${year} | ${hours}.${minutes} น.`
     }
 
     return (

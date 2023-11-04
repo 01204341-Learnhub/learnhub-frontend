@@ -21,13 +21,14 @@ import {
 } from "../../../slices/basketSlice";
 import { addBasketItem } from "../services/purchase";
 import { fetchBasketItems } from "../services/purchase";
+import daysToWeeks from "date-fns/daysToWeeks";
 
 interface CourseDetailedSummaryProps {
   costs: number;
   quantity: number;
   level: string;
   students: number;
-  hours: number;
+  videolength: number;
   examples: number;
   status: string;
   availablesource: number;
@@ -85,10 +86,6 @@ function CourseDetailedSummary(
       });
   }
 
-  function formatDateFromTimestamp(timestamp: number) : string{
-    const  date = new Date(timestamp * 1000)
-    return date.getHours().toLocaleString()
-  }
 
   return (
     <>
@@ -146,7 +143,7 @@ function CourseDetailedSummary(
             <p className="ml-3">
               วิดีโอสอน
               <span className="font-bold ml-2">
-                {formatDateFromTimestamp(myCourseDetailedSummary.hours)} ชั่วโมง
+                {(myCourseDetailedSummary.videolength / 3600).toFixed()} ชั่วโมง
               </span>
             </p>
           </div>
@@ -161,7 +158,7 @@ function CourseDetailedSummary(
             <p className="ml-3">
               แบบฝึกหัด
               <span className="font-bold ml-2">
-                {myCourseDetailedSummary.availablesource} แบบฝึกหัด
+                {myCourseDetailedSummary.examples} แบบฝึกหัด
               </span>
             </p>
           </div>

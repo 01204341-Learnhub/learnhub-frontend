@@ -71,7 +71,7 @@ function CourseDetailPage() {
                     level={courseDetail.courseDetail.level}
                     students={courseDetail.courseDetail.studentCount}
                     availablesource={courseDetail.courseDetail.fileCount}
-                    hours={courseDetail.courseDetail.videoLength}
+                    videolength={courseDetail.courseDetail.videoLength}
                     examples={courseDetail.courseDetail.quizCount}
                     status="Available"
                     courseID={courseDetail.courseDetail.courseID}

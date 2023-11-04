@@ -14,6 +14,7 @@ export function useTeachIncomes() {
       }
     setIsFetchingIncomes(true);
     fetchIncomes().then(() => {
+
         setIsFetchingIncomes(false);
     });
   }, [user.userID])

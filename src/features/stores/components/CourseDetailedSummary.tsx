@@ -9,6 +9,7 @@ import {
   faInfinity,
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -41,6 +42,7 @@ function CourseDetailedSummary(
   const dispatcher = useDispatch();
   const navigate = useNavigate();
   const { user } = useUser();
+  const [isButtonDisabled,setIsButtonDisabled] = useState(true);
   async function refresh() {
     const BasketItems = await fetchBasketItems(user.userID);
     dispatcher(setStatusFetchOnce(true));
@@ -50,11 +52,19 @@ function CourseDetailedSummary(
     });
   }
   async function handleAddBusketItems() {
+    if(isButtonDisabled){
+    setIsButtonDisabled(false)
     const basketItmeID = await addBasketItem(
       myCourseDetailedSummary.courseID,
       "course",
       user.userID,
-    );
+    ).catch(() => {
+      Swal.fire({
+        title: "ไม่สามารถดำเนินการนี้ได้",
+        text: "คุณมีคอร์สนี้อยู่แล้ว หรือ คอร์สนี้อยู่ในรถเข็นอยู่แล้ว",
+        icon: "error",
+      });
+    });
     if (!basketItmeID) {
       Swal.fire({
         title: "ไม่สามารถดำเนินการนี้ได้",
@@ -69,8 +79,11 @@ function CourseDetailedSummary(
       });
       dispatcher(setStatusFetchOnce(false));
     }
+
     refresh();
+    setIsButtonDisabled(true)
   }
+}
   function handleBuyCourse() {
     addBasketItem(myCourseDetailedSummary.courseID, "course", user.userID)
       .then(() => {

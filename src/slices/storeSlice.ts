@@ -7,19 +7,20 @@ export const storeSlice = createSlice({
   initialState: {
     allCourses: [] as Course[],
     allClasses: [] as ClassProgram[],
-    isFetchedOnce: false,
+    isFetchCoursesOnce: false,
+    isFetchClassesOnce: false,
   },
   reducers: {
     setAllCourses: (state, action) => {
       state.allCourses = action.payload;
-      if (state.isFetchedOnce) {
-        state.isFetchedOnce = true;
+      if (state.isFetchCoursesOnce) {
+        state.isFetchCoursesOnce = true;
       }
     },
     setAllClasses: (state, action) => {
       state.allClasses = action.payload;
-      if (state.isFetchedOnce) {
-        state.isFetchedOnce = true;
+      if (state.isFetchClassesOnce) {
+        state.isFetchClassesOnce = true;
       }
     },
   },

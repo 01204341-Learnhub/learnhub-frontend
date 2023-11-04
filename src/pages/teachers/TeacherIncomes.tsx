@@ -9,6 +9,9 @@ function TeacherIncomes(){
     const {incomes, isFetchingsIncomes} = useTeachIncomes()
     const [isShowMonth, setIsShowMonth] = useState<boolean>(false)
 
+    const courseType = "course"
+    const classType = "class"
+
     function _getTotalPrice(){
         let total_price = 0
         incomes.filter((income) => (isShowMonth  && _isDateWithinNextMonth(income.purchaseTime)) || !isShowMonth).forEach(_income => total_price += _income.price)
@@ -16,12 +19,97 @@ function TeacherIncomes(){
     }
 
     if (isFetchingsIncomes) return <div>loading...</div>;
-    const courseIncomes = incomes.filter((income) => (isShowMonth  && _isDateWithinNextMonth(income.purchaseTime)) || !isShowMonth)
-                    .reduce(function (r,income ) {
-                            r[income.programID] = r[income.programID] || []
-                            r[income.programID].push(income)
-                            return r
-                        }, Object.create(null))
+    const _renderCourseIncomes = () => {
+        const courseIncomes = incomes.filter((income) => income.type==courseType && ((isShowMonth  && _isDateWithinNextMonth(income.purchaseTime)) || !isShowMonth))
+                        .reduce(function (r,income ) {
+                                r[income.programID] = r[income.programID] || []
+                                r[income.programID].push(income)
+                                return r
+                            }, Object.create(null))
+
+        const courseKeys = Object.keys(courseIncomes)
+
+        if (courseKeys.length == 0){
+            return (
+                <div className="font-bold">
+                    ไม่มีการซื้อคอร์สเรียน
+                </div>
+            )
+        }
+        return (
+            <>
+            {
+                courseKeys.map((key, index) => {
+                    const courseIncome = courseIncomes[key]
+                    return <li key={index}>
+                        <_TransactionBox 
+                        type={courseIncome[0].type}
+                        programID={courseIncome[0].programID}
+                        programPic={courseIncome[0].programPic}
+                        name={courseIncome[0].name}
+                        totalPrice={courseIncome[0].price * courseIncome.length}
+                        transactions={courseIncome.map((transaction,) => {
+                            return {
+                                buyer: transaction.buyer,
+                                purchaseTime: transaction.purchaseTime,
+                            }
+                        })}
+                            
+                        />
+
+                    </li>
+                })
+
+            }
+            </>
+        )
+    }
+    
+    const _renderClassIncomes = () => {
+        const classIncomes = incomes.filter((income) => income.type==classType && ((isShowMonth  && _isDateWithinNextMonth(income.purchaseTime)) || !isShowMonth))
+                        .reduce(function (r,income ) {
+                                r[income.programID] = r[income.programID] || []
+                                r[income.programID].push(income)
+                                return r
+                            }, Object.create(null))
+
+        const classKeys = Object.keys(classIncomes)
+        if (classKeys.length == 0){
+            return (
+                <div className="font-bold">
+                    ไม่มีการซื้อคลาสเรียน
+                </div>
+            )
+        }
+        return (
+            <>
+            {
+                classKeys.map((key, index) => {
+                    const classIncome = classIncomes[key]
+                    return <li key={index}>
+                        <_TransactionBox 
+                        type={classIncome[0].type}
+                        programID={classIncome[0].programID}
+                        programPic={classIncome[0].programPic}
+                        name={classIncome[0].name}
+                        totalPrice={classIncome[0].price * classIncome.length}
+                        transactions={classIncome.map((transaction,) => {
+                            return {
+                                buyer: transaction.buyer,
+                                purchaseTime: transaction.purchaseTime,
+                            }
+                        })}
+                            
+                        />
+
+                    </li>
+                })
+
+            }
+            </>
+        )
+
+    }
     return (
         <div className="flex-cols">
             <div className="flex-cols px-8 py-1">
@@ -77,30 +165,20 @@ function TeacherIncomes(){
                 </div>
             </div>
             <div className="flex-cols px-8 py-1">
+                <h1 className="text-xl font-bold py-4">คอร์สเรียน</h1>
                 <div className="w-full h-full">
                     <ol>
                         {
-                        Object.keys(courseIncomes).map((key, index) => {
-                            const courseIncome = courseIncomes[key]
-                            return <li key={index}>
-                                <_TransactionBox 
-                                type={courseIncome[0].type}
-                                programID={courseIncome[0].programID}
-                                programPic={courseIncome[0].programPic}
-                                name={courseIncome[0].name}
-                                totalPrice={courseIncome[0].price * courseIncome.length}
-                                transactions={courseIncome.map((transaction,) => {
-                                    return {
-                                        buyer: transaction.buyer,
-                                        purchaseTime: transaction.purchaseTime,
-                                    }
-                                })}
-                                    
-                                />
-
-                            </li>
-                        })
-                    }
+                            _renderCourseIncomes()
+                        }
+                    </ol>
+                </div>
+                <h1 className="text-xl font-bold py-4">คลาสเรียน</h1>
+                <div className="w-full h-full">
+                    <ol>
+                        {
+                            _renderClassIncomes()
+                        }
                     </ol>
                 </div>
             </div>

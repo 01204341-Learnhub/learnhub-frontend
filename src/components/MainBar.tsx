@@ -115,7 +115,11 @@ function MainBar() {
         </button>
       </div>
       <SearchBar />
-      <div className={`flex items-center my-2 pl-3 pr-3 w-[300px] ${user.userType === "teacher" ? "justify-around " : ""}}`}>
+      <div
+        className={`flex items-center my-2 pl-3 pr-3 w-[300px] ${
+          user.userType === "teacher" ? "justify-around " : ""
+        }}`}
+      >
         {user && user.userType === "teacher" ? null : (
           <div className=" col-span-3 grid grid-cols-2 pr-4">
             <button className="px-3 mx-2">
@@ -258,33 +262,20 @@ function MainBar() {
                   </ul>
                   <ul>
                     <li>
-                      <a className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">
+                      <Link
+                        to={{ pathname: "/profile", search: "?tab=settings" }}
+                        className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100"
+                      >
                         ตั้งค่าบัญชี
-                      </a>
+                      </Link>
                     </li>
                     <li>
                       <Link
-                        to={{ pathname: "/profile" }}
+                        to={{ pathname: "/profile", search: "?tab=profile" }}
                         className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100"
                       >
                         แก้ไขโปรไฟล์
                       </Link>
-                    </li>
-                  </ul>
-                  <ul>
-                    {user.userType === "student" ? (
-                      <li>
-                        <a className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">
-                          ประวัติการซื้อ
-                        </a>
-                      </li>
-                    ) : (
-                      <></>
-                    )}
-                    <li>
-                      <a className=" block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100">
-                        วิธีการชำระเงิน
-                      </a>
                     </li>
                   </ul>
                   <ul>

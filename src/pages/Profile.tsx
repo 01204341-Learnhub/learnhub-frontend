@@ -1,24 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import { updateFullname, updateProfileFromFile } from "../features/profiles/services/updateProfile";
+import {
+  updateFullname,
+  updateProfileFromFile,
+} from "../features/profiles/services/updateProfile";
 import { useUser } from "../hooks/useUser";
 import { changePassword } from "../services/auth/updatePassword";
 import { changeFullName, changeProfilePicture } from "../slices/userSlice";
+import { useLocation } from "react-router-dom";
 
 function Profile() {
   const { user, isFetching } = useUser();
   const dispatch = useDispatch();
   const [selectProfile, setSelectProfile] = useState<boolean>(true);
   const [selectSetting, setSelectSetting] = useState<boolean>(false);
-  const [firstName, setFirstName] = useState<string>(user.fullname.split(" ")[0])
+  const [firstName, setFirstName] = useState<string>(
+    user.fullname.split(" ")[0]
+  );
   const [lastName, setLastName] = useState<string>(user.fullname.split(" ")[1]);
   const [isEdit, setIsEdit] = useState<boolean>(false);
   const [isChangePassword, setIsChangePassword] = useState<boolean>(false);
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
-  const [newProfile, setNewProfile] = useState<File>()
-  const [newPassword, setNewPassword] = useState<string>("")
-  const [confirmPassword, setConfirmPassword] = useState<string>("")
+  const [newProfile, setNewProfile] = useState<File>();
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
 
   const classNameSelectProfile = selectProfile
     ? "border-b-[10px] border-black ml-2 py-2 px-3 border-b-[12px] z-10"
@@ -37,28 +43,48 @@ function Profile() {
     setSelectSetting(true);
   };
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const tab = queryParams.get("tab");
+
+  useEffect(() => {
+    if (tab == "settings") {
+      setSelectProfile(false);
+      setSelectSetting(true);
+    } else {
+      setSelectProfile(true);
+      setSelectSetting(false);
+    }
+  }, [tab]);
+
   const handleNewProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewProfile(e.target.files![0]);
-  }
+  };
 
   const handleClickEditProfile = () => {
     if (isEdit) {
       if (newProfile) {
         setIsUpdating(true);
-        updateProfileFromFile(user.userType, user.userID, newProfile).then((res) => {
-          dispatch(changeProfilePicture(res))
-          setIsUpdating(false);
-        })
+        updateProfileFromFile(user.userType, user.userID, newProfile).then(
+          (res) => {
+            dispatch(changeProfilePicture(res));
+            setIsUpdating(false);
+          }
+        );
       }
       if (`${firstName} ${lastName}` != user.fullname) {
-        updateFullname(user.userType, user.userID, `${firstName} ${lastName}`).then(() => {
-          dispatch(changeFullName(`${firstName} ${lastName}`))
+        updateFullname(
+          user.userType,
+          user.userID,
+          `${firstName} ${lastName}`
+        ).then(() => {
+          dispatch(changeFullName(`${firstName} ${lastName}`));
           setIsUpdating(false);
-        })
+        });
       }
     }
     setIsEdit(!isEdit);
-  }
+  };
 
   const ChangeFirstName = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.includes(" ")) {
@@ -66,7 +92,7 @@ function Profile() {
       return;
     }
     setFirstName(e.target.value);
-  }
+  };
 
   const ChangeLastName = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.includes(" ")) {
@@ -74,9 +100,7 @@ function Profile() {
       return;
     }
     setLastName(e.target.value);
-  }
-
-
+  };
 
   const classTextIsExist = " h-16 text-base font-medium text-[#505050]";
   const classTextNotExist = "h-16 text-base font-medium text-[#808080]";
@@ -86,8 +110,7 @@ function Profile() {
     } else {
       return classTextNotExist;
     }
-  }
-
+  };
 
   if (isFetching || isUpdating) {
     return (
@@ -107,8 +130,7 @@ function Profile() {
         {isEdit ? "บันทึก" : "แก้ไข"}
       </button>
     );
-  }
-
+  };
 
   const renderProfile = () => {
     return (
@@ -120,7 +142,12 @@ function Profile() {
               ทุกคนจะเห็นชื่อนี้บนโปรไฟล์ของคุณ คุณสามารถเปลี่ยนได้ทุกเมื่อ
             </p>
             <div className="flex flex-col items-start">
-              <label htmlFor="FirstName" className="font-semibold text-lg py-2 mt-4">ชื่อจริง</label>
+              <label
+                htmlFor="FirstName"
+                className="font-semibold text-lg py-2 mt-4"
+              >
+                ชื่อจริง
+              </label>
 
               {isEdit ? (
                 <input
@@ -130,10 +157,17 @@ function Profile() {
                   value={firstName}
                   type="text"
                   name="FirstName"
-                  id="FirstName" />
-              ) : <span className={classText(firstName)}>{firstName ? firstName : "คุณยังไม่ตั้งชื่อของคุณ"}</span>}
+                  id="FirstName"
+                />
+              ) : (
+                <span className={classText(firstName)}>
+                  {firstName ? firstName : "คุณยังไม่ตั้งชื่อของคุณ"}
+                </span>
+              )}
 
-              <label htmlFor="LastName" className="font-semibold text-lg py-2">นามสกุล</label>
+              <label htmlFor="LastName" className="font-semibold text-lg py-2">
+                นามสกุล
+              </label>
               {isEdit ? (
                 <input
                   onChange={ChangeLastName}
@@ -142,16 +176,26 @@ function Profile() {
                   className="border-2 border-gray-300 outline-none h-12 w-4/5 px-4 mb-4"
                   type="text"
                   name="LastName"
-                  id="LastName" />
-              ) : <span className={classText(lastName)}>{lastName ? lastName : "คุณยังไม่ตั้งนามสกุลของคุณ"}</span>}
+                  id="LastName"
+                />
+              ) : (
+                <span className={classText(lastName)}>
+                  {lastName ? lastName : "คุณยังไม่ตั้งนามสกุลของคุณ"}
+                </span>
+              )}
               {ButtonEditProfile()}
             </div>
           </div>
 
-
           <div className="flex flex-col avatar relative">
             <div className="w-40 h-40 rounded-full">
-              <img src={(isEdit && newProfile) ? URL.createObjectURL(newProfile) : user.profilePicture} />
+              <img
+                src={
+                  isEdit && newProfile
+                    ? URL.createObjectURL(newProfile)
+                    : user.profilePicture
+                }
+              />
             </div>
             <input
               type="file"
@@ -162,70 +206,98 @@ function Profile() {
                 handleNewProfileChange(e);
               }}
             />
-            {isEdit ? <button className="bg-gray-100 font-semibold w-20 absolute top-40 left-24"
-              onClick={() => { document.getElementById("editProfilePicture").click() }}>
-              แก้ไข
-            </button> : <></>}
+            {isEdit ? (
+              <button
+                className="bg-gray-100 font-semibold w-20 absolute top-40 left-24"
+                onClick={() => {
+                  document.getElementById("editProfilePicture").click();
+                }}
+              >
+                แก้ไข
+              </button>
+            ) : (
+              <></>
+            )}
           </div>
         </div>
       </div>
-    )
-  }
-
+    );
+  };
 
   const handleChangePassword = (newPassword: string) => {
-    changePassword(newPassword).then(() => {
-      (document.getElementById("my_modal_2") as HTMLDialogElement).close()
-      Swal.fire({
-        icon: 'success',
-        title: 'เปลี่ยนรหัสผ่านสำเร็จ',
-        showConfirmButton: false,
-        timer: 1500
+    changePassword(newPassword)
+      .then(() => {
+        (document.getElementById("my_modal_2") as HTMLDialogElement).close();
+        Swal.fire({
+          icon: "success",
+          title: "เปลี่ยนรหัสผ่านสำเร็จ",
+          showConfirmButton: false,
+          timer: 1500,
+        });
       })
-    }).catch(() => {
-      (document.getElementById("my_modal_2") as HTMLDialogElement).close()
-      Swal.fire({
-        icon: 'error',
-        title: 'เปลี่ยนรหัสผ่านไม่สำเร็จ',
-        showConfirmButton: false,
-        timer: 2000
-      })
-    })
-  }
+      .catch(() => {
+        (document.getElementById("my_modal_2") as HTMLDialogElement).close();
+        Swal.fire({
+          icon: "error",
+          title: "เปลี่ยนรหัสผ่านไม่สำเร็จ",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+      });
+  };
 
   const renderSetting = () => {
     return (
       <div className="w-4/5 h-full">
-        <dialog id="my_modal_2" className="modal" onClose={() => {
-          setConfirmPassword("")
-          setNewPassword("")
-        }}>
+        <dialog
+          id="my_modal_2"
+          className="modal"
+          onClose={() => {
+            setConfirmPassword("");
+            setNewPassword("");
+          }}
+        >
           <div className="modal-box">
             <div className="form-control w-full max-w-xs">
               <label className="label">
                 <span className="label-text">รหัสผ่านใหม่</span>
               </label>
-              <input type="text" placeholder="รหัสผ่านใหม่" className="input input-bordered w-full max-w-xs" value={newPassword}
+              <input
+                type="text"
+                placeholder="รหัสผ่านใหม่"
+                className="input input-bordered w-full max-w-xs"
+                value={newPassword}
                 onChange={(e) => {
-                  setNewPassword(e.target.value)
-                }} />
+                  setNewPassword(e.target.value);
+                }}
+              />
               <label className="label">
                 <span className="label-text">ยืนยันรหัสผ่านใหม่</span>
               </label>
-              <input type="text" placeholder="ยืนยันรหัสผ่านใหม่" className="input input-bordered w-full max-w-xs"
-                value={confirmPassword} onChange={(e) => { setConfirmPassword(e.target.value) }} />
+              <input
+                type="text"
+                placeholder="ยืนยันรหัสผ่านใหม่"
+                className="input input-bordered w-full max-w-xs"
+                value={confirmPassword}
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                }}
+              />
             </div>
-            <button className="btn mt-5" onClick={() => {
-              if (newPassword != confirmPassword) {
-                alert("รหัสผ่านไม่ตรงกัน")
-                return
-              }
-              if (newPassword.length < 6) {
-                alert("รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร")
-                return
-              }
-              handleChangePassword(newPassword)
-            }}>
+            <button
+              className="btn mt-5"
+              onClick={() => {
+                if (newPassword != confirmPassword) {
+                  alert("รหัสผ่านไม่ตรงกัน");
+                  return;
+                }
+                if (newPassword.length < 6) {
+                  alert("รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร");
+                  return;
+                }
+                handleChangePassword(newPassword);
+              }}
+            >
               ตกลง
             </button>
           </div>
@@ -234,18 +306,24 @@ function Profile() {
           </form>
         </dialog>
         <div className="flex flex-col items-start pt-20">
-          <label
-            className="font-semibold text-xl py-4"
-            htmlFor="Email"
-          >Email</label>
-          <p className="font-semibold text-[#808080] border-2 w-96 bg-[#f5f5f580] px-4 py-4">{user.email}</p>
-          <label
-            className="font-semibold text-xl py-4"
-            htmlFor="Password"
-          >Password</label>
-          <p className="font-semibold tracking-[6px] text-[#808080] bg-[#f5f5f580] p-4 border-2 w-96 ">**********</p>
+          <label className="font-semibold text-xl py-4" htmlFor="Email">
+            Email
+          </label>
+          <p className="font-semibold text-[#808080] border-2 w-96 bg-[#f5f5f580] px-4 py-4">
+            {user.email}
+          </p>
+          <label className="font-semibold text-xl py-4" htmlFor="Password">
+            Password
+          </label>
+          <p className="font-semibold tracking-[6px] text-[#808080] bg-[#f5f5f580] p-4 border-2 w-96 ">
+            **********
+          </p>
           <button
-            onClick={() => (document.getElementById('my_modal_2') as HTMLDialogElement).showModal()}
+            onClick={() =>
+              (
+                document.getElementById("my_modal_2") as HTMLDialogElement
+              ).showModal()
+            }
             type="button"
             className=" text-[#068FFF] text-xl rounded-md font-semibold mt-4"
           >
@@ -253,9 +331,8 @@ function Profile() {
           </button>
         </div>
       </div>
-    )
-  }
-
+    );
+  };
 
   return (
     <div className="flex flex-col items-center h-full relative">
@@ -277,9 +354,7 @@ function Profile() {
       </div>
       <div className="h-3 w-full bg-gray-200 absolute top-14 z-0"></div>
 
-      {selectProfile ? (
-        renderProfile()
-      ) : renderSetting()}
+      {selectProfile ? renderProfile() : renderSetting()}
     </div>
   );
 }

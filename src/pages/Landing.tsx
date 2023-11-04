@@ -53,7 +53,7 @@ function Landingmiddle() {
                         <div className="pt-[10%]">
                             <button className="bg-[#18334E] hover:bg-blue-900 text-white font-semibold py-4 px-5 border border-gray-400 rounded shadow"
                                 onClick={() => { navigate("/home") }}>
-                                ดูคอส/คลาสเรียนทั้งหมด
+                                ดูคอร์ส/คลาสเรียนทั้งหมด
                             </button>
                         </div>
                         <div className="flex pt-[15%]">

@@ -1,11 +1,10 @@
 import {
   faBook,
-  faBookmark,
   faCartShopping,
   faRightFromBracket,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import booklogo from "../assets/images/bookLogo.png";
@@ -27,7 +26,9 @@ function MainBar() {
     (state: RootState) => state.basket.isFetchOnce
   );
   const dispatcher = useDispatch();
-  const [openDropdown, setOpenDropdown] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState<
+    "mycartdropdown" | "userdropdown"
+  >(null);
   const navigate = useNavigate();
   const toggleDropdown = (dropdownName) => {
     if (openDropdown === dropdownName) {
@@ -36,6 +37,31 @@ function MainBar() {
       setOpenDropdown(dropdownName);
     }
   };
+  const cartDropdownRef = useRef(null);
+  const userDropdownRef = useRef(null);
+  useEffect(() => {
+    if (openDropdown === null) return;
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        openDropdown === "mycartdropdown" &&
+        cartDropdownRef.current &&
+        !cartDropdownRef.current.contains(event.target)
+      ) {
+        setOpenDropdown(null);
+      }
+      if (
+        openDropdown === "userdropdown" &&
+        userDropdownRef.current &&
+        !userDropdownRef.current.contains(event.target)
+      ) {
+        setOpenDropdown(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [openDropdown]);
   const itemsInBasket = basketItems.length;
   const handleClickBasket = () => {
     async function fetchBasket() {
@@ -116,6 +142,7 @@ function MainBar() {
 
               {/* Mycart dropdown menu */}
               <div
+                ref={cartDropdownRef}
                 className="flex flex-col  absolute w-[320px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
                 style={{
                   display: openDropdown === "mycartdropdown" ? "block" : "none",
@@ -170,6 +197,7 @@ function MainBar() {
 
                 {/* User dropdown menu */}
                 <div
+                  ref={userDropdownRef}
                   style={{
                     display: openDropdown === "userdropdown" ? "block" : "none",
                     top: "90%",

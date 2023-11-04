@@ -99,7 +99,7 @@ function MainBar() {
   return (
     <nav
       style={{ height: "100px", zIndex: 1000 }}
-      className="fixed bg-white border-b-2 flex justify-around  w-screen  py-5"
+      className="fixed bg-white border-b-2 flex justify-between  w-screen  py-5"
     >
       <div className="flex flex-row items-center justify-center pl-12">
         <div className="px-2">
@@ -115,7 +115,7 @@ function MainBar() {
         </button>
       </div>
       <SearchBar />
-      <div className="flex items-center my-2 pl-3 pr-3 w-[300px]">
+      <div className={`flex items-center my-2 pl-3 pr-3 w-[300px] ${user.userType === "teacher" ? "justify-around " : ""}}`}>
         {user && user.userType === "teacher" ? null : (
           <div className=" col-span-3 grid grid-cols-2 pr-4">
             <button className="px-3 mx-2">
@@ -146,7 +146,7 @@ function MainBar() {
                 className="flex flex-col  absolute w-[320px] bg-white border border-gray-300 rounded-lg shadow divide-y divide-gray-100"
                 style={{
                   display: openDropdown === "mycartdropdown" ? "block" : "none",
-                  top: "90%",
+                  top: "100%",
                   right: "13%",
                 }}
               >
@@ -186,7 +186,7 @@ function MainBar() {
           if (user) {
             return (
               <button
-                className="w-[50px] h-[50px] justify-self-center"
+                className="w-[50px] h-[50px]"
                 onClick={() => toggleDropdown("userdropdown")}
               >
                 <img

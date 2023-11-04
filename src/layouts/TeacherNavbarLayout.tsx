@@ -4,8 +4,7 @@ import TeacherNavBar from "../components/TeacherNavBar"
 import { useUser } from "../hooks/useUser"
 
 function TeacherNavbarLayout() {
-    const { user, isFetching } = useUser()
-    if (isFetching) return (<div>Loading...</div>)
+    const { user } = useUser()
     if (user === undefined || user.userType !== "teacher") {
         return (
             <h1 className=" flex justify-center items-center h-screen font-bold text-7xl">How You get Here</h1>

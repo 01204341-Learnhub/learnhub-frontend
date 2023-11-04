@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { LoadingSpash } from "../../components/LoadingSpash";
 import Calendar from "../../features/learns/components/Calendar";
 import ClassCard from "../../features/teaches/components/ClassCard";
 import CourseCard from "../../features/teaches/components/CourseCard";
@@ -16,7 +17,13 @@ function TeacherOverview() {
     navigate(`/teach/create/${type}`);
   }
 
-  if (isFetchingCourse || isFetchingClasses) return <div>loading...</div>;
+  if (isFetchingCourse || isFetchingClasses) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <LoadingSpash />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col px-8 pb-6">

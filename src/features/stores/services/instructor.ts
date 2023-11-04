@@ -6,7 +6,8 @@ import { InstructorProfile } from "../types/instructor";
 import { ResponseTeacherInfo } from "../types/response";
 
 async function getInstructor(teacherID: string) {
-  const url = `${BASE_URL}${teacherID}`;
+  const url = `${BASE_URL}/users/teachers/${teacherID}`;
+  console.log(url)
   const res = await axios.get<ResponseTeacherInfo>(url);
   const fetchedCourses = await listTeachCourse(teacherID);
   const fetchedClasses = await listTeacherClasses(teacherID);

@@ -65,25 +65,27 @@ function MainBar() {
         })
     }
     return (
-        <nav style={{ height: '100px', zIndex: 1000 }} className='fixed bg-white border-b-2 flex w-screen  py-5'>
-            <div className=' flex flex-row items-center justify-center w-1/12'>
-                <img className=' w-2/5' src={booklogo} alt="booklogo" />
+        <nav style={{ height: '100px', zIndex: 1000 }} className='fixed bg-white border-b-2 flex justify-around  w-screen  py-5'>
+            <div className='flex flex-row items-center justify-center pl-12'>
+                <div className='px-2'>
+                    <img className='w-full' src={booklogo} alt="booklogo" />
+                </div>
+                <button className='flex flex-row items-center' onClick={() => { navigate("/home") }}>
+                    <img src={namelogo} alt="namelogo" className='w-full' />
+                </button>
             </div>
-            <button className='flex flex-row items-center w-2/12' onClick={() => { navigate("/home") }}>
-                <img src={namelogo} alt="namelogo" />
-            </button>
-            {user && user.userType === 'teacher' ? <div className='w-7/12 py-2 px-2' /> : (
+            {user && user.userType === 'teacher' ? <div className='w-11/12 py-2 px-2' /> : (
                 <SearchBar />
             )}
-            <div className='flex items-center my-2 pl-24 pr-6 bg-white'>
+            <div className='flex items-center my-2 pl-3 pr-3 w-[300px]'>
                 {user && user.userType === 'teacher' ? null : (
-                    <div className=' col-span-3 grid grid-cols-2'>
-                        <button className='px-2 mx-2'>
+                    <div className=' col-span-3 grid grid-cols-2 pr-4'>
+                        <button className='px-3 mx-2'>
                             <Link to={"/learn/overview"}>
                                 <FontAwesomeIcon icon={faBook} size='xl' />
                             </Link>
                         </button>
-                        <button className=' flex justify-center items-center relative' onClick={handleClickBasket}>
+                        <button className=' flex justify-center items-center relative pr-2' onClick={handleClickBasket}>
                             <div className=' flex relative'>
                                 <FontAwesomeIcon icon={faCartShopping} size='xl' color={openDropdown === 'mycartdropdown' ? 'red' : 'none'} />
                                 <div className={itemsInBasket === 0 ? "hidden" : ""}>
@@ -120,13 +122,12 @@ function MainBar() {
 
                     </div>
                 )}
-            </div>
-            {
+                {
                 (() => {
                     if (user) {
                         return (
                             <button
-                                className="w-[50px] h-[50px] mr-3 justify-self-center"
+                                className="w-[50px] h-[50px] justify-self-center"
                                 onClick={() => toggleDropdown('userdropdown')}
                             >
                                 <img src={user.profilePicture} alt="profile" className=' h-full rounded-full object-cover aspect-square' />
@@ -213,6 +214,8 @@ function MainBar() {
                     }
                 })()
             }
+            </div>
+            
 
         </nav>
 

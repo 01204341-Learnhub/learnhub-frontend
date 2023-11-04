@@ -1,5 +1,3 @@
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
 import { LoadingSpash } from "../../components/LoadingSpash";
 import CourseCard from "../../features/teaches/components/CourseCard";
@@ -9,7 +7,12 @@ import { useTeachCourses } from "../../features/teaches/hooks/useTeachCourses";
 function TeachingCourses() {
   const { courses, isFetchingCourse } = useTeachCourses()
   const navigate = useNavigate();
-  if (isFetchingCourse) return <div>loading...</div>;
+  if (isFetchingCourse) 
+    return(
+      <div className="flex w-full h-full justify-center">
+        {LoadingSpash()}
+      </div>
+  );
   function handleNavigate(type: string) {
     navigate(`/teach/create/${type}`);
   }

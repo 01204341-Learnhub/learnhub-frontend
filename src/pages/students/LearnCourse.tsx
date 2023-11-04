@@ -78,9 +78,10 @@ function _LessonDisplay({ lesson, progress, onLessonEnd, onUpdateProgress }: _Le
         }
     } else if (lesson.lessonType == "files" || lesson.lessonType == "file") {
         return (
-            <div className="flex rounded-xl h-[120px] bg-white w-full " >
-                <div className='flex justify-center items-center w-[70%] border-2 h-full text-center py-2'>
-                    <a className="text-blue-500" target='_blank' href={lesson.src}>
+            <div className="flex rounded-xl justify-center h-[200px] w-full " >
+                <div className='flex flex-col bg-white w-4/5 pt-4 px-4 border-2 h-full py-2'>
+                    <p className="text-3xl font-semobold">เอกสารที่สามารถดาวโหลดได้</p>
+                    <a className="text-blue-500 py-2" target='_blank' href={lesson.src}>
                         {getFileNameFromSrc(lesson.src)}
                     </a>
                 </div>

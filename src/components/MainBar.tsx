@@ -227,21 +227,6 @@ function MainBar() {
                     ) : (
                       <></>
                     )}
-                    {user.userType === "student" ? (
-                      <li>
-                        <a className="block px-8 py-2 text-[18px] font-medium text-black text-left hover:bg-gray-100 ">
-                          หลักสูตรที่อยากได้
-                          <FontAwesomeIcon
-                            icon={faBookmark}
-                            size="xl"
-                            color="#F1C93B"
-                            className="mx-3"
-                          />
-                        </a>
-                      </li>
-                    ) : (
-                      <></>
-                    )}
                   </ul>
                   <ul>
                     <li>

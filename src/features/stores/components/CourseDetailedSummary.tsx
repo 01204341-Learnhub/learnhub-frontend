@@ -94,17 +94,9 @@ function CourseDetailedSummary(
     <>
       <div className="card flex w-[518px] h-[544px] bg-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[5px] cursor-pointer">
         <div className="flex justify-between content-center items-center mx-[10%] pt-[2%]">
-          <p className="font-bold	text-[32px]">
+          <p className="font-bold	text-[32px] my-4">
             {myCourseDetailedSummary.costs} บาท
           </p>
-          {user.userType == "student" ? (
-            <button className="flex justify-between items-center content-center  text-base h-[52px] bg-[#D9D9D9] rounded-2xl px-[5%] my-4">
-              <FontAwesomeIcon icon={faHeart} color="#FF2171" size="2xl" />
-              <p className="font-bold	pl-2">เพิ่มในการเรียนรู้ที่อยากได้</p>
-            </button>
-          ) : (
-            <></>
-          )}
         </div>
         <div className="flex justify-center">
           <div className="flex justify-between w-[412px] h-[72.339px] border-2 border-gray-300 rounded-xl mt-2">

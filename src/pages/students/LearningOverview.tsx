@@ -156,7 +156,6 @@ function LearningOverview() {
 
                 <div className="self-start w-[400px]">
                     <h1 className="font-bold text-2xl pb-4">ประกาศจากผู้สอน</h1>
-                    <div className="flex flex-col justify-center  bg-white drop-shadow-lg py-6">
                         <div className="flex items-center px-2 pt-2 pb-4">
                             <span className="text-xl px-1 font-semibold">ประกาศจากผู้สอน</span>
                             <span className="px-1 truncate font-semibold text-xl">classname</span>
@@ -179,8 +178,7 @@ function LearningOverview() {
                                     </li>
                                 </Link>
                             )
-                        }) : <div className="w-[550px] ml-14 mt-2">ไม่มีประกาศจากผู้สอนเร็วๆนี้</div>}
-                    </div>
+                        }) : <div className="w-[550px] ml-14 mt-2"><h1>ไม่มีประกาศจากผู้สอนเร็วๆนี้</h1></div>}
                 </div>
             </div>
         </div>

@@ -74,9 +74,7 @@ function MainBar() {
                     <img src={namelogo} alt="namelogo" className='w-full' />
                 </button>
             </div>
-            {user && user.userType === 'teacher' ? <div className='w-11/12 py-2 px-2' /> : (
-                <SearchBar />
-            )}
+            <SearchBar />
             <div className='flex items-center my-2 pl-3 pr-3 w-[300px]'>
                 {user && user.userType === 'teacher' ? null : (
                     <div className=' col-span-3 grid grid-cols-2 pr-4'>
@@ -112,9 +110,11 @@ function MainBar() {
                                     </div>
                                 </div>
                                 <h1 className=' font-bold text-[20px]'>{basketItems.reduce((acc, item) => acc + item.price, 0)} บาท</h1>
-                                <div className='bg-[#d9d9d9] px-[40px] py-3 m-2'>
-                                    <Link to={{ pathname: "/baskets" }} className=' font-semibold text-[20px]'>ไปยังรถเข็น</Link>
-                                </div>
+                                    <Link to={{ pathname: "/baskets" }} className='w-full h-full bg-red-50'>
+                                        <div className='bg-[#d9d9d9] px-[40px] py-3 m-3'>
+                                            <p className=' font-semibold text-[20px]'>ไปยังรถเข็น</p>
+                                        </div>
+                                    </Link>
                             </div>
                         </button>
 

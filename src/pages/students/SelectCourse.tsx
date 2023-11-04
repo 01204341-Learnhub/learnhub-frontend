@@ -74,7 +74,7 @@ export default function SelectCourse() {
     } else if (rating == 2) {
       return "แย่ น่าผิดหวัง";
     } else if (rating == 3) {
-      return "ปานกลาง นน่าจะดีกว่านี้";
+      return "ปานกลาง น่าจะดีกว่านี้";
     } else if (rating == 4) {
       return "ดี ตามที่คาดหวัง";
     } else if (rating == 5) {

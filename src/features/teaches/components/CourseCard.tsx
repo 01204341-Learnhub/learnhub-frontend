@@ -27,11 +27,9 @@ export default function CourseCard(myCoursesCard: CourseCardProps) {
         จำนวนผู้เรียน {myCoursesCard.studentCount} คน
       </div>
       <div className="absolute right-[12px] bottom-[12px]">
-        <button className="w-[60px] h-[30px] rounded-full bg-gray-600 hover:shadow-xl hover:bg-gray-800">
-          <Link to={`/teach/update-course/${myCoursesCard.courseID}`} className="text-[14px] text-base-200 font-semibold text-center">
-            แก้ไข
+          <Link to={`/teach/update-course/${myCoursesCard.courseID}`}  className="py-1 px-3.5 w-[60px] h-[30px] rounded-full bg-gray-600 hover:shadow-xl hover:bg-gray-800 text-[14px] text-base-200 font-semibold text-center">
+              แก้ไข
           </Link>
-        </button>
       </div>
     </div>
   );

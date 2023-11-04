@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useTeachIncomes } from "../../features/teaches/hooks/useIncomes"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faChevronDown, faChevronUp } from "@fortawesome/free-solid-svg-icons"
+import { LoadingSpash } from "../../components/LoadingSpash"
 
 
 
@@ -18,7 +19,7 @@ function TeacherIncomes(){
         return total_price
     }
 
-    if (isFetchingsIncomes) return <div>loading...</div>;
+    if (isFetchingsIncomes) return <div className="flex w-full h-full justify-center">{LoadingSpash()}</div>;
     const _renderCourseIncomes = () => {
         const courseIncomes = incomes.filter((income) => income.type==courseType && ((isShowMonth  && _isDateWithinNextMonth(income.purchaseTime)) || !isShowMonth))
                         .reduce(function (r,income ) {

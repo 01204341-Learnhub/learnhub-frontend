@@ -1,4 +1,4 @@
-import { faMagnifyingGlass, faX } from "@fortawesome/free-solid-svg-icons";
+import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import Swal from "sweetalert2";
@@ -61,7 +61,7 @@ export default function SelectCourse() {
       title: "สำเร็จ",
       text: "คุณได้ให้คะแนนหลักสูตรนี้แล้ว",
       icon: "success",
-      timer: 1500,
+      timer: 2000,
     });
     setShowModal(false);
     setRating(0);
@@ -80,11 +80,11 @@ export default function SelectCourse() {
     } else if (rating == 5) {
       return "ดีมาก เกินความคาดหวัง";
     } else {
-      return "เลือกการให้คะแนน";
+      return "เลือกจำนวนดาวเพื่อให้คะแนน";
     }
   }
 
-  function renderModalAddReview(courseID: string) {
+  function renderModalAddReview(courseID: string, ratingCourse: number) {
 
     return (
 
@@ -98,7 +98,7 @@ export default function SelectCourse() {
           />
 
           <h1 className="text-3xl font-bold h-1/5">
-            {isReview ? ("แก้ไขคะแนนหลักสูตรนี้") : ("คุณจะให้คะแนนหลักสูตรนี้เท่าไร")}
+            {ratingCourse > 0 ? ("แก้ไขคะแนนหลักสูตรนี้") : ("คุณจะให้คะแนนหลักสูตรนี้เท่าไร")}
           </h1>
           <p className="my-4 font-semibold text-lg">{renderWordRatting()}</p>
           <div className="rating rating-lg flex flex-row justify-center items-center px-3 py-2">
@@ -149,7 +149,7 @@ export default function SelectCourse() {
               onClick={() => handleClickSendRating(courseID)}
               className="bg-blue-500 btn text-lg text-white px-3 py-2 rounded-md mt-4"
             >
-              {isReview ? ("แก้ไขคะแนน") : ("ให้คะแนน")}
+              {ratingCourse > 0 ? ("แก้ไขคะแนน") : ("ให้คะแนน")}
             </button>
           )}
         </div>
@@ -237,7 +237,7 @@ export default function SelectCourse() {
       <h1 className="ml-5 text-xl font-bold mt-20">{enrolledCourses.length!=0? 'คอร์สเรียน':''}</h1>
       <ul className="grid grid-cols-5 mx-5">
         {enrolledCourses.map(
-          ({ courseID, name, thumbnailUrl, teacher, progress }) => {
+          ({ courseID, name, thumbnailUrl, teacher, progress, rating }) => {
             if (shouldShow(progress))
               return (
                 <li
@@ -267,9 +267,7 @@ export default function SelectCourse() {
                     </button>
                     {showModal ? (
                       <>
-                        {isReview ? (renderModalAddReview(courseID)) : (
-                          (renderModalAddReview(courseID))
-                        )}
+                        {renderModalAddReview(courseID, rating)}
                       </>
                     ) : null}
                   </div>

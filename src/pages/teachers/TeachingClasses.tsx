@@ -316,7 +316,7 @@ function TeachingClasses() {
             <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-12 h-12 m-2 rounded-full">
               <img
                 src={user.profilePicture}
-                className="rounded-full object-cover aspect-square"
+                className="rounded-full object-cover aspect-square h-12 w-12"
               />
             </div>
             <h1 className=" text-gray-600 font-bold ml-5">{user.fullname}</h1>
@@ -337,7 +337,7 @@ function TeachingClasses() {
                   <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-12 h-12 m-2 rounded-full">
                     <img
                       src={student.avatarURL}
-                      className="rounded-full object-cover aspect-square"
+                      className="rounded-full object-cover aspect-square w-12 h-122"
                     />
                   </div>
                   <h1 className=" text-gray-600 font-bold ml-5">

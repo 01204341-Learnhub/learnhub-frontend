@@ -1,6 +1,7 @@
 import { faPaperclip, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
+import ReactPlayer from "react-player";
 import VideoPlayer from "../../../components/VideoPlayer";
 import { uploadFile } from "../../../services/uploader/file";
 import { Lesson } from "../types/course";
@@ -65,7 +66,7 @@ function VideoLessonCreate({
       return
     }
     if (fileSrc == undefined && urlSrc == "") {
-      alert("กรุณาใส่ไฟล์");
+      alert("กรุณาใส่ไฟล์หรือลิ้งค์");
       return
     }
     if (fileSrc != undefined) {
@@ -134,6 +135,11 @@ function VideoLessonCreate({
               <div className="modal-action">
                 <form method="dialog">
                   <button className="btn" onClick={() => {
+                    if (!ReactPlayer.canPlay(urlSrc)) {
+                      alert("ลิ้งค์ไม่ถูกต้อง");
+                      setUrlSrc("");
+                      return;
+                    }
                     setUrlSrc(urlSrc);
                     setFileSrc(undefined);
                   }}>ตกลง</button>

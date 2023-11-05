@@ -1,8 +1,8 @@
-import { CreatingClassContext } from "../../../pages/teachers/CreateClass.tsx";
 import React, { useContext, useEffect, useRef } from "react";
-import { Tag } from "../types/tags.ts";
+import { CreatingClassContext } from "../../../pages/teachers/CreateClass.tsx";
 import { uploadFile } from "../../../services/uploader/file.ts";
 import { listTags } from "../services/tags.ts";
+import { Tag } from "../types/tags.ts";
 
 function _Name() {
   const creatingClassContext = useContext(CreatingClassContext);

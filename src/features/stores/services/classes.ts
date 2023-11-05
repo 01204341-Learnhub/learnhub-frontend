@@ -1,11 +1,11 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { ClassProgram, ClassProgramDetail } from "../types/class";
 import { GetClassResponse, ListClassesResponse } from "../types/response";
 
 async function listClass() {
   return [];
 }
-const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function getNewClasses(num: number) {
   const newClasses = [];
@@ -35,7 +35,7 @@ async function getNewClasses(num: number) {
 }
 
 async function listAllClasses(): Promise<ClassProgram[]> {
-  const url = `${baseURL}/programs/classes`;
+  const url = `${BASE_URL}/programs/classes`;
   const res = await axios.get<ListClassesResponse>(url);
   const classes = res.data.classes.map<ClassProgram>((c) => {
     return {
@@ -66,7 +66,7 @@ async function listAllClasses(): Promise<ClassProgram[]> {
 }
 
 async function getClasses(classID: string) {
-  const url = `${baseURL}/programs/classes/${classID}`;
+  const url = `${BASE_URL}/programs/classes/${classID}`;
   const res = await axios.get<GetClassResponse>(url);
   const classProgram: ClassProgramDetail = {
     classID: classID,

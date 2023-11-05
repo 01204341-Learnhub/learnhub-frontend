@@ -2,8 +2,10 @@ import { faEnvelope, faUnlockKeyhole, faUser } from "@fortawesome/free-solid-svg
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import smolRobotImage from "../../src/assets/images/smolRobot.webp";
+import ConnectingSplash from "../components/ConnectingSplash";
 import { createStudentWithEmail } from "../services/auth/createUser";
-import smolRobotImage from "../../src/assets/images/smolRobot.webp"
 
 function StudentsRegister() {
     const navigate = useNavigate();
@@ -13,6 +15,7 @@ function StudentsRegister() {
     const [firstname, setFirstname] = useState('');
     const [lastname, setLastname] = useState('');
     const [confirmpassword, setConfirmPassword] = useState('');
+    const [isRegistering, setIsRegistering] = useState(false);
 
     const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setUsername(event.target.value);
@@ -39,41 +42,55 @@ function StudentsRegister() {
 
     const handleRegister = async () => {
         if (password !== confirmpassword) {
-            alert("Password and Confirm Password not match");
+            alert("รหัสผ่านไม่ตรงกัน");
             return
-        } else if(firstname.trim().includes(' ') || lastname.trim().includes(' ')){
+        } else if (firstname.trim().includes(' ') || lastname.trim().includes(' ')) {
             alert("Firstname or Lastname contains whitespace");
             return
         }
 
         try {
             const fullname = firstname.trim() + " " + lastname.trim();
+            setIsRegistering(true);
             await createStudentWithEmail(email, password, username, fullname)
-            navigate('/login', { replace: true });
+            Swal.fire({
+                title: 'สมัครสมาชิกสำเร็จ',
+                icon: 'success',
+                confirmButtonText: 'ตกลง'
+            }).then(() => {
+                navigate("/login", { replace: true });
+            })
         } catch (error) {
-            alert(`cannot register ${error}`);
+            Swal.fire({
+                title: 'สมัครสมาชิกไม่สำเร็จ',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'ตกลง'
+            })
+        } finally {
+            setIsRegistering(false);
         }
     }
-
     return (
         <div className=" bg-gray-300 h-screen">
+            {isRegistering && <ConnectingSplash />}
             <div className="grid grid-cols-2">
-        <div className=" h-screen">
-          <img
-            src={smolRobotImage}
-            alt="smolRobotImage"
-            className=" z-0 w-full h-full relative object-cover"
-            overflow-hidden={true}
-          ></img>
-          <button
-            onClick={() => {
-              navigate("/register", { replace: true });
-            }}
-            className="absolute top-6 text-[30px] text-white ml-[2%]"
-          >
-            Back
-          </button>
-        </div>
+                <div className=" h-screen">
+                    <img
+                        src={smolRobotImage}
+                        alt="smolRobotImage"
+                        className=" z-0 w-full h-full relative object-cover"
+                        overflow-hidden={true}
+                    ></img>
+                    <button
+                        onClick={() => {
+                            navigate("/register", { replace: true });
+                        }}
+                        className="absolute top-6 text-[30px] text-white ml-[2%]"
+                    >
+                        Back
+                    </button>
+                </div>
 
                 <div className="bg-white h-screen flex flex-col justify-center items-center">
                     <div className="">
@@ -112,7 +129,7 @@ function StudentsRegister() {
                             <input
                                 type="text"
                                 className="border-none outline-none text-[24px] text-black w-full bg-white"
-                                placeholder="Username"
+                                placeholder="ชื่อบัญชีผู้ใช้"
                                 value={username}
                                 onChange={handleUsernameChange}
                             />
@@ -124,7 +141,7 @@ function StudentsRegister() {
                             <input
                                 type="email"
                                 className="border-none outline-none text-[24px] text-black w-full bg-white"
-                                placeholder="Email"
+                                placeholder="อีเมล"
                                 value={email}
                                 onChange={handleEmailChange}
                             />
@@ -136,7 +153,7 @@ function StudentsRegister() {
                             <input
                                 type="password"
                                 className="border-none outline-none text-[24px] text-black w-full bg-white"
-                                placeholder="Password"
+                                placeholder="รหัสผ่าน"
                                 value={password}
                                 onChange={handlePasswordChange}
                             />
@@ -148,7 +165,7 @@ function StudentsRegister() {
                             <input
                                 type="password"
                                 className="border-none outline-none text-[24px] text-black w-full bg-white"
-                                placeholder="Confirm Password"
+                                placeholder="ยืนยันรหัสผ่าน"
                                 value={confirmpassword}
                                 onChange={handleConfirmPasswordChange}
                             />

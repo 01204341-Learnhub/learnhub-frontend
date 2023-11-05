@@ -237,9 +237,9 @@ function checkReadyToPublish(course: Course) {
     course.thumbnailUrl !== "" &&
     course.level !== "" &&
     course.instructorName !== "" &&
-    course.description !== "" &&
-    course.objectives.every((objective) => objective !== "") &&
-    course.requirement !== "" &&
+    course.description.trim() !== "" &&
+    course.objectives.every((objective) => objective.trim() !== "") &&
+    course.requirement.trim() !== "" &&
     course.chapters.length !== 0 &&
     course.chapters.every((chapter) => chapter.lessons.length !== 0) &&
     course.chapters.every((chapter) =>
@@ -275,6 +275,7 @@ function CreateCourse() {
   const { user } = useUser();
   const teacherID = user.userID;
   const [chapterToEdit, setChapterToEdit] = useState(-1)
+  const [isPublishing, setIsPublishing] = useState<boolean>(false);
   const [course, setCourse] = useState<Course>({
     courseId: "1234567890", // TODO: Get an ID, possibly uuid.
     name: "",
@@ -318,9 +319,16 @@ function CreateCourse() {
       if (!checkReadyToPublish(course)) throw new Error("ยังกรอกข้อมูลไม่ครบ")
       await createCourse(course, teacherID);
     }
+    setIsPublishing(true);
     publishCourse().then(() => {
-      alert("Course published!");
-      navigate("/teach/overview");
+      Swal.fire({
+        title: "เผยแพร่คอร์สสำเร็จ",
+        text: "คอร์สของคุณได้ถูกเผยแพร่แล้ว",
+        icon: "success",
+        confirmButtonText: "ตกลง",
+      }).then(() => {
+        navigate("/teach/overview");
+      })
     }).catch((err) => {
       Swal.fire({
         title: "เกิดข้อผิดพลาดในการเผยแพร่คอร์ส",
@@ -328,10 +336,18 @@ function CreateCourse() {
         icon: "error",
         confirmButtonText: "ตกลง",
       })
+    }).finally(() => {
+      setIsPublishing(false);
     })
 
   };
-
+  if (isPublishing) {
+    return (
+      <div className="flex flex-col justify-center items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
+        <h1 className="text-black font-semibold text-[32px]">กำลังเผยแพร่คอร์ส</h1>
+      </div>
+    )
+  }
   if (initializedCourse === false) {
     return (
       <div className="flex flex-col justify-start items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">

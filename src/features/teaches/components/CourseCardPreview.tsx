@@ -21,7 +21,7 @@ function CourseCardPreview({
     <div className="m-2 rounded-[20px] w-[286px] h-[350px] max-w-sm overflow-hidden shadow-lg bg-white">
       <div className=" w-[286px] h-[146px]">
         <img
-          className="w-full h-[146px]"
+          className="w-full h-[146px] object-cover"
           src={courseThumbnailUrl}
           alt="Larm On Chang"
         />

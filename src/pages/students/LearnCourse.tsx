@@ -1,5 +1,5 @@
-import { useReducer, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useEffect, useReducer, useState } from "react"
+import { useParams, useSearchParams } from "react-router-dom"
 import { LoadingSpash } from "../../components/LoadingSpash"
 import ChapterOutline from "../../features/learns/components/ChapterOutline"
 import CourseAnnouncementDropdown from "../../features/learns/components/CourseAnnouncementDropdown"
@@ -14,6 +14,7 @@ import { CourseLesson } from "../../features/learns/types/lessons"
 import { StudentCourseLessonProgress, StudentCourseProgress } from "../../features/learns/types/progress"
 import { useAnnouncementsCourses } from "../../features/stores/hooks/useListAnnouncementsCourses"
 import { useUser } from "../../hooks/useUser"
+import { getFileNameFromSrc } from "../../utils/functions"
 
 interface _CourseContentProp {
     chapters: CourseChapter[]
@@ -59,7 +60,7 @@ function _LessonDisplay({ lesson, progress, onLessonEnd, onUpdateProgress }: _Le
     } else if (lesson.lessonType == "quiz") {
         if (progress.finished) {
             return (
-                <div className="w-f">
+                <div className="w-full">
                     <CourseMultipleChoiceQuizReport quizID={lesson.src} />
                 </div>
             )
@@ -75,6 +76,17 @@ function _LessonDisplay({ lesson, progress, onLessonEnd, onUpdateProgress }: _Le
                 </div>
             )
         }
+    } else if (lesson.lessonType == "files" || lesson.lessonType == "file") {
+        return (
+            <div className="flex rounded-xl justify-center h-[200px] w-full " >
+                <div className='flex flex-col bg-white w-4/5 pt-4 px-4 border-2 h-full py-2'>
+                    <p className="text-3xl font-semobold">เอกสารที่สามารถดาวโหลดได้</p>
+                    <a className="text-blue-500 py-2" target='_blank' href={lesson.src}>
+                        {getFileNameFromSrc(lesson.src)}
+                    </a>
+                </div>
+            </div>
+        )
     }
 }
 
@@ -84,7 +96,8 @@ function LearnCourse() {
     const { progress, updateLessonProgress } = useStudentCourseProgress(user.userID, courseID)
     const { chapters } = useCourseChapters(courseID)
     const { announcements, isFetching } = useAnnouncementsCourses(courseID)
-    const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>('contents')
+    const [searchParams, setSearchParams] = useSearchParams()
+    const [outlineViewMode, setOutlineViewMode] = useState<'contents' | 'announcements'>(searchParams.get('view') == 'announcements' ? 'announcements' : 'contents')
     const [currentLesson, setCurrentLesson] = useState<CourseLesson | undefined>(undefined)
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
 
@@ -117,6 +130,14 @@ function LearnCourse() {
             forceUpdate()
         })
     }
+    useEffect(() => {
+        setSearchParams({ view: outlineViewMode })
+    }, [setSearchParams, outlineViewMode])
+
+    if (isFetching || chapters.length == 0) return (<div className="flex justify-center items-center h-screen">
+        <LoadingSpash />
+    </div>)
+
     return (
         <div className="">
             <div className="flex pt-8 pl-14 pb-14">

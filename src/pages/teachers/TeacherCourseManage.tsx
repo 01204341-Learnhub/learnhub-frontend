@@ -18,6 +18,7 @@ import {
   faStar,
   faTimes,
 } from "@fortawesome/free-solid-svg-icons";
+import { LoadingSpash } from "../../components/LoadingSpash";
 
 function getFileType(file: File): string {
   const imageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -395,7 +396,11 @@ function TeacherCourseManage() {
 
   const renderAnnouncements = () => {
     if (isFetching) {
-      return <div>loading...</div>;
+      return (
+        <div className="flex w-full h-full justify-center">
+          {LoadingSpash()}
+        </div>
+      );
     }
     return (
       <>

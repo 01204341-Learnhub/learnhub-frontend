@@ -8,8 +8,8 @@ import { useInstructor } from "../features/stores/hooks/useInstructor..ts";
 
 function TeacherProfile() {
     const { id } = useParams<{ id: string }>()
-    const [displayedCourses, setDisplayedCourses] = useState<number>(4)
-    const [displayedClasses, setDisplayedClasses] = useState<number>(4)
+    const [displayedCourses, setDisplayedCourses] = useState(true)
+    const [displayedClasses, setDisplayedClasses] = useState(true)
     const { instructor, isFetching } = useInstructor(id)
 
     if (isFetching) {
@@ -33,10 +33,11 @@ function TeacherProfile() {
     const renderProgramCourse = () => {
         return (
             <>
-                {instructor.courses.slice(0, displayedCourses).map((program, index) => {
+                {instructor.courses.map((program, index) => {
+                    console.log(program.courseID)
                     return (
                         <div className="flex mr-10 my-5 pl-[10%] ">
-                            <img src={program.thumbnailUrl} className="h-[100px] w-[100px] object-cover bg-black  rounded-l-lg"></img>
+                            <img src={program.thumbnailUrl} className="h-[100px] aspect-square object-cover  bg-black  rounded-l-lg"></img>
                             <div className="h-[100px] w-[250px] bg-white border-r border-y border-gray-300 rounded-r-lg">
                                 <div>
                                     <div className="mx-5 mt-4 mb-2 font-bold truncate">
@@ -59,17 +60,17 @@ function TeacherProfile() {
     const renderProgramClass = () => {
         return (
             <>
-                {instructor.classes.slice(0, displayedCourses).map((program, index) => {
+                {instructor.classes.map((program, index) => {
                     return (
-                        <div className="flex mr-10 my-5 pl-[10%] ">
-                            <img src={program.classThumbnailUrl} className="h-[100px] w-[100px] bg-black ml-[10px] rounded-l-lg"></img>
+                        <div className="flex mr-10  my-5 pl-[10%] ">
+                            <img src={program.classThumbnailUrl} className="h-[100px]  aspect-square object-cover bg-black ml-[10px] rounded-l-lg"></img>
                             <div className="h-[100px] w-[250px] bg-white border-r border-y border-gray-300 rounded-r-lg">
                                 <div>
                                     <div className="mx-5 mt-4 mb-2 font-bold truncate">
                                         {program.className}
                                     </div>
                                     <div className="mx-5">
-                                        <Link to={`/detail/course/${program.classID}`} key={index} className="my-4">
+                                        <Link to={`/detail/class/${program.classID}`} key={index} className="my-4">
                                             รายละเอียด
                                         </Link>
                                     </div>
@@ -82,27 +83,8 @@ function TeacherProfile() {
         )
     }
 
-    const loadMoreCourses = () => {
-        setDisplayedCourses((p) => {
-            if (p > 4) {
-                return 4
-            }
-            else {
-                return p + 4
-            }
-        })
-    }
-    const loadMoreClasses = () => {
-        setDisplayedClasses((p) => {
-            if (p > 4) {
-                return 4
-            }
-            else {
-                return p + 4
-            }
-        }
-        )
-    }
+
+
     return (
         <div className=" bg-[#F0F0F0] h-full w-full flex flex-row">
             <div className=" h-full bg-white ">
@@ -116,33 +98,33 @@ function TeacherProfile() {
                 />
             </div>
             <div>
-                <div className=" flex flex-col items-center w-full">
-                    <h1 className=" my-5 mx-[60px] absolute text-[24px] font-semibold self-start">คอร์สเรียนยอดนิยม</h1>
-                    <div className="pl-5 mt-5 pt-8 grid grid-cols-4">
+                <div className=" flex flex-col items-center w-full overflow-hidden">
+                    <h1 className=" my-5 mx-[60px] text-[24px] font-semibold self-start">คอร์สเรียนยอดนิยม</h1>
+                    <div className={`pl-5 mt-5 ${displayedCourses? 'h-[150px] overflow-hidden':'pb-5'} grid grid-cols-4`}>
                         {renderProgramCourse()}
                     </div>
-                    {(instructor.courses.length > 4 && 3 > 1) ? (
+                    {(instructor.courses.length > 4 ) ? (
                         <button
-                            className="p-4 rounded-xl bg-[#505050] text-lg text-white font-bold shadow-xl"
-                            onClick={loadMoreCourses}
+                            className="p-2.5 rounded-xl bg-[#505050] text-lg text-white font-bold shadow-xl"
+                            onClick={()=>{setDisplayedCourses(!displayedCourses)}}
                         >
-                            แสดงคอร์สเพิ่มเติม
+                            {displayedCourses? 'แสดงคอร์สเพิ่มเติม':'แสดงคอร์สน้อยลง'}
                         </button>
                     ) :
                         null
                     }
                 </div>
                 <div className="relative flex flex-col items-center w-full overflow-hidden">
-                    <h1 className=" my-5 mx-[60px] absolute text-[24px] font-semibold self-start">คลาสเรียนที่กำลังสอน</h1>
-                    <div className="pl-3 mt-5 pt-8 grid grid-cols-4">
+                    <h1 className=" my-5 mx-[60px]  text-[24px] font-semibold self-start">คลาสเรียนที่กำลังสอน</h1>
+                    <div className={`pl-5 mt-5 ${displayedClasses? 'h-[150px] overflow-hidden':'pb-5'} grid grid-cols-4`}>
                         {renderProgramClass()}
                     </div>
-                    {(instructor.classes.length > 4 && 4 > displayedClasses) ? (
+                    {(instructor.classes.length > 4 ) ? (
                         <button
-                            className="p-4 rounded-xl bg-[#505050] text-lg text-white font-bold shadow-xl"
-                            onClick={loadMoreClasses}
+                            className="p-2.5 rounded-xl bg-[#505050] text-lg text-white font-bold shadow-xl"
+                            onClick={()=>{setDisplayedClasses(!displayedClasses)}}
                         >
-                            แสดงคลาสเพิ่มเติม
+                            {displayedClasses? 'แสดงคลาสเพิ่มเติม':'แสดงคลาสน้อยลง'}
                         </button>
                     ) :
                         null

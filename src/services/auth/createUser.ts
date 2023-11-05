@@ -6,13 +6,13 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+import { BASE_URL } from "../../config";
 import { app } from "../../firebase/firebase";
 import { LearnhubUser, LearnhubUserCredential } from "../../types/user";
 
 const noImagePlaceholder =
   "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png";
 const auth = getAuth(app);
-const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function checkIfAlreadyRegisterOnce(email: string, password: string) {
   try {
@@ -33,7 +33,7 @@ async function createLearnhubStudent(
   fullname: string,
   email: string
 ) {
-  const url: string = `${baseURL}/users/students`;
+  const url: string = `${BASE_URL}/users/students`;
   const body = {
     uid: uid,
     username: username,
@@ -52,7 +52,7 @@ async function createLearnhubTeacher(
   fullname: string,
   email: string
 ) {
-  const url: string = `${baseURL}/users/teachers`;
+  const url: string = `${BASE_URL}/users/teachers`;
   const body = {
     uid: uid,
     username: username,

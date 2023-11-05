@@ -9,6 +9,7 @@ import {
   faInfinity,
   faUserGroup,
 } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -21,13 +22,14 @@ import {
 } from "../../../slices/basketSlice";
 import { addBasketItem } from "../services/purchase";
 import { fetchBasketItems } from "../services/purchase";
+import daysToWeeks from "date-fns/daysToWeeks";
 
 interface CourseDetailedSummaryProps {
   costs: number;
   quantity: number;
   level: string;
   students: number;
-  hours: number;
+  videolength: number;
   examples: number;
   status: string;
   availablesource: number;
@@ -40,6 +42,7 @@ function CourseDetailedSummary(
   const dispatcher = useDispatch();
   const navigate = useNavigate();
   const { user } = useUser();
+  const [isButtonDisabled,setIsButtonDisabled] = useState(true);
   async function refresh() {
     const BasketItems = await fetchBasketItems(user.userID);
     dispatcher(setStatusFetchOnce(true));
@@ -49,11 +52,19 @@ function CourseDetailedSummary(
     });
   }
   async function handleAddBusketItems() {
+    if(isButtonDisabled){
+    setIsButtonDisabled(false)
     const basketItmeID = await addBasketItem(
       myCourseDetailedSummary.courseID,
       "course",
       user.userID,
-    );
+    ).catch(() => {
+      Swal.fire({
+        title: "ไม่สามารถดำเนินการนี้ได้",
+        text: "คุณมีคอร์สนี้อยู่แล้ว หรือ คอร์สนี้อยู่ในรถเข็นอยู่แล้ว",
+        icon: "error",
+      });
+    });
     if (!basketItmeID) {
       Swal.fire({
         title: "ไม่สามารถดำเนินการนี้ได้",
@@ -68,8 +79,11 @@ function CourseDetailedSummary(
       });
       dispatcher(setStatusFetchOnce(false));
     }
+
     refresh();
+    setIsButtonDisabled(true)
   }
+}
   function handleBuyCourse() {
     addBasketItem(myCourseDetailedSummary.courseID, "course", user.userID)
       .then(() => {
@@ -85,26 +99,24 @@ function CourseDetailedSummary(
       });
   }
 
-  function formatDateFromTimestamp(timestamp: number) : string{
-    const  date = new Date(timestamp * 1000)
-    return date.getHours().toLocaleString()
+  function formatCourseVideoLength(): string{
+    const hour = (myCourseDetailedSummary.videolength / 3600).toFixed()
+    if (hour !="0") 
+      return `${hour} ชั่วโมง`
+    else {
+      const minute = (myCourseDetailedSummary.videolength / 60).toFixed()
+      return `${minute} นาที`
+    }
   }
+
 
   return (
     <>
       <div className="card flex w-[518px] h-[544px] bg-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.25)] rounded-[5px] cursor-pointer">
         <div className="flex justify-between content-center items-center mx-[10%] pt-[2%]">
-          <p className="font-bold	text-[32px]">
+          <p className="font-bold	text-[32px] my-4">
             {myCourseDetailedSummary.costs} บาท
           </p>
-          {user.userType == "student" ? (
-            <button className="flex justify-between items-center content-center  text-base h-[52px] bg-[#D9D9D9] rounded-2xl px-[5%] my-4">
-              <FontAwesomeIcon icon={faHeart} color="#FF2171" size="2xl" />
-              <p className="font-bold	pl-2">เพิ่มในการเรียนรู้ที่อยากได้</p>
-            </button>
-          ) : (
-            <></>
-          )}
         </div>
         <div className="flex justify-center">
           <div className="flex justify-between w-[412px] h-[72.339px] border-2 border-gray-300 rounded-xl mt-2">
@@ -154,7 +166,7 @@ function CourseDetailedSummary(
             <p className="ml-3">
               วิดีโอสอน
               <span className="font-bold ml-2">
-                {formatDateFromTimestamp(myCourseDetailedSummary.hours)} ชั่วโมง
+                {formatCourseVideoLength()}
               </span>
             </p>
           </div>
@@ -169,7 +181,7 @@ function CourseDetailedSummary(
             <p className="ml-3">
               แบบฝึกหัด
               <span className="font-bold ml-2">
-                {myCourseDetailedSummary.availablesource} แบบฝึกหัด
+                {myCourseDetailedSummary.examples} แบบฝึกหัด
               </span>
             </p>
           </div>

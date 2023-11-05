@@ -3,8 +3,7 @@ import { useUser } from "../hooks/useUser";
 import Login from "../pages/Login";
 
 function ProtectedRoute() {
-    const { user, isFetching } = useUser()
-    if (isFetching) return <div>loading</div>
+    const { user } = useUser()
     if (user) return <Outlet />
     return <Login />
 }

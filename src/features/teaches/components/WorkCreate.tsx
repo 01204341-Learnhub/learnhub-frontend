@@ -10,12 +10,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChangeEventHandler, useState } from "react";
-import Calendar from "../../learns/components/Calendar";
-import { ClassAssignment } from "../types/classWork";
 import Swal from "sweetalert2";
 import { uploadFile } from "../../../services/uploader/file";
 import { uploadImageFile } from "../../../services/uploader/image";
 import { getFileNameFromSrc } from "../../../utils/functions";
+import Calendar from "../../learns/components/Calendar";
+import { ClassAssignment } from "../types/classWork";
 
 function getFileType(file: File): string {
   const imageTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -83,6 +83,7 @@ const defaultWork: ClassAssignment = {
   assignmentID: "",
   name: "",
   description: "",
+  lastEdit: new Date(),
   topic: "",
   dueDate: new Date(),
   score: 0,
@@ -96,13 +97,6 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
   const [dropdowndete, setdropdowndete] = useState<boolean>(false);
   const [attachmentLink, setAttachmentLink] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [attachments, setAttachments] = useState<
-    {
-      attachmentType: string;
-      src: string;
-    }[]
-  >([]);
-
   const handleAttachmentFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -122,11 +116,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
       } else {
         url = await uploadFile(files[0]);
       }
-      console.log(url);
-      
-      
-      setAttachments([...attachments, { attachmentType : attachmentType, src: url }]);
-      console.log(JSON.stringify(attachments, null, 2));
+      setWork((work) => ({ ...work, attachments: [...work.attachments, { attachmentType: attachmentType, src: url }] }));
 
       Swal.close();
       Swal.fire({
@@ -150,24 +140,19 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
   ) => {
     const link = e.target.value;
     setAttachmentLink(link);
-    console.log(link);
   };
 
 
   const handleAddLink = () => {
     const attachmentType = getLinkType(attachmentLink);
-    setAttachments([
-      ...attachments,
-      { attachmentType: attachmentType, src: attachmentLink },
-    ]);
-    console.log(JSON.stringify(attachments, null, 2));
+    setWork((work) => ({ ...work, attachments: [...work.attachments, { attachmentType: attachmentType, src: attachmentLink }] }));
     setIsModalOpen(false);
   };
 
   const handleDeleteAttachment = (index: number) => {
-    const newAttachments = attachments.filter((attachment, i) => i !== index);
+    const newAttachments = work.attachments.filter((attachment, i) => i !== index);
     newAttachments.slice(index, 1);
-    setAttachments(newAttachments);
+    setWork((work) => ({ ...work, attachments: newAttachments }));
     Swal.fire({
       icon: "success",
       title: "ลบไฟล์สำเร็จ",
@@ -181,6 +166,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
   };
 
   const handleCloseModal = () => {
+    setAttachmentLink("");
     setIsModalOpen(false);
   };
 
@@ -220,15 +206,13 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
     } else {
       date.setHours(
         Number(
-          `${selectedShowTime[0] == "0" ? "" : selectedShowTime[0]}${
-            selectedShowTime[1]
+          `${selectedShowTime[0] == "0" ? "" : selectedShowTime[0]}${selectedShowTime[1]
           }`
         )
       );
       date.setMinutes(
         Number(
-          `${selectedShowTime[3] == "0" ? "" : selectedShowTime[3]}${
-            selectedShowTime[4]
+          `${selectedShowTime[3] == "0" ? "" : selectedShowTime[3]}${selectedShowTime[4]
           }`
         )
       );
@@ -262,15 +246,13 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
     console.log(2);
     selectedTime.setHours(
       Number(
-        `${event.target.value[0] == "0" ? "" : event.target.value[0]}${
-          event.target.value[1]
+        `${event.target.value[0] == "0" ? "" : event.target.value[0]}${event.target.value[1]
         }`
       )
     );
     selectedTime.setMinutes(
       Number(
-        `${event.target.value[3] == "0" ? "" : event.target.value[3]}${
-          event.target.value[4]
+        `${event.target.value[3] == "0" ? "" : event.target.value[3]}${event.target.value[4]
         }`
       )
     );
@@ -304,7 +286,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
   const renderAttachments = () => {
     return (
       <div className="pb-4">
-        {attachments.map((attach, index) => {
+        {work.attachments.map((attach, index) => {
           return (
             <div key={index} className="flex h-24 items-center justify-center mt-4">
               <div className="w-10/12 h-16 border-[1px] border-[#a0a0a0] flex">
@@ -313,7 +295,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                 </div>
                 <div className="w-full h-full flex flex-col items-start justify-center mx-2 overflow-hidden">
                   <a href={attach.src} target="_bank" className="w-11/12">
-                    <p className="text-sm truncate">{ getFileNameFromSrc(attach.src) }</p>
+                    <p className="text-sm truncate">{getFileNameFromSrc(attach.src)}</p>
                     <h1 className="text-xs mr-4 text-[#606060] truncate">
                       {attach.src}
                     </h1>
@@ -379,7 +361,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
               className="border-[#808080] border-[1px] resize-none h-36 py-2 px-4 mt-2 mx-10 mb-10 outline-none"
               placeholder="อธิบายงานในส่วนนี้ (ไม่จำเป็นต้องกรอกก็ได้)"
             />
-            { renderAttachments() }
+            {renderAttachments()}
           </div>
           <div className="bg-white mt-5 w-3/4 border-gray-400 border-2 rounded-xl pt-4">
             <h1 className="text-gray-500 font-bold mx-8 ">แนบ</h1>
@@ -399,6 +381,7 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                       </h3>
                       <input
                         onChange={handleAttachmentLinkChange}
+                        value={attachmentLink}
                         placeholder="เพิ่มลิ้งก์ที่นี้"
                         className="form-input mt-1 block w-full py-2 px-3 h-10 outline-none bg-[#F9F9FA]"
                         id="linkAnc"
@@ -472,14 +455,14 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
               <div className="text-sm font-medium">
                 {work.dueDate
                   ? `${work.dueDate.toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })} ${work.dueDate.toLocaleDateString("th-TH", {
-                      weekday: "short",
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}`
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })} ${work.dueDate.toLocaleDateString("th-TH", {
+                    weekday: "short",
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}`
                   : ""}
               </div>
               {dropdowndete ? (
@@ -522,11 +505,11 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
                     <h1>
                       {work.dueDate
                         ? work.dueDate.toLocaleDateString("th-TH", {
-                            weekday: "short",
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                          })
+                          weekday: "short",
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })
                         : "ไม่มีกำหนดส่ง"}
                     </h1>
                   </label>

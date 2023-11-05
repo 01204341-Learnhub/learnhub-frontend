@@ -1,14 +1,13 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config";
 import { uploadImageFile } from "../../../services/uploader/image";
-
-const baseURL = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000";
 
 async function updateProfilePicture(
   userType: string,
   userID: string,
   newProfilePic: string
 ) {
-  const url = `${baseURL}/users/${userType}${"s"}/${userID}/`;
+  const url = `${BASE_URL}/users/${userType}${"s"}/${userID}/`;
   const body = {
     profile_pic: newProfilePic,
   };
@@ -20,7 +19,7 @@ async function updateProfileFromFile(
   userID: string,
   file: File
 ) {
-  const url = `${baseURL}/users/${userType}${"s"}/${userID}/`;
+  const url = `${BASE_URL}/users/${userType}${"s"}/${userID}/`;
   const uploadedUrl = await uploadImageFile(file);
   const body = {
     profile_pic: uploadedUrl,
@@ -29,4 +28,16 @@ async function updateProfileFromFile(
   return uploadedUrl;
 }
 
-export { updateProfileFromFile, updateProfilePicture };
+async function updateFullname(
+  userType: string,
+  userID: string,
+  fullname: string
+) {
+  const url = `${BASE_URL}/users/${userType}${"s"}/${userID}/`;
+  const body = {
+    fullname: fullname,
+  };
+  await axios.patch(url, body);
+}
+
+export { updateFullname, updateProfileFromFile, updateProfilePicture };

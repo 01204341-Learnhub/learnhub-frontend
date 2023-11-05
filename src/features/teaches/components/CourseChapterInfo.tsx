@@ -19,6 +19,15 @@ interface _LessonEntryProps {
 }
 
 function _LessonEntry({ lesson }: _LessonEntryProps) {
+
+  const totalSec = lesson.length;
+  const hours = Math.floor(totalSec / 3600);
+  const minutes = Math.floor((totalSec % 3600) / 60);
+  const length = `${hours > 0 ? `${hours} ชั่วโมง` : ""} ${
+    minutes > 0 ? `${minutes} นาที` : ""
+  }`;
+
+
   let icon: IconDefinition;
   if (lesson.type === "video") {
     icon = faCirclePlay;
@@ -32,9 +41,12 @@ function _LessonEntry({ lesson }: _LessonEntryProps) {
     icon = faCircleQuestion;
   }
   return (
-    <div className="flex flex-row justify-start space-x-5 py-2">
-      <FontAwesomeIcon icon={icon} size="xl" color="#808080" />
-      <p className="text-[13px] text-[#808080] font-normal">{lesson.name}</p>
+    <div className="flex flex-row justify-between space-x-5 py-2">
+      <div className="flex items-center">
+        <FontAwesomeIcon icon={icon} size="xl" color="202020" className="px-2" />
+        <p className="text-base text-[#404040] font-normal">{lesson.name}</p>
+      </div>
+        <p className="text-base ">{length}</p>
     </div>
   );
 }

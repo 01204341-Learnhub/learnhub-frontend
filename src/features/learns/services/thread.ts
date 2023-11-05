@@ -1,13 +1,12 @@
 import axios from "axios";
-import { HomeworkSubmissionFile, Thread } from "../types/thread";
+import { BASE_URL } from "../../../config";
 import {
   GetClassAssignmentResponse,
   GetClassAssignmentSubmissionResponse,
   GetClassThreadResponse,
 } from "../types/response";
+import { HomeworkSubmissionFile, Thread } from "../types/thread";
 import { getClassDetail, getTeacher } from "./classes";
-
-const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 async function fetchThread(
   userId: string,
@@ -120,7 +119,7 @@ async function addThreadReply(
   typ: "announcement" | "homework",
   text: string
 ): Promise<void> {
-  const url = `${baseURL}/programs/classes/${classId}/${
+  const url = `${BASE_URL}/programs/classes/${classId}/${
     typ === "announcement" ? "threads" : "assignments"
   }/${threadId}/reply`;
   await axios.post(url, {
@@ -136,7 +135,7 @@ async function submitThreadHomework(
   threadId: string,
   homeworkSubmissionFiles: HomeworkSubmissionFile[]
 ): Promise<void> {
-  const url = `${baseURL}/programs/classes/${classId}/assignments/${threadId}/submissions/${userId}/submit`;
+  const url = `${BASE_URL}/programs/classes/${classId}/assignments/${threadId}/submissions/${userId}/submit`;
   await axios.put(url, {
     attachments: homeworkSubmissionFiles.map((f) => ({
       attachment_type: f.typ,
@@ -150,7 +149,7 @@ async function unsubmitThreadHomework(
   classId: string,
   threadId: string
 ): Promise<void> {
-  const url = `${baseURL}/programs/classes/${classId}/assignments/${threadId}/submissions/${userId}/unsubmit`;
+  const url = `${BASE_URL}/programs/classes/${classId}/assignments/${threadId}/submissions/${userId}/unsubmit`;
   await axios.patch(url);
 }
 
@@ -158,7 +157,7 @@ async function getClassThread(
   classId: string,
   threadId: string
 ): Promise<GetClassThreadResponse> {
-  const url = `${baseURL}/programs/classes/${classId}/threads/${threadId}`;
+  const url = `${BASE_URL}/programs/classes/${classId}/threads/${threadId}`;
   const res = await axios.get<GetClassThreadResponse>(url);
   return res.data;
 }
@@ -167,7 +166,7 @@ async function getClassAssignment(
   classId: string,
   assignmentId: string
 ): Promise<GetClassAssignmentResponse> {
-  const url = `${baseURL}/programs/classes/${classId}/assignments/${assignmentId}`;
+  const url = `${BASE_URL}/programs/classes/${classId}/assignments/${assignmentId}`;
   const res = await axios.get<GetClassAssignmentResponse>(url);
   return res.data;
 }
@@ -177,17 +176,17 @@ async function getClassAssignmentSubmission(
   assignmentId: string,
   studentId: string
 ): Promise<GetClassAssignmentSubmissionResponse> {
-  const url = `${baseURL}/programs/classes/${classId}/assignments/${assignmentId}/submissions/${studentId}`;
+  const url = `${BASE_URL}/programs/classes/${classId}/assignments/${assignmentId}/submissions/${studentId}`;
   const res = await axios.get<GetClassAssignmentSubmissionResponse>(url);
   return res.data;
 }
 
 export {
-  fetchThread,
   addThreadReply,
-  submitThreadHomework,
-  unsubmitThreadHomework,
-  getClassThread,
+  fetchThread,
   getClassAssignment,
   getClassAssignmentSubmission,
+  getClassThread,
+  submitThreadHomework,
+  unsubmitThreadHomework,
 };

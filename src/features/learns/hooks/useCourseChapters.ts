@@ -7,6 +7,7 @@ function useCourseChapters(courseId: string) {
   const [isFetching, setIsFetching] = useState<boolean>(false);
   async function fetchCourseChapters(courseId: string) {
     const fetchedCourseChapters = await listCourseChapters(courseId);
+    fetchedCourseChapters.sort((a, b) => a.chapterNumber - b.chapterNumber);
     setChapters(fetchedCourseChapters);
   }
   useEffect(() => {

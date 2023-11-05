@@ -4,6 +4,7 @@ type ClassAssignment = {
   description: string;
   attachments: { src: string; attachmentType: string }[];
   dueDate?: Date;
+  lastEdit: Date;
   score: number;
   topic: string;
   send: number;

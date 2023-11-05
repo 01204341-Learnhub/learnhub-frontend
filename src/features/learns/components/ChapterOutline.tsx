@@ -27,6 +27,15 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
     const [_, forceUpdate] = useReducer((x) => x + 1, 0)
     const { lessons } = useCourseLessons(chapter.courseID, chapter.chapterID)
 
+    const finishedLesson = () => {
+        let finished = 0
+        for (let i = 0; i < lessonsProgress.length; i++) {
+            if (lessonsProgress[i].finished) {
+                finished++
+            }
+        }
+        return finished
+    }
     const handleShow = async () => {
         setShow((prev) => !prev)
     }
@@ -40,12 +49,13 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
         return false
     }
 
-    function formatDatetime(timestamp: number): string {
-        const date = new Date(timestamp * 1000)
-        if (date.getHours() < 1) {
-            return `${date.getMinutes()} นาที`
+    function formatSeconds(seconds: number): string {
+        const hours = Math.floor(seconds / 3600)
+        const minutes = Math.floor((seconds % 3600) / 60)
+        if (hours < 1) {
+            return `${minutes} นาที`
         }
-        return `${date.getHours()} ชั่วโมง ${date.getMinutes()} นาที`
+        return `${hours} ชั่วโมง ${minutes} นาที`
     }
     return (
         <>
@@ -55,10 +65,10 @@ export default function ChapterOutline({ chapter, lessonsProgress, onSelectLesso
                     <div className="flex flex-col items-start flex-1 pl-6 py-2">
                         <h1 className="text-base font-semibold">บทที่ {chapter.chapterNumber} : {chapter.name}</h1>
                         <div className="py-1">
-                            <span className='text- text-[#202020] font-medium text-sm pr-4'>{currentLesson?.lessonNumber || 0}/{chapter.lessonCount}</span>
+                            <span className='text- text-[#202020] font-medium text-sm pr-4'>{finishedLesson()}/{chapter.lessonCount}</span>
                             <FontAwesomeIcon icon={faClock} color="#606060" className="pr-4" />
                             <span className='text-sm text-[#404040]'>
-                                {formatDatetime(chapter.chapterLength)}
+                                {formatSeconds(chapter.chapterLength)}
                             </span>
                         </div>
                     </div>
@@ -106,6 +116,8 @@ interface LessonSlotProp {
 function LessonSlot({ lesson, finished, onSelectLesson, onFinishedChange, isFocused }: LessonSlotProp) {
     const handleClick = () => {
         if (onSelectLesson) onSelectLesson(lesson)
+        if (lesson.lessonType == "file") onFinishedChange(true)
+        
     }
     const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onFinishedChange(e.target.checked)
@@ -118,7 +130,7 @@ function LessonSlot({ lesson, finished, onSelectLesson, onFinishedChange, isFocu
                     <div className="flex h-24 w-24 bg-[#D9D9D9] justify-center items-center">
                         {
                             lesson.lessonType == "video" ? <FontAwesomeIcon icon={faCirclePlay} size='2xl' color="black" className="drop-shadow-lg" />
-                                : lesson.lessonType == "doc" ? <FontAwesomeIcon icon={faFile} color="#000" size='2xl' className="drop-shadow-lg" />
+                                : lesson.lessonType == "file" ? <FontAwesomeIcon icon={faFile} color="#000" size='2xl' className="drop-shadow-lg" />
                                     : lesson.lessonType == "quiz" ? <FontAwesomeIcon icon={faClipboardList} color="#000" size="2xl" className="drop-shadow-lg" /> : <></>
                         }
                     </div>

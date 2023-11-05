@@ -68,7 +68,7 @@ function LearningClasses() {
                         <div key={index} className='px-4 py-3'>
                             <Link to={c.id} >
                                 <ClassCard classThumbnailUrl={c.imageClassUrl} className={c.name} instructorName={c.teacher.name} completionDate={new Date()} />
-                            </Link> :
+                            </Link>
                         </div>
                     )
                 })}
@@ -89,22 +89,6 @@ function LearningClasses() {
         <div className=''>
             <header className='flex items-center px-12 h-40 pb-6'>
                 <span className='text-3xl font-bold'>คลาสเรียนของฉัน</span>
-                <div className='flex w-64 h-8 mx-4 items-center'>
-                    <div className='flex basis-3/4 items-center bg-white drop-shadow-lg w-full h-full'>
-                        <input
-                            placeholder='ค้นหาคลาสเรียน'
-                            className='outline-none w-full h-full px-4 text-sm'
-                            name='search'
-                            id='search'
-                            type="text" />
-                    </div>
-                    <button
-                        type='button'
-                        className='basis-1/4 bg-black drop-shadow-lg w-full h-full'
-                    >
-                        <span className='text-white font-bold text-sm'>ค้นหา</span>
-                    </button>
-                </div>
             </header>
             <article className='flex flex-col'>
                 <section className='flex flex-col items-center pt-4 px-12 bg-[#d9d9d9] h-[360px]'>
@@ -142,7 +126,7 @@ function LearningClasses() {
                         className={progressQuery == "ENDED" ? selected : notSelected}>จบไปแล้ว</button>
                 </nav>
                 <hr className='border-2' />
-                <h1 className='px-12 pt-12 text-xl font-semibold'>คลาสเรียนที่กำลังดำเนิน</h1>
+                <h1 className='px-12 pt-12 text-xl font-semibold'>คลาสเรียน</h1>
                 <section className='flex flex-wrap px-4 pt-8 pb-12'>
                     {renderClasses()}
                 </section>

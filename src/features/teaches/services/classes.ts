@@ -1,7 +1,9 @@
 import axios from "axios";
+import { BASE_URL } from "../../../config.ts";
 import { ClassInfo, CreatingClass } from "../types/class.ts";
 import { ClassAssignment } from "../types/classWork.ts";
 import {
+  GetClassInfoResponse,
   ListClassAssignmentsResponse,
   ListClassStudentsResponse,
   ListClassThreadsResponse,
@@ -10,9 +12,8 @@ import {
 import { ClassStudent } from "../types/student.ts";
 import { Thread } from "../types/thread.ts";
 
-const baseURL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 async function listTeacherClasses(teacherID: string): Promise<ClassInfo[]> {
-  const url = `${baseURL}/users/teachers/${teacherID}/classes`;
+  const url = `${BASE_URL}/users/teachers/${teacherID}/classes`;
   const res = await axios.get<ListTeacherClassesResponse>(url);
   const classes: ClassInfo[] = res.data.classes.map((c) => {
     return {
@@ -28,7 +29,7 @@ async function listTeacherClasses(teacherID: string): Promise<ClassInfo[]> {
 }
 
 async function listClassStudents(classID: string) {
-  const url = `${baseURL}/programs/classes/${classID}/students`;
+  const url = `${BASE_URL}/programs/classes/${classID}/students`;
   const res = await axios.get<ListClassStudentsResponse>(url);
   const students: ClassStudent[] = res.data.students.map((s) => ({
     studentID: s.student_id,
@@ -39,7 +40,7 @@ async function listClassStudents(classID: string) {
 }
 
 async function publishClass(cls: CreatingClass): Promise<string> {
-  const url = `${baseURL}/programs/classes`;
+  const url = `${BASE_URL}/programs/classes`;
   const body = {
     name: cls.name,
     class_pic: cls.pictureUrl,
@@ -63,12 +64,55 @@ async function publishClass(cls: CreatingClass): Promise<string> {
   return res.data.class_id;
 }
 
+async function getClassTagAndObjectives(classID: string) {
+  const url = `${BASE_URL}/programs/classes/${classID}`;
+  const res = await axios.get<GetClassInfoResponse>(url);
+  return {
+    tagID: res.data.tags[0].tag_id,
+    objectives: res.data.class_objective,
+  };
+}
+
+async function updateClass(cls: CreatingClass, classID: string) {
+  const url = `${BASE_URL}/programs/classes/${classID}`;
+  // clear objectives
+  const old = await getClassTagAndObjectives(classID);
+  const clearObjective = old.objectives.map((o) => ({
+    op: "remove",
+    value: o,
+  }));
+  await axios.patch(url, { class_objective: clearObjective });
+
+  // clear tags
+  const clearTag = {
+    tag_id: old.tagID,
+    op: "remove",
+  };
+  await axios.patch(url, { tag: clearTag });
+
+  const body = {
+    name: cls.name,
+    class_pic: cls.pictureUrl,
+    class_objective: cls.objectives.map((o) => ({
+      op: "add",
+      value: o,
+    })),
+    tag: {
+      tag_id: cls.tag.tagID,
+      op: "add",
+    },
+    description: cls.description,
+    class_requirement: cls.requirement,
+  };
+  await axios.patch(url, body);
+}
+
 async function listClassAssignments(classID: string) {
-  const url = `${baseURL}/programs/classes/${classID}/assignments`;
+  const url = `${BASE_URL}/programs/classes/${classID}/assignments`;
   const res = await axios.get<ListClassAssignmentsResponse>(url);
   const assignments: ClassAssignment[] = [];
   for (let i = 0; i < res.data.assignments.length; i++) {
-    const getAssignmentUrl = `${baseURL}/programs/classes/${classID}/assignments/${res.data.assignments[i].assignment_id}`;
+    const getAssignmentUrl = `${BASE_URL}/programs/classes/${classID}/assignments/${res.data.assignments[i].assignment_id}`;
     const assignmentRes = await axios.get<{
       attachments: { attachment_type: string; src: string }[];
     }>(getAssignmentUrl);
@@ -80,6 +124,7 @@ async function listClassAssignments(classID: string) {
         src: a.src,
         attachmentType: a.attachment_type,
       })),
+      lastEdit: new Date(res.data.assignments[i].last_edit * 1000),
       score: res.data.assignments[i].max_score,
       topic: res.data.assignments[i].group_name,
       send: res.data.assignments[i].submission_count.submit_count,
@@ -90,11 +135,40 @@ async function listClassAssignments(classID: string) {
   return assignments;
 }
 
+async function getClass(classID: string): Promise<CreatingClass> {
+  const url = `${BASE_URL}/programs/classes/${classID}`;
+  const res = await axios.get<GetClassInfoResponse>(url);
+  const data = res.data;
+  const cls: CreatingClass = {
+    name: data.name,
+    pictureUrl: data.class_pic,
+    teacher: undefined,
+    description: data.description,
+    maxStudent: data.max_student,
+    price: data.price,
+    objectives: data.class_objective,
+    requirement: data.class_requirement,
+    level: data.difficulty_level,
+    tag: {
+      tagID: data.tags[0].tag_id,
+      name: data.tags[0].tag_name,
+    },
+    schedule: data.schedules.map((s) => ({
+      start: new Date(s.start * 1000),
+      end: new Date(s.end * 1000),
+    })),
+    start: new Date(data.open_date * 1000),
+    registrationEnd: new Date(data.registration_ended_date * 1000),
+    end: new Date(data.class_ended_date * 1000),
+  };
+  return cls;
+}
+
 async function createClassAssignment(
   classID: string,
   assignment: ClassAssignment
 ) {
-  const url = `${baseURL}/programs/classes/${classID}/assignments`;
+  const url = `${BASE_URL}/programs/classes/${classID}/assignments`;
   const body = {
     name: assignment.name,
     group_name: assignment.topic,
@@ -111,7 +185,7 @@ async function createClassAssignment(
 }
 
 async function listClassThreads(classID: string): Promise<Thread[]> {
-  const url = `${baseURL}/programs/classes/${classID}/threads`;
+  const url = `${BASE_URL}/programs/classes/${classID}/threads`;
   const res = await axios.get<ListClassThreadsResponse>(url);
   return res.data.threads
     .map((thread) => ({
@@ -136,9 +210,11 @@ async function listClassThreads(classID: string): Promise<Thread[]> {
 
 export {
   createClassAssignment,
+  getClass,
   listClassAssignments,
-  listClassThreads,
   listClassStudents,
+  listClassThreads,
   listTeacherClasses,
   publishClass,
+  updateClass,
 };

@@ -4,7 +4,7 @@ import {
   faCircle as faCircleSolid,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import { LoadingSpash } from "../../components/LoadingSpash";
@@ -238,9 +238,9 @@ function checkReadyToPublish(course: Course) {
     course.thumbnailUrl !== "" &&
     course.level !== "" &&
     course.instructorName !== "" &&
-    course.description !== "" &&
-    course.objectives.every((objective) => objective !== "") &&
-    course.requirement !== "" &&
+    course.description.trim() !== "" &&
+    course.objectives.every((objective) => objective.trim() !== "") &&
+    course.requirement.trim() !== "" &&
     course.chapters.length !== 0 &&
     course.chapters.every((chapter) => chapter.lessons.length !== 0) &&
     course.chapters.every((chapter) =>
@@ -261,15 +261,11 @@ function checkReadyToPublish(course: Course) {
   );
 }
 
-interface CourseContextType {
-  course: Course;
-  setCourse: (course: Course) => void;
-}
 
-
-const CourseContext = React.createContext<CourseContextType | undefined>(
-  undefined,
-);
+// const CourseContext = React.createContext<CourseContextType | undefined>(
+//   undefined,
+// );
+import { CourseContext } from "./CreateCourse";
 
 function CreateCourse() {
   const navigate = useNavigate();
@@ -302,6 +298,11 @@ function CreateCourse() {
       setIsLoading(false)
     }
     onUpdateCourse().then(() => {
+      Swal.fire({
+        title: "อัพเดทคอร์สสำเร็จ",
+        icon: "success",
+        confirmButtonText: "ตกลง",
+      })
     }).catch((err) => {
       Swal.fire({
         title: "เกิดข้อผิดพลาดในการอัพเดทคอร์ส",

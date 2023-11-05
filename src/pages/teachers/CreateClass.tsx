@@ -6,6 +6,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import ClassCardPreview from "../../features/teaches/components/ClassCardPreview.tsx";
 import ClassDatesInfoForm from "../../features/teaches/components/ClassDatesInfoForm.tsx";
 import ClassGoalsInfoForm from "../../features/teaches/components/ClassGoalsInfoForm.tsx";
@@ -179,12 +180,12 @@ function _TopPanel({ cls }: _TopPanelProps) {
 }
 
 function checkReadyToPublish(cls: CreatingClass) {
-  if (cls.name === "" || cls.pictureUrl === "" || cls.description === "") return false;
+  if (cls.name === "" || cls.pictureUrl === "" || cls.description.trim() === "") return false;
   if (cls.maxStudent <= 0 || cls.maxStudent > 100) return false;
   if (cls.price < 0) return false;
   if (cls.objectives.length !== 4) return false;
-  if (cls.objectives.some((objective) => objective === "")) return false;
-  if (cls.requirement === "") return false;
+  if (cls.objectives.some((objective) => objective.trim() === "")) return false;
+  if (cls.requirement.trim() === "") return false;
   if (cls.level === "") return false;
   if (cls.tag === undefined) return false;
   if (cls.schedule.length === 0) return false;
@@ -204,6 +205,7 @@ const CreatingClassContext = createContext<
 function CreateClass() {
   const navigate = useNavigate();
   const { user } = useUser();
+  const [isPublishing, setIsPublishing] = useState<boolean>(false);
   const [cls, setCls] = useState<CreatingClass>({
     name: "",
     pictureUrl: "https://placehold.co/1920x1080",
@@ -228,17 +230,37 @@ function CreateClass() {
       return;
     }
     console.log(JSON.stringify(cls, null, 2));
+    setIsPublishing(true);
     publishClass(cls)
-      .then((classId) => {
-        alert("เผยแพร่คลาสสำเร็จ");
-        console.log(classId);
-        // navigate("/teach/overview");
+      .then(() => {
+        Swal.fire({
+          title: "เผยแพร่คลาสสำเร็จ",
+          text: "คลาสของคุณได้ถูกเผยแพร่แล้ว",
+          icon: "success",
+          confirmButtonText: "ตกลง",
+        }).then(() => {
+          navigate("/teach/overview");
+        })
       })
-      .catch((err) => {
-        console.log(err);
-        alert("เผยแพร่คลาสไม่สำเร็จ");
-      });
+      .catch(() => {
+        Swal.fire({
+          title: "เผยแพร่คลาสไม่สำเร็จ",
+          text: "กรุณาลองใหม่อีกครั้ง",
+          icon: "error",
+          confirmButtonText: "ตกลง",
+        })
+      }).finally(() => {
+        setIsPublishing(false);
+      })
   };
+
+  if (isPublishing) {
+    return (
+      <div className="flex flex-col justify-center items-center space-y-10 p-10 bg-[#EEEEEE80] w-full min-h-screen">
+        <h1 className="text-black font-semibold text-[32px]">กำลังเผยแพร่คลาส</h1>
+      </div>
+    )
+  }
 
   if (currentTab == "goals") {
     return (

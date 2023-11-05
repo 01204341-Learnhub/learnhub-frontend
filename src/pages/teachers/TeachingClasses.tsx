@@ -13,6 +13,8 @@ import { useClassInfo } from "../../features/teaches/hooks/useClassInfo";
 import { useClassStudents } from "../../features/teaches/hooks/useClassStudents";
 import useClassThreads from "../../features/teaches/hooks/useClassThreads";
 import { useUser } from "../../hooks/useUser";
+import { Thread } from "../../features/teaches/types/thread";
+import ClassHomeworkOverviewEntry from "../../features/teaches/components/ClassHomeworkOverviewEntry";
 
 type View = "main" | "works" | "members" | "create-work";
 
@@ -102,31 +104,27 @@ function _WorkSlot({ work }: { work: ClassAssignment }) {
       </button>
       {isOpen && (
         <div className="flex flex-col items-center justify-center mx-3 w-full border-[1px] drop-shadow-lg bg-white">
-
           <div className="flex items-center w-11/12">
             <p className="break-all py-4">{work.description}</p>
           </div>
 
           <div className="flex justify-end w-9/12 pb-8 pt-4">
             <div className="items-end flex flex-col">
-              <p className="w-full text-4xl font-bold ml-5">
-                {work.send}
+              <p className="w-full text-4xl font-bold ml-5">{work.send}</p>
+              <p className="text-sm text-[#808080] font-semibold ml-5">
+                ส่งแล้ว
               </p>
-              <p className="text-sm text-[#808080] font-semibold ml-5">ส่งแล้ว</p>
             </div>
             <div className="items-end flex flex-col">
-              <p className="w-full text-4xl font-bold ml-5">
-                {work.nosend}
+              <p className="w-full text-4xl font-bold ml-5">{work.nosend}</p>
+              <p className="text-sm text-[#808080] font-semibold ml-5">
+                ยังไม่ส่ง
               </p>
-              <p className="text-sm text-[#808080] font-semibold ml-5">ยังไม่ส่ง</p>
             </div>
           </div>
           <hr className="w-full py-2" />
 
-          <div className="bg-white flex items-center w-11/12 justify-between py-5 px-5">
-            <button type="button" className="text-blue-600">
-              ดูวิธีการ
-            </button>
+          <div className="bg-white flex items-center w-11/12 justify-end py-5 px-5">
             <div className="">
               <Link
                 to={`review/${work.assignmentID}`}
@@ -202,6 +200,7 @@ function TeachingClasses() {
     isFetching: isFetchingClassThreads,
     postThread,
   } = useClassThreads(classID);
+  const entries: (Thread | ClassAssignment)[] = [...threads, ...assignments];
   const { students } = useClassStudents(classID);
   const { user } = useUser();
 
@@ -243,12 +242,18 @@ function TeachingClasses() {
               class
             </h1>
           </div>
-          <div className="mt-7 w-full flex items-center justify-center">
+          <div className="relative mt-7 w-full flex items-center justify-center">
             <img
               src={classInfo.classThumbnailUrl}
               alt="class-cover"
               className="object-cover w-11/12 h-64 "
             />
+            <Link
+              className="absolute btn-ghost text-white bottom-0 right-20"
+              to={`/teach/update-class/${classID}`}
+            >
+              แก้ไข
+            </Link>
           </div>
         </div>
         <div className="w-3/4 mt-[2%] flex flex-col items-center space-y-[2%]">
@@ -257,16 +262,31 @@ function TeachingClasses() {
           </div>
 
           <div className="flex flex-col w-3/4 items-center space-y-3 pb-4">
-            {threads
+            {entries
               .sort((a, b) => b.lastEdit.getTime() - a.lastEdit.getTime())
-              .map((thread) => (
-                <ClassThread
-                  key={thread.threadId}
-                  user={user}
-                  classId={classID}
-                  threadId={thread.threadId}
-                />
-              ))}
+              .map((entry: Thread | ClassAssignment) => {
+                if ("topic" in entry) {
+                  // is ClassAssignment
+                  return (
+                    <ClassHomeworkOverviewEntry
+                      key={entry.assignmentID}
+                      classId={classID}
+                      homeworkId={entry.assignmentID}
+                      homeworkName={entry.name}
+                      homeworkLastEdit={entry.lastEdit}
+                    />
+                  );
+                } else {
+                  return (
+                    <ClassThread
+                      key={entry.threadId}
+                      user={user}
+                      classId={classID}
+                      threadId={entry.threadId}
+                    />
+                  );
+                }
+              })}
           </div>
         </div>
       </div>
@@ -296,12 +316,10 @@ function TeachingClasses() {
             <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-12 h-12 m-2 rounded-full">
               <img
                 src={user.profilePicture}
-                className="rounded-full object-cover aspect-square"
+                className="rounded-full object-cover aspect-square h-12 w-12"
               />
             </div>
-            <h1 className=" text-gray-600 font-bold ml-5">
-              {user.fullname}
-            </h1>
+            <h1 className=" text-gray-600 font-bold ml-5">{user.fullname}</h1>
           </div>
         </div>
 
@@ -319,7 +337,7 @@ function TeachingClasses() {
                   <div className=" justify-center items-center bg-[#D9D9D9] active:bg-blue-200 w-12 h-12 m-2 rounded-full">
                     <img
                       src={student.avatarURL}
-                      className="rounded-full object-cover aspect-square"
+                      className="rounded-full object-cover aspect-square w-12 h-122"
                     />
                   </div>
                   <h1 className=" text-gray-600 font-bold ml-5">

@@ -1,13 +1,13 @@
 import axios from "axios";
-import { ResponseTeacherInfo } from "../types/response";
-import { InstructorProfile } from "../types/instructor";
-import { listTeachCourse } from "../../teaches/services/courses";
+import { BASE_URL } from "../../../config";
 import { listTeacherClasses } from "../../teaches/services/classes";
-
-const baseUrl = import.meta.env.VITE_BASE_API_URL ?? "http://localhost:8000/users/teachers/";
+import { listTeachCourse } from "../../teaches/services/courses";
+import { InstructorProfile } from "../types/instructor";
+import { ResponseTeacherInfo } from "../types/response";
 
 async function getInstructor(teacherID: string) {
-  const url = `${baseUrl}${teacherID}`;
+  const url = `${BASE_URL}/users/teachers/${teacherID}`;
+  console.log(url)
   const res = await axios.get<ResponseTeacherInfo>(url);
   const fetchedCourses = await listTeachCourse(teacherID);
   const fetchedClasses = await listTeacherClasses(teacherID);
@@ -19,7 +19,7 @@ async function getInstructor(teacherID: string) {
     email: res.data.email,
     profilePic: res.data.profile_pic,
     courses: fetchedCourses,
-    classes: fetchedClasses
+    classes: fetchedClasses,
   };
   return instructor;
 }

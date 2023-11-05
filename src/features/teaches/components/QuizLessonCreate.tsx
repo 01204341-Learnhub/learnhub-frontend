@@ -142,7 +142,7 @@ function _ProblemCreate({
         <h1 className="mx-[40px] ">คำอธิบายเพิ่มเติม</h1>
         <textarea
           className="mr-[50px] min-w-0 min-h-[45px] h-[160px] max-h-[280px] py-2 px-4 grow input input-bordered mb-4"
-          placeholder="คำอธิบายเพิ่มเติมที่่ผู้เรียนจะเห็นหลังทำแบบฝึกหัดเสร็จ"
+          placeholder="คำอธิบายเพิ่มเติมที่ผู้เรียนจะเห็นหลังทำแบบฝึกหัดเสร็จ"
           value={explaination}
           onChange={(e) => {
             setExplaination(e.target.value);

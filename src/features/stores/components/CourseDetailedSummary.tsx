@@ -99,6 +99,16 @@ function CourseDetailedSummary(
       });
   }
 
+  function formatCourseVideoLength(seconds: number): string{
+    const hour = (myCourseDetailedSummary.videolength / 3600).toFixed()
+    if (hour !="0") 
+      return `${hour} ชั่วโมง`
+    else {
+      const minute = (myCourseDetailedSummary.videolength / 60).toFixed()
+      return `${minute} นาที`
+    }
+  }
+
 
   return (
     <>
@@ -156,7 +166,7 @@ function CourseDetailedSummary(
             <p className="ml-3">
               วิดีโอสอน
               <span className="font-bold ml-2">
-                {(myCourseDetailedSummary.videolength / 3600).toFixed()} ชั่วโมง
+                {formatCourseVideoLength(myCourseDetailedSummary.videolength)}
               </span>
             </p>
           </div>

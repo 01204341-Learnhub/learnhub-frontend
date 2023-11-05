@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import bookLogo from "../../src/assets/images/bookLogo.png";
 import textNameLogo from "../../src/assets/images/textNameLogo.png";
-import { LoadingSpash } from "../components/LoadingSpash";
+import ConnectingSplash from "../components/ConnectingSplash";
 import { signInWithEmail } from "../services/auth/signIn";
 
 
@@ -58,16 +58,9 @@ export default function Login() {
         navigate("/", { replace: true })
     }
 
-    if (isLoggingIn) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <LoadingSpash />
-            </div>
-        )
-    }
-
     return (
         <div className="flex flex-col h-screen w-screen bg-[#eeeeee80]">
+            {isLoggingIn && <ConnectingSplash />}
             <button className=" text-2xl font-bold ml-24 mt-6  self-start" onClick={handleBack}>
                 ย้อนกลับ
             </button>

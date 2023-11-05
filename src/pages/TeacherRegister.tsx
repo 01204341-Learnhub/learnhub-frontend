@@ -10,7 +10,7 @@ import { createTeacherWithEmail } from "../services/auth/createUser";
 
 import Swal from "sweetalert2";
 import smolRobotImage from "../../src/assets/images/smolRobot.jpeg";
-import { LoadingSpash } from "../components/LoadingSpash";
+import ConnectingSplash from "../components/ConnectingSplash";
 
 function TeacherRegister() {
   const navigate = useNavigate();
@@ -81,16 +81,10 @@ function TeacherRegister() {
       });
     }
   };
-  if (isRegistering) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <LoadingSpash />
-      </div>
-    )
-  }
 
   return (
     <div className=" bg-gray-300 h-screen">
+      {isRegistering && <ConnectingSplash />}
       <div className=" grid grid-cols-2">
         <div className=" h-screen">
           <img

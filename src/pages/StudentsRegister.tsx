@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import smolRobotImage from "../../src/assets/images/smolRobot.webp";
-import { LoadingSpash } from "../components/LoadingSpash";
+import ConnectingSplash from "../components/ConnectingSplash";
 import { createStudentWithEmail } from "../services/auth/createUser";
 
 function StudentsRegister() {
@@ -71,16 +71,9 @@ function StudentsRegister() {
             setIsRegistering(false);
         }
     }
-    if (isRegistering) {
-        return (
-            <div className="flex justify-center items-center h-screen">
-                <LoadingSpash />
-            </div>
-        )
-    }
-
     return (
         <div className=" bg-gray-300 h-screen">
+            {isRegistering && <ConnectingSplash />}
             <div className="grid grid-cols-2">
                 <div className=" h-screen">
                     <img

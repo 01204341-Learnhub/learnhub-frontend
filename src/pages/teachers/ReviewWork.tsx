@@ -33,7 +33,11 @@ function ReviewWork() {
     const { assignments, isFetching: isFetchingAssignments } = useClassAssignments(classID)
     const { submissions, isFetching, reloadSubmissions } = useAssignmentSubmissions(classID, assignmentID)
     const getMaxScore = () => {
-        return assignments.find(assignment => assignment.assignmentID === assignmentID).score
+        try {
+            return assignments.find(assignment => assignment.assignmentID === assignmentID).score
+        } catch {
+            return 0
+        }
     }
     const [targetStudentID, setTargetStudentID] = useState("")
     const [_, forceUpdate] = useReducer(x => x + 1, 0)
@@ -44,7 +48,11 @@ function ReviewWork() {
         return submissions.find(submission => submission.student.studentID === targetStudentID)!
     }
     const getAssignmentName = () => {
-        return assignments.find(assignment => assignment.assignmentID === assignmentID).name
+        try {
+            return assignments.find(assignment => assignment.assignmentID === assignmentID).name
+        } catch {
+            return ""
+        }
     }
     const handleSelectTargetStudent = (studentID: string) => {
         return setTargetStudentID(studentID)

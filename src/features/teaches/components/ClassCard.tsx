@@ -33,11 +33,11 @@ export default function ClassCard(myClassesCard: ClassCardProps) {
         มีผู้เรียน {myClassesCard.studentCount}/{myClassesCard.studentLimit}
       </div>
       <div className="absolute right-[12px] bottom-[12px]">
-        <a href={`/teach/update-class/${myClassesCard.classID}`}>
+        <Link to={`/teach/update-class/${myClassesCard.classID}`}>
           <button className="w-[60px] h-[30px] rounded-full bg-gray-600 hover:shadow-xl hover:bg-gray-800 text-[14px] text-base-200 font-semibold text-center">
               แก้ไข
           </button>
-        </a>
+        </Link>
       </div>
     </div>
   );

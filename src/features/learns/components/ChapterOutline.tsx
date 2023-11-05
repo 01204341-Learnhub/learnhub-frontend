@@ -116,6 +116,8 @@ interface LessonSlotProp {
 function LessonSlot({ lesson, finished, onSelectLesson, onFinishedChange, isFocused }: LessonSlotProp) {
     const handleClick = () => {
         if (onSelectLesson) onSelectLesson(lesson)
+        if (lesson.lessonType == "file") onFinishedChange(true)
+        
     }
     const onCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         onFinishedChange(e.target.checked)

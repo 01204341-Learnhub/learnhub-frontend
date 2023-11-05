@@ -97,8 +97,6 @@ function WorkCreate({ availableTopics, onCancel, onSubmit }: WorkCreateProps) {
   const [dropdowndete, setdropdowndete] = useState<boolean>(false);
   const [attachmentLink, setAttachmentLink] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  console.log(work);
   const handleAttachmentFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {

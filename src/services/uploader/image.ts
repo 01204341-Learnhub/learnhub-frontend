@@ -12,11 +12,12 @@ const storage = getStorage(app);
 */
 async function uploadImageFile(file: File): Promise<string> {
   const randomID = Math.random().toString(36).substring(2);
-  const fileRef = ref(storage, `images/${randomID}`);
+  const fileRef = ref(storage, `images/${randomID}\0${file.name}`);
   try {
     await uploadBytes(fileRef, file);
   } catch (error) {
     console.error(`Error uploading file: ${JSON.stringify(error, null, 2)}`);
+    throw new Error(error);
   }
   const downloadURL = await getDownloadURL(fileRef);
   return downloadURL;

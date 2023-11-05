@@ -248,9 +248,12 @@ function TeachingClasses() {
               alt="class-cover"
               className="object-cover w-11/12 h-64 "
             />
-            <button className="absolute btn-ghost text-white bottom-0 right-20">
+            <Link
+              className="absolute btn-ghost text-white bottom-0 right-20"
+              to={`/teach/update-class/${classID}`}
+            >
               แก้ไข
-            </button>
+            </Link>
           </div>
         </div>
         <div className="w-3/4 mt-[2%] flex flex-col items-center space-y-[2%]">

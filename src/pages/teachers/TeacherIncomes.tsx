@@ -33,7 +33,7 @@ function TeacherIncomes(){
         if (courseKeys.length == 0){
             return (
                 <div className="font-bold">
-                    {isShowMonth?'ไม่มีการซื้อคอร์สเรียน':'ไม่มีการซื้อคอร์สเรียนในเดือนนั้น'}
+                    {!isShowMonth?'ไม่มีการซื้อคอร์สเรียน':'ไม่มีการซื้อคอร์สเรียนในเดือนนั้น'}
                 </div>
             )
 
@@ -79,7 +79,7 @@ function TeacherIncomes(){
         if (classKeys.length == 0){
             return (
                 <div className="font-bold">
-                    {isShowMonth?'ไม่มีการซื้อคลาสเรียน':'ไม่มีการซื้อคลาสเรียนในเดือนนั้น'}
+                    {!isShowMonth?'ไม่มีการซื้อคลาสเรียน':'ไม่มีการซื้อคลาสเรียนในเดือนนั้น'}
                 </div>
             )
         }

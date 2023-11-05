@@ -33,10 +33,10 @@ export default function SelectCourse() {
   const [query, setQuery] = useState<string>("IN-PROGRESS");
   const [showModal, setShowModal] = useState(false);
   const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState<number>(0)
   const [showReviewButton, setShowReviewButton] = useState(false);
   const [isReview, setIsReview] = useState(false);
 
-  console.log(user.userID);
 
   const onRatingChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRating(Number(e.target.value));
@@ -54,8 +54,7 @@ export default function SelectCourse() {
   }
 
   async function handleClickSendRating(courseID: string) {
-    const rattingID = await addRatingCourse(courseID, rating, user.userID);
-    console.log(rattingID);
+    await addRatingCourse(courseID, rating, user.userID);
 
     Swal.fire({
       title: "สำเร็จ",
@@ -106,41 +105,51 @@ export default function SelectCourse() {
               type="radio"
               name="rating-1"
               value="1"
-              className={`mask mask-star bg-gray-100  hover:bg-amber-300 ${rating >= 1 ? "bg-yellow-300" : ""
+              className={`mask mask-star ${hoverRating >= 1?'bg-amber-300':'bg-gray-100'}  ${rating >= 1 ? "bg-yellow-300" : ""
                 }`}
               onChange={onRatingChange}
+              onMouseEnter={()=>setHoverRating(1)}
+              onMouseOut={()=>setHoverRating(0)}
             />
             <input
               type="radio"
               name="rating-1"
               value="2"
-              className={`mask mask-star hover:bg-amber-300 bg-gray-100  ${rating >= 2 ? "bg-yellow-300" : ""
+              className={`mask mask-star bg-${hoverRating >= 2?'amber-300':'gray-100'}  ${rating >= 2 ? "bg-yellow-300" : ""
                 }`}
               onChange={onRatingChange}
+              onMouseEnter={()=>setHoverRating(2)}
+              onMouseOut={()=>setHoverRating(0)}
             />
             <input
               type="radio"
               name="rating-1"
               value="3"
-              className={`mask mask-star hover:bg-amber-300 bg-gray-100 ${rating >= 3 ? "bg-yellow-300" : ""
+              className={`mask mask-star bg-${hoverRating >= 3?'amber-300':'gray-100'} ${rating >= 3 ? "bg-yellow-300" : ""
                 }`}
               onChange={onRatingChange}
+              onMouseEnter={()=>setHoverRating(3)}
+              onMouseOut={()=>setHoverRating(0)}
             />
             <input
               type="radio"
               name="rating-1"
               value="4"
-              className={`mask mask-star hover:bg-amber-300 bg-gray-100  ${rating >= 4 ? "bg-yellow-300" : ""
+              className={`mask mask-star bg-${hoverRating >= 4?'amber-300':'gray-100'}  ${rating >= 4 ? "bg-yellow-300" : ""
                 }`}
               onChange={onRatingChange}
+              onMouseEnter={()=>setHoverRating(4)}
+              onMouseOut={()=>setHoverRating(0)}
             />
             <input
               type="radio"
               value="5"
               name="rating-1"
-              className={`mask mask-star hover:bg-amber-300 bg-gray-100  ${rating >= 5 ? "bg-yellow-300" : ""
+              className={`mask mask-star bg-${hoverRating >= 5?'amber-300':'gray-100'}  ${rating >= 5 ? "bg-yellow-300" : ""
                 }`}
               onChange={onRatingChange}
+              onMouseEnter={()=>setHoverRating(5)}
+              onMouseOut={()=>setHoverRating(0)}
             />
 
           </div>

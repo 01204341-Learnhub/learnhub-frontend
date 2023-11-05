@@ -124,10 +124,7 @@ function _WorkSlot({ work }: { work: ClassAssignment }) {
           </div>
           <hr className="w-full py-2" />
 
-          <div className="bg-white flex items-center w-11/12 justify-between py-5 px-5">
-            <button type="button" className="text-blue-600">
-              ดูวิธีการ
-            </button>
+          <div className="bg-white flex items-center w-11/12 justify-end py-5 px-5">
             <div className="">
               <Link
                 to={`review/${work.assignmentID}`}
